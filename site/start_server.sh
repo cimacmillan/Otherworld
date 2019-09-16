@@ -1,0 +1,1 @@
+sudo "$(which nodemon)" start.js
