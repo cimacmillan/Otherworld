@@ -16,13 +16,13 @@ app.get('/home', (req, res) => {
   })
 
 app.use(function(err, req, res, next) {
-if(401 == err.status) {
-    res.redirect('/home')
-}
+    if(401 == err.status) {
+        res.redirect('/home')
+    }
 });
   
 
-let port = 3000;
+let port = 80;
 let root = "public";
 app.listen(port, 'localhost', () => console.log(`Listening on port ${port}!`))
   
