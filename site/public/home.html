@@ -4,15 +4,36 @@
 <head>
     <title>JSGame &middot; Home</title>
 
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
     <script type="text/javascript" src="js/boot.js"></script>
 </head>
 
 <body>
-    <h1>
-        Untitled JS Game
+
+    <!-- Style needs the same width of the canvas -->
+    <style>
+        .container-canvas {
+            /* This could be done in one single declaration. See the extended sample. */
+            /* margin-right: auto;
+            margin-left: auto; */
+            width: 640px;
+        }
+    </style>
+
+    <h1 class="d-flex justify-content-center p-5">
+            JS Game
     </h1> 
 
-    <canvas id="viewport" width="640" height="480"></canvas>
+    <div class="d-flex justify-content-center">
+        <div class="container-canvas">
+            <canvas id="viewport" width="640" height="480"></canvas>
+        </div>
+    </div>
 
 </body>
 

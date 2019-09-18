@@ -1,5 +1,5 @@
 
-let game_sources = ["js/sound.js"];
+let game_sources = ["js/sound.js", "js/graphics.js"];
 let game_main = "js/game.js";
 
 function loadSource(url) {
