@@ -1,11 +1,11 @@
 /*
-TODO loading screen with audios / images
 TODO start button to allow audio to start
 TODO general structure for screens of varying behaviour
 */
+
 console.log("Game");
 
-var screen = new Screen("viewport", 4);
+var screen = new Screen("viewport", 8);
 var sound = new Sound();
 
 // let mySound = new sound("audio/bassdrum.mp3");
@@ -24,8 +24,8 @@ var current_frame = 0;
 function update(tframe) {
 
     // Audio requires user interaction first
-    sound.pan_node.pan.value = Math.sin(tframe / 1000);
-    sound.gain_node.gain.value = Math.abs(sound.pan_node.pan.value)
+    // sound.pan_node.pan.value = Math.sin(tframe / 1000);
+    // sound.gain_node.gain.value = Math.abs(sound.pan_node.pan.value)
 
     // if(current_frame % 20 == 0 && (typeof dogBarkingBuffer !== 'undefined')) {
     //     console.log("update - ", sound.pan_node.pan.value);

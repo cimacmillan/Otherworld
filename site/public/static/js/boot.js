@@ -1,4 +1,10 @@
 
+/*
+
+TODO Proper loading of resources
+
+*/
+
 let game_sources = ["js/sound.js", "js/graphics.js"];
 let game_main = "js/game.js";
 
@@ -12,7 +18,8 @@ window.onload = function() {
     console.log("Window Loaded");
     console.log("Loading Sources...")
     game_sources.map(url => loadSource(url));
-    loadSource(game_main);
+
+    setTimeout(() => loadSource(game_main), 1000)
 };
 
 /*
