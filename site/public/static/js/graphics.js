@@ -33,6 +33,13 @@ function vec_divide(a, b) {
     }
 }
 
+function vec_rotate(a, theta) {
+    return {
+        x: a.x * Math.cos(theta) - a.y * Math.sin(theta),
+        y: a.y * Math.cos(theta) + a.x * Math.sin(theta)
+    }
+}
+
 
 // TODO Doesn't work in some cases
 // Returns array of intersecting arrays
@@ -89,13 +96,14 @@ function createImage(screen, offset) {
 
 
         let x_grad = convert_unit(x, screen.width, -1.0, 1.0);
-        let direction = {x: x_grad, y: -camera.focal_length};
+        let direction = vec_rotate({x: x_grad, y: -camera.focal_length}, camera.angle);
         let origin = camera.position;
         let theta = Math.atan(x_grad / -camera.focal_length);
 
         let intersecting_rays = fire_ray(origin, direction);
         
         intersecting_rays.forEach((ray) => {
+
             let wall_height = 2.0 / (ray.length * Math.cos(theta));
             for (var y = 0; y < screen.height; y++) {
 
@@ -107,8 +115,8 @@ function createImage(screen, offset) {
 
                     var pixelindex = (y * screen.width + x) * 4;
                     screen.image_data.data[pixelindex] = 255;     // Red
-                    screen.image_data.data[pixelindex+1] = 0; // Green
-                    screen.image_data.data[pixelindex+2] = 0;  // Blue
+                    screen.image_data.data[pixelindex+1] = ((ray.intersection.x % 2) / 2)  * 255; // Green
+                    screen.image_data.data[pixelindex+2] = ((ray.intersection.y % 2) / 2)  * 255; // Green
                     screen.image_data.data[pixelindex+3] = 255;   // Alpha
 
                 }

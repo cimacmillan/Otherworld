@@ -39,6 +39,14 @@ function keyboardInput(e) {
     if(e.code == "KeyD") {
         camera.position.x += speed;
     }
+
+    if(e.code == "ArrowLeft") {
+        camera.angle -= speed / 2;
+    }
+    if(e.code == "ArrowRight") {
+        camera.angle += speed / 2;
+    }
+
     console.log(camera.position);
 }
 
