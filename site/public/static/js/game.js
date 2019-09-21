@@ -6,7 +6,7 @@ TODO when key held in update
 
 console.log("Game");
 
-var screen = new Screen("viewport", 4);
+var screen = new Screen("viewport", 2);
 var sound = new Sound();
 
 // let mySound = new sound("audio/bassdrum.mp3");
@@ -25,17 +25,19 @@ var current_frame = 0;
 window.addEventListener('keydown',this.keyboardInput,false);
 
 function keyboardInput(e) {
+
+    let speed = 0.2;
     if(e.code == "KeyW") {
-        camera.position.y -= 0.05;
+        camera.position.y -= speed;
     }
     if(e.code == "KeyS") {
-        camera.position.y += 0.05;
+        camera.position.y += speed;
     }
     if(e.code == "KeyA") {
-        camera.position.x -= 0.05;
+        camera.position.x -= speed;
     }
     if(e.code == "KeyD") {
-        camera.position.x += 0.05;
+        camera.position.x += speed;
     }
     console.log(camera.position);
 }
