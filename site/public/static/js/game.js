@@ -1,11 +1,12 @@
 /*
 TODO start button to allow audio to start
 TODO general structure for screens of varying behaviour
+TODO when key held in update
 */
 
 console.log("Game");
 
-var screen = new Screen("viewport", 8);
+var screen = new Screen("viewport", 4);
 var sound = new Sound();
 
 // let mySound = new sound("audio/bassdrum.mp3");
@@ -19,6 +20,26 @@ loadSound("audio/song.mp3", (buffer) => {
 }, sound);
 
 var current_frame = 0;
+
+
+window.addEventListener('keydown',this.keyboardInput,false);
+
+function keyboardInput(e) {
+    if(e.code == "KeyW") {
+        camera.position.y -= 0.05;
+    }
+    if(e.code == "KeyS") {
+        camera.position.y += 0.05;
+    }
+    if(e.code == "KeyA") {
+        camera.position.x -= 0.05;
+    }
+    if(e.code == "KeyD") {
+        camera.position.x += 0.05;
+    }
+    console.log(camera.position);
+}
+
 
 
 function update(tframe) {

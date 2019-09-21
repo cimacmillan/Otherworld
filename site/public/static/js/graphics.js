@@ -15,6 +15,9 @@ class Screen {
         this.canvas_context.putImageData(this.image_data, 0, 0);
         this.canvas_context.drawImage( screen.canvas, 0, 0, this.resolution_divisor * screen.canvas.width, this.resolution_divisor * screen.canvas.height );
     }
+}
+
+function fire_ray(origin, direction) {
 
 }
 
