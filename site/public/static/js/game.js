@@ -1,8 +1,6 @@
-/*
-TODO start button to allow audio to start
-TODO general structure for screens of varying behaviour
-TODO when key held in update
-*/
+
+
+
 
 console.log("Game");
 
@@ -21,38 +19,13 @@ loadSound("audio/song.mp3", (buffer) => {
 
 var current_frame = 0;
 
-
-window.addEventListener('keydown',this.keyboardInput,false);
-
-function keyboardInput(e) {
-
-    let speed = 0.2;
-    if(e.code == "KeyW") {
-        camera.position.y -= speed;
-    }
-    if(e.code == "KeyS") {
-        camera.position.y += speed;
-    }
-    if(e.code == "KeyA") {
-        camera.position.x -= speed;
-    }
-    if(e.code == "KeyD") {
-        camera.position.x += speed;
-    }
-
-    if(e.code == "ArrowLeft") {
-        camera.angle -= speed / 2;
-    }
-    if(e.code == "ArrowRight") {
-        camera.angle += speed / 2;
-    }
-
-    console.log(camera.position);
+function init() {
+    initialiseInput();
 }
 
-
-
 function update(tframe) {
+
+    updateInput();
 
     // Audio requires user interaction first
     // sound.pan_node.pan.value = Math.sin(tframe / 1000);
@@ -72,7 +45,18 @@ function draw(tframe) {
     screen.render_to_canvas();
 }
 
+
 function mainLoop(tframe) {
+
+    let delta = Date.now() - last_frame_time;
+    if (delta >= 1000) {
+        console.log("FPS: ", fps)
+        fps = 0;
+        last_frame_time = Date.now();
+    } else {
+        fps++;
+    }
+
     update(tframe);
     draw(tframe);
     requestAnimationFrame(mainLoop);
@@ -80,7 +64,10 @@ function mainLoop(tframe) {
     current_frame += 1;
 }
  
+init();
 
+var last_frame_time = Date.now();
+var fps = 0;
 mainLoop(0)
 // Start things off
 // requestAnimationFrame(mainLoop);

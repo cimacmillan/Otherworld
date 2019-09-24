@@ -20,12 +20,22 @@ class Screen {
 function vec_cross(a, b) {
     return (a.x * b.y) - (a.y * b.x);
 }
+
 function vec_sub(a, b) {
     return {
         x: a.x - b.x,
         y: a.y - b.y
     }
 }
+
+function vec_add(a, b) {
+    return {
+        x: a.x + b.x,
+        y: a.y + b.y
+    }
+}
+
+
 function vec_divide(a, b) {
     return {
         x: a.x / b.x,
@@ -40,9 +50,6 @@ function vec_rotate(a, theta) {
     }
 }
 
-
-// TODO Doesn't work in some cases
-// Returns array of intersecting arrays
 function fire_ray(origin, direction) {
 
     let intersecting_rays = [];
