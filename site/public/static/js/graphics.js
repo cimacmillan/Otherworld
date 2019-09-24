@@ -1,4 +1,25 @@
 
+class DepthBuffer {
+    constructor(width, height) {
+        this.data = Array(width * height).fill(0);
+        this.width = width;
+        this.height = height;
+    }
+
+    isCloser(x, y, distance) {
+        let index = (y * this.width) + x;
+        return 1.0 / distance > this.data[index];
+    }
+
+    setDistance(x, y, distance) {
+        let index = (y * this.width) + x;
+        this.data[index] = 1.0 / distance;
+    }
+
+    reset() {
+        this.data = Array(this.width * this.height).fill(0);
+    }
+}
 
 class Screen {
     constructor(canvas_element_name, resolution_divisor) {
@@ -9,6 +30,15 @@ class Screen {
         this.width = this.canvas.width / resolution_divisor;
         this.height = this.canvas.height / resolution_divisor;
         this.image_data = this.canvas_context.createImageData(this.width, this.height);
+    }
+
+    putPixel(x, y, red, green, blue, alpha) {
+        var pixelindex = (y * this.width + x) * 4;
+        this.image_data.data[pixelindex] = red;
+        this.image_data.data[pixelindex+1] = green;
+        this.image_data.data[pixelindex+2] = blue;
+        this.image_data.data[pixelindex+3] = alpha;
+
     }
 
     render_to_canvas() {
@@ -90,15 +120,14 @@ function convert_unit(x, range, a, b) {
 }
 
 function createImage(screen, offset) {
+
+    depth_buffer.reset();
+
     // Loop over all of the pixels
     for (var x=0; x < screen.width; x++) {
 
         for (var y=0; y < screen.height; y++) {
-            var pixelindex = (y * screen.width + x) * 4;
-            screen.image_data.data[pixelindex] = 0;     // Red
-            screen.image_data.data[pixelindex+1] = 0; // Green
-            screen.image_data.data[pixelindex+2] = 0;  // Blue
-            screen.image_data.data[pixelindex+3] = 255;   // Alpha
+            screen.putPixel(x, y, 0, 0, 0, 255);
         }
 
 
@@ -114,44 +143,22 @@ function createImage(screen, offset) {
             let wall_height = 2.0 / (ray.length * Math.cos(theta));
             for (var y = 0; y < screen.height; y++) {
 
-                var pixelindex = (y * screen.width + x) * 4;
                 let y_grad = (y / screen.height) * 2 - 1;
                 let wall_check = Math.abs(y_grad);
 
-                if(wall_check < wall_height) {
+                if(wall_check < wall_height && depth_buffer.isCloser(x, y, ray.length)) {
 
-                    var pixelindex = (y * screen.width + x) * 4;
-                    screen.image_data.data[pixelindex] = 255;     // Red
-                    screen.image_data.data[pixelindex+1] = ((ray.intersection.x % 2) / 2)  * 255; // Green
-                    screen.image_data.data[pixelindex+2] = ((ray.intersection.y % 2) / 2)  * 255; // Green
-                    screen.image_data.data[pixelindex+3] = 255;   // Alpha
+                    depth_buffer.setDistance(x, y, ray.length);
+
+                    screen.putPixel(x, y, 
+                        255, 
+                        ((ray.intersection.x % 2) / 2)  * 255, 
+                        ((ray.intersection.y % 2) / 2)  * 255, 
+                        255);
 
                 }
             }
         })
-
-        // let wall_height = 2.0 / (intersecting_rays[0].length * Math.cos(theta));
-    
-
-        // for (var y=0; y < screen.height; y++) {
-
-        //     var pixelindex = (y * screen.width + x) * 4;
-        //     let y_grad = (y / screen.height) * 2 - 1;
-        //     let wall_check = Math.abs(y_grad);
-
-        //     if(wall_check > wall_height) {
-        //         screen.image_data.data[pixelindex] = 0;     // Red
-        //         screen.image_data.data[pixelindex+1] = 0; // Green
-        //         screen.image_data.data[pixelindex+2] = 0;  // Blue
-        //         screen.image_data.data[pixelindex+3] = 255;   // Alpha
-        //         // continue;
-        //     } else {
-        //         screen.image_data.data[pixelindex] = 255;     // Red
-        //         screen.image_data.data[pixelindex+1] = 0; // Green
-        //         screen.image_data.data[pixelindex+2] = 0;  // Blue
-        //         screen.image_data.data[pixelindex+3] = 255;   // Alpha
-        //     }
-        // }
 
     }
 }

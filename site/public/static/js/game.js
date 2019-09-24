@@ -5,6 +5,7 @@
 console.log("Game");
 
 var screen = new Screen("viewport", 2);
+var depth_buffer = new DepthBuffer(screen.width, screen.height);
 var sound = new Sound();
 
 // let mySound = new sound("audio/bassdrum.mp3");

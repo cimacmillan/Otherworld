@@ -1,11 +1,9 @@
 TODO start button to allow audio to start
 TODO general structure for screens of varying behaviour
-TODO when key held in update
 TODO Proper loading of resources
 TODO Headbob
 TODO Sprites
 TODO proper wall height
 TODO Floor
-TODO depth buffer
 TODO Light effects
 TODO texture effects
