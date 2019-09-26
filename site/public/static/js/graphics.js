@@ -80,6 +80,15 @@ function vec_rotate(a, theta) {
     }
 }
 
+function interpolate(alpha, a, b) {
+    return (a * (1 - alpha)) + (b * alpha);
+}
+
+function convert_unit(x, range, a, b) {
+    let grad = x / range;
+    return interpolate(grad, a, b);
+}
+
 function fire_ray(origin, direction) {
 
     let intersecting_rays = [];
@@ -113,10 +122,39 @@ function fire_ray(origin, direction) {
     return intersecting_rays;
 }
 
-function convert_unit(x, range, a, b) {
-    let grad = x / range;
-    let new_unit = (a * (1 - grad)) + (b * grad);
-    return new_unit;
+function drawWall(x, ray, screen, theta, camera) {
+
+    let upper_wall_z = interpolate(ray.wall_interpolation, ray.wall.height0 + ray.wall.offset0, ray.wall.height1 + ray.wall.offset1);
+    let lower_wall_z = interpolate(ray.wall_interpolation, ray.wall.offset0, ray.wall.offset1);
+
+    let upper_pixel = (((-upper_wall_z / camera.focal_length) - 0.5) * camera.y_view_window) * screen.height;
+    let lower_pixel = (((-lower_wall_z / camera.focal_length) - 0.5) * camera.y_view_window) * screen.height;
+
+    console.log(upper_pixel, lower_pixel);
+
+    // let y0_onscreen = upper_wall_z / 
+
+    //TODO Offset, texture coordinates, aspect ratio
+
+    let wall_height = (upper_wall_z - lower_wall_z) / (ray.length * Math.cos(theta));
+
+    for (var y = 0; y < screen.height; y++) {
+
+        let y_grad = (y / screen.height) * 2 - 1;
+        let wall_check = Math.abs(y_grad);
+
+        if(wall_check <= wall_height && depth_buffer.isCloser(x, y, ray.length)) {
+
+            depth_buffer.setDistance(x, y, ray.length);
+
+            screen.putPixel(x, y, 
+                255, 
+                ((ray.intersection.x % 2) / 2)  * 255, 
+                ((ray.intersection.y % 2) / 2)  * 255, 
+                255);
+
+        }
+    }
 }
 
 function createImage(screen, offset) {
@@ -130,36 +168,19 @@ function createImage(screen, offset) {
             screen.putPixel(x, y, 0, 0, 0, 255);
         }
 
+        // Proper focal length and viewing angle
 
-        let x_grad = convert_unit(x, screen.width, -1.0, 1.0);
+        let x_grad = convert_unit(x, screen.width, -camera.x_view_window, camera.x_view_window);
         let direction = vec_rotate({x: x_grad, y: -camera.focal_length}, camera.angle);
         let origin = camera.position;
         let theta = Math.atan(x_grad / -camera.focal_length);
 
         let intersecting_rays = fire_ray(origin, direction);
         
-        intersecting_rays.forEach((ray) => {
-
-            let wall_height = 2.0 / (ray.length * Math.cos(theta));
-            for (var y = 0; y < screen.height; y++) {
-
-                let y_grad = (y / screen.height) * 2 - 1;
-                let wall_check = Math.abs(y_grad);
-
-                if(wall_check < wall_height && depth_buffer.isCloser(x, y, ray.length)) {
-
-                    depth_buffer.setDistance(x, y, ray.length);
-
-                    screen.putPixel(x, y, 
-                        255, 
-                        ((ray.intersection.x % 2) / 2)  * 255, 
-                        ((ray.intersection.y % 2) / 2)  * 255, 
-                        255);
-
-                }
-            }
-        })
+        intersecting_rays.forEach((ray) => drawWall(x, ray, screen, theta, camera));
 
     }
 }
+
+
 

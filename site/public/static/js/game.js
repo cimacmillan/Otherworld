@@ -4,7 +4,7 @@
 
 console.log("Game");
 
-var screen = new Screen("viewport", 2);
+var screen = new Screen("viewport", 4);
 var depth_buffer = new DepthBuffer(screen.width, screen.height);
 var sound = new Sound();
 
@@ -22,6 +22,7 @@ var current_frame = 0;
 
 function init() {
     initialiseInput();
+    initialiseMap(screen);
 }
 
 function update(tframe) {

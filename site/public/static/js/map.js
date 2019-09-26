@@ -1,8 +1,12 @@
 
 class Wall {
-    constructor(p0, p1) {
+    constructor(p0, p1, height0, height1, offset0, offset1) {
         this.p0 = p0;
         this.p1 = p1;
+        this.height0 = height0;
+        this.height1 = height1;
+        this.offset0 = offset0;
+        this.offset1 = offset1;
     }
 }
 
@@ -13,19 +17,29 @@ class Map {
 }
 
 class Camera {
-    constructor(position, angle, focal_length) {
+    constructor(position, angle, focal_length, height, x_view_window, y_view_window) {
         this.position = position;
         this.angle = angle;
         this.focal_length = focal_length;
+        this.height = height;
+        this.x_view_window = x_view_window;
+        this.y_view_window = y_view_window;
     }
 }
 
-wall_buffer = [];
-wall_buffer.push(new Wall({x: 0.0, y: 0.0}, {x: 10.0, y: 0.0}))
-wall_buffer.push(new Wall({x: 10.0, y: 0.0}, {x: 10.0, y: 10.0}))
-wall_buffer.push(new Wall({x: 10.0, y: 10.0}, {x: 0.0, y: 10.0}))
-wall_buffer.push(new Wall({x: 0.0, y: 10.0}, {x: 0.0, y: 0.0}))
-var map = new Map(wall_buffer);
+var wall_buffer;
+var map;
+var camera;
 
-var camera = new Camera({x: 5.0, y: 8.0}, 0.0, 1.0)
+function initialiseMap(screen) {
+
+    wall_buffer = [];
+    wall_buffer.push(new Wall({x: 0.0, y: 0.0}, {x: 10.0, y: 0.0}, 1, 1, 0, 0))
+    wall_buffer.push(new Wall({x: 10.0, y: 0.0}, {x: 10.0, y: 10.0}, 1, 1, 0, 0))
+    wall_buffer.push(new Wall({x: 10.0, y: 10.0}, {x: 0.0, y: 10.0}, 1, 1, 0, 0))
+    wall_buffer.push(new Wall({x: 0.0, y: 10.0}, {x: 0.0, y: 0.0}, 1, 1, 0, 0))
+    map = new Map(wall_buffer);
+    camera = new Camera({x: 5.0, y: 8.0}, 0.0, 1.0, 0.0, (screen.width / screen.height), 1.0);
+}
+
 
