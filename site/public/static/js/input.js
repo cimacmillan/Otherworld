@@ -34,7 +34,12 @@ function updateInput() {
         camera.position = vec_add(camera.position, camera_add);
     }
 
-
+    if(isKeyDown("Space")) {
+        camera.height += speed;
+    }
+    if(isKeyDown("ShiftLeft")) {
+        camera.height -= speed;
+    }
 
     if(isKeyDown("ArrowLeft")) {
         camera.angle -= speed / 3;

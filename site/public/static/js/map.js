@@ -35,10 +35,10 @@ var camera;
 function initialiseMap(screen) {
 
     wall_buffer = [];
-    wall_buffer.push(new Wall({x: 0.0, y: 0.0}, {x: 10.0, y: 0.0}, 1, 1, 0, 0))
-    wall_buffer.push(new Wall({x: 10.0, y: 0.0}, {x: 10.0, y: 10.0}, 1, 1, 0, 0))
-    wall_buffer.push(new Wall({x: 10.0, y: 10.0}, {x: 0.0, y: 10.0}, 1, 1, 0, 0))
-    wall_buffer.push(new Wall({x: 0.0, y: 10.0}, {x: 0.0, y: 0.0}, 1, 1, 0, 0))
+    wall_buffer.push(new Wall({x: 0.0, y: 0.0}, {x: 10.0, y: 0.0}, 0.5, 1, 0, 0))
+    wall_buffer.push(new Wall({x: 10.0, y: 0.0}, {x: 10.0, y: 10.0}, 1, 1, 0, 0.5))
+    wall_buffer.push(new Wall({x: 10.0, y: 10.0}, {x: 0.0, y: 10.0}, 1, 1, 0.5, 0))
+    wall_buffer.push(new Wall({x: 0.0, y: 10.0}, {x: 0.0, y: 0.0}, 1, 0.5, 0, 0))
     map = new Map(wall_buffer);
 
     let aspect_ratio = (screen.width / screen.height);
