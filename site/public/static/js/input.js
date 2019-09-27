@@ -34,6 +34,8 @@ function updateInput() {
         camera.position = vec_add(camera.position, camera_add);
     }
 
+
+
     if(isKeyDown("ArrowLeft")) {
         camera.angle -= speed / 3;
     }

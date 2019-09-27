@@ -17,13 +17,14 @@ class Map {
 }
 
 class Camera {
-    constructor(position, angle, focal_length, height, x_view_window, y_view_window) {
+    constructor(position, angle, focal_length, height, x_view_window, y_view_window, clip_depth) {
         this.position = position;
         this.angle = angle;
         this.focal_length = focal_length;
         this.height = height;
         this.x_view_window = x_view_window;
         this.y_view_window = y_view_window;
+        this.clip_depth = clip_depth;
     }
 }
 
@@ -39,7 +40,12 @@ function initialiseMap(screen) {
     wall_buffer.push(new Wall({x: 10.0, y: 10.0}, {x: 0.0, y: 10.0}, 1, 1, 0, 0))
     wall_buffer.push(new Wall({x: 0.0, y: 10.0}, {x: 0.0, y: 0.0}, 1, 1, 0, 0))
     map = new Map(wall_buffer);
-    camera = new Camera({x: 5.0, y: 8.0}, 0.0, 1.0, 0.0, (screen.width / screen.height), 1.0);
+
+    let aspect_ratio = (screen.width / screen.height);
+    let viewing_angle = 80;
+    let radians = (viewing_angle / 180.0) * Math.PI;
+    let focal_length = aspect_ratio / Math.tan(radians / 2);
+    camera = new Camera({x: 5.0, y: 8.0}, 0.0, focal_length, 0.5, aspect_ratio, 1.0, 0.1);
 }
 
 

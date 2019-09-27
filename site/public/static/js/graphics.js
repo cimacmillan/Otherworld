@@ -65,7 +65,6 @@ function vec_add(a, b) {
     }
 }
 
-
 function vec_divide(a, b) {
     return {
         x: a.x / b.x,
@@ -101,7 +100,7 @@ function fire_ray(origin, direction) {
         let wall_interpolation = (vec_cross(origin, direction) - vec_cross(wall.p0, direction)) /  vec_cross(wall_direction, direction);
         let ray_interpolation =  (vec_cross(wall.p0, wall_direction) - vec_cross(origin, wall_direction)) /  vec_cross(direction, wall_direction);
 
-        if (wall_interpolation >= 0 && wall_interpolation <= 1 && ray_interpolation > camera.focal_length) {
+        if (wall_interpolation >= 0 && wall_interpolation <= 1 && ray_interpolation > camera.clip_depth) {
 
             let intersection = {x: origin.x + ray_interpolation * direction.x, y: origin.y + ray_interpolation * direction.y};
             let length = Math.sqrt(Math.pow(intersection.x - origin.x, 2) + Math.pow(intersection.y - origin.y, 2));
@@ -124,37 +123,31 @@ function fire_ray(origin, direction) {
 
 function drawWall(x, ray, screen, theta, camera) {
 
-    let upper_wall_z = interpolate(ray.wall_interpolation, ray.wall.height0 + ray.wall.offset0, ray.wall.height1 + ray.wall.offset1);
-    let lower_wall_z = interpolate(ray.wall_interpolation, ray.wall.offset0, ray.wall.offset1);
+    let upper_wall_z = -interpolate(ray.wall_interpolation, ray.wall.height0 + ray.wall.offset0 - camera.height, ray.wall.height1 + ray.wall.offset1 - camera.height);
+    let lower_wall_z = -interpolate(ray.wall_interpolation, ray.wall.offset0 - camera.height, ray.wall.offset1 - camera.height);
+    let distance = ray.length * Math.cos(theta);
 
-    let upper_pixel = (((-upper_wall_z / camera.focal_length) - 0.5) * camera.y_view_window) * screen.height;
-    let lower_pixel = (((-lower_wall_z / camera.focal_length) - 0.5) * camera.y_view_window) * screen.height;
+    let upper_pixel = ((upper_wall_z / distance) * camera.focal_length * camera.y_view_window + 0.5) * screen.height;
+    let lower_pixel = ((lower_wall_z / distance) * camera.focal_length * camera.y_view_window + 0.5) * screen.height;
 
-    console.log(upper_pixel, lower_pixel);
+    let temp = upper_pixel;
+    upper_pixel = Math.min(upper_pixel, lower_pixel);
+    lower_pixel = Math.max(temp, lower_pixel);
+    upper_pixel = Math.max(0, upper_pixel);
+    lower_pixel = Math.min(screen.height - 1, lower_pixel);
 
-    // let y0_onscreen = upper_wall_z / 
+    for (var y = Math.floor(upper_pixel); y < Math.floor(lower_pixel); y++) {
 
-    //TODO Offset, texture coordinates, aspect ratio
-
-    let wall_height = (upper_wall_z - lower_wall_z) / (ray.length * Math.cos(theta));
-
-    for (var y = 0; y < screen.height; y++) {
-
-        let y_grad = (y / screen.height) * 2 - 1;
-        let wall_check = Math.abs(y_grad);
-
-        if(wall_check <= wall_height && depth_buffer.isCloser(x, y, ray.length)) {
-
+        if(depth_buffer.isCloser(x, y, ray.length)) {
             depth_buffer.setDistance(x, y, ray.length);
-
             screen.putPixel(x, y, 
                 255, 
                 ((ray.intersection.x % 2) / 2)  * 255, 
                 ((ray.intersection.y % 2) / 2)  * 255, 
                 255);
-
         }
     }
+
 }
 
 function createImage(screen, offset) {
