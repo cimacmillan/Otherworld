@@ -1,5 +1,6 @@
 Working On:
-    TODO Reformat project to typescript setting
+    TODO Rewrite server to use new project format
+    TODO Rewrite client to use new project
     TODO proper wall rendering
 
 TODO start button to allow audio to start
