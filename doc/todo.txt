@@ -1,4 +1,5 @@
 Working On:
+    TODO Reformat project to typescript setting
     TODO proper wall rendering
 
 TODO start button to allow audio to start
