@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Express = require("express");
+const Chalk = require("./Chalk");
+Chalk.bigLog();
 const PROCESS_DIRECTORY = process.cwd();
 const INDEX_DIRECTORY = `${PROCESS_DIRECTORY}/site/public/`;
 const STATIC_DIRECTORY = `${PROCESS_DIRECTORY}/site/public/static/`;

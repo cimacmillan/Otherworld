@@ -1,22 +1,24 @@
-#!/usr/bin/env bash
-set -e
-echo -e "Default \e[32mGreen"
+# #!/usr/bin/env bash
+# set -e
+# echo -e "Default \e[32mGreen"
 
-GREEN='\033[0;32m'
-NC='\033[0m' # No Color
+# GREEN='\033[0;32m'
+# NC='\033[0m' # No Color
 
-printf "${GREEN}Building${NC}...\n"
+# printf "${GREEN}Building${NC}...\n"
 
-npm run build
+# npm run build
 
-printf "${GREEN}Testing...${NC}...\n"
+# printf "${GREEN}Testing...${NC}...\n"
 
-npm run test
+# npm run test
 
-printf "${GREEN}Webpacking...${NC}...\n"
+# printf "${GREEN}Webpacking...${NC}...\n"
 
-npm run pack
+# npm run pack
 
-printf "${GREEN}Starting Server...${NC}...\n"
+# printf "${GREEN}Starting Server...${NC}...\n"
 
-npm run start 
+# npm run start 
+
+sudo npm run watch
