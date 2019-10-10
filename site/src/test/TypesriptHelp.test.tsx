@@ -1,6 +1,6 @@
 // Jest script requires all files to have .test
 
-import * as Index from '../typescripthelp';
+import * as Index from '../TypescriptHelp';
 
 console.log(Index);
 

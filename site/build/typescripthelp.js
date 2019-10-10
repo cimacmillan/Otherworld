@@ -20,4 +20,4 @@ class Student {
     }
 }
 exports.Student = Student;
-//# sourceMappingURL=typescripthelp.js.map
+//# sourceMappingURL=TypescriptHelp.js.map
