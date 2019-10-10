@@ -30,7 +30,7 @@
   "scripts": {
     "build": "tsc",
     "test": "npx jest",
-    "pack": "npx webpack site/build/ -o site/public/static/js/main.js",
+    "pack": "npx webpack site/build/client/ -o site/public/static/js/main.js",
     "start": "node site/build/server/run.js"
   },
   "repository": {

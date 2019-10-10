@@ -19,4 +19,4 @@ npm run pack
 
 printf "${GREEN}Starting Server...${NC}...\n"
 
-npm run start
+npm run start 
