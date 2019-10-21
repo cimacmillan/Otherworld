@@ -21,5 +21,5 @@
 
 # npm run start 
 
-sudo npm run clean
-sudo npm run watch
+npm run clean
+npm run watch

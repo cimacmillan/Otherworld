@@ -2,7 +2,6 @@
   "name": "jsgame",
   "version": "1.0.0",
   "description": "## Subheading A",
-  "main": "index.js",
   "devDependencies": {
     "@types/deep-freeze": "^0.1.2",
     "@types/jest": "^24.0.18",
@@ -31,11 +30,11 @@
   },
   "scripts": {
     "clean": "rm -rf ./site/build/",
-    "build": "tsc -w",
+    "build": "tsc",
     "test": "npx jest",
-    "pack": "npx webpack --watch site/build/client/ -o site/public/static/js/main.js",
-    "server": "nodemon site/build/server/Run.js",
-    "watch": "npm run-script build & npm run-script pack & npm run-script server"
+    "pack": "npx webpack --config webpack.config.js site/build/client/ -o site/public/static/js/main.js",
+    "server": "node site/build/server/Run.js",
+    "watch": "npm run-script build && npm run-script pack && npm run-script server"
   },
   "repository": {
     "type": "git",
