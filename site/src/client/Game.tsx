@@ -1,18 +1,19 @@
 
-
+console.log("Hello World");
 
 
 console.log("Game");
 
-var screen = new Screen("viewport", 4);
+var gameScreen = new GameScreen("viewport", 4);
 var depth_buffer = new DepthBuffer(screen.width, screen.height);
 var sound = new Sound();
+var dogBarkingBuffer: AudioBuffer;
 
 // let mySound = new sound("audio/bassdrum.mp3");
 loadSound("audio/song.mp3", (buffer) => {
     dogBarkingBuffer = buffer;
 
-    setTimeout(function(){
+    setTimeout(function () {
         sound.context.resume();
         playSound(dogBarkingBuffer, sound);
     }, 2000);
@@ -25,7 +26,7 @@ function init() {
     initialiseMap(screen);
 }
 
-function update(tframe) {
+function update(tframe: number) {
 
     updateInput();
 
@@ -39,16 +40,16 @@ function update(tframe) {
 
 }
 
-function draw(tframe) {
+function draw(tframe: number) {
     // Create the image
-    createImage(screen, (tframe / 1000));
+    createImage(gameScreen);
 
     // Draw the image data to the canvas
-    screen.render_to_canvas();
+    gameScreen.render_to_canvas();
 }
 
 
-function mainLoop(tframe) {
+export function mainLoop(tframe: number) {
 
     let delta = Date.now() - last_frame_time;
     if (delta >= 1000) {
@@ -65,7 +66,7 @@ function mainLoop(tframe) {
 
     current_frame += 1;
 }
- 
+
 init();
 
 var last_frame_time = Date.now();

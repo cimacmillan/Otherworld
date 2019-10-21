@@ -1,50 +1,50 @@
 
-var keys_down_set = {};
+var keys_down_set: any = {};
 
 function initialiseInput() {
     window.addEventListener('keydown', keyboardInput);
     window.addEventListener('keyup', keyboardInput);
 }
 
-function isKeyDown(key) {
+function isKeyDown(key: string) {
     return keys_down_set[key] == true;
 }
 
-function keyboardInput(e) {
+function keyboardInput(e: KeyboardEvent) {
     keys_down_set[e.code] = (e.type == "keydown") ? true : false;
 }
 
 function updateInput() {
 
     let speed = 0.1;
-    if(isKeyDown("KeyW")) {
-        let camera_add = vec_rotate({x: 0, y: -speed}, camera.angle);
+    if (isKeyDown("KeyW")) {
+        let camera_add = vec_rotate({ x: 0, y: -speed }, camera.angle);
         camera.position = vec_add(camera.position, camera_add);
     }
-    if(isKeyDown("KeyS")) {
-        let camera_add = vec_rotate({x: 0, y: speed}, camera.angle);
+    if (isKeyDown("KeyS")) {
+        let camera_add = vec_rotate({ x: 0, y: speed }, camera.angle);
         camera.position = vec_add(camera.position, camera_add);
     }
-    if(isKeyDown("KeyA")) {
-        let camera_add = vec_rotate({x: -speed, y: 0}, camera.angle);
+    if (isKeyDown("KeyA")) {
+        let camera_add = vec_rotate({ x: -speed, y: 0 }, camera.angle);
         camera.position = vec_add(camera.position, camera_add);
     }
-    if(isKeyDown("KeyD")) {
-        let camera_add = vec_rotate({x: speed, y: 0}, camera.angle);
+    if (isKeyDown("KeyD")) {
+        let camera_add = vec_rotate({ x: speed, y: 0 }, camera.angle);
         camera.position = vec_add(camera.position, camera_add);
     }
 
-    if(isKeyDown("Space")) {
+    if (isKeyDown("Space")) {
         camera.height += speed;
     }
-    if(isKeyDown("ShiftLeft")) {
+    if (isKeyDown("ShiftLeft")) {
         camera.height -= speed;
     }
 
-    if(isKeyDown("ArrowLeft")) {
+    if (isKeyDown("ArrowLeft")) {
         camera.angle -= speed / 3;
     }
-    if(isKeyDown("ArrowRight")) {
+    if (isKeyDown("ArrowRight")) {
         camera.angle += speed / 3;
     }
 
