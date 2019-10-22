@@ -4,7 +4,7 @@ interface Vector2D {
     y: number
 }
 
-class Wall {
+export class Wall {
     public p0: Vector2D;
     public p1: Vector2D;
     public height0: number;
@@ -28,7 +28,7 @@ class GameMap {
     }
 }
 
-class Camera {
+export class Camera {
     position: Vector2D;
     angle: number;
     focal_length: number;
@@ -47,11 +47,11 @@ class Camera {
     }
 }
 
-var wall_buffer: Wall[];
-var map: GameMap;
-var camera: Camera;
+export var wall_buffer: Wall[];
+export var map: GameMap;
+export var camera: Camera;
 
-function initialiseMap(screen: Screen) {
+export function initialiseMap(screen: Screen) {
 
     wall_buffer = [];
     wall_buffer.push(new Wall({ x: 0.0, y: 0.0 }, { x: 10.0, y: 0.0 }, 0.5, 1, 0, 0))

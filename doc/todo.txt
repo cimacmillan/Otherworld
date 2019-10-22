@@ -1,6 +1,6 @@
 Working On:
-    TODO Rewrite server to use new project format
     TODO Rewrite client to use new project
+    TODO Refactor graphics types
     TODO proper wall rendering
 
 TODO start button to allow audio to start

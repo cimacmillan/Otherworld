@@ -1,5 +1,7 @@
 
-class DepthBuffer {
+import { camera, map, Camera, Wall } from "./Map"
+
+export class DepthBuffer {
 
     data: number[];
     width: number;
@@ -26,7 +28,7 @@ class DepthBuffer {
     }
 }
 
-class GameScreen {
+export class GameScreen {
 
     canvas: HTMLCanvasElement;
     canvas_context: CanvasRenderingContext2D;
@@ -71,7 +73,7 @@ function vec_sub(a: { x: number, y: number }, b: { x: number, y: number }) {
     }
 }
 
-function vec_add(a: { x: number, y: number }, b: { x: number, y: number }) {
+export function vec_add(a: { x: number, y: number }, b: { x: number, y: number }) {
     return {
         x: a.x + b.x,
         y: a.y + b.y
@@ -85,7 +87,7 @@ function vec_divide(a: { x: number, y: number }, b: { x: number, y: number }) {
     }
 }
 
-function vec_rotate(a: { x: number, y: number }, theta: number) {
+export function vec_rotate(a: { x: number, y: number }, theta: number) {
     return {
         x: a.x * Math.cos(theta) - a.y * Math.sin(theta),
         y: a.y * Math.cos(theta) + a.x * Math.sin(theta)
@@ -178,7 +180,7 @@ function drawWall(x: number, ray: Ray, screen: GameScreen, theta: number, camera
 
 }
 
-function createImage(screen: GameScreen, depth_buffer: DepthBuffer) {
+export function createImage(screen: GameScreen, depth_buffer: DepthBuffer) {
 
     depth_buffer.reset();
 

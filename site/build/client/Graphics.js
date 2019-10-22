@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Map_1 = require("./Map");
 class DepthBuffer {
     constructor(width, height) {
         this.data = Array(width * height).fill(0);
@@ -16,6 +19,7 @@ class DepthBuffer {
         this.data = Array(this.width * this.height).fill(0);
     }
 }
+exports.DepthBuffer = DepthBuffer;
 class GameScreen {
     constructor(canvas_element_name, resolution_divisor) {
         this.canvas = document.getElementById(canvas_element_name);
@@ -38,6 +42,7 @@ class GameScreen {
         this.canvas_context.drawImage(this.canvas, 0, 0, this.resolution_divisor * this.canvas.width, this.resolution_divisor * this.canvas.height);
     }
 }
+exports.GameScreen = GameScreen;
 function vec_cross(a, b) {
     return (a.x * b.y) - (a.y * b.x);
 }
@@ -53,6 +58,7 @@ function vec_add(a, b) {
         y: a.y + b.y
     };
 }
+exports.vec_add = vec_add;
 function vec_divide(a, b) {
     return {
         x: a.x / b.x,
@@ -65,6 +71,7 @@ function vec_rotate(a, theta) {
         y: a.y * Math.cos(theta) + a.x * Math.sin(theta)
     };
 }
+exports.vec_rotate = vec_rotate;
 function interpolate(alpha, a, b) {
     return (a * (1 - alpha)) + (b * alpha);
 }
@@ -74,12 +81,12 @@ function convert_unit(x, range, a, b) {
 }
 function fire_ray(origin, direction) {
     let intersecting_rays = [];
-    map.wall_buffer.forEach((wall) => {
+    Map_1.map.wall_buffer.forEach((wall) => {
         let wall_direction = vec_sub(wall.p1, wall.p0);
         //Funky maths
         let wall_interpolation = (vec_cross(origin, direction) - vec_cross(wall.p0, direction)) / vec_cross(wall_direction, direction);
         let ray_interpolation = (vec_cross(wall.p0, wall_direction) - vec_cross(origin, wall_direction)) / vec_cross(direction, wall_direction);
-        if (wall_interpolation >= 0 && wall_interpolation <= 1 && ray_interpolation > camera.clip_depth) {
+        if (wall_interpolation >= 0 && wall_interpolation <= 1 && ray_interpolation > Map_1.camera.clip_depth) {
             let intersection = { x: origin.x + ray_interpolation * direction.x, y: origin.y + ray_interpolation * direction.y };
             let length = Math.sqrt(Math.pow(intersection.x - origin.x, 2) + Math.pow(intersection.y - origin.y, 2));
             intersecting_rays.push({
@@ -121,12 +128,13 @@ function createImage(screen, depth_buffer) {
             screen.putPixel(x, y, 0, 0, 0, 255);
         }
         // Proper focal length and viewing angle
-        let x_grad = convert_unit(x, screen.width, -camera.x_view_window, camera.x_view_window);
-        let direction = vec_rotate({ x: x_grad, y: -camera.focal_length }, camera.angle);
-        let origin = camera.position;
-        let theta = Math.atan(x_grad / -camera.focal_length);
+        let x_grad = convert_unit(x, screen.width, -Map_1.camera.x_view_window, Map_1.camera.x_view_window);
+        let direction = vec_rotate({ x: x_grad, y: -Map_1.camera.focal_length }, Map_1.camera.angle);
+        let origin = Map_1.camera.position;
+        let theta = Math.atan(x_grad / -Map_1.camera.focal_length);
         let intersecting_rays = fire_ray(origin, direction);
-        intersecting_rays.forEach((ray) => drawWall(x, ray, screen, theta, camera, depth_buffer));
+        intersecting_rays.forEach((ray) => drawWall(x, ray, screen, theta, Map_1.camera, depth_buffer));
     }
 }
+exports.createImage = createImage;
 //# sourceMappingURL=Graphics.js.map

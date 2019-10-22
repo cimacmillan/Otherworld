@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class Wall {
     constructor(p0, p1, height0, height1, offset0, offset1) {
         this.p0 = p0;
@@ -8,6 +10,7 @@ class Wall {
         this.offset1 = offset1;
     }
 }
+exports.Wall = Wall;
 class GameMap {
     constructor(wall_buffer) {
         this.wall_buffer = wall_buffer;
@@ -24,20 +27,19 @@ class Camera {
         this.clip_depth = clip_depth;
     }
 }
-var wall_buffer;
-var map;
-var camera;
+exports.Camera = Camera;
 function initialiseMap(screen) {
-    wall_buffer = [];
-    wall_buffer.push(new Wall({ x: 0.0, y: 0.0 }, { x: 10.0, y: 0.0 }, 0.5, 1, 0, 0));
-    wall_buffer.push(new Wall({ x: 10.0, y: 0.0 }, { x: 10.0, y: 10.0 }, 1, 1, 0, 0.5));
-    wall_buffer.push(new Wall({ x: 10.0, y: 10.0 }, { x: 0.0, y: 10.0 }, 1, 1, 0.5, 0));
-    wall_buffer.push(new Wall({ x: 0.0, y: 10.0 }, { x: 0.0, y: 0.0 }, 1, 0.5, 0, 0));
-    map = new GameMap(wall_buffer);
+    exports.wall_buffer = [];
+    exports.wall_buffer.push(new Wall({ x: 0.0, y: 0.0 }, { x: 10.0, y: 0.0 }, 0.5, 1, 0, 0));
+    exports.wall_buffer.push(new Wall({ x: 10.0, y: 0.0 }, { x: 10.0, y: 10.0 }, 1, 1, 0, 0.5));
+    exports.wall_buffer.push(new Wall({ x: 10.0, y: 10.0 }, { x: 0.0, y: 10.0 }, 1, 1, 0.5, 0));
+    exports.wall_buffer.push(new Wall({ x: 0.0, y: 10.0 }, { x: 0.0, y: 0.0 }, 1, 0.5, 0, 0));
+    exports.map = new GameMap(exports.wall_buffer);
     let aspect_ratio = (screen.width / screen.height);
     let viewing_angle = 80;
     let radians = (viewing_angle / 180.0) * Math.PI;
     let focal_length = aspect_ratio / Math.tan(radians / 2);
-    camera = new Camera({ x: 5.0, y: 8.0 }, 0.0, focal_length, 0.5, aspect_ratio, 1.0, 0.1);
+    exports.camera = new Camera({ x: 5.0, y: 8.0 }, 0.0, focal_length, 0.5, aspect_ratio, 1.0, 0.1);
 }
+exports.initialiseMap = initialiseMap;
 //# sourceMappingURL=Map.js.map

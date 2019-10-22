@@ -1,25 +1,44 @@
+import { Sound, loadSound, playSound } from "./Sound";
+import { DepthBuffer, GameScreen, createImage } from "./Graphics";
+import { initialiseInput, updateInput } from "./Input";
+import { initialiseMap } from "./Map";
 
-console.log("Hello World");
+var gameScreen: GameScreen;
+var depth_buffer: DepthBuffer;
+var current_frame: number;
+var last_frame_time: number;
+var fps: number;
 
+export function bootstrap() {
+    console.log("Hello World");
+    console.log("Game");
 
-console.log("Game");
+    var sound = new Sound();
+    var dogBarkingBuffer: AudioBuffer;
 
-var gameScreen = new GameScreen("viewport", 4);
-var depth_buffer = new DepthBuffer(screen.width, screen.height);
-var sound = new Sound();
-var dogBarkingBuffer: AudioBuffer;
+    gameScreen = new GameScreen("viewport", 4);
+    depth_buffer = new DepthBuffer(screen.width, screen.height);
 
-// let mySound = new sound("audio/bassdrum.mp3");
-loadSound("audio/song.mp3", (buffer) => {
-    dogBarkingBuffer = buffer;
+    // let mySound = new sound("audio/bassdrum.mp3");
+    loadSound("audio/song.mp3", (buffer) => {
+        dogBarkingBuffer = buffer;
 
-    setTimeout(function () {
-        sound.context.resume();
-        playSound(dogBarkingBuffer, sound);
-    }, 2000);
-}, sound);
+        setTimeout(function () {
+            sound.context.resume();
+            playSound(dogBarkingBuffer, sound);
+        }, 2000);
+    }, sound);
 
-var current_frame = 0;
+    current_frame = 0;
+
+    init();
+
+    last_frame_time = Date.now();
+    fps = 0;
+
+    mainLoop(0)
+}
+
 
 function init() {
     initialiseInput();
@@ -49,7 +68,7 @@ function draw(tframe: number) {
 }
 
 
-export function mainLoop(tframe: number) {
+function mainLoop(tframe: number) {
 
     let delta = Date.now() - last_frame_time;
     if (delta >= 1000) {
@@ -66,11 +85,3 @@ export function mainLoop(tframe: number) {
 
     current_frame += 1;
 }
-
-init();
-
-var last_frame_time = Date.now();
-var fps = 0;
-mainLoop(0)
-// Start things off
-// requestAnimationFrame(mainLoop);

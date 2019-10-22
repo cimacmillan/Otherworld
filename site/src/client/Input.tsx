@@ -1,7 +1,9 @@
+import { vec_add, vec_rotate } from "./Graphics"
+import { camera } from "./Map"
 
 var keys_down_set: any = {};
 
-function initialiseInput() {
+export function initialiseInput() {
     window.addEventListener('keydown', keyboardInput);
     window.addEventListener('keyup', keyboardInput);
 }
@@ -14,7 +16,7 @@ function keyboardInput(e: KeyboardEvent) {
     keys_down_set[e.code] = (e.type == "keydown") ? true : false;
 }
 
-function updateInput() {
+export function updateInput() {
 
     let speed = 0.1;
     if (isKeyDown("KeyW")) {

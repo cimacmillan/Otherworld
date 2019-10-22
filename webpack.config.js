@@ -4,5 +4,6 @@ const path = require('path');
 const APP_DIR = path.resolve(__dirname, "site/build/client/Index.js");
 
 module.exports = {
-    entry: APP_DIR
+    entry: APP_DIR,
+    mode: "development"
 }
