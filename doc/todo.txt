@@ -1,5 +1,4 @@
 Working On:
-    TODO Rewrite client to use new project
     TODO Refactor graphics types
     TODO proper wall rendering
 
