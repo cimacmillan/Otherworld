@@ -24,17 +24,29 @@
     "express": "^4.17.1",
     "lodash": "^4.17.15",
     "nodemon": "^1.19.3",
+    "npm-watch": "^0.6.0",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "redux": "^4.0.4"
   },
   "scripts": {
     "clean": "rm -rf ./site/build/",
-    "build": "tsc",
+    "build": "tsc ",
     "test": "npx jest",
     "pack": "npx webpack --config webpack.config.js site/build/client/ -o site/public/static/js/main.js",
     "server": "node site/build/server/Run.js",
-    "watch": "npm run-script build && npm run-script pack && npm run-script server"
+    "watch": "npm-watch",
+    "full-rebuild": "npm run-script clean && npm run-script build && npm run-script pack && npm run-script server"
+  },
+  "watch": {
+    "full-rebuild": {
+      "patterns": [
+        "site/src"
+      ],
+      "extensions": "ts,tsx",
+      "quiet": true,
+      "inherit": true
+    }
   },
   "repository": {
     "type": "git",
