@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Graphics_1 = require("./Graphics");
+const Graphics_1 = require("./render/Graphics");
 const Map_1 = require("./Map");
 var keys_down_set = {};
 function initialiseInput() {

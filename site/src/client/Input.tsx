@@ -1,4 +1,4 @@
-import { vec_add, vec_rotate } from "./Graphics"
+import { vec_add, vec_rotate } from "./render/Graphics"
 import { camera } from "./Map"
 
 var keys_down_set: any = {};

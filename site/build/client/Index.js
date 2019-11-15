@@ -1,8 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Game = require("./Game");
+const React = require("react");
+const ReactDOM = require("react-dom");
+const GameComponent_1 = require("./GameComponent");
+const Sound_1 = require("./Sound");
 console.log("!!");
-// const render = () => ReactDOM.render(<h1> Hello World! React Etc</h1>, document.getElementById("root"))
-// render();
-Game.bootstrap();
+const sound = new Sound_1.Sound();
+const render = () => ReactDOM.render(React.createElement(GameComponent_1.GameComponent, { sound: sound }), document.getElementById("root"));
+render();
 //# sourceMappingURL=Index.js.map

@@ -1,7 +1,7 @@
 
-import { camera, map } from "./Map"
-import { Camera, Wall } from "./types/TypesMap"
-import { Vector2D } from "./types/TypesVector"
+import { camera, map } from "../Map"
+import { Camera, Wall } from "../types/TypesMap"
+import { Vector2D } from "../types/TypesVector"
 
 export class DepthBuffer {
 
@@ -32,21 +32,14 @@ export class DepthBuffer {
 
 export class GameScreen {
 
-    canvas: HTMLCanvasElement;
-    canvas_context: CanvasRenderingContext2D;
-    resolution_divisor: number;
+    image_data: ImageData;
     width: number;
     height: number;
-    image_data: ImageData;
 
-    constructor(canvas_element_name: string, resolution_divisor: number) {
-        this.canvas = document.getElementById(canvas_element_name) as HTMLCanvasElement;
-        this.canvas_context = this.canvas.getContext("2d");
-        this.canvas_context.imageSmoothingEnabled = false;
-        this.resolution_divisor = resolution_divisor;
-        this.width = this.canvas.width / resolution_divisor;
-        this.height = this.canvas.height / resolution_divisor;
-        this.image_data = this.canvas_context.createImageData(this.width, this.height);
+    constructor(image_data: ImageData, width: number, height: number) {
+        this.image_data = image_data;
+        this.width = width;
+        this.height = height;
     }
 
     putPixel(x: number, y: number, red: number, green: number, blue: number, alpha: number) {
@@ -55,13 +48,8 @@ export class GameScreen {
         this.image_data.data[pixelindex + 1] = green;
         this.image_data.data[pixelindex + 2] = blue;
         this.image_data.data[pixelindex + 3] = alpha;
-
     }
 
-    render_to_canvas() {
-        this.canvas_context.putImageData(this.image_data, 0, 0);
-        this.canvas_context.drawImage(this.canvas, 0, 0, this.resolution_divisor * this.canvas.width, this.resolution_divisor * this.canvas.height);
-    }
 }
 
 function vec_cross(a: Vector2D, b: Vector2D) {

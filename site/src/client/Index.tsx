@@ -1,13 +1,14 @@
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { createStore, Reducer } from 'redux';
-
-import * as Game from "./Game"
+import { GameComponent } from "./GameComponent";
+import { Sound } from "./Sound";
 
 console.log("!!");
 
-// const render = () => ReactDOM.render(<h1> Hello World! React Etc</h1>, document.getElementById("root"))
-// render();
+const sound = new Sound();
 
-Game.bootstrap();
+
+const render = () => ReactDOM.render(<GameComponent sound={sound}/>, document.getElementById("root"))
+render();
+

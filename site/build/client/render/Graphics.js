@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Map_1 = require("./Map");
+const Map_1 = require("../Map");
 class DepthBuffer {
     constructor(width, height) {
         this.data = Array(width * height).fill(0);
@@ -21,14 +21,10 @@ class DepthBuffer {
 }
 exports.DepthBuffer = DepthBuffer;
 class GameScreen {
-    constructor(canvas_element_name, resolution_divisor) {
-        this.canvas = document.getElementById(canvas_element_name);
-        this.canvas_context = this.canvas.getContext("2d");
-        this.canvas_context.imageSmoothingEnabled = false;
-        this.resolution_divisor = resolution_divisor;
-        this.width = this.canvas.width / resolution_divisor;
-        this.height = this.canvas.height / resolution_divisor;
-        this.image_data = this.canvas_context.createImageData(this.width, this.height);
+    constructor(image_data, width, height) {
+        this.image_data = image_data;
+        this.width = width;
+        this.height = height;
     }
     putPixel(x, y, red, green, blue, alpha) {
         var pixelindex = (y * this.width + x) * 4;
@@ -36,10 +32,6 @@ class GameScreen {
         this.image_data.data[pixelindex + 1] = green;
         this.image_data.data[pixelindex + 2] = blue;
         this.image_data.data[pixelindex + 3] = alpha;
-    }
-    render_to_canvas() {
-        this.canvas_context.putImageData(this.image_data, 0, 0);
-        this.canvas_context.drawImage(this.canvas, 0, 0, this.resolution_divisor * this.canvas.width, this.resolution_divisor * this.canvas.height);
     }
 }
 exports.GameScreen = GameScreen;
