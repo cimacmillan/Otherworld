@@ -7,6 +7,7 @@
     "@types/jest": "^24.0.18",
     "@types/react": "^16.9.5",
     "@types/react-dom": "^16.9.1",
+    "cypress": "^3.6.1",
     "jest": "^24.9.0",
     "ts-jest": "^24.1.0",
     "typescript": "^3.6.3",
@@ -20,6 +21,7 @@
     "@types/express": "^4.17.1",
     "@types/node": "^12.7.11",
     "chalk": "^2.4.2",
+    "cypress-plugin-snapshots": "^1.2.9",
     "deep-freeze": "0.0.1",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
@@ -32,11 +34,14 @@
   "scripts": {
     "clean": "rm -rf ./site/build/",
     "build": "tsc ",
-    "test": "npx jest",
     "pack": "npx webpack --config webpack.config.js site/build/client/ -o site/public/static/js/main.js",
     "server": "node site/build/server/Run.js",
     "watch": "npm-watch",
-    "full-rebuild": "npm run-script clean && npm run-script build && npm run-script pack && npm run-script server"
+    "full-rebuild": "npm run-script clean && npm run-script build && npm run-script pack && npm run-script server",
+    "test-unit": "npx jest",
+    "test-integration-i": "./node_modules/.bin/cypress open",
+    "test-integration": "./node_modules/.bin/cypress run",
+    "test": "npm run-script test-unit && npm run-script test-integration"
   },
   "watch": {
     "full-rebuild": {

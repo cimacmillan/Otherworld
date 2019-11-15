@@ -1,5 +1,7 @@
 
-import { camera, map, Camera, Wall } from "./Map"
+import { camera, map } from "./Map"
+import { Camera, Wall } from "./types/TypesMap"
+import { Vector2D } from "./types/TypesVector"
 
 export class DepthBuffer {
 
@@ -62,32 +64,32 @@ export class GameScreen {
     }
 }
 
-function vec_cross(a: { x: number, y: number }, b: { x: number, y: number }) {
+function vec_cross(a: Vector2D, b: Vector2D) {
     return (a.x * b.y) - (a.y * b.x);
 }
 
-function vec_sub(a: { x: number, y: number }, b: { x: number, y: number }) {
+function vec_sub(a: Vector2D, b: Vector2D) {
     return {
         x: a.x - b.x,
         y: a.y - b.y
     }
 }
 
-export function vec_add(a: { x: number, y: number }, b: { x: number, y: number }) {
+export function vec_add(a: Vector2D, b: Vector2D) {
     return {
         x: a.x + b.x,
         y: a.y + b.y
     }
 }
 
-function vec_divide(a: { x: number, y: number }, b: { x: number, y: number }) {
+function vec_divide(a: Vector2D, b: Vector2D) {
     return {
         x: a.x / b.x,
         y: a.y / b.y
     }
 }
 
-export function vec_rotate(a: { x: number, y: number }, theta: number) {
+export function vec_rotate(a: Vector2D, theta: number) {
     return {
         x: a.x * Math.cos(theta) - a.y * Math.sin(theta),
         y: a.y * Math.cos(theta) + a.x * Math.sin(theta)
@@ -101,11 +103,6 @@ function interpolate(alpha: number, a: number, b: number) {
 function convert_unit(x: number, range: number, a: number, b: number) {
     let grad = x / range;
     return interpolate(grad, a, b);
-}
-
-interface Vector2D {
-    x: number,
-    y: number
 }
 
 interface Ray {

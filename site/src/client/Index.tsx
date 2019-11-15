@@ -7,7 +7,7 @@ import * as Game from "./Game"
 
 console.log("!!");
 
-const render = () => ReactDOM.render(<h1> Hello World! React Etc</h1>, document.getElementById("root"))
-render();
+// const render = () => ReactDOM.render(<h1> Hello World! React Etc</h1>, document.getElementById("root"))
+// render();
 
 Game.bootstrap();
