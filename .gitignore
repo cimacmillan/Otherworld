@@ -5,4 +5,4 @@ cypress/plugins
 cypress/screenshots
 cypress/support
 cypress/videos
-examples
+site/build
