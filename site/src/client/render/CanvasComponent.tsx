@@ -3,6 +3,7 @@ import * as React from "react";
 
 export interface CanvasComponentProps {
     id: string;
+    resolution: number;
     dom_width: number;
     dom_height: number;
     width: number;
@@ -21,7 +22,7 @@ export class CanvasComponent extends React.Component<CanvasComponentProps> {
 
     public writeImageData = () => {
         this.canvasContext.putImageData(this.imageData, 0, 0);
-        this.canvasContext.drawImage(this.canvas, 0, 0, this.props.dom_width * 4, this.props.dom_height * 4);
+        this.canvasContext.drawImage(this.canvas, 0, 0, this.props.dom_width * this.props.resolution, this.props.dom_height * this.props.resolution);
     }
 
     public componentDidMount = () => {

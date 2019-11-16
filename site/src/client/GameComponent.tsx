@@ -5,8 +5,8 @@ import { loadSound, Sound, playSound } from "./Sound";
 import { initialiseInput, updateInput } from "./Input";
 import { initialiseMap } from "./Map";
 
-const DOM_WIDTH = 640;
-const DOM_HEIGHT = 480;
+const DOM_WIDTH = 1280;
+const DOM_HEIGHT = 720;
 const RES_DIV = 4;
 const WIDTH = DOM_WIDTH / RES_DIV;
 const HEIGHT = DOM_HEIGHT / RES_DIV;
@@ -55,7 +55,7 @@ export class GameComponent extends React.Component {
 
     private init = () => {
         initialiseInput();
-        initialiseMap(screen);
+        initialiseMap(this.gameScreen);
     }
 
     private update = (tframe: number) => {
@@ -66,7 +66,7 @@ export class GameComponent extends React.Component {
         // sound.pan_node.pan.value = Math.sin(tframe / 1000);
         // sound.gain_node.gain.value = Math.abs(sound.pan_node.pan.value)
 
-        // if(current_frame % 20 == 0 && (typeof dogBarkingBuffer !== 'undefined')) {
+        // if(current_frame % 20 == 0 && (tyspeof dogBarkingBuffer !== 'undefined')) {
         //     console.log("update - ", sound.pan_node.pan.value);
         // }
 
@@ -97,7 +97,7 @@ export class GameComponent extends React.Component {
 
 
     public render() {
-        return <CanvasComponent ref="main_canvas" id={"main_canvas"} dom_width={DOM_WIDTH} dom_height={DOM_HEIGHT} width={WIDTH} height={HEIGHT}/>
+        return <CanvasComponent ref="main_canvas" id={"main_canvas"} dom_width={DOM_WIDTH} dom_height={DOM_HEIGHT} width={WIDTH} height={HEIGHT} resolution={RES_DIV}/>
     }
 
 }
