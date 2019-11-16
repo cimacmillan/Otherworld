@@ -11,15 +11,12 @@ const RES_DIV = 4;
 const WIDTH = DOM_WIDTH / RES_DIV;
 const HEIGHT = DOM_HEIGHT / RES_DIV;
 
-export interface GameComponentProps {
-    sound: Sound;
-}
-
-export class GameComponent extends React.Component<GameComponentProps> {
+export class GameComponent extends React.Component {
 
     private gameScreen: GameScreen;
     private depthBuffer: DepthBuffer;
     private dogBarkingBuffer: AudioBuffer;
+    private sound: Sound;
 
     private last_frame_time: number;
     private fps: number;
@@ -34,15 +31,17 @@ export class GameComponent extends React.Component<GameComponentProps> {
             WIDTH, HEIGHT
         );
 
+        this.sound = new Sound();
+
         loadSound("audio/song.mp3", (buffer) => {
             this.dogBarkingBuffer = buffer;
             console.log("Loaded");
             setTimeout(
                 () => {
-                this.props.sound.context.resume();
-                playSound(this.dogBarkingBuffer, this.props.sound);
+                this.sound.context.resume();
+                playSound(this.dogBarkingBuffer, this.sound);
             }, 2000);
-        }, this.props.sound);
+        }, this.sound);
 
 
         this.init();
