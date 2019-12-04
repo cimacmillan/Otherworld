@@ -33,7 +33,7 @@ export class GameComponent extends React.Component {
 
         this.sound = new Sound();
 
-        loadSound("audio/song.mp3", (buffer) => {
+        loadSound("audio/intro.mp3", (buffer) => {
             this.dogBarkingBuffer = buffer;
             console.log("Loaded");
             setTimeout(

@@ -1,0 +1,4 @@
+
+interface WorldState {
+    map : MapState
+}
