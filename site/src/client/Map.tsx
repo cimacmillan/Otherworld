@@ -1,12 +1,12 @@
 import { Vector2D } from "./types/TypesVector";
 import { Wall, GameMap, Camera } from "./types/TypesMap";
-import { GameScreen } from "./render/Graphics";
+import { ScreenBuffer } from "./render";
 
 export var wall_buffer: Wall[];
 export var map: GameMap;
 export var camera: Camera;
 
-export function initialiseMap(screen: GameScreen) {
+export function initialiseMap(screen: ScreenBuffer) {
 
     wall_buffer = [];
 

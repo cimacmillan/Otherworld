@@ -15,7 +15,6 @@ export function printPerson(person: Person) {
     console.log(person.firstName + " " + person.lastName);
 }
 
-
 export class Student {
 
     fullName: string;

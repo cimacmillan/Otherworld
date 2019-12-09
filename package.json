@@ -7,9 +7,9 @@
     "@types/jest": "^24.0.18",
     "@types/react": "^16.9.5",
     "@types/react-dom": "^16.9.1",
-    "cypress": "^3.6.1",
     "jest": "^24.9.0",
     "ts-jest": "^24.1.0",
+    "tslint": "^5.20.1",
     "typescript": "^3.6.3",
     "webpack": "^4.41.0",
     "webpack-cli": "^3.3.9"
@@ -41,7 +41,7 @@
     "test-unit": "npx jest",
     "test-integration-i": "./node_modules/.bin/cypress open",
     "test-integration": "./node_modules/.bin/cypress run",
-    "test": "npm run-script test-unit && npm run-script test-integration"
+    "test": "npm run-script test-unit"
   },
   "watch": {
     "full-rebuild": {

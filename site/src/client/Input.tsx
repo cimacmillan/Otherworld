@@ -1,5 +1,6 @@
 import { vec_add, vec_rotate } from "./render/Graphics"
 import { camera } from "./Map"
+import { fpsNorm } from "./util/time/GlobalFPSController";
 
 var keys_down_set: any = {};
 
@@ -18,7 +19,8 @@ function keyboardInput(e: KeyboardEvent) {
 
 export function updateInput() {
 
-    let speed = 0.1;
+    let speed = fpsNorm(0.1);
+
     if (isKeyDown("KeyW")) {
         let camera_add = vec_rotate({ x: 0, y: -speed }, camera.angle);
         camera.position = vec_add(camera.position, camera_add);

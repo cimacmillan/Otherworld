@@ -2,55 +2,8 @@
 import { camera, map } from "../Map"
 import { Camera, Wall } from "../types/TypesMap"
 import { Vector2D } from "../types/TypesVector"
-
-export class DepthBuffer {
-
-    data: number[];
-    width: number;
-    height: number;
-
-    constructor(width: number, height: number) {
-        this.data = Array(width * height).fill(0);
-        this.width = width;
-        this.height = height;
-    }
-
-    isCloser(x: number, y: number, distance: number) {
-        let index = (y * this.width) + x;
-        return 1.0 / distance > this.data[index];
-    }
-
-    setDistance(x: number, y: number, distance: number) {
-        let index = (y * this.width) + x;
-        this.data[index] = 1.0 / distance;
-    }
-
-    reset() {
-        this.data = Array(this.width * this.height).fill(0);
-    }
-}
-
-export class GameScreen {
-
-    image_data: ImageData;
-    width: number;
-    height: number;
-
-    constructor(image_data: ImageData, width: number, height: number) {
-        this.image_data = image_data;
-        this.width = width;
-        this.height = height;
-    }
-
-    putPixel(x: number, y: number, red: number, green: number, blue: number, alpha: number) {
-        var pixelindex = (y * this.width + x) * 4;
-        this.image_data.data[pixelindex] = red;
-        this.image_data.data[pixelindex + 1] = green;
-        this.image_data.data[pixelindex + 2] = blue;
-        this.image_data.data[pixelindex + 3] = alpha;
-    }
-
-}
+import { ScreenBuffer } from "./ScreenBuffer";
+import { DepthBuffer } from "./DepthBuffer";
 
 function vec_cross(a: Vector2D, b: Vector2D) {
     return (a.x * b.y) - (a.y * b.x);
@@ -136,7 +89,7 @@ function fire_ray(origin: Vector2D, direction: Vector2D) {
     return intersecting_rays;
 }
 
-function drawWall(x: number, ray: Ray, screen: GameScreen, theta: number, camera: Camera, depth_buffer: DepthBuffer) {
+function drawWall(x: number, ray: Ray, screen: ScreenBuffer, theta: number, camera: Camera, depth_buffer: DepthBuffer) {
 
     let upper_wall_z = -interpolate(ray.wall_interpolation, ray.wall.height0 + ray.wall.offset0 - camera.height, ray.wall.height1 + ray.wall.offset1 - camera.height);
     let lower_wall_z = -interpolate(ray.wall_interpolation, ray.wall.offset0 - camera.height, ray.wall.offset1 - camera.height);
@@ -165,7 +118,7 @@ function drawWall(x: number, ray: Ray, screen: GameScreen, theta: number, camera
 
 }
 
-export function createImage(screen: GameScreen, depth_buffer: DepthBuffer) {
+export function createImage(screen: ScreenBuffer, depth_buffer: DepthBuffer) {
 
     depth_buffer.reset();
 
