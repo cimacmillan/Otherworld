@@ -1,7 +1,7 @@
 import React = require("react");
 import { CanvasComponent } from "./render"
 import { ScreenBuffer, DepthBuffer, createImage } from "./render";
-import { loadSound, Sound, playSound } from "./Sound";
+import { loadSound, Sound, playSound } from "./util/sound/Sound";
 import { initialiseInput, updateInput } from "./Input";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
 import { setFPSProportion, logFPS} from "./util/time/GlobalFPSController";
@@ -19,52 +19,53 @@ const TARGET_MILLIS = Math.floor(1000 / TARGET_FPS);
 
 export class GameComponent extends React.Component {
 
-    private gameLoop: TimeControlledLoop;
-    private gameScreen: ScreenBuffer;
-    private depthBuffer: DepthBuffer;
-    private dogBarkingBuffer: AudioBuffer;
-    private sound: Sound;
-
     private gameState: GameState;
     
     public componentDidMount() {
-        this.gameScreen = new ScreenBuffer(
+        this.initState();
+    }
+
+    private initState = () => {
+        initialiseInput();
+
+        const screen = new ScreenBuffer(
             (this.refs.main_canvas as CanvasComponent).getImageData(),
             WIDTH,
             HEIGHT
         );
-        this.depthBuffer = new DepthBuffer(
+
+        const depthBuffer = new DepthBuffer(
             WIDTH, HEIGHT
         );
 
-        this.sound = new Sound();
+        const sound = new Sound();
 
-        loadSound("audio/intro.mp3", (buffer) => {
-            this.dogBarkingBuffer = buffer;
-            console.log("Loaded");
-            setTimeout(
-                () => {
-                this.sound.context.resume();
-                playSound(this.dogBarkingBuffer, this.sound);
-            }, 2000);
-        }, this.sound);
-
-        this.init();
-
-        this.gameLoop = new TimeControlledLoop(TARGET_MILLIS, this.mainLoop);
-        this.gameLoop.start();
-    }
-
-
-    private init = () => {
-        initialiseInput();
+        const loop = new TimeControlledLoop(TARGET_MILLIS, this.mainLoop);
 
         this.gameState = {
+            loop, 
             world: {
                 map: initialiseMap(),
-                camera: initialiseCamera(this.gameScreen)
+                camera: initialiseCamera(screen)
+            },
+            audio: {
+                sound
+            },
+            render: {
+                screen,
+                depthBuffer
             }
         }
+
+        loadSound("audio/intro.mp3", (buffer) => {
+            setTimeout(
+                () => {
+                this.gameState.audio.sound.context.resume();
+                playSound(buffer, this.gameState.audio.sound);
+            }, 2000);
+        }, this.gameState.audio.sound);
+
+        this.gameState.loop.start();
     }
 
     private update = () => {
@@ -73,7 +74,7 @@ export class GameComponent extends React.Component {
 
     private draw = () => {
         // Create the image
-        createImage(this.gameScreen, this.depthBuffer, this.gameState.world.map, this.gameState.world.camera);
+        createImage(this.gameState.render.screen, this.gameState.render.depthBuffer, this.gameState.world.map, this.gameState.world.camera);
         // Draw the image data to the canvas
         (this.refs.main_canvas as CanvasComponent).writeImageData();
     }
