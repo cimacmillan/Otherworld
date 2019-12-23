@@ -1,4 +1,6 @@
+import { Camera, GameMap } from "../../types/TypesMap";
 
-interface WorldState {
-    map : MapState
+export interface WorldState {
+    map: GameMap;
+    camera: Camera;
 }

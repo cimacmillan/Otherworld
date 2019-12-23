@@ -1,5 +1,6 @@
+import { WorldState } from "./world/WorldState";
 
-interface GameState {
-    
+export interface GameState {
+    world: WorldState;
 }
 

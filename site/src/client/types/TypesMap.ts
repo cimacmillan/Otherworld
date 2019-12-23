@@ -1,6 +1,10 @@
 
 import { Vector2D } from "./TypesVector"
 
+export interface GameMap {
+    wall_buffer: Wall[];
+}
+
 export interface Wall {
     p0: Vector2D;
     p1: Vector2D;
@@ -8,10 +12,6 @@ export interface Wall {
     height1: number;
     offset0: number;
     offset1: number;
-}
-
-export interface GameMap {
-    wall_buffer: Wall[];
 }
 
 export interface Camera {

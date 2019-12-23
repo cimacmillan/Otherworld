@@ -1,6 +1,5 @@
 
-import { camera, map } from "../Map"
-import { Camera, Wall } from "../types/TypesMap"
+import { Camera, Wall, GameMap } from "../types/TypesMap"
 import { Vector2D } from "../types/TypesVector"
 import { ScreenBuffer } from "./ScreenBuffer";
 import { DepthBuffer } from "./DepthBuffer";
@@ -56,7 +55,7 @@ interface Ray {
     length: number
 }
 
-function fire_ray(origin: Vector2D, direction: Vector2D) {
+function fire_ray(origin: Vector2D, direction: Vector2D, map: GameMap, camera: Camera) {
 
     let intersecting_rays: Ray[] = [];
 
@@ -118,7 +117,7 @@ function drawWall(x: number, ray: Ray, screen: ScreenBuffer, theta: number, came
 
 }
 
-export function createImage(screen: ScreenBuffer, depth_buffer: DepthBuffer) {
+export function createImage(screen: ScreenBuffer, depth_buffer: DepthBuffer, map: GameMap, camera: Camera) {
 
     depth_buffer.reset();
 
@@ -136,7 +135,7 @@ export function createImage(screen: ScreenBuffer, depth_buffer: DepthBuffer) {
         let origin = camera.position;
         let theta = Math.atan(x_grad / -camera.focal_length);
 
-        let intersecting_rays = fire_ray(origin, direction);
+        let intersecting_rays = fire_ray(origin, direction, map, camera);
 
         intersecting_rays.forEach((ray) => drawWall(x, ray, screen, theta, camera, depth_buffer));
 

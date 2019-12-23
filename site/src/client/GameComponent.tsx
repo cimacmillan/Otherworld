@@ -3,9 +3,10 @@ import { CanvasComponent } from "./render"
 import { ScreenBuffer, DepthBuffer, createImage } from "./render";
 import { loadSound, Sound, playSound } from "./Sound";
 import { initialiseInput, updateInput } from "./Input";
-import { initialiseMap } from "./Map";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
 import { setFPSProportion, logFPS} from "./util/time/GlobalFPSController";
+import { GameState } from "./state/GameState";
+import { initialiseCamera, initialiseMap } from "./util/loader/MapLoader";
 
 const DOM_WIDTH = 1280;
 const DOM_HEIGHT = 720;
@@ -24,6 +25,7 @@ export class GameComponent extends React.Component {
     private dogBarkingBuffer: AudioBuffer;
     private sound: Sound;
 
+    private gameState: GameState;
     
     public componentDidMount() {
         this.gameScreen = new ScreenBuffer(
@@ -56,16 +58,22 @@ export class GameComponent extends React.Component {
 
     private init = () => {
         initialiseInput();
-        initialiseMap(this.gameScreen);
+
+        this.gameState = {
+            world: {
+                map: initialiseMap(),
+                camera: initialiseCamera(this.gameScreen)
+            }
+        }
     }
 
     private update = () => {
-        updateInput();
+        updateInput(this.gameState.world.camera);
     }
 
     private draw = () => {
         // Create the image
-        createImage(this.gameScreen, this.depthBuffer);
+        createImage(this.gameScreen, this.depthBuffer, this.gameState.world.map, this.gameState.world.camera);
         // Draw the image data to the canvas
         (this.refs.main_canvas as CanvasComponent).writeImageData();
     }

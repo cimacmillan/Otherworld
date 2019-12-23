@@ -1,6 +1,6 @@
 import { vec_add, vec_rotate } from "./render/Graphics"
-import { camera } from "./Map"
 import { fpsNorm } from "./util/time/GlobalFPSController";
+import { Camera } from "./types/TypesMap";
 
 var keys_down_set: any = {};
 
@@ -17,7 +17,7 @@ function keyboardInput(e: KeyboardEvent) {
     keys_down_set[e.code] = (e.type == "keydown") ? true : false;
 }
 
-export function updateInput() {
+export function updateInput(camera: Camera) {
 
     let speed = fpsNorm(0.1);
 
