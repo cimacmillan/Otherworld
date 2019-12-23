@@ -1,59 +1,9 @@
 
-import { Camera, Wall, GameMap } from "../types/TypesMap"
-import { Vector2D } from "../types/TypesVector"
 import { ScreenBuffer } from "./ScreenBuffer";
 import { DepthBuffer } from "./DepthBuffer";
-
-function vec_cross(a: Vector2D, b: Vector2D) {
-    return (a.x * b.y) - (a.y * b.x);
-}
-
-function vec_sub(a: Vector2D, b: Vector2D) {
-    return {
-        x: a.x - b.x,
-        y: a.y - b.y
-    }
-}
-
-export function vec_add(a: Vector2D, b: Vector2D) {
-    return {
-        x: a.x + b.x,
-        y: a.y + b.y
-    }
-}
-
-function vec_divide(a: Vector2D, b: Vector2D) {
-    return {
-        x: a.x / b.x,
-        y: a.y / b.y
-    }
-}
-
-export function vec_rotate(a: Vector2D, theta: number) {
-    return {
-        x: a.x * Math.cos(theta) - a.y * Math.sin(theta),
-        y: a.y * Math.cos(theta) + a.x * Math.sin(theta)
-    }
-}
-
-function interpolate(alpha: number, a: number, b: number) {
-    return (a * (1 - alpha)) + (b * alpha);
-}
-
-function convert_unit(x: number, range: number, a: number, b: number) {
-    let grad = x / range;
-    return interpolate(grad, a, b);
-}
-
-interface Ray {
-    wall: Wall,
-    wall_interpolation: number,
-    ray_interpolation: number,
-    origin: Vector2D,
-    direction: Vector2D,
-    intersection: Vector2D,
-    length: number
-}
+import { vec_sub, vec_cross, vec_rotate } from "../util/math/Vector";
+import { interpolate, convert_unit } from "../util/math/Basic";
+import { Ray, Vector2D, GameMap, Camera } from "../types";
 
 function fire_ray(origin: Vector2D, direction: Vector2D, map: GameMap, camera: Camera) {
 
@@ -129,7 +79,6 @@ export function createImage(screen: ScreenBuffer, depth_buffer: DepthBuffer, map
         }
 
         // Proper focal length and viewing angle
-
         let x_grad = convert_unit(x, screen.width, -camera.x_view_window, camera.x_view_window);
         let direction = vec_rotate({ x: x_grad, y: -camera.focal_length }, camera.angle);
         let origin = camera.position;

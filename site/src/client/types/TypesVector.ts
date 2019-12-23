@@ -4,4 +4,3 @@ export interface Vector2D {
     y: number
 }
 
-
