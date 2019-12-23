@@ -1,6 +1,7 @@
-import { vec_add, vec_rotate } from "./render/Graphics"
+
 import { fpsNorm } from "./util/time/GlobalFPSController";
 import { Camera } from "./types/TypesMap";
+import { vec_rotate, vec_add } from "./util/math/Vector";
 
 var keys_down_set: any = {};
 
