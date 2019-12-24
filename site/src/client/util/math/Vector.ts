@@ -31,3 +31,7 @@ export function vec_rotate(a: Vector2D, theta: number) {
         y: a.y * Math.cos(theta) + a.x * Math.sin(theta)
     }
 }
+
+export function vec_distance(a: Vector2D) {
+    return Math.sqrt((a.x * a.x) + (a.y * a.y));
+}

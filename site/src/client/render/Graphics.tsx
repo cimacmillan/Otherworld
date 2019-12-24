@@ -1,7 +1,7 @@
 
 import { ScreenBuffer } from "./ScreenBuffer";
 import { DepthBuffer } from "./DepthBuffer";
-import { vec_sub, vec_cross, vec_rotate } from "../util/math/Vector";
+import { vec_sub, vec_cross, vec_rotate, vec_add, vec_distance } from "../util/math/Vector";
 import { interpolate, convert_unit } from "../util/math/Basic";
 import { Ray, Vector2D, GameMap, Camera, Sprite } from "../types";
 import { WorldState } from "../state/world/WorldState";
@@ -88,6 +88,9 @@ function drawWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, map: GameMap
 
 function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprite: Sprite) {
     const projectPosition = sprite.projectPosition!;
+
+    const diff = vec_sub(sprite.position, {x: 5, y: 5});
+    sprite.position = vec_add(vec_rotate(diff, 0.04 / Math.pow(vec_distance(diff), 2) ), {x: 5, y: 5});
 
     // Angle of 0 is looking up
     projectPosition.y = -projectPosition.y;

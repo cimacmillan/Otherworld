@@ -64,7 +64,7 @@ export function initialiseMap(): GameMap {
     const spriteCount = 1000;
 
     for(let i = 0; i < spriteCount; i++) {
-        const size = randomFloatRange(0.1, 0.2);
+        const size = randomFloatRange(0.02, 0.1);
         const height = randomFloatRange(0, 1);
         const colour = {
             a: 255,
