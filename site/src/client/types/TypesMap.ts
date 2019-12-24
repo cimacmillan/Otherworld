@@ -1,6 +1,20 @@
 
 import { Vector2D } from "./TypesVector"
 
+export interface Colour {
+    r: number;
+    g: number;
+    b: number;
+    a: number;
+}
+
+export interface Sprite {
+    position: Vector2D; 
+    size: Vector2D;
+    height: number;
+    colour: Colour;
+}
+
 export interface GameMap {
     wall_buffer: Wall[];
 }

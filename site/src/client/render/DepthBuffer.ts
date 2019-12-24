@@ -1,3 +1,5 @@
+import { fill } from "../util/math/Array";
+
 export class DepthBuffer {
 
     data: number[];
@@ -21,6 +23,6 @@ export class DepthBuffer {
     }
 
     reset() {
-        this.data = Array(this.width * this.height).fill(0);
+        fill(this.data, 0);
     }
 }

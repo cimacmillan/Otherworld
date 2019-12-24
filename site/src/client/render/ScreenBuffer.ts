@@ -1,3 +1,5 @@
+import { fillPattern } from "../util/math/Array";
+
 export class ScreenBuffer {
 
     image_data: ImageData;
@@ -16,6 +18,14 @@ export class ScreenBuffer {
         this.image_data.data[pixelindex + 1] = green;
         this.image_data.data[pixelindex + 2] = blue;
         this.image_data.data[pixelindex + 3] = alpha;
+    }
+
+    fillBackground(red: number, green: number, blue: number, alpha: number) {
+        fillPattern(this.image_data.data, [red, green, blue, alpha]);
+    }
+
+    reset() {
+        this.fillBackground(0, 0, 0, 255);
     }
 
 }

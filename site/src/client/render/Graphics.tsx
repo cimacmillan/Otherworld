@@ -67,17 +67,10 @@ function drawWall(x: number, ray: Ray, screen: ScreenBuffer, theta: number, came
 
 }
 
-export function createImage(screen: ScreenBuffer, depth_buffer: DepthBuffer, map: GameMap, camera: Camera) {
-
-    depth_buffer.reset();
+function drawWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, map: GameMap, camera: Camera) {
 
     // Loop over all of the pixels
     for (var x = 0; x < screen.width; x++) {
-
-        for (var y = 0; y < screen.height; y++) {
-            screen.putPixel(x, y, 0, 0, 0, 255);
-        }
-
         // Proper focal length and viewing angle
         let x_grad = convert_unit(x, screen.width, -camera.x_view_window, camera.x_view_window);
         let direction = vec_rotate({ x: x_grad, y: -camera.focal_length }, camera.angle);
@@ -87,8 +80,17 @@ export function createImage(screen: ScreenBuffer, depth_buffer: DepthBuffer, map
         let intersecting_rays = fire_ray(origin, direction, map, camera);
 
         intersecting_rays.forEach((ray) => drawWall(x, ray, screen, theta, camera, depth_buffer));
-
     }
+}
+
+export function createImage(screen: ScreenBuffer, depth_buffer: DepthBuffer, map: GameMap, camera: Camera) {
+
+    depth_buffer.reset();
+    screen.reset();
+
+
+    drawWalls(screen, depth_buffer, map, camera);
+
 }
 
 

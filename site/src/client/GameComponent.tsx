@@ -46,7 +46,8 @@ export class GameComponent extends React.Component {
             loop, 
             world: {
                 map: initialiseMap(),
-                camera: initialiseCamera(screen)
+                camera: initialiseCamera(screen),
+                sprites: []
             },
             audio: {
                 sound
