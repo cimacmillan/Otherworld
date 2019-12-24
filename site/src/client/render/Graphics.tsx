@@ -3,7 +3,10 @@ import { ScreenBuffer } from "./ScreenBuffer";
 import { DepthBuffer } from "./DepthBuffer";
 import { vec_sub, vec_cross, vec_rotate } from "../util/math/Vector";
 import { interpolate, convert_unit } from "../util/math/Basic";
-import { Ray, Vector2D, GameMap, Camera } from "../types";
+import { Ray, Vector2D, GameMap, Camera, Sprite } from "../types";
+import { WorldState } from "../state/world/WorldState";
+import { RenderState } from "../state/render/RenderState";
+import { swapSort } from "../util/math";
 
 function fire_ray(origin: Vector2D, direction: Vector2D, map: GameMap, camera: Camera) {
 
@@ -83,13 +86,69 @@ function drawWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, map: GameMap
     }
 }
 
-export function createImage(screen: ScreenBuffer, depth_buffer: DepthBuffer, map: GameMap, camera: Camera) {
+function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprite: Sprite) {
+    const projectPosition = sprite.projectPosition!;
 
-    depth_buffer.reset();
+    // Angle of 0 is looking up
+    projectPosition.y = -projectPosition.y;
+
+    if (projectPosition.y < camera.clip_depth) {
+        return;
+    }
+
+    const distance = projectPosition.y;
+    const projectMult = (camera.focal_length / distance);
+
+    let width = sprite.size.x * projectMult * camera.y_view_window * screen.height; 
+    let height = sprite.size.y * projectMult  * camera.y_view_window * screen.height;
+
+    let x = ((projectPosition.x / distance) * screen.height) + (0.5 * screen.width);
+    let y = (((-sprite.height + camera.height) * projectMult) * camera.y_view_window + 0.5) * screen.height;
+
+    let x1 = Math.floor(x - width/2);
+    let x2 = Math.floor(x + width/2);
+    let y1 = Math.floor(y - height/2);
+    let y2 = Math.floor(y + height/2);
+
+    if(x1 < 0) x1 = 0;
+    if(x2 < 0) x2 = 0;
+    if(y1 < 0) y1 = 0;
+    if(y2 < 0) y2 = 0;
+    if(x1 >= screen.width) x1 = screen.width-1;
+    if(x2 >= screen.width) x2 = screen.width-1;
+    if(y1 >= screen.height) y1 = screen.height-1;
+    if(y2 >= screen.height) y2 = screen.height-1;
+
+    for (let xPixel = x1; xPixel < x2; xPixel++) {
+        for (let yPixel = y1; yPixel < y2; yPixel++) {
+            screen.putPixelColour(xPixel, yPixel, sprite.colour);
+            depth_buffer.setDistance(xPixel, yPixel, projectPosition.y);
+        }
+    }
+
+}
+
+function drawSprites(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprites: Sprite[]) {
+    sprites.forEach((sprite) => {
+        sprite.projectPosition = vec_rotate(vec_sub(sprite.position, camera.position), -camera.angle)
+    })
+    
+    swapSort(sprites, (spriteA, spriteB) => (spriteA.projectPosition!.y < spriteB.projectPosition!.y));
+
+    sprites.forEach((sprite) => {
+        drawSprite(screen, depth_buffer, camera, sprite);
+    });
+}
+
+export function createImage(renderState: RenderState, worldState: WorldState) {
+
+    const {screen, depthBuffer} = renderState;
+
+    depthBuffer.reset();
     screen.reset();
 
-
-    drawWalls(screen, depth_buffer, map, camera);
+    drawSprites(screen, depthBuffer, worldState.camera, worldState.map.sprites);
+    drawWalls(screen, depthBuffer, worldState.map, worldState.camera);
 
 }
 

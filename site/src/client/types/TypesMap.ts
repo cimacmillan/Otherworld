@@ -13,10 +13,14 @@ export interface Sprite {
     size: Vector2D;
     height: number;
     colour: Colour;
+
+    // For computation only
+    projectPosition?: Vector2D;
 }
 
 export interface GameMap {
     wall_buffer: Wall[];
+    sprites: Sprite[];
 }
 
 export interface Wall {

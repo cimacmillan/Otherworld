@@ -1,5 +1,6 @@
-import { Wall, GameMap, Camera } from "../../types/TypesMap";
+import { Wall, GameMap, Camera, Sprite } from "../../types/TypesMap";
 import { ScreenBuffer } from "../../render";
+import { randomFloatRange, randomIntRange } from "../math";
 
 export function initialiseCamera(screen: ScreenBuffer): Camera {
     let aspect_ratio = (screen.width / screen.height);
@@ -8,7 +9,7 @@ export function initialiseCamera(screen: ScreenBuffer): Camera {
     let focal_length = aspect_ratio / Math.tan(radians / 2);
     
     return {
-        position: { x: 5.0, y: 8.0 }, 
+        position: { x: 0.0, y: 18.0 }, 
         angle: 0.0, 
         focal_length, 
         height: 0.5, 
@@ -40,14 +41,14 @@ export function initialiseMap(): GameMap {
         offset1: 0.5
     });
 
-    wall_buffer.push({ 
-        p0: { x: 10.0, y: 10.0 }, 
-        p1: { x: 0.0, y: 10.0 }, 
-        height0: 1, 
-        height1: 1, 
-        offset0: 0.5, 
-        offset1: 0
-    });
+    // wall_buffer.push({ 
+    //     p0: { x: 10.0, y: 10.0 }, 
+    //     p1: { x: 0.0, y: 10.0 }, 
+    //     height0: 1, 
+    //     height1: 1, 
+    //     offset0: 0.5, 
+    //     offset1: 0
+    // });
 
     wall_buffer.push({ 
         p0: { x: 0.0, y: 10.0 }, 
@@ -58,7 +59,30 @@ export function initialiseMap(): GameMap {
         offset1: 0
     });
 
-    const map: GameMap = {wall_buffer};
+    const sprites: Sprite[] = [];
+
+    const spriteCount = 1000;
+
+    for(let i = 0; i < spriteCount; i++) {
+        const size = randomFloatRange(0.1, 0.2);
+        const height = randomFloatRange(0, 1);
+        const colour = {
+            a: 255,
+            r: randomIntRange(0, 255),
+            g: randomIntRange(0, 255),
+            b: randomIntRange(0, 255),
+        }
+
+        sprites.push({
+            position: {x: randomFloatRange(0, 10), y: randomFloatRange(0, 10)}, 
+            size: {x: size, y: size},
+            height: height,
+            colour
+        })
+    }
+
+
+    const map: GameMap = {wall_buffer, sprites};
     
     return map;
 }

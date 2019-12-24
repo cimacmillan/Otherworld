@@ -47,7 +47,6 @@ export class GameComponent extends React.Component {
             world: {
                 map: initialiseMap(),
                 camera: initialiseCamera(screen),
-                sprites: []
             },
             audio: {
                 sound
@@ -75,7 +74,7 @@ export class GameComponent extends React.Component {
 
     private draw = () => {
         // Create the image
-        createImage(this.gameState.render.screen, this.gameState.render.depthBuffer, this.gameState.world.map, this.gameState.world.camera);
+        createImage(this.gameState.render, this.gameState.world);
         // Draw the image data to the canvas
         (this.refs.main_canvas as CanvasComponent).writeImageData();
     }
