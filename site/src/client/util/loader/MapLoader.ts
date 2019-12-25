@@ -1,12 +1,15 @@
-import { Wall, GameMap, Camera, Sprite } from "../../types/TypesMap";
+import { Wall, GameMap, Sprite } from "../../types/TypesMap";
 import { ScreenBuffer } from "../../render";
-import { randomFloatRange, randomIntRange } from "../math";
+import { randomFloatRange, randomIntRange, toRadians } from "../math";
+import { Camera } from "../../types";
 
 export function initialiseCamera(screen: ScreenBuffer): Camera {
-    let aspect_ratio = (screen.width / screen.height);
-    let viewing_angle = 80;
-    let radians = (viewing_angle / 180.0) * Math.PI;
-    let focal_length = aspect_ratio / Math.tan(radians / 2);
+    const aspect_ratio = (screen.width / screen.height);
+    const viewing_angle = toRadians(80.0);
+    const focal_length = aspect_ratio / Math.tan(viewing_angle / 2);
+    
+    // -1 indicates top of screen, 1 indicates bottom
+    const space_to_pixel = screen.height / 2;
     
     return {
         position: { x: 0.0, y: 18.0 }, 
@@ -15,7 +18,8 @@ export function initialiseCamera(screen: ScreenBuffer): Camera {
         height: 0.5, 
         x_view_window: aspect_ratio, 
         y_view_window: 1.0, 
-        clip_depth: 0.1
+        clip_depth: 0.1,
+        space_to_pixel
     }
 }
 
@@ -64,7 +68,7 @@ export function initialiseMap(): GameMap {
     const spriteCount = 1000;
 
     for(let i = 0; i < spriteCount; i++) {
-        const size = randomFloatRange(0.02, 0.1);
+        const size = randomFloatRange(0.2, 0.4);
         const height = randomFloatRange(0, 1);
         const colour = {
             a: 255,

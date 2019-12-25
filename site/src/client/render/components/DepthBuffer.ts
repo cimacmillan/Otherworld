@@ -1,4 +1,4 @@
-import { fill } from "../util/math/Array";
+import { fill } from "../../util/math/Array";
 
 export class DepthBuffer {
 

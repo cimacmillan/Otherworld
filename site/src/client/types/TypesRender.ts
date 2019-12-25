@@ -10,3 +10,14 @@ export interface Ray {
     intersection: Vector2D,
     length: number
 }
+
+export interface Camera {
+    position: Vector2D;
+    angle: number;
+    focal_length: number;
+    height: number;
+    x_view_window: number;
+    y_view_window: number;
+    clip_depth: number;
+    space_to_pixel: number;
+}

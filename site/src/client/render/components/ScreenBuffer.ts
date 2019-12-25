@@ -1,5 +1,5 @@
-import { fillPattern } from "../util/math/Array";
-import { Colour } from "../types";
+import { fillPattern } from "../../util/math/Array";
+import { Colour } from "../../types";
 
 export class ScreenBuffer {
 

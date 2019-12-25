@@ -1,6 +1,6 @@
 
 import { fpsNorm } from "./util/time/GlobalFPSController";
-import { Camera } from "./types/TypesMap";
+import { Camera } from "./types";
 import { vec_rotate, vec_add } from "./util/math/Vector";
 
 var keys_down_set: any = {};
