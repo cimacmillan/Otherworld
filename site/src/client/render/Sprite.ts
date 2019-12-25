@@ -16,13 +16,13 @@ function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Cam
         return;
     }
 
-    const projectMult = (camera.focal_length / distance);
+    const projectMult = (camera.focal_length / distance) * screen.height;
 
-    let width = sprite.size.x * projectMult * camera.y_view_window * screen.height; 
-    let height = sprite.size.y * projectMult  * camera.y_view_window * screen.height;
+    let width = sprite.size.x * projectMult; 
+    let height = sprite.size.y * projectMult;
 
-    let x = ((projectPosition.x / distance) * screen.height) + (0.5 * screen.width);
-    let y = (((-sprite.height + camera.height) * projectMult) * camera.y_view_window + 0.5) * screen.height;
+    let x = (projectPosition.x * projectMult / camera.x_view_window) + (0.5 * screen.width);
+    let y = ((camera.height - sprite.height) * projectMult)  + (0.5 * screen.height);
 
     let x1 = clipToRange(Math.floor(x - width/2), 0, screen.width-1);
     let x2 = clipToRange(Math.floor(x + width/2), 0, screen.width-1);
