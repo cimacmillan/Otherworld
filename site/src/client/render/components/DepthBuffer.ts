@@ -14,12 +14,17 @@ export class DepthBuffer {
 
     isCloser(x: number, y: number, distance: number) {
         let index = (y * this.width) + x;
-        return 1.0 / distance > this.data[index];
+        return (1.0 / distance > this.data[index]);
     }
 
     setDistance(x: number, y: number, distance: number) {
         let index = (y * this.width) + x;
         this.data[index] = 1.0 / distance;
+    }
+
+    forceSet(x: number, y: number, set: number) {
+        let index = (y * this.width) + x;
+        this.data[index] = 0;
     }
 
     reset() {

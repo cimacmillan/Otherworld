@@ -18,9 +18,8 @@ export interface Sprite {
     projectPosition?: Vector2D;
 }
 
-export interface GameMap {
-    wall_buffer: Wall[];
-    sprites: Sprite[];
+export interface Plane {
+    height: number;
 }
 
 export interface Wall {
@@ -31,3 +30,10 @@ export interface Wall {
     offset0: number;
     offset1: number;
 }
+
+export interface GameMap {
+    wall_buffer: Wall[];
+    sprites: Sprite[];
+    planes: Plane[];
+}
+

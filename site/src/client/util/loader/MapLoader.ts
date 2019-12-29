@@ -85,8 +85,11 @@ export function initialiseMap(): GameMap {
         })
     }
 
+    const planes = [
+        {height: 0}
+    ]
 
-    const map: GameMap = {wall_buffer, sprites};
+    const map: GameMap = {wall_buffer, sprites, planes};
     
     return map;
 }
