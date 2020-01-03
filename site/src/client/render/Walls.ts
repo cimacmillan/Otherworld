@@ -50,14 +50,14 @@ function drawWall(x: number, ray: Ray, screen: ScreenBuffer, theta: number, came
     upper_pixel = Math.max(0, upper_pixel);
     lower_pixel = Math.min(screen.height - 1, lower_pixel);
 
-    for (var y = Math.floor(upper_pixel); y < Math.floor(lower_pixel); y++) {
+    for (var y = Math.floor(upper_pixel); y <= Math.floor(lower_pixel); y++) {
 
         if (depth_buffer.isCloser(x, y, ray.length)) {
             depth_buffer.setDistance(x, y, ray.length);
             screen.putPixel(x, y,
                 255,
-                ((ray.intersection.x % 2) / 2) * 255,
-                ((ray.intersection.y % 2) / 2) * 255,
+                (ray.intersection.x % 1) * 255,
+                (ray.intersection.y % 1) * 255,
                 255);
         }
     }
@@ -66,10 +66,12 @@ function drawWall(x: number, ray: Ray, screen: ScreenBuffer, theta: number, came
 
 export function drawWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, map: GameMap, camera: Camera) {
 
+    const halfView = camera.x_view_window / 2;
+
     // Loop over all of the pixels
     for (var x = 0; x < screen.width; x++) {
         // Proper focal length and viewing angle
-        let x_grad = convert_unit(x, screen.width, -camera.x_view_window, camera.x_view_window);
+        let x_grad = convert_unit(x, screen.width, -halfView, halfView);
         let direction = vec_rotate({ x: x_grad, y: -camera.focal_length }, camera.angle);
         let origin = camera.position;
         let theta = Math.atan(x_grad / -camera.focal_length);

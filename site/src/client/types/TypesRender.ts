@@ -19,5 +19,4 @@ export interface Camera {
     x_view_window: number;
     y_view_window: number;
     clip_depth: number;
-    space_to_pixel: number;
 }

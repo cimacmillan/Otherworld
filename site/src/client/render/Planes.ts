@@ -9,7 +9,7 @@ export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camer
         let yGrad = (y / screen.height);
         let yViewWindow = camera.y_view_window * (yGrad - 0.5);
         let heightDifference = (camera.height - planes[0].height);
-        let yTilePreRotate = (camera.focal_length /yViewWindow) * heightDifference;
+        let yTilePreRotate = (camera.focal_length / yViewWindow) * heightDifference;
 
         for(let x = 0; x < screen.width; x++) {
 

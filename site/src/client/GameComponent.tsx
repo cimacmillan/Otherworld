@@ -57,13 +57,13 @@ export class GameComponent extends React.Component {
             }
         }
 
-        loadSound("audio/intro.mp3", (buffer) => {
-            setTimeout(
-                () => {
-                this.gameState.audio.sound.context.resume();
-                playSound(buffer, this.gameState.audio.sound);
-            }, 2000);
-        }, this.gameState.audio.sound);
+        // loadSound("audio/intro.mp3", (buffer) => {
+            // setTimeout(
+                // () => {
+                // this.gameState.audio.sound.context.resume();
+                // playSound(buffer, this.gameState.audio.sound);
+            // }, 2000);
+        // }, this.gameState.audio.sound);
 
         this.gameState.loop.start();
     }

@@ -21,7 +21,7 @@ function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Cam
     let width = sprite.size.x * projectMult; 
     let height = sprite.size.y * projectMult;
 
-    let x = (projectPosition.x * projectMult / camera.x_view_window) + (0.5 * screen.width);
+    let x = (projectPosition.x * projectMult) + (0.5 * screen.width);
     let y = ((camera.height - sprite.height) * projectMult)  + (0.5 * screen.height);
 
     let x1 = clipToRange(Math.floor(x - width/2), 0, screen.width-1);
