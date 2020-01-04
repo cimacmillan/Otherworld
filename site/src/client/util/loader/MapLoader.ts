@@ -56,15 +56,6 @@ export function initialiseMap(texture: Texture): GameMap {
         offset1: 0.5
     });
 
-    // wall_buffer.push({ 
-    //     p0: { x: 10.0, y: 10.0 }, 
-    //     p1: { x: 0.0, y: 10.0 }, 
-    //     height0: 1, 
-    //     height1: 1, 
-    //     offset0: 0.5, 
-    //     offset1: 0
-    // });
-
     wall_buffer.push({ 
         p0: { x: 0.0, y: 10.0 }, 
         p1: { x: 0.0, y: 0.0 }, 
@@ -75,18 +66,11 @@ export function initialiseMap(texture: Texture): GameMap {
     });
 
     const sprites: Sprite[] = [];
-    const spriteCount = 3000;
+    const spriteCount = 1000;
 
     for(let i = 0; i < spriteCount; i++) {
         const size = randomFloatRange(0.2, 0.4);
         const height = randomFloatRange(0, 1);
-        const colour = {
-            a: 255,
-            r: randomIntRange(0, 255),
-            g: randomIntRange(0, 255),
-            b: randomIntRange(0, 255),
-        }
-
         sprites.push({
             position: {x: randomFloatRange(0, 10), y: randomFloatRange(0, 10)}, 
             size: {x: size, y: size},

@@ -52,3 +52,12 @@ export function vec_sum(...vecs: Vector2D[]) {
     });
     return sum;
 }
+
+export function vec_interpolate(vecs: Vector2D[], alphas: number[]) {
+    const sum = {x: 0, y: 0};
+    vecs.forEach((vec, index) => {
+        sum.x += vec.x * alphas[index];
+        sum.y += vec.y * alphas[index];
+    });
+    return sum;
+}

@@ -1,7 +1,7 @@
 import { ScreenBuffer, DepthBuffer } from ".";
 import { Camera, Sprite } from "../types";
 import { vec_sub, vec_add, vec_rotate, vec_distance, clipToRange, swapSort } from "../util/math";
-import { basicShader, textureMap } from "./Shader";
+import { textureMap } from "./Shader";
 
 function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprite: Sprite) {
     const projectPosition = sprite.projectPosition!;
@@ -46,7 +46,7 @@ function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Cam
 
             if (colour.a === 0) continue;
 
-            screen.putPixelColour(xPixel, yPixel, textureMap(sprite.texture, sprite.texcoord, a0, a1, a2, a3));
+            screen.putPixelColour(xPixel, yPixel, colour);
             depth_buffer.setDistance(xPixel, yPixel, distance);
         }
     }
