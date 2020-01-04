@@ -15,20 +15,19 @@ export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camer
 
             depthBuffer.forceSet(x, y, 0);
 
-            if (yTilePreRotate < 0) {
-                // depthBuffer.forceSet(x, y, 0);
-                screen.putPixel(x, y, 0, 0, 0, 255);
-                continue;
-            }
-
             let xGrad = (x / screen.width);
             let xViewWindow = camera.x_view_window * (xGrad - 0.5);
             let xTilePreRotate = (xViewWindow / camera.focal_length) * yTilePreRotate;
 
             let tilePosition = vec_add(vec_rotate({x: xTilePreRotate, y: -yTilePreRotate}, camera.angle), camera.position);
 
-            let yTileGrad = (tilePosition.y % 1);
-            let xTileGrad = tilePosition.x < 0 ? 1.0 + (tilePosition.x % 1) : tilePosition.x % 1;
+            if (tilePosition.x < 0 || tilePosition.y < 0 || yTilePreRotate < 0) {
+                screen.putPixel(x, y, 0, 0, 0, 255);
+                continue;
+            }
+
+            let yTileGrad = tilePosition.y % 1;
+            let xTileGrad = tilePosition.x % 1;
 
             let red = yTileGrad * 255;
             let green = xTileGrad * 255;

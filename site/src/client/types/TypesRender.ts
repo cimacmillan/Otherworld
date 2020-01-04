@@ -20,3 +20,21 @@ export interface Camera {
     y_view_window: number;
     clip_depth: number;
 }
+
+export enum TextureSampleType {
+    LINEAR = "LINEAR"
+}
+
+export interface TextureCoordinates {
+    t0: Vector2D;
+    t1: Vector2D;
+    t2: Vector2D;
+    t3: Vector2D;
+}
+
+export interface Texture {
+    data: ImageData;
+    width: number;
+    height: number;
+}
+

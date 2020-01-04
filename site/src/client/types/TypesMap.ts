@@ -1,5 +1,6 @@
 
 import { Vector2D } from "./TypesVector"
+import { Texture, TextureCoordinates } from "./TypesRender";
 
 export interface Colour {
     r: number;
@@ -12,7 +13,9 @@ export interface Sprite {
     position: Vector2D; 
     size: Vector2D;
     height: number;
-    colour: Colour;
+
+    texture: Texture;
+    texcoord: TextureCoordinates;
 
     // For computation only
     projectPosition?: Vector2D;
