@@ -5,11 +5,6 @@ import { textureMap } from "./Shader";
 
 function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprite: Sprite) {
     const projectPosition = sprite.projectPosition!;
-
-    const diff = vec_sub(sprite.position, {x: 5, y: 5});
-    sprite.position = vec_add(vec_rotate(diff, 0.04 / Math.pow(vec_distance(diff), 2) ), {x: 5, y: 5});
-
-    // Angle of 0 is looking up? 
     const distance = -projectPosition.y;
 
     if (distance < camera.clip_depth) {
@@ -28,6 +23,8 @@ function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Cam
     let x2 = clipToRange(Math.floor(x + width/2), 0, screen.width-1);
     let y1 = clipToRange(Math.floor(y - height/2), 0, screen.height-1);
     let y2 = clipToRange(Math.floor(y + height/2), 0, screen.height-1);
+
+    
     
     for (let xPixel = x1; xPixel < x2; xPixel++) {
 
@@ -42,7 +39,10 @@ function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Cam
             const a2 = (x_alpha) * (y_alpha);
             const a3 = (1 - x_alpha) * (y_alpha);
 
-            const colour = textureMap(sprite.texture, sprite.texcoord, a0, a1, a2, a3);
+            const u = (sprite.texcoord.t0.x * a0) + (sprite.texcoord.t1.x * a1) + (sprite.texcoord.t2.x * a2) + (sprite.texcoord.t3.x * a3);
+            const v = (sprite.texcoord.t0.y * a0) + (sprite.texcoord.t1.y * a1) + (sprite.texcoord.t2.y * a2) + (sprite.texcoord.t3.y * a3);
+
+            const colour = textureMap(sprite.texture, u, v);
 
             if (colour.a === 0) continue;
 

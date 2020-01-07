@@ -17,3 +17,11 @@ export function clipToRange(a: number, lowerBound: number, upperBound: number): 
 export function toRadians(alpha: number): number {
     return (alpha / 180.0) * Math.PI;
 }
+
+export function getGradientIncrementor(resultStart: number, resultEnd: number, distance: number) {
+    return (resultEnd - resultStart) / distance;
+}
+
+export function getGradientOffset(resultStart: number, actualResultStart: number, gradientIncrementor: number) {
+    return (actualResultStart - resultStart) * gradientIncrementor;
+}
