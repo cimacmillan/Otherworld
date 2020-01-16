@@ -6,7 +6,7 @@ import { textureMap } from "./Shader";
 export function drawSprites(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprites: Sprite[]) {
     sprites.forEach((sprite) => {
         sprite.projectPosition = vec_rotate(vec_sub(sprite.position, camera.position), -camera.angle)
-    })
+    });
     
     swapSort(sprites, (spriteA, spriteB) => (spriteA.projectPosition!.y < spriteB.projectPosition!.y));
 
