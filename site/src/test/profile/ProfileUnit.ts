@@ -3,6 +3,7 @@ export type ProfileFunction = () => any;
 // Not based on any actual statistics
 export const SAMPLE_BIG = Math.pow(10, 9);
 export const SAMPLE_MED = Math.pow(10, 6);
+export const SAMPLE_MEDIUM_RARE = Math.pow(10, 5);
 export const SAMPLE_SMA = Math.pow(10, 4);
 export const SAMPLE_LIL = Math.pow(10, 3);
 

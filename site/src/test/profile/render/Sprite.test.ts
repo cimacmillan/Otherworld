@@ -1,5 +1,5 @@
-import { SAMPLE_LIL, profile, SAMPLE_SMA } from "../ProfileUnit";
-import { drawSprite, drawSprites } from "../../../client/render/Sprite";
+import { SAMPLE_LIL, profile, SAMPLE_SMA, SAMPLE_MEDIUM_RARE } from "../ProfileUnit";
+import { drawSprite, drawSprites, drawSpriteB } from "../../../client/render/Sprite";
 import { ScreenBuffer } from "../../../client/render/components/ScreenBuffer";
 import { DepthBuffer } from "../../../client/render/components/DepthBuffer";
 import { Camera, Texture, Sprite } from "../../../client/types";
@@ -43,7 +43,7 @@ describe("Sprite Profile", () => {
         };
     });
 
-    describe("Single Sprite", () => {
+    describe.only("Single Sprite", () => {
 
         let sprite: Sprite;
             
@@ -65,7 +65,11 @@ describe("Sprite Profile", () => {
         });
 
         test("drawSprite", () => {
-            profile(SAMPLE_SMA, () => drawSprite(screenBuffer, depthBuffer, camera, sprite));
+            profile(SAMPLE_MEDIUM_RARE, () => drawSprite(screenBuffer, depthBuffer, camera, sprite));
+        });
+
+        test("drawSpriteB", () => {
+            profile(SAMPLE_MEDIUM_RARE, () => drawSpriteB(screenBuffer, depthBuffer, camera, sprite));
         });
 
     });
