@@ -66,7 +66,7 @@ export function initialiseMap(texture: Texture): GameMap {
     });
 
     const sprites: Sprite[] = [];
-    const spriteCount = 2000;
+    const spriteCount = 3000;
 
     for(let i = 0; i < spriteCount; i++) {
         const size = randomFloatRange(0.2, 0.4);

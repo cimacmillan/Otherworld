@@ -4,15 +4,15 @@ import { vec_sub, vec_add, vec_rotate, vec_distance, clipToRange, swapSort } fro
 import { textureMap } from "./Shader";
 
 export function drawSprites(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprites: Sprite[]) {
-    sprites.forEach((sprite) => {
-        sprite.projectPosition = vec_rotate(vec_sub(sprite.position, camera.position), -camera.angle)
-    });
-    
-    swapSort(sprites, (spriteA, spriteB) => (spriteA.projectPosition!.y < spriteB.projectPosition!.y));
+    for (let i = 0; i < sprites.length; i++) {
+        sprites[i].projectPosition = vec_rotate(vec_sub(sprites[i].position, camera.position), -camera.angle)
+    }
 
-    sprites.forEach((sprite) => {
-        drawSprite(screen, depth_buffer, camera, sprite);
-    });
+    sprites.sort((spriteA, spriteB) => (spriteA.projectPosition!.y - spriteB.projectPosition!.y));
+
+    for (let i = 0; i < sprites.length; i++) {
+        drawSprite(screen, depth_buffer, camera, sprites[i]);
+    }
 }
 
 export function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprite: Sprite) {
