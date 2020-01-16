@@ -13,8 +13,9 @@ const textureMapReturn = {
 }
 
 export const textureMap: Shader = (texture: Texture, u: number, v: number) => {
-    const x = Math.floor(texture.width * u) % texture.width;
-    const y = Math.floor(texture.height * v) % texture.height;
+    const x = ~~(texture.width * u) % texture.width;
+    const y = ~~(texture.height * v) % texture.height;
+
     const index = (x + (y * texture.width)) * 4;
 
     textureMapReturn.r = texture.data.data[index];
