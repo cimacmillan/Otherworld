@@ -3,7 +3,19 @@ import { Camera, Sprite } from "../types";
 import { vec_sub, vec_add, vec_rotate, vec_distance, clipToRange, swapSort } from "../util/math";
 import { textureMap } from "./Shader";
 
-function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprite: Sprite) {
+export function drawSprites(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprites: Sprite[]) {
+    sprites.forEach((sprite) => {
+        sprite.projectPosition = vec_rotate(vec_sub(sprite.position, camera.position), -camera.angle)
+    })
+    
+    swapSort(sprites, (spriteA, spriteB) => (spriteA.projectPosition!.y < spriteB.projectPosition!.y));
+
+    sprites.forEach((sprite) => {
+        drawSprite(screen, depth_buffer, camera, sprite);
+    });
+}
+
+export function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprite: Sprite) {
     const projectPosition = sprite.projectPosition!;
     const distance = -projectPosition.y;
 
@@ -24,8 +36,6 @@ function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Cam
     let y1 = clipToRange(Math.floor(y - height/2), 0, screen.height-1);
     let y2 = clipToRange(Math.floor(y + height/2), 0, screen.height-1);
 
-    
-    
     for (let xPixel = x1; xPixel < x2; xPixel++) {
 
         const x_alpha = (xPixel - (x - width/2)) / (width);
@@ -51,16 +61,4 @@ function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Cam
         }
     }
 
-}
-
-export function drawSprites(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprites: Sprite[]) {
-    sprites.forEach((sprite) => {
-        sprite.projectPosition = vec_rotate(vec_sub(sprite.position, camera.position), -camera.angle)
-    })
-    
-    swapSort(sprites, (spriteA, spriteB) => (spriteA.projectPosition!.y < spriteB.projectPosition!.y));
-
-    sprites.forEach((sprite) => {
-        drawSprite(screen, depth_buffer, camera, sprite);
-    });
 }

@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Vector Profile add 1`] = `1036`;
+
+exports[`Vector Profile add_mutable 1`] = `10859`;
+
+exports[`Vector Profile vec_interpolate 1`] = `57`;
+
+exports[`Vector Profile vec_sum 1`] = `45`;
+
+exports[`Vector Profile vec_sum_immutable 1`] = `55`;

@@ -21,6 +21,7 @@ export function vec_add(a: Vector2D, b: Vector2D) {
 export function vec_add_mutable(a: Vector2D, b: Vector2D) {
     a.x += b.x;
     a.y += b.y;
+    return a;
 }
 
 export function vec_divide(a: Vector2D, b: Vector2D) {
@@ -45,10 +46,18 @@ export function vec_scale(a: Vector2D, b: number) {
     return {x: a.x * b, y: a.y * b};
 }
 
-export function vec_sum(...vecs: Vector2D[]) {
+export function vec_sum(vecs: Vector2D[]) {
     const sum = {x: 0, y: 0};
     vecs.forEach((vec) => {
         vec_add_mutable(sum, vec)
+    });
+    return sum;
+}
+
+export function vec_sum_immutable(vecs: Vector2D[]) {
+    let sum = {x: 0, y: 0};
+    vecs.forEach((vec) => {
+        sum = vec_add(sum, vec)
     });
     return sum;
 }
