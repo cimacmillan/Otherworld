@@ -6,6 +6,6 @@ exports[`Sprite Profile Many Sprites drawSprite random 1`] = `4646`;
 
 exports[`Sprite Profile Many Sprites drawSprite worst case 1`] = `4659`;
 
-exports[`Sprite Profile Single Sprite drawSprite 1`] = `7193`;
+exports[`Sprite Profile Single Sprite drawSprite 1`] = `199`;
 
-exports[`Sprite Profile Single Sprite drawSpriteB 1`] = `6727`;
+exports[`Sprite Profile Single Sprite drawSpriteB 1`] = `423`;

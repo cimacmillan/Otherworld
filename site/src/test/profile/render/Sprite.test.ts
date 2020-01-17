@@ -65,11 +65,11 @@ describe("Sprite Profile", () => {
         });
 
         test("drawSprite", () => {
-            profile(SAMPLE_MEDIUM_RARE, () => drawSprite(screenBuffer, depthBuffer, camera, sprite));
+            profile(SAMPLE_LIL, () => drawSprite(screenBuffer, depthBuffer, camera, sprite));
         });
 
         test("drawSpriteB", () => {
-            profile(SAMPLE_MEDIUM_RARE, () => drawSpriteB(screenBuffer, depthBuffer, camera, sprite));
+            profile(SAMPLE_LIL, () => drawSpriteB(screenBuffer, depthBuffer, camera, sprite));
         });
 
     });

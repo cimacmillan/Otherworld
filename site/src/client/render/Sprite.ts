@@ -31,10 +31,10 @@ export function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, came
     let x = (projectPosition.x * projectMult) + (0.5 * screen.width);
     let y = ((camera.height - sprite.height) * projectMult)  + (0.5 * screen.height);
 
-    let x1 = clipToRange(Math.floor(x - width/2), 0, screen.width-1);
-    let x2 = clipToRange(Math.floor(x + width/2), 0, screen.width-1);
-    let y1 = clipToRange(Math.floor(y - height/2), 0, screen.height-1);
-    let y2 = clipToRange(Math.floor(y + height/2), 0, screen.height-1);
+    let x1 = clipToRange(~~(x - width/2), 0, screen.width-1);
+    let x2 = clipToRange(~~(x + width/2), 0, screen.width-1);
+    let y1 = clipToRange(~~(y - height/2), 0, screen.height-1);
+    let y2 = clipToRange(~~(y + height/2), 0, screen.height-1);
 
     for (let xPixel = x1; xPixel < x2; xPixel++) {
 
@@ -108,5 +108,4 @@ export function drawSpriteB(screen: ScreenBuffer, depth_buffer: DepthBuffer, cam
             depth_buffer.setDistance(xPixel, yPixel, distance);
         }
     }
-
 }
