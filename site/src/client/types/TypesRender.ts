@@ -1,4 +1,4 @@
-import { Wall } from "./TypesMap"
+import { Wall, Colour } from "./TypesMap"
 import { Vector2D } from "./TypesVector"
 
 export interface Ray {
@@ -36,5 +36,11 @@ export interface Texture {
     data: ImageData;
     width: number;
     height: number;
+}
+
+export interface FastTexture {
+    data: Colour[][],
+    width: number,
+    height: number,
 }
 

@@ -2,7 +2,7 @@ import { Wall, GameMap, Sprite } from "../../types/TypesMap";
 import { ScreenBuffer } from "../../render";
 import { randomFloatRange, randomIntRange, toRadians } from "../math";
 import { Camera, Texture } from "../../types";
-import { loadTextureFromURL } from "./TextureLoader";
+import { loadTextureFromURL, convertToFastTexture } from "./TextureLoader";
 
 const VIEWING_ANGLE = toRadians(110.0);
 
@@ -61,12 +61,14 @@ export function initialiseMap(texture: Texture): GameMap {
         p1: { x: 0.0, y: 0.0 }, 
         height0: 1, 
         height1: 0.5, 
-        offset0: 0, 
+        offset0: 0,
         offset1: 0
     });
 
     const sprites: Sprite[] = [];
     const spriteCount = 3000;
+
+    const fastTexture = convertToFastTexture(texture);
 
     for(let i = 0; i < spriteCount; i++) {
         const size = randomFloatRange(0.2, 0.4);
@@ -75,7 +77,7 @@ export function initialiseMap(texture: Texture): GameMap {
             position: {x: randomFloatRange(0, 10), y: randomFloatRange(0, 10)}, 
             size: {x: size, y: size},
             height: height,
-            texture,
+            texture: fastTexture,
             texcoord: {
                 t0: {x: 0, y: 0},
                 t1: {x: 1, y: 0},

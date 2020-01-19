@@ -1,4 +1,4 @@
-import { Texture } from "../../types";
+import { Texture, FastTexture, Colour } from "../../types";
 
 export type LoadTextureCallback = (img: Texture) => void;
 
@@ -25,3 +25,26 @@ export function loadTextureFromURL (url: string): Promise<Texture> {
     });
 }
 
+export function convertToFastTexture(texture: Texture): FastTexture {
+    const colours: Colour[][] = [];
+
+    for (let x = 0; x < texture.width; x++) {
+        const column: Colour[] = [];
+        for (let y = 0; y < texture.height; y++) {
+            const index = (x + (y * texture.width)) * 4;
+            column.push({
+                r: texture.data.data[index],
+                g: texture.data.data[index + 1],
+                b: texture.data.data[index + 2],
+                a: texture.data.data[index + 3]
+            });
+        }
+        colours.push(column);
+    }
+
+    return {
+        data: colours,
+        width: texture.width,
+        height: texture.height
+    };
+}

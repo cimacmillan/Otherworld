@@ -38,9 +38,8 @@
     "server": "node site/build/server/Run.js",
     "watch": "npm-watch",
     "full-rebuild": "npm run-script clean && npm run-script build && npm run-script pack && npm run-script server",
-    "test-unit": "npm run-script clean && npx jest",
-    "test-integration-i": "./node_modules/.bin/cypress open",
-    "test-integration": "./node_modules/.bin/cypress run",
+    "test-unit": "npx jest site/src/test/unit/",
+    "test-profile": "npx jest site/src/test/profile/ -u",
     "test": "npm run-script test-unit"
   },
   "watch": {

@@ -1,11 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Sprite Profile Many Sprites drawSprite best case 1`] = `4668`;
-
-exports[`Sprite Profile Many Sprites drawSprite random 1`] = `4646`;
-
-exports[`Sprite Profile Many Sprites drawSprite worst case 1`] = `4659`;
-
-exports[`Sprite Profile Single Sprite drawSprite 1`] = `199`;
-
-exports[`Sprite Profile Single Sprite drawSpriteB 1`] = `423`;
+exports[`Sprite Profile Single Sprite drawSprite 1`] = `2839`;

@@ -1,8 +1,9 @@
 import { SAMPLE_LIL, profile, SAMPLE_SMA, SAMPLE_MEDIUM_RARE } from "../ProfileUnit";
-import { drawSprite, drawSprites, drawSpriteB } from "../../../client/render/Sprite";
+import { drawSprite, drawSprites} from "../../../client/render/Sprite";
 import { ScreenBuffer } from "../../../client/render/components/ScreenBuffer";
 import { DepthBuffer } from "../../../client/render/components/DepthBuffer";
 import { Camera, Texture, Sprite } from "../../../client/types";
+import { convertToFastTexture } from "../../../client/util/loader/TextureLoader";
 
 jest.mock("../../../client/render/components/ScreenBuffer");
 jest.mock("../../../client/render/components/DepthBuffer");
@@ -52,7 +53,7 @@ describe("Sprite Profile", () => {
                 position: {x: 0, y: 0}, 
                 size: {x: 1, y: 1},
                 height: 1,
-                texture: randomTexture(64, 64),
+                texture: convertToFastTexture(randomTexture(64, 64)),
                 texcoord: {
                     t0: {x: 0, y: 0},
                     t1: {x: 1, y: 0},
@@ -65,11 +66,7 @@ describe("Sprite Profile", () => {
         });
 
         test("drawSprite", () => {
-            profile(SAMPLE_LIL, () => drawSprite(screenBuffer, depthBuffer, camera, sprite));
-        });
-
-        test("drawSpriteB", () => {
-            profile(SAMPLE_LIL, () => drawSpriteB(screenBuffer, depthBuffer, camera, sprite));
+            profile(SAMPLE_MEDIUM_RARE, () => drawSprite(screenBuffer, depthBuffer, camera, sprite));
         });
 
     });
@@ -88,7 +85,7 @@ describe("Sprite Profile", () => {
                     position: {x: 0, y: depth}, 
                     size: {x: 1, y: 1},
                     height: 1,
-                    texture: randomTexture(64, 64),
+                    texture: convertToFastTexture(randomTexture(64, 64)),
                     texcoord: {
                         t0: {x: 0, y: 0},
                         t1: {x: 1, y: 0},
@@ -101,16 +98,16 @@ describe("Sprite Profile", () => {
             }
         });
 
-        test("drawSprite best case", () => {
+        test("best case", () => {
             profile(SAMPLE_SMA, () => drawSprites(screenBuffer, depthBuffer, camera, sprites));
         });
 
-        test("drawSprite random", () => {
+        test("random case", () => {
             shuffle(sprites)
             profile(SAMPLE_SMA, () => drawSprites(screenBuffer, depthBuffer, camera, sprites));
         });
 
-        test("drawSprite worst case", () => {
+        test("worst case", () => {
             profile(SAMPLE_SMA, () => drawSprites(screenBuffer, depthBuffer, camera, sprites.reverse()));
         });
 

@@ -1,6 +1,6 @@
 
 import { Vector2D } from "./TypesVector"
-import { Texture, TextureCoordinates } from "./TypesRender";
+import { Texture, TextureCoordinates, FastTexture } from "./TypesRender";
 
 export interface Colour {
     r: number;
@@ -14,7 +14,7 @@ export interface Sprite {
     size: Vector2D;
     height: number;
 
-    texture: Texture;
+    texture: FastTexture;
     texcoord: TextureCoordinates;
 
     // For computation only
