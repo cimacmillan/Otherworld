@@ -66,7 +66,7 @@ export function initialiseMap(texture: Texture): GameMap {
     });
 
     const sprites: Sprite[] = [];
-    const spriteCount = 3000;
+    const spriteCount = 4000;
 
     const fastTexture = convertToFastTexture(texture);
 

@@ -1,7 +1,7 @@
 import { ScreenBuffer, DepthBuffer } from ".";
 import { Camera, Sprite } from "../types";
 import { vec_sub, vec_add, vec_rotate, vec_distance, clipToRange, swapSort } from "../util/math";
-import { textureMap, fastTextureMap } from "./Shader";
+import { fastTextureMap } from "./Shader";
 
 export function drawSprites(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprites: Sprite[]) {
     for (let i = 0; i < sprites.length; i++) {
@@ -18,6 +18,9 @@ export function drawSprites(screen: ScreenBuffer, depth_buffer: DepthBuffer, cam
 export function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprite: Sprite) {
     const projectPosition = sprite.projectPosition!;
     const distance = -projectPosition.y;
+
+    const diff = vec_sub(sprite.position, {x: 20, y: 20});
+    sprite.position = vec_add(vec_rotate(diff, 0.4 / Math.pow(vec_distance(diff) / 2, 2) ), {x: 20, y: 20});
 
     if (distance < camera.clip_depth) {
         return;
