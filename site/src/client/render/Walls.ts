@@ -56,8 +56,8 @@ function drawWall(x: number, ray: Ray, screen: ScreenBuffer, theta: number, came
             depth_buffer.setDistance(x, y, ray.length);
             screen.putPixel(x, y,
                 255,
-                (ray.intersection.x % 1) * 255,
-                (ray.intersection.y % 1) * 255,
+                (ray.wall_interpolation * 10 % 1) * 255,
+                (ray.wall_interpolation * 10 % 1) * 255,
                 255);
         }
     }
