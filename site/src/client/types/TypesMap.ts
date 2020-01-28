@@ -1,6 +1,6 @@
 
 import { Vector2D } from "./TypesVector"
-import { TextureCoordinates, FastTexture } from "./TypesRender";
+import { TextureCoordinates, FastTexture, SpriteSheet } from "./TypesRender";
 
 export interface Colour {
     r: number;
@@ -23,6 +23,9 @@ export interface Sprite {
 
 export interface Plane {
     height: number;
+    start: Vector2D;
+    end: Vector2D;
+    spritesheet: SpriteSheet; 
 }
 
 export interface Wall {

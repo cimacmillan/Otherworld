@@ -1,7 +1,7 @@
-import { Wall, GameMap, Sprite } from "../../types/TypesMap";
+import { Wall, GameMap, Sprite, Plane } from "../../types/TypesMap";
 import { ScreenBuffer } from "../../render";
 import { randomFloatRange, randomIntRange, toRadians } from "../math";
-import { Camera, Texture } from "../../types";
+import { Camera, Texture, SpriteSheet } from "../../types";
 import { loadTextureFromURL, convertToFastTexture } from "./TextureLoader";
 
 const VIEWING_ANGLE = toRadians(110.0);
@@ -26,6 +26,14 @@ export function initialiseCamera(screen: ScreenBuffer): Camera {
 export function initialiseMap(texture: Texture): GameMap {
 
     const fastTexture = convertToFastTexture(texture);
+
+    const spritesheetData = [];
+    spritesheetData.push([fastTexture]);
+    const spritesheet: SpriteSheet = {
+        data: spritesheetData, 
+        width: 1,
+        height: 1
+    };
 
     const wall_buffer: Wall[] = [];
 
@@ -129,8 +137,19 @@ export function initialiseMap(texture: Texture): GameMap {
         })
     }
 
-    const planes = [
-        {height: 0}
+    const planes: Plane[] = [
+        {
+            height: 0,
+            start: {
+                x: 0,
+                y: 0,
+            },
+            end: {
+                x: 10,
+                y: 10,
+            },
+            spritesheet
+        }
     ]
 
     const map: GameMap = {wall_buffer, sprites, planes};

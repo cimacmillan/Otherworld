@@ -42,3 +42,8 @@ export interface FastTexture {
     height: number,
 }
 
+export interface SpriteSheet {
+    data: FastTexture[][];
+    width: number;
+    height: number;
+}

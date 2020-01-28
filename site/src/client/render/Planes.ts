@@ -1,39 +1,55 @@
 import { ScreenBuffer, DepthBuffer } from ".";
 import { Camera, Plane } from "../types";
 import { vec_rotate, vec_add } from "../util/math";
+import { fastTextureMap } from "./Shader";
 
 export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camera: Camera, planes: Plane[]) {
 
+    const plane = planes[0];
+
     for(let y = 0; y < screen.height; y++) {
 
-        let yGrad = (y / screen.height);
-        let yViewWindow = camera.y_view_window * (yGrad - 0.5);
-        let heightDifference = (camera.height - planes[0].height);
-        let yTilePreRotate = (camera.focal_length / yViewWindow) * heightDifference;
+        const yGrad = (y / screen.height);
+        const yViewWindow = camera.y_view_window * (yGrad - 0.5);
+        const heightDifference = (camera.height - planes[0].height);
+        const yTilePreRotate = (camera.focal_length / yViewWindow) * heightDifference;
 
         for(let x = 0; x < screen.width; x++) {
 
             depthBuffer.forceSet(x, y, 0);
 
-            let xGrad = (x / screen.width);
-            let xViewWindow = camera.x_view_window * (xGrad - 0.5);
-            let xTilePreRotate = (xViewWindow / camera.focal_length) * yTilePreRotate;
+            const xGrad = (x / screen.width);
+            const xViewWindow = camera.x_view_window * (xGrad - 0.5);
+            const xTilePreRotate = (xViewWindow / camera.focal_length) * yTilePreRotate;
 
-            let tilePosition = vec_add(vec_rotate({x: xTilePreRotate, y: -yTilePreRotate}, camera.angle), camera.position);
+            const tilePosition = vec_add(vec_rotate({x: xTilePreRotate, y: -yTilePreRotate}, camera.angle), camera.position);
 
-            if (tilePosition.x < 0 || tilePosition.y < 0 || yTilePreRotate < 0) {
+            if (yTilePreRotate < 0 || 
+                tilePosition.x < plane.start.x || 
+                tilePosition.x > plane.end.x ||
+                tilePosition.y < plane.start.y ||
+                tilePosition.y > plane.end.y) {
                 screen.putPixel(x, y, 0, 0, 0, 255);
                 continue;
             }
 
-            let yTileGrad = tilePosition.y % 1;
-            let xTileGrad = tilePosition.x % 1;
+            const tileX = ~~(tilePosition.x - plane.start.x);
+            const tileY = ~~(tilePosition.y - plane.start.y);
 
-            let red = yTileGrad * 255;
-            let green = xTileGrad * 255;
+            const texture = plane.spritesheet.data[tileX % plane.spritesheet.width][tileY % plane.spritesheet.height];
+
+            const u = tilePosition.x - tileX;
+            const v = tilePosition.y - tileY;
+
+            const colour = fastTextureMap(texture, u, v);
+
+            if (colour.a < 255) {
+                screen.putPixel(x, y, 0, 0, 0, 255);
+                continue;
+            }
 
             // depthBuffer.setDistance(x, y, distance);
-            screen.putPixel(x, y, red, green, 0, 255);
+            screen.putPixelColour(x, y, colour);
 
         }
     }
