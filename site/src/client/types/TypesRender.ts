@@ -26,10 +26,8 @@ export enum TextureSampleType {
 }
 
 export interface TextureCoordinates {
-    t0: Vector2D;
-    t1: Vector2D;
-    t2: Vector2D;
-    t3: Vector2D;
+    start: Vector2D;
+    end: Vector2D;
 }
 
 export interface Texture {

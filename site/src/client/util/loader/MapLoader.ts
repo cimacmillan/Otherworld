@@ -25,6 +25,8 @@ export function initialiseCamera(screen: ScreenBuffer): Camera {
 
 export function initialiseMap(texture: Texture): GameMap {
 
+    const fastTexture = convertToFastTexture(texture);
+
     const wall_buffer: Wall[] = [];
 
     wall_buffer.push({ 
@@ -33,7 +35,18 @@ export function initialiseMap(texture: Texture): GameMap {
         height0: 0.5, 
         height1: 1, 
         offset0: 0, 
-        offset1: 0
+        offset1: 0,
+        texture: fastTexture,
+        texcoord: {
+            start: {
+                x: 0,
+                y: 0
+            },
+            end: {
+                x: 10,
+                y: 1
+            }
+        }
     });
 
     for(let i = 0; i < 100; i++) {
@@ -43,7 +56,18 @@ export function initialiseMap(texture: Texture): GameMap {
             height0: 1, 
             height1: 1, 
             offset0: 0, 
-            offset1: 0
+            offset1: 0,
+            texture: fastTexture,
+            texcoord: {
+                start: {
+                    x: 0,
+                    y: 0
+                },
+                end: {
+                    x: 10,
+                    y: 1
+                }
+            }
         });
     }
 
@@ -53,7 +77,18 @@ export function initialiseMap(texture: Texture): GameMap {
         height0: 1, 
         height1: 1, 
         offset0: 0, 
-        offset1: 0.5
+        offset1: 0.5,
+        texture: fastTexture,
+        texcoord: {
+            start: {
+                x: 0,
+                y: 0
+            },
+            end: {
+                x: 10,
+                y: 1
+            }
+        }
     });
 
     wall_buffer.push({ 
@@ -62,13 +97,22 @@ export function initialiseMap(texture: Texture): GameMap {
         height0: 1, 
         height1: 0.5, 
         offset0: 0,
-        offset1: 0
+        offset1: 0,
+        texture: fastTexture,
+        texcoord: {
+            start: {
+                x: 0,
+                y: 0
+            },
+            end: {
+                x: 10,
+                y: 1
+            }
+        }
     });
 
     const sprites: Sprite[] = [];
     const spriteCount = 4000;
-
-    const fastTexture = convertToFastTexture(texture);
 
     for(let i = 0; i < spriteCount; i++) {
         const size = randomFloatRange(0.2, 0.4);
@@ -79,10 +123,8 @@ export function initialiseMap(texture: Texture): GameMap {
             height: height,
             texture: fastTexture,
             texcoord: {
-                t0: {x: 0, y: 0},
-                t1: {x: 1, y: 0},
-                t2: {x: 1, y: 1},
-                t3: {x: 0, y: 1},
+                start: {x: 0, y: 0},
+                end: {x: 1, y: 1},
             }
         })
     }

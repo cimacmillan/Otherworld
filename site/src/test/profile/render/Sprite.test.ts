@@ -55,10 +55,8 @@ describe("Sprite Profile", () => {
                 height: 1,
                 texture: convertToFastTexture(randomTexture(64, 64)),
                 texcoord: {
-                    t0: {x: 0, y: 0},
-                    t1: {x: 1, y: 0},
-                    t2: {x: 1, y: 1},
-                    t3: {x: 0, y: 1},
+                    start: {x: 0, y: 0},
+                    end: {x: 1, y: 1},
                 },
                 projectPosition: {x: 0, y: -4}
             };
@@ -87,10 +85,8 @@ describe("Sprite Profile", () => {
                     height: 1,
                     texture: convertToFastTexture(randomTexture(64, 64)),
                     texcoord: {
-                        t0: {x: 0, y: 0},
-                        t1: {x: 1, y: 0},
-                        t2: {x: 1, y: 1},
-                        t3: {x: 0, y: 1},
+                        start: {x: 0, y: 0},
+                        end: {x: 1, y: 1},
                     },
                     projectPosition: {x: 0, y: -depth}
                     }

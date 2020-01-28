@@ -1,6 +1,6 @@
 
 import { Vector2D } from "./TypesVector"
-import { Texture, TextureCoordinates, FastTexture } from "./TypesRender";
+import { TextureCoordinates, FastTexture } from "./TypesRender";
 
 export interface Colour {
     r: number;
@@ -28,10 +28,14 @@ export interface Plane {
 export interface Wall {
     p0: Vector2D;
     p1: Vector2D;
+    
     height0: number;
     height1: number;
     offset0: number;
     offset1: number;
+
+    texture: FastTexture;
+    texcoord: TextureCoordinates;
 }
 
 export interface GameMap {

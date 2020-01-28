@@ -1,6 +1,25 @@
 import { Vector2D, GameMap, Camera, Ray } from "../types";
 import { vec_sub, vec_cross, interpolate, convert_unit, vec_rotate } from "../util/math";
 import { ScreenBuffer, DepthBuffer } from ".";
+import { fastTextureMap } from "./Shader";
+
+export function drawWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, map: GameMap, camera: Camera) {
+
+    const halfView = camera.x_view_window / 2;
+
+    // Loop over all of the pixels
+    for (var x = 0; x < screen.width; x++) {
+        // Proper focal length and viewing angle
+        let x_grad = convert_unit(x, screen.width, -halfView, halfView);
+        let direction = vec_rotate({ x: x_grad, y: -camera.focal_length }, camera.angle);
+        let origin = camera.position;
+        let theta = Math.atan(x_grad / -camera.focal_length);
+
+        let intersecting_rays = fire_ray(origin, direction, map, camera);
+
+        intersecting_rays.forEach((ray) => drawWall(x, ray, screen, theta, camera, depth_buffer));
+    }
+}
 
 function fire_ray(origin: Vector2D, direction: Vector2D, map: GameMap, camera: Camera) {
 
@@ -36,49 +55,39 @@ function fire_ray(origin: Vector2D, direction: Vector2D, map: GameMap, camera: C
 }
 
 function drawWall(x: number, ray: Ray, screen: ScreenBuffer, theta: number, camera: Camera, depth_buffer: DepthBuffer) {
+    const { texture, texcoord } = ray.wall;
+    const alpha = ray.wall_interpolation;
 
-    let upper_wall_z = -interpolate(ray.wall_interpolation, ray.wall.height0 + ray.wall.offset0 - camera.height, ray.wall.height1 + ray.wall.offset1 - camera.height);
-    let lower_wall_z = -interpolate(ray.wall_interpolation, ray.wall.offset0 - camera.height, ray.wall.offset1 - camera.height);
-    let distance = ray.length * Math.cos(theta);
+    const upper_wall_z = -interpolate(alpha, ray.wall.height0 + ray.wall.offset0 - camera.height, ray.wall.height1 + ray.wall.offset1 - camera.height);
+    const lower_wall_z = -interpolate(alpha, ray.wall.offset0 - camera.height, ray.wall.offset1 - camera.height);
+    const u = interpolate(alpha, texcoord.start.x, texcoord.end.x);
+    
+    const distance = ray.length * Math.cos(theta);
 
     let upper_pixel = ((upper_wall_z / distance) * camera.focal_length * camera.y_view_window + 0.5) * screen.height;
     let lower_pixel = ((lower_wall_z / distance) * camera.focal_length * camera.y_view_window + 0.5) * screen.height;
 
-    let temp = upper_pixel;
+    const temp = upper_pixel;
     upper_pixel = Math.min(upper_pixel, lower_pixel);
     lower_pixel = Math.max(temp, lower_pixel);
+
+    const original_upper = ~~(upper_pixel);
+    const original_height = Math.ceil(lower_pixel - upper_pixel) + 1;
+
     upper_pixel = Math.max(0, upper_pixel);
     lower_pixel = Math.min(screen.height - 1, lower_pixel);
 
-    for (var y = Math.floor(upper_pixel); y <= Math.floor(lower_pixel); y++) {
-
+    for (var y = ~~upper_pixel; y <= ~~lower_pixel; y++) {
         if (depth_buffer.isCloser(x, y, ray.length)) {
+            const beta = (y - original_upper) / original_height;
+            const v = (texcoord.end.y * beta) + ((1.0 - beta) * texcoord.start.y);
+            const colour = fastTextureMap(texture, u, v);
+
+            if (colour.a < 255) continue;
+
             depth_buffer.setDistance(x, y, ray.length);
-            screen.putPixel(x, y,
-                255,
-                (ray.wall_interpolation * 10 % 1) * 255,
-                (ray.wall_interpolation * 10 % 1) * 255,
-                255);
+            screen.putPixelColour(x, y, colour);
         }
     }
 
 }
-
-export function drawWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, map: GameMap, camera: Camera) {
-
-    const halfView = camera.x_view_window / 2;
-
-    // Loop over all of the pixels
-    for (var x = 0; x < screen.width; x++) {
-        // Proper focal length and viewing angle
-        let x_grad = convert_unit(x, screen.width, -halfView, halfView);
-        let direction = vec_rotate({ x: x_grad, y: -camera.focal_length }, camera.angle);
-        let origin = camera.position;
-        let theta = Math.atan(x_grad / -camera.focal_length);
-
-        let intersecting_rays = fire_ray(origin, direction, map, camera);
-
-        intersecting_rays.forEach((ray) => drawWall(x, ray, screen, theta, camera, depth_buffer));
-    }
-}
-

@@ -1,6 +1,6 @@
 import { ScreenBuffer, DepthBuffer } from ".";
 import { Camera, Sprite } from "../types";
-import { vec_sub, vec_add, vec_rotate, vec_distance, clipToRange, swapSort } from "../util/math";
+import { vec_sub, vec_add, vec_rotate, vec_distance, clipToRange, swapSort, randomFloatRange } from "../util/math";
 import { fastTextureMap } from "./Shader";
 
 export function drawSprites(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprites: Sprite[]) {
@@ -19,8 +19,9 @@ export function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, came
     const projectPosition = sprite.projectPosition!;
     const distance = -projectPosition.y;
 
-    const diff = vec_sub(sprite.position, {x: 20, y: 20});
-    sprite.position = vec_add(vec_rotate(diff, 0.4 / Math.pow(vec_distance(diff) / 2, 2) ), {x: 20, y: 20});
+    const centre = {x: randomFloatRange(15, 25), y: randomFloatRange(15, 25)};
+    const diff = vec_sub(sprite.position, centre);
+    sprite.position = vec_add(vec_rotate(diff, 0.4 / Math.pow(vec_distance(diff) / 2, 2) ), centre);
 
     if (distance < camera.clip_depth) {
         return;
@@ -42,12 +43,14 @@ export function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, came
     for (let xPixel = x1; xPixel < x2; xPixel++) {
 
         const x_alpha = (xPixel - (x - width/2)) / (width);
+        const u = (sprite.texcoord.start.x * (1.0 - x_alpha)) + (sprite.texcoord.end.x * x_alpha);
 
         for (let yPixel = y1; yPixel < y2; yPixel++) {
 
             const y_alpha = (yPixel - (y - height/2)) / (height);
+            const v = (sprite.texcoord.start.y * (1.0 - y_alpha)) + (sprite.texcoord.end.y * y_alpha);
 
-            const colour = fastTextureMap(sprite.texture, x_alpha, y_alpha);
+            const colour = fastTextureMap(sprite.texture, u, v);
 
             if (colour.a < 255) continue;
 
