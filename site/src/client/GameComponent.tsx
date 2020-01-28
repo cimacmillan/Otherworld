@@ -9,6 +9,7 @@ import { GameState } from "./state/GameState";
 import { initialiseCamera, initialiseMap } from "./util/loader/MapLoader";
 import { loadTextureFromURL } from "./util/loader/TextureLoader";
 import { Texture } from "./types";
+import { ResourceManager } from "./resources/ResourceManager";
 
 const DOM_WIDTH = 1280;
 const DOM_HEIGHT = 720;
@@ -22,10 +23,11 @@ const TARGET_MILLIS = Math.floor(1000 / TARGET_FPS);
 export class GameComponent extends React.Component {
 
     private gameState: GameState;
-    private texture: Texture;
+    private resourceManager: ResourceManager;
     
     public async componentDidMount() {
-        this.texture = await loadTextureFromURL("img/sprite.png");
+        this.resourceManager = new ResourceManager();
+        await this.resourceManager.load();
         this.initState();
     }
 
@@ -49,7 +51,7 @@ export class GameComponent extends React.Component {
         this.gameState = {
             loop, 
             world: {
-                map: initialiseMap(this.texture),
+                map: initialiseMap(this.resourceManager),
                 camera: initialiseCamera(screen),
             },
             audio: {

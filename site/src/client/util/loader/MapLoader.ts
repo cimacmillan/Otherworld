@@ -3,6 +3,7 @@ import { ScreenBuffer } from "../../render";
 import { randomFloatRange, randomIntRange, toRadians } from "../math";
 import { Camera, Texture, SpriteSheet } from "../../types";
 import { loadTextureFromURL, convertToFastTexture } from "./TextureLoader";
+import { ResourceManager } from "../../resources/ResourceManager";
 
 const VIEWING_ANGLE = toRadians(110.0);
 
@@ -23,12 +24,10 @@ export function initialiseCamera(screen: ScreenBuffer): Camera {
     }
 }
 
-export function initialiseMap(texture: Texture): GameMap {
-
-    const fastTexture = convertToFastTexture(texture);
+export function initialiseMap(resourceManager: ResourceManager): GameMap {
 
     const spritesheetData = [];
-    spritesheetData.push([fastTexture]);
+    spritesheetData.push([resourceManager.floor]);
     const spritesheet: SpriteSheet = {
         data: spritesheetData, 
         width: 1,
@@ -44,7 +43,7 @@ export function initialiseMap(texture: Texture): GameMap {
         height1: 1, 
         offset0: 0, 
         offset1: 0,
-        texture: fastTexture,
+        texture: resourceManager.wall,
         texcoord: {
             start: {
                 x: 0,
@@ -65,7 +64,7 @@ export function initialiseMap(texture: Texture): GameMap {
             height1: 1, 
             offset0: 0, 
             offset1: 0,
-            texture: fastTexture,
+            texture: resourceManager.wall,
             texcoord: {
                 start: {
                     x: 0,
@@ -86,7 +85,7 @@ export function initialiseMap(texture: Texture): GameMap {
         height1: 1, 
         offset0: 0, 
         offset1: 0.5,
-        texture: fastTexture,
+        texture: resourceManager.wall,
         texcoord: {
             start: {
                 x: 0,
@@ -106,7 +105,7 @@ export function initialiseMap(texture: Texture): GameMap {
         height1: 0.5, 
         offset0: 0,
         offset1: 0,
-        texture: fastTexture,
+        texture: resourceManager.wall,
         texcoord: {
             start: {
                 x: 0,
@@ -129,7 +128,7 @@ export function initialiseMap(texture: Texture): GameMap {
             position: {x: randomFloatRange(0, 10), y: randomFloatRange(0, 10)}, 
             size: {x: size, y: size},
             height: height,
-            texture: fastTexture,
+            texture: resourceManager.sprite,
             texcoord: {
                 start: {x: 0, y: 0},
                 end: {x: 1, y: 1},
