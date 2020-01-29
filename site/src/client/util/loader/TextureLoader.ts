@@ -1,25 +1,25 @@
-import { Texture, FastTexture, Colour } from "../../types";
+import { Colour, FastTexture, Texture } from "../../types";
 
 export type LoadTextureCallback = (img: Texture) => void;
 
 function constructTexture(img: HTMLImageElement): Texture {
-    var canvas = document.createElement("canvas");
+    let canvas = document.createElement("canvas");
     canvas.width = img.width;
     canvas.height = img.height;
-    var ctx = canvas.getContext("2d");
+    let ctx = canvas.getContext("2d");
     ctx.drawImage(img, 0, 0);
     return {
         data: ctx.getImageData(0, 0, img.width, img.height),
         width: img.width,
-        height: img.height
+        height: img.height,
     };
 }
 
-export function loadTextureFromURL (url: string): Promise<Texture> {
+export function loadTextureFromURL(url: string): Promise<Texture> {
     return new Promise((resolve, reject) => {
-        var img = new Image();
+        let img = new Image();
         img.onload = () => {
-            resolve(constructTexture(img))
+            resolve(constructTexture(img));
         };
         img.src = url;
     });
@@ -36,7 +36,7 @@ export function convertToFastTexture(texture: Texture): FastTexture {
                 r: texture.data.data[index],
                 g: texture.data.data[index + 1],
                 b: texture.data.data[index + 2],
-                a: texture.data.data[index + 3]
+                a: texture.data.data[index + 3],
             });
         }
         colours.push(column);
@@ -45,6 +45,6 @@ export function convertToFastTexture(texture: Texture): FastTexture {
     return {
         data: colours,
         width: texture.width,
-        height: texture.height
+        height: texture.height,
     };
 }

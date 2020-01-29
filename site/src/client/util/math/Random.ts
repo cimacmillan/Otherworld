@@ -11,4 +11,3 @@ export function randomFloatRange(lowerBound: number, upperBound: number): number
     const alpha = randomFloat();
     return (alpha * upperBound) + ((1 - alpha) * lowerBound);
 }
-

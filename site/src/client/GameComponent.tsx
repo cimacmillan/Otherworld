@@ -1,15 +1,15 @@
 import React = require("react");
-import { CanvasComponent } from "./render"
-import { ScreenBuffer, DepthBuffer, createImage } from "./render";
-import { loadSound, Sound, playSound } from "./util/sound/Sound";
 import { initialiseInput, updateInput } from "./Input";
-import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
-import { setFPSProportion, logFPS} from "./util/time/GlobalFPSController";
+import { createImage, DepthBuffer, ScreenBuffer } from "./render";
+import { CanvasComponent } from "./render";
+import { ResourceManager } from "./resources/ResourceManager";
 import { GameState } from "./state/GameState";
+import { Texture } from "./types";
 import { initialiseCamera, initialiseMap } from "./util/loader/MapLoader";
 import { loadTextureFromURL } from "./util/loader/TextureLoader";
-import { Texture } from "./types";
-import { ResourceManager } from "./resources/ResourceManager";
+import { loadSound, playSound, Sound } from "./util/sound/Sound";
+import { logFPS, setFPSProportion} from "./util/time/GlobalFPSController";
+import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
 
 const DOM_WIDTH = 1280;
 const DOM_HEIGHT = 720;
@@ -24,11 +24,15 @@ export class GameComponent extends React.Component {
 
     private gameState: GameState;
     private resourceManager: ResourceManager;
-    
+
     public async componentDidMount() {
         this.resourceManager = new ResourceManager();
         await this.resourceManager.load();
         this.initState();
+    }
+
+    public render() {
+        return <CanvasComponent ref="main_canvas" id={"main_canvas"} dom_width={DOM_WIDTH} dom_height={DOM_HEIGHT} width={WIDTH} height={HEIGHT} resolution={RES_DIV}/>;
     }
 
     private initState = () => {
@@ -37,11 +41,11 @@ export class GameComponent extends React.Component {
         const screen = new ScreenBuffer(
             (this.refs.main_canvas as CanvasComponent).getImageData(),
             WIDTH,
-            HEIGHT
+            HEIGHT,
         );
 
         const depthBuffer = new DepthBuffer(
-            WIDTH, HEIGHT
+            WIDTH, HEIGHT,
         );
 
         const sound = new Sound();
@@ -49,21 +53,19 @@ export class GameComponent extends React.Component {
         const loop = new TimeControlledLoop(TARGET_MILLIS, this.mainLoop);
 
         this.gameState = {
-            loop, 
+            loop,
             world: {
                 map: initialiseMap(this.resourceManager),
                 camera: initialiseCamera(screen),
             },
             audio: {
-                sound
+                sound,
             },
             render: {
                 screen,
-                depthBuffer
-            }
-        }
-
-
+                depthBuffer,
+            },
+        };
 
         // loadSound("audio/intro.mp3", (buffer) => {
             // setTimeout(
@@ -87,17 +89,12 @@ export class GameComponent extends React.Component {
         (this.refs.main_canvas as CanvasComponent).writeImageData();
     }
 
-
     private mainLoop = (instance: TimeControlledLoop, actualMilliseconds: number, actualProportion?: number) => {
         logFPS();
         setFPSProportion(1 / actualProportion);
 
         this.update();
         this.draw();
-    }
-
-    public render() {
-        return <CanvasComponent ref="main_canvas" id={"main_canvas"} dom_width={DOM_WIDTH} dom_height={DOM_HEIGHT} width={WIDTH} height={HEIGHT} resolution={RES_DIV}/>
     }
 
 }

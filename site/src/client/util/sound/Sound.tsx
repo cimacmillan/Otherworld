@@ -13,22 +13,20 @@ export class Sound {
 }
 
 export function loadSound(url: string, callback: (buffer: AudioBuffer) => void, sound: Sound) {
-    var request = new XMLHttpRequest();
-    request.open('GET', url, true);
-    request.responseType = 'arraybuffer';
+    const request = new XMLHttpRequest();
+    request.open("GET", url, true);
+    request.responseType = "arraybuffer";
 
     // Decode asynchronously
-    request.onload = function () {
+    request.onload = function() {
         sound.context.decodeAudioData(request.response, callback, (e) => console.log(e));
-    }
+    };
     request.send();
 }
 
 export function playSound(buffer: AudioBuffer, sound: Sound) {
-    var source = sound.context.createBufferSource(); // creates a sound source
+    const source = sound.context.createBufferSource(); // creates a sound source
     source.buffer = buffer;                    // tell the source which sound to play
     source.connect(sound.pan_node).connect(sound.gain_node).connect(sound.context.destination);       // connect the source to the context's destination (the speakers)
     source.start(0);                           // play the source now
 }
-
-

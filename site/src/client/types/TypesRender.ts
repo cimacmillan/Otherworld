@@ -1,14 +1,14 @@
-import { Wall, Colour } from "./TypesMap"
-import { Vector2D } from "./TypesVector"
+import { Colour, Wall } from "./TypesMap";
+import { Vector2D } from "./TypesVector";
 
 export interface Ray {
-    wall: Wall,
-    wall_interpolation: number,
-    ray_interpolation: number,
-    origin: Vector2D,
-    direction: Vector2D,
-    intersection: Vector2D,
-    length: number
+    wall: Wall;
+    wall_interpolation: number;
+    ray_interpolation: number;
+    origin: Vector2D;
+    direction: Vector2D;
+    intersection: Vector2D;
+    length: number;
 }
 
 export interface Camera {
@@ -22,7 +22,7 @@ export interface Camera {
 }
 
 export enum TextureSampleType {
-    LINEAR = "LINEAR"
+    LINEAR = "LINEAR",
 }
 
 export interface TextureCoordinates {
@@ -37,9 +37,9 @@ export interface Texture {
 }
 
 export interface FastTexture {
-    data: Colour[][],
-    width: number,
-    height: number,
+    data: Colour[][];
+    width: number;
+    height: number;
 }
 
 export interface SpriteSheet {

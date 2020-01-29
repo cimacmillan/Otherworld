@@ -1,13 +1,13 @@
 
-import { fpsNorm } from "./util/time/GlobalFPSController";
 import { Camera } from "./types";
-import { vec_rotate, vec_add } from "./util/math/Vector";
+import { vec_add, vec_rotate } from "./util/math/Vector";
+import { fpsNorm } from "./util/time/GlobalFPSController";
 
-var keys_down_set: any = {};
+const keys_down_set: any = {};
 
 export function initialiseInput() {
-    window.addEventListener('keydown', keyboardInput);
-    window.addEventListener('keyup', keyboardInput);
+    window.addEventListener("keydown", keyboardInput);
+    window.addEventListener("keyup", keyboardInput);
 }
 
 function isKeyDown(key: string) {
@@ -20,22 +20,22 @@ function keyboardInput(e: KeyboardEvent) {
 
 export function updateInput(camera: Camera) {
 
-    let speed = fpsNorm(0.1);
+    const speed = fpsNorm(0.1);
 
     if (isKeyDown("KeyW")) {
-        let camera_add = vec_rotate({ x: 0, y: -speed }, camera.angle);
+        const camera_add = vec_rotate({ x: 0, y: -speed }, camera.angle);
         camera.position = vec_add(camera.position, camera_add);
     }
     if (isKeyDown("KeyS")) {
-        let camera_add = vec_rotate({ x: 0, y: speed }, camera.angle);
+        const camera_add = vec_rotate({ x: 0, y: speed }, camera.angle);
         camera.position = vec_add(camera.position, camera_add);
     }
     if (isKeyDown("KeyA")) {
-        let camera_add = vec_rotate({ x: -speed, y: 0 }, camera.angle);
+        const camera_add = vec_rotate({ x: -speed, y: 0 }, camera.angle);
         camera.position = vec_add(camera.position, camera_add);
     }
     if (isKeyDown("KeyD")) {
-        let camera_add = vec_rotate({ x: speed, y: 0 }, camera.angle);
+        const camera_add = vec_rotate({ x: speed, y: 0 }, camera.angle);
         camera.position = vec_add(camera.position, camera_add);
     }
 

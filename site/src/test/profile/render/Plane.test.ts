@@ -1,16 +1,16 @@
-import { SAMPLE_LIL, profile, SAMPLE_SMA, SAMPLE_MEDIUM_RARE } from "../ProfileUnit";
-import { drawSprite, drawSprites} from "../../../client/render/Sprite";
-import { ScreenBuffer } from "../../../client/render/components/ScreenBuffer";
-import { DepthBuffer } from "../../../client/render/components/DepthBuffer";
-import { Camera, Texture, Plane, SpriteSheet } from "../../../client/types";
-import { convertToFastTexture } from "../../../client/util/loader/TextureLoader";
 import { drawPlanes } from "../../../client/render";
-import { mockScreenBuffer, mockDepthBuffer } from "../util";
+import { DepthBuffer } from "../../../client/render/components/DepthBuffer";
+import { ScreenBuffer } from "../../../client/render/components/ScreenBuffer";
+import { drawSprite, drawSprites} from "../../../client/render/Sprite";
+import { Camera, Plane, SpriteSheet, Texture } from "../../../client/types";
+import { convertToFastTexture } from "../../../client/util/loader/TextureLoader";
+import { profile, SAMPLE_LIL, SAMPLE_MEDIUM_RARE, SAMPLE_SMA } from "../ProfileUnit";
+import { mockDepthBuffer, mockScreenBuffer } from "../util";
 
 const randomTexture = (width: number, height: number): Texture => {
-    let data = new Uint8ClampedArray(width * height * 4);
+    const data = new Uint8ClampedArray(width * height * 4);
     return {data: {data, width, height}, width, height};
-}
+};
 
 const MANY_PLANES = 100;
 
@@ -19,26 +19,26 @@ describe("Plane Profile", () => {
 
     beforeEach(() => {
         camera = {
-            position: { x: 0.0, y: 4.0 }, 
-            angle: 0.0, 
-            focal_length: 1, 
-            height: 1, 
-            x_view_window: 1, 
-            y_view_window: 1, 
-            clip_depth: 0.1
+            position: { x: 0.0, y: 4.0 },
+            angle: 0.0,
+            focal_length: 1,
+            height: 1,
+            x_view_window: 1,
+            y_view_window: 1,
+            clip_depth: 0.1,
         };
     });
 
     describe("Many Walls", () => {
 
         let planes: Plane[];
-            
+
         beforeEach(() => {
             const texture = convertToFastTexture(randomTexture(64, 64));
             const spritesheet: SpriteSheet = {
-                data: [[texture]], 
+                data: [[texture]],
                 width: 1,
-                height: 1
+                height: 1,
             };
 
             planes = [];
@@ -55,8 +55,8 @@ describe("Plane Profile", () => {
                             x: 10,
                             y: 10,
                         },
-                        spritesheet
-                    }
+                        spritesheet,
+                    },
                 );
             }
 
@@ -69,4 +69,3 @@ describe("Plane Profile", () => {
     });
 
 });
-

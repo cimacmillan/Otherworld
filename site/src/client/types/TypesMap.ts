@@ -1,6 +1,6 @@
 
-import { Vector2D } from "./TypesVector"
-import { TextureCoordinates, FastTexture, SpriteSheet } from "./TypesRender";
+import { FastTexture, SpriteSheet, TextureCoordinates } from "./TypesRender";
+import { Vector2D } from "./TypesVector";
 
 export interface Colour {
     r: number;
@@ -10,7 +10,7 @@ export interface Colour {
 }
 
 export interface Sprite {
-    position: Vector2D; 
+    position: Vector2D;
     size: Vector2D;
     height: number;
 
@@ -25,13 +25,13 @@ export interface Plane {
     height: number;
     start: Vector2D;
     end: Vector2D;
-    spritesheet: SpriteSheet; 
+    spritesheet: SpriteSheet;
 }
 
 export interface Wall {
     p0: Vector2D;
     p1: Vector2D;
-    
+
     height0: number;
     height1: number;
     offset0: number;
@@ -46,4 +46,3 @@ export interface GameMap {
     sprites: Sprite[];
     planes: Plane[];
 }
-

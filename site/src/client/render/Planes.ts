@@ -1,20 +1,20 @@
-import { ScreenBuffer, DepthBuffer } from ".";
+import { DepthBuffer, ScreenBuffer } from ".";
 import { Camera, Plane } from "../types";
-import { vec_rotate, vec_add } from "../util/math";
+import { vec_add, vec_rotate } from "../util/math";
 import { fastTextureMap } from "./Shader";
 
 export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camera: Camera, planes: Plane[]) {
 
     const plane = planes[0];
 
-    for(let y = 0; y < screen.height; y++) {
+    for (let y = 0; y < screen.height; y++) {
 
         const yGrad = (y / screen.height);
         const yViewWindow = camera.y_view_window * (yGrad - 0.5);
         const heightDifference = (camera.height - planes[0].height);
         const yTilePreRotate = (camera.focal_length / yViewWindow) * heightDifference;
 
-        for(let x = 0; x < screen.width; x++) {
+        for (let x = 0; x < screen.width; x++) {
 
             depthBuffer.forceSet(x, y, 0);
 
@@ -24,8 +24,8 @@ export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camer
 
             const tilePosition = vec_add(vec_rotate({x: xTilePreRotate, y: -yTilePreRotate}, camera.angle), camera.position);
 
-            if (yTilePreRotate < 0 || 
-                tilePosition.x < plane.start.x || 
+            if (yTilePreRotate < 0 ||
+                tilePosition.x < plane.start.x ||
                 tilePosition.x > plane.end.x ||
                 tilePosition.y < plane.start.y ||
                 tilePosition.y > plane.end.y) {

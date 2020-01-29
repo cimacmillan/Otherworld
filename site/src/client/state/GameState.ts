@@ -1,7 +1,7 @@
-import { WorldState } from "./world/WorldState";
-import { RenderState } from "./render/RenderState";
 import { TimeControlledLoop } from "../util/time/TimeControlledLoop";
 import { AudioState } from "./audio/AudioState";
+import { RenderState } from "./render/RenderState";
+import { WorldState } from "./world/WorldState";
 
 export interface GameState {
 
@@ -11,4 +11,3 @@ export interface GameState {
     render: RenderState;
     audio: AudioState;
 }
-

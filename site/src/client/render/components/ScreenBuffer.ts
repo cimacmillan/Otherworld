@@ -1,11 +1,11 @@
-import { fillPattern } from "../../util/math/Array";
 import { Colour } from "../../types";
+import { fillPattern } from "../../util/math/Array";
 
 export class ScreenBuffer {
 
-    image_data: ImageData;
-    width: number;
-    height: number;
+    public image_data: ImageData;
+    public width: number;
+    public height: number;
 
     constructor(image_data: ImageData, width: number, height: number) {
         this.image_data = image_data;
@@ -13,23 +13,23 @@ export class ScreenBuffer {
         this.height = height;
     }
 
-    putPixel(x: number, y: number, red: number, green: number, blue: number, alpha: number) {
-        var pixelindex = (y * this.width + x) * 4;
+    public putPixel(x: number, y: number, red: number, green: number, blue: number, alpha: number) {
+        const pixelindex = (y * this.width + x) * 4;
         this.image_data.data[pixelindex] = red;
         this.image_data.data[pixelindex + 1] = green;
         this.image_data.data[pixelindex + 2] = blue;
         this.image_data.data[pixelindex + 3] = alpha;
     }
 
-    putPixelColour(x: number, y: number, colour: Colour) {
+    public putPixelColour(x: number, y: number, colour: Colour) {
         this.putPixel(x, y, colour.r, colour.g, colour.b, colour.a);
     }
 
-    fillBackground(red: number, green: number, blue: number, alpha: number) {
+    public fillBackground(red: number, green: number, blue: number, alpha: number) {
         fillPattern(this.image_data.data, [red, green, blue, alpha]);
     }
 
-    reset() {
+    public reset() {
         this.fillBackground(0, 0, 0, 255);
     }
 

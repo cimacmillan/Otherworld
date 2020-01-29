@@ -1,6 +1,5 @@
 
 export interface Vector2D {
-    x: number,
-    y: number
+    x: number;
+    y: number;
 }
-

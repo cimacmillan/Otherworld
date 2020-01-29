@@ -1,5 +1,5 @@
-import { Colour, Texture, TextureCoordinates, FastTexture } from "../types";
-import { vec_sum, vec_scale, vec_interpolate } from "../util/math";
+import { Colour, FastTexture, Texture, TextureCoordinates } from "../types";
+import { vec_interpolate, vec_scale, vec_sum } from "../util/math";
 
 export type Shader = (...args: any) => Colour;
 
@@ -10,7 +10,7 @@ const textureMapReturn = {
     g: 0,
     b: 0,
     a: 0,
-}
+};
 
 export const textureMap: Shader = (texture: Texture, u: number, v: number) => {
     const x = ~~(texture.width * u) % texture.width;
@@ -24,15 +24,14 @@ export const textureMap: Shader = (texture: Texture, u: number, v: number) => {
     textureMapReturn.a = clipAlpha(texture.data.data[index + 3]);
 
     return textureMapReturn;
-}
+};
 
 export const fastTextureMap: Shader = (texture: FastTexture, u: number, v: number) => {
     const x = ~~(texture.width * u) % texture.width;
     const y = ~~(texture.height * v) % texture.height;
     return texture.data[x][y];
-}
+};
 
 export const basicShader: Shader = (colour: Colour) => {
     return colour;
-}
-
+};

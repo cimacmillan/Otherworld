@@ -2,7 +2,7 @@
 export type TimeControlledLoopCallback = (instance?: TimeControlledLoop, actualMilliseconds?: number, actualProportion?: number) => void;
 
 export class TimeControlledLoop {
-    
+
     private targetMilliseconds: number;
     private callback: TimeControlledLoopCallback;
 
@@ -34,13 +34,13 @@ export class TimeControlledLoop {
         this.callback(this, this.actualMilliseconds, this.actualProportion);
         this.endMilliseconds = Date.now();
         const diff = this.endMilliseconds - this.startMilliseconds;
-        var wait = this.targetMilliseconds - diff;
+        let wait = this.targetMilliseconds - diff;
         wait = wait >= 0 ? wait : 0;
 
         if (wait > 0) {
             this.actualMilliseconds = this.targetMilliseconds;
             this.actualProportion = 1;
-        } else{ 
+        } else {
             this.actualMilliseconds = diff;
             this.actualProportion = this.targetMilliseconds / diff;
         }
@@ -48,8 +48,6 @@ export class TimeControlledLoop {
         if (this.looping) {
             setTimeout(() => this.loop(), wait);
         }
-    }    
+    }
 
 }
-
-

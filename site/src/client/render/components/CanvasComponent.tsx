@@ -18,13 +18,13 @@ export class CanvasComponent extends React.Component<CanvasComponentProps> {
 
     // Draws the canvas object to the screen, not actual pixels
     public render() {
-        return <canvas ref="canvas" id={this.props.id} width={this.props.dom_width} height={this.props.dom_height}/>
+        return <canvas ref="canvas" id={this.props.id} width={this.props.dom_width} height={this.props.dom_height}/>;
     }
 
     // Gets the image data from the canvas object
     public componentDidMount() {
         this.canvas = this.refs.canvas as HTMLCanvasElement;
-        this.canvasContext = this.canvas.getContext('2d');
+        this.canvasContext = this.canvas.getContext("2d");
         this.imageData = this.canvasContext.createImageData(this.props.width, this.props.height);
         this.canvasContext.imageSmoothingEnabled = false;
     }

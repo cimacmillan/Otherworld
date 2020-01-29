@@ -1,9 +1,9 @@
-import { WorldState } from "../state/world/WorldState";
 import { RenderState } from "../state/render/RenderState";
-import { drawWalls } from "./Walls";
-import { drawSprites } from "./Sprite";
-import { drawPlanes } from "./Planes";
+import { WorldState } from "../state/world/WorldState";
 import { drawBackground } from "./Background";
+import { drawPlanes } from "./Planes";
+import { drawSprites } from "./Sprite";
+import { drawWalls } from "./Walls";
 
 export function createImage(renderState: RenderState, worldState: WorldState) {
 
@@ -15,6 +15,3 @@ export function createImage(renderState: RenderState, worldState: WorldState) {
     drawWalls(screen, depthBuffer, worldState.camera, worldState.map.wall_buffer);
 
 }
-
-
-
