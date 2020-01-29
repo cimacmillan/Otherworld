@@ -4,12 +4,7 @@ import { ScreenBuffer } from "../../../client/render/components/ScreenBuffer";
 import { DepthBuffer } from "../../../client/render/components/DepthBuffer";
 import { Camera, Texture, Sprite } from "../../../client/types";
 import { convertToFastTexture } from "../../../client/util/loader/TextureLoader";
-
-jest.mock("../../../client/render/components/ScreenBuffer");
-jest.mock("../../../client/render/components/DepthBuffer");
-
-const mockedScreenbuffer = ScreenBuffer as jest.Mock<ScreenBuffer>;
-const mockedDepthBuffer = DepthBuffer as jest.Mock<DepthBuffer>;
+import { mockScreenBuffer, mockDepthBuffer } from "../util";
 
 const randomTexture = (width: number, height: number): Texture => {
     let data = new Uint8ClampedArray(width * height * 4);
@@ -23,16 +18,9 @@ function shuffle(array: any[]) {
 }
 
 describe("Sprite Profile", () => {
-    let screenBuffer: ScreenBuffer;
-    let depthBuffer: DepthBuffer;
     let camera: Camera;
 
     beforeEach(() => {
-        mockedScreenbuffer.mockReset();
-        screenBuffer = new mockedScreenbuffer();
-        depthBuffer = new mockedDepthBuffer();
-        screenBuffer.width = 256;
-        screenBuffer.height = 256;
         camera = {
             position: { x: 0.0, y: 4.0 }, 
             angle: 0.0, 
@@ -64,7 +52,7 @@ describe("Sprite Profile", () => {
         });
 
         test("drawSprite", () => {
-            profile(SAMPLE_MEDIUM_RARE, () => drawSprite(screenBuffer, depthBuffer, camera, sprite));
+            profile(SAMPLE_MEDIUM_RARE, () => drawSprite(mockScreenBuffer, mockDepthBuffer, camera, sprite));
         });
 
     });
@@ -95,16 +83,16 @@ describe("Sprite Profile", () => {
         });
 
         test("best case", () => {
-            profile(SAMPLE_SMA, () => drawSprites(screenBuffer, depthBuffer, camera, sprites));
+            profile(SAMPLE_SMA, () => drawSprites(mockScreenBuffer, mockDepthBuffer, camera, sprites));
         });
 
         test("random case", () => {
             shuffle(sprites)
-            profile(SAMPLE_SMA, () => drawSprites(screenBuffer, depthBuffer, camera, sprites));
+            profile(SAMPLE_SMA, () => drawSprites(mockScreenBuffer, mockDepthBuffer, camera, sprites));
         });
 
         test("worst case", () => {
-            profile(SAMPLE_SMA, () => drawSprites(screenBuffer, depthBuffer, camera, sprites.reverse()));
+            profile(SAMPLE_SMA, () => drawSprites(mockScreenBuffer, mockDepthBuffer, camera, sprites.reverse()));
         });
 
     });

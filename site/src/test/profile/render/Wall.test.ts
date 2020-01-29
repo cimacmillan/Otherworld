@@ -5,31 +5,19 @@ import { DepthBuffer } from "../../../client/render/components/DepthBuffer";
 import { Camera, Texture, Sprite, Wall } from "../../../client/types";
 import { convertToFastTexture } from "../../../client/util/loader/TextureLoader";
 import { drawWalls } from "../../../client/render/Walls";
-
-jest.mock("../../../client/render/components/ScreenBuffer");
-jest.mock("../../../client/render/components/DepthBuffer");
-
-const mockedScreenbuffer = ScreenBuffer as jest.Mock<ScreenBuffer>;
-const mockedDepthBuffer = DepthBuffer as jest.Mock<DepthBuffer>;
+import { mockScreenBuffer, mockDepthBuffer } from "../util";
 
 const randomTexture = (width: number, height: number): Texture => {
     let data = new Uint8ClampedArray(width * height * 4);
     return {data: {data, width, height}, width, height};
 }
 
-const MANY_WALLS = 100;
+const MANY_WALLS = 1000;
 
 describe("Wall Profile", () => {
-    let screenBuffer: ScreenBuffer;
-    let depthBuffer: DepthBuffer;
     let camera: Camera;
 
     beforeEach(() => {
-        mockedScreenbuffer.mockReset();
-        screenBuffer = new mockedScreenbuffer();
-        depthBuffer = new mockedDepthBuffer();
-        screenBuffer.width = 256;
-        screenBuffer.height = 256;
         camera = {
             position: { x: 0.0, y: 4.0 }, 
             angle: 0.0, 
@@ -73,7 +61,7 @@ describe("Wall Profile", () => {
         });
 
         test("rendering walls", () => {
-            profile(MANY_WALLS, () => drawWalls(screenBuffer, depthBuffer, camera, walls));
+            profile(MANY_WALLS, () => drawWalls(mockScreenBuffer, mockDepthBuffer, camera, walls));
         });
 
     });
