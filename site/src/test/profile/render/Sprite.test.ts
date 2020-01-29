@@ -44,7 +44,7 @@ describe("Sprite Profile", () => {
         };
     });
 
-    describe.only("Single Sprite", () => {
+    describe("Single Sprite", () => {
 
         let sprite: Sprite;
             

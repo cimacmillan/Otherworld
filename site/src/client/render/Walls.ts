@@ -1,9 +1,9 @@
-import { Vector2D, GameMap, Camera, Ray } from "../types";
+import { Vector2D, GameMap, Camera, Ray, Wall } from "../types";
 import { vec_sub, vec_cross, interpolate, convert_unit, vec_rotate } from "../util/math";
 import { ScreenBuffer, DepthBuffer } from ".";
 import { fastTextureMap } from "./Shader";
 
-export function drawWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, map: GameMap, camera: Camera) {
+export function drawWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, walls: Wall[]) {
 
     const halfView = camera.x_view_window / 2;
 
@@ -15,17 +15,17 @@ export function drawWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, map: 
         let origin = camera.position;
         let theta = Math.atan(x_grad / -camera.focal_length);
 
-        let intersecting_rays = fire_ray(origin, direction, map, camera);
+        let intersecting_rays = fire_ray(origin, direction, camera, walls);
 
         intersecting_rays.forEach((ray) => drawWall(x, ray, screen, theta, camera, depth_buffer));
     }
 }
 
-function fire_ray(origin: Vector2D, direction: Vector2D, map: GameMap, camera: Camera) {
+function fire_ray(origin: Vector2D, direction: Vector2D, camera: Camera, walls: Wall[]) {
 
     let intersecting_rays: Ray[] = [];
 
-    map.wall_buffer.forEach((wall) => {
+    walls.forEach((wall) => {
 
         let wall_direction = vec_sub(wall.p1, wall.p0);
 
