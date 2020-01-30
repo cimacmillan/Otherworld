@@ -1,5 +1,5 @@
 export function interpolate(alpha: number, a: number, b: number) {
-    return (a * (1 - alpha)) + (b * alpha);
+    return (b - a) * alpha + a;
 }
 
 export function convert_unit(x: number, range: number, a: number, b: number) {

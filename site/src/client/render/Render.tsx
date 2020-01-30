@@ -9,7 +9,7 @@ export function createImage(renderState: RenderState, worldState: WorldState) {
 
     const {screen, depthBuffer} = renderState;
 
-    // drawBackground(screen, depthBuffer, worldState.camera);
+    drawBackground(screen, depthBuffer, worldState.camera);
     drawPlanes(screen, depthBuffer, worldState.camera, worldState.map.planes);
     drawSprites(screen, depthBuffer, worldState.camera, worldState.map.sprites);
     drawWalls(screen, depthBuffer, worldState.camera, worldState.map.wall_buffer);

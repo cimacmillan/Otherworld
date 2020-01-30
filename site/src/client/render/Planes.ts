@@ -7,39 +7,54 @@ export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camer
 
     const plane = planes[0];
 
-    for (let y = 0; y < screen.height; y++) {
+    let startY = 0;
+    let endY = screen.height;
+
+    if (camera.height > plane.height) {
+        startY = screen.height / 2;
+    }
+
+    if (camera.height < plane.height) {
+        endY = screen.height / 2;
+    }
+
+    const cosTheta = Math.cos(camera.angle);
+    const sinTheta = Math.sin(camera.angle);
+
+    for (let y = startY; y < endY; y++) {
 
         const yGrad = (y / screen.height);
         const yViewWindow = camera.y_view_window * (yGrad - 0.5);
         const heightDifference = (camera.height - planes[0].height);
         const yTilePreRotate = (camera.focal_length / yViewWindow) * heightDifference;
 
-        for (let x = 0; x < screen.width; x++) {
+        if (yTilePreRotate <= 0 || yTilePreRotate === Infinity) {
+            continue;
+        }
 
-            depthBuffer.forceSet(x, y, 0);
+        for (let x = 0; x < screen.width; x++) {
 
             const xGrad = (x / screen.width);
             const xViewWindow = camera.x_view_window * (xGrad - 0.5);
             const xTilePreRotate = (xViewWindow / camera.focal_length) * yTilePreRotate;
 
-            const tilePosition = vec_add(vec_rotate({x: xTilePreRotate, y: -yTilePreRotate}, camera.angle), camera.position);
+            const tilePositionX = (xTilePreRotate * cosTheta + yTilePreRotate * sinTheta) + camera.position.x;
+            const tilePositionY = (-yTilePreRotate * cosTheta + xTilePreRotate * sinTheta) + camera.position.y;
 
-            if (yTilePreRotate < 0 ||
-                tilePosition.x < plane.start.x ||
-                tilePosition.x > plane.end.x ||
-                tilePosition.y < plane.start.y ||
-                tilePosition.y > plane.end.y) {
-                screen.putPixel(x, y, 0, 0, 0, 255);
+            if (tilePositionX < plane.start.x ||
+                tilePositionX > plane.end.x ||
+                tilePositionY < plane.start.y ||
+                tilePositionY > plane.end.y) {
                 continue;
             }
 
-            const tileX = ~~(tilePosition.x - plane.start.x);
-            const tileY = ~~(tilePosition.y - plane.start.y);
+            const tileX = ~~(tilePositionX - plane.start.x);
+            const tileY = ~~(tilePositionY - plane.start.y);
 
             const texture = plane.spritesheet.data[tileX % plane.spritesheet.width][tileY % plane.spritesheet.height];
 
-            const u = tilePosition.x - tileX;
-            const v = tilePosition.y - tileY;
+            const u = tilePositionX - tileX;
+            const v = tilePositionY - tileY;
 
             const colour = fastTextureMap(texture, u, v);
 
