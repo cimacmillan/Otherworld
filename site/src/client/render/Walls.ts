@@ -1,10 +1,99 @@
 import { DepthBuffer, ScreenBuffer } from ".";
 import { Camera, GameMap, Ray, Vector2D, Wall } from "../types";
-import { convert_unit, interpolate, vec_cross, vec_rotate, vec_sub } from "../util/math";
+import { convert_unit, interpolate, vec_cross, vec_rotate, vec_sub, clipToRange } from "../util/math";
 import { fastTextureMap } from "./Shader";
 
 export function drawWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, walls: Wall[]) {
+    // return drawRaycastedWalls(screen, depth_buffer, camera, walls);
+    return drawRasterisedWalls(screen, depth_buffer, camera, walls);
+}
 
+
+function drawRasterisedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, walls: Wall[]) {
+    for (let wallIndex = 0; wallIndex < walls.length; wallIndex++) {
+        const wall = walls[wallIndex];
+        const texcoord = wall.texcoord;
+        const texture = wall.texture;
+
+        const wallA = vec_rotate(vec_sub(wall.p0, camera.position), -camera.angle);
+        const wallB = vec_rotate(vec_sub(wall.p1, camera.position), -camera.angle);
+        let distanceA = -wallA.y;
+        let distanceB = -wallB.y;
+        let wallX1 = wallA.x;
+        let wallX2 = wallB.x;
+
+        if (distanceA < camera.clip_depth && distanceB < camera.clip_depth ) {
+            continue;
+        }
+
+        // if (distanceA < camera.clip_depth) {
+        //     const depthAlpha = (camera.clip_depth - distanceA) / (distanceB - distanceA);
+        //     wallX1 = wallX1 + (wallX2 - wallX1) * depthAlpha;
+        //     distanceA = camera.clip_depth;
+        // }
+
+        // if (distanceB < camera.clip_depth) {
+        //     const depthAlpha = (camera.clip_depth - distanceB) / (distanceA - distanceB);
+        //     wallX2 = wallX2 + (wallX1 - wallX2) * depthAlpha;
+        //     distanceB = camera.clip_depth;
+        // }
+
+        const wallAX = ((wallX1 * camera.focal_length * screen.height) / distanceA) + (0.5 * screen.width);
+        const wallBX = ((wallX2 * camera.focal_length * screen.height) / distanceB) + (0.5 * screen.width);
+
+        const clipX1 = clipToRange(wallAX, 0, screen.width - 1);
+        const clipX2 = clipToRange(wallBX, 0, screen.width - 1);
+
+        const x1 = Math.min(clipX1, clipX2);
+        const x2 = Math.max(clipX1, clipX2);
+
+        const upper_wall_start = -(wall.height0 + wall.offset0 - camera.height) / distanceA;
+        const upper_wall_end = -(wall.height1 + wall.offset1 - camera.height) / distanceB;
+        const lower_wall_start = -(wall.offset0 - camera.height) / distanceA;
+        const lower_wall_end = -(wall.offset1 - camera.height) / distanceB;
+        const u_start = texcoord.start.x / distanceA;
+        const u_end = texcoord.end.x / distanceB;
+
+        for (let x = x1; x < x2; x++) {
+
+            const alpha = (x - wallAX) / (wallBX - wallAX);
+            const distance = ((1.0 - alpha) * distanceA) + (alpha * distanceB);
+
+            const upper_wall_z = (((1.0 - alpha) * upper_wall_start) + (alpha * upper_wall_end)) * distance;
+            const lower_wall_z = (((1.0 - alpha) * lower_wall_start) + (alpha * lower_wall_end)) * distance;
+
+            const u = (((1.0 - alpha) * u_start) + (alpha * u_end)) * distance;
+
+            let upper_pixel = ((upper_wall_z / distance) * camera.focal_length * camera.y_view_window + 0.5) * screen.height;
+            let lower_pixel = ((lower_wall_z / distance) * camera.focal_length * camera.y_view_window + 0.5) * screen.height;
+
+            const temp = upper_pixel;
+            upper_pixel = Math.min(upper_pixel, lower_pixel);
+            lower_pixel = Math.max(temp, lower_pixel);
+
+            const original_upper = ~~(upper_pixel);
+            const original_height = Math.ceil(lower_pixel - upper_pixel) + 1;
+
+            upper_pixel = Math.max(0, upper_pixel);
+            lower_pixel = Math.min(screen.height - 1, lower_pixel);
+
+            for (let y = ~~upper_pixel; y <= ~~lower_pixel; y++) {
+                if (depth_buffer.isCloser(~~x, ~~y, distance)) {
+                    const beta = (y - original_upper) / original_height;
+                    const v = (texcoord.end.y * beta) + ((1.0 - beta) * texcoord.start.y);
+                    const colour = fastTextureMap(texture, u, v);
+
+                    if (colour.a < 255) { continue; }
+
+                    depth_buffer.setDistance(~~x, ~~y, distance);
+                    screen.putPixelColour(~~x, ~~y, colour);
+                }
+            }
+        }
+    }
+}
+
+function drawRaycastedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, walls: Wall[]) {
     const halfView = camera.x_view_window / 2;
 
     // Loop over all of the pixels
