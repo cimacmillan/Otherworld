@@ -21,6 +21,12 @@ function drawRasterisedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, ca
         let distanceB = -wallB.y;
         let wallX1 = wallA.x;
         let wallX2 = wallB.x;
+        let wallU1 = texcoord.start.x;
+        let wallU2 = texcoord.end.x;
+        let wallYT1 = -(wall.height0 + wall.offset0 - camera.height);
+        let wallYT2 = -(wall.height1 + wall.offset1 - camera.height);
+        let wallYB1 = -(wall.offset0 - camera.height);
+        let wallYB2 = -(wall.offset1 - camera.height);
 
         if (distanceA < camera.clip_depth && distanceB < camera.clip_depth ) {
             continue;
@@ -29,12 +35,18 @@ function drawRasterisedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, ca
         if (distanceA < camera.clip_depth) {
             const depthAlpha = (camera.clip_depth - distanceA) / (distanceB - distanceA);
             wallX1 = wallX1 + (wallX2 - wallX1) * depthAlpha;
+            wallU1 = wallU1 + (wallU2 - wallU1) * depthAlpha;
+            wallYT1 = wallYT1 + (wallYT2 - wallYT1) * depthAlpha;
+            wallYB1 = wallYB1 + (wallYB2 - wallYB1) * depthAlpha;
             distanceA = camera.clip_depth;
         }
 
         if (distanceB < camera.clip_depth) {
             const depthAlpha = (camera.clip_depth - distanceB) / (distanceA - distanceB);
             wallX2 = wallX2 + (wallX1 - wallX2) * depthAlpha;
+            wallU2 = wallU2 + (wallU1 - wallU2) * depthAlpha;
+            wallYT2 = wallYT2 + (wallYT1 - wallYT2) * depthAlpha;
+            wallYB2 = wallYB2 + (wallYB1 - wallYB2) * depthAlpha;
             distanceB = camera.clip_depth;
         }
 
@@ -49,16 +61,16 @@ function drawRasterisedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, ca
 
         const persp = (p: number, z: number) =>  ((p / z) * camera.focal_length * camera.y_view_window + 0.5) * screen.height;
 
-        const upper_pixel_start = persp(-(wall.height0 + wall.offset0 - camera.height), distanceA);
-        const upper_pixel_end = persp(-(wall.height1 + wall.offset1 - camera.height), distanceB);
-        const lower_pixel_start = persp(-(wall.offset0 - camera.height), distanceA);
-        const lower_pixel_end = persp(-(wall.offset1 - camera.height), distanceB);
+        const upper_pixel_start = persp(wallYT1, distanceA);
+        const upper_pixel_end = persp(wallYT2, distanceB);
+        const lower_pixel_start = persp(wallYB1, distanceA);
+        const lower_pixel_end = persp(wallYB2, distanceB);
 
         const zinv_start = 1.0 / distanceA;
         const zinv_end = 1.0 / distanceB;
 
-        const u_start = texcoord.start.x * zinv_start;
-        const u_end = texcoord.end.x * zinv_end;
+        const u_start = wallU1 * zinv_start;
+        const u_end = wallU2 * zinv_end;
 
         for (let x = x1; x < x2; x++) {
 
@@ -81,7 +93,7 @@ function drawRasterisedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, ca
 
                     const colour = fastTextureMap(texture, u, v);
 
-                    if (colour.a < 255) { continue; }
+                    if (colour === undefined || colour.a < 255) { continue; }
 
                     depth_buffer.setDistance(~~x, ~~y, distance);
                     screen.putPixelColour(~~x, ~~y, colour);

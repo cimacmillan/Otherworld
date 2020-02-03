@@ -56,67 +56,67 @@ export function initialiseMap(resourceManager: ResourceManager): GameMap {
         },
     });
 
-    // for (let i = 0; i < 100; i++) {
-    //     wall_buffer.push({
-    //         p0: { x: 0.0 + i, y: 10.0 },
-    //         p1: { x: 0.0 + i, y: 0.0 },
-    //         height0: 1,
-    //         height1: 1,
-    //         offset0: 0,
-    //         offset1: 0,
-    //         texture: resourceManager.wall,
-    //         texcoord: {
-    //             start: {
-    //                 x: 0,
-    //                 y: 0,
-    //             },
-    //             end: {
-    //                 x: 10,
-    //                 y: 1,
-    //             },
-    //         },
-    //     });
-    // }
+    for (let i = 0; i < 100; i++) {
+        wall_buffer.push({
+            p0: { x: 0.0 + i, y: 10.0 },
+            p1: { x: 0.0 + i, y: 0.0 },
+            height0: 1,
+            height1: 1,
+            offset0: 0,
+            offset1: 0,
+            texture: resourceManager.wall,
+            texcoord: {
+                start: {
+                    x: 0,
+                    y: 0,
+                },
+                end: {
+                    x: 10,
+                    y: 1,
+                },
+            },
+        });
+    }
 
-    // wall_buffer.push({
-    //     p0: { x: 10.0, y: 0.0 },
-    //     p1: { x: 10.0, y: 10.0 },
-    //     height0: 1,
-    //     height1: 1,
-    //     offset0: 0,
-    //     offset1: 0.5,
-    //     texture: resourceManager.wall,
-    //     texcoord: {
-    //         start: {
-    //             x: 0,
-    //             y: 0,
-    //         },
-    //         end: {
-    //             x: 10,
-    //             y: 1,
-    //         },
-    //     },
-    // });
+    wall_buffer.push({
+        p0: { x: 10.0, y: 0.0 },
+        p1: { x: 10.0, y: 10.0 },
+        height0: 1,
+        height1: 1,
+        offset0: 0,
+        offset1: 0.5,
+        texture: resourceManager.wall,
+        texcoord: {
+            start: {
+                x: 0,
+                y: 0,
+            },
+            end: {
+                x: 10,
+                y: 1,
+            },
+        },
+    });
 
-    // wall_buffer.push({
-    //     p0: { x: 0.0, y: 10.0 },
-    //     p1: { x: 0.0, y: 0.0 },
-    //     height0: 1,
-    //     height1: 0.5,
-    //     offset0: 0,
-    //     offset1: 0,
-    //     texture: resourceManager.wall,
-    //     texcoord: {
-    //         start: {
-    //             x: 0,
-    //             y: 0,
-    //         },
-    //         end: {
-    //             x: 10,
-    //             y: 1,
-    //         },
-    //     },
-    // });
+    wall_buffer.push({
+        p0: { x: 0.0, y: 10.0 },
+        p1: { x: 0.0, y: 0.0 },
+        height0: 1,
+        height1: 0.5,
+        offset0: 0,
+        offset1: 0,
+        texture: resourceManager.wall,
+        texcoord: {
+            start: {
+                x: 0,
+                y: 0,
+            },
+            end: {
+                x: 10,
+                y: 1,
+            },
+        },
+    });
 
     const sprites: Sprite[] = [];
     const spriteCount = 4000;
