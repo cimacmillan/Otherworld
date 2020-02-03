@@ -21,6 +21,7 @@ export function initialiseCamera(screen: ScreenBuffer): Camera {
         x_view_window,
         y_view_window,
         clip_depth: 0.1,
+        far_clip_depth: 20.0
     };
 }
 

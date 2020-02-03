@@ -19,6 +19,7 @@ export interface Camera {
     x_view_window: number;
     y_view_window: number;
     clip_depth: number;
+    far_clip_depth: number;
 }
 
 export enum TextureSampleType {
