@@ -23,7 +23,7 @@ export function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, came
     const diff = vec_sub(sprite.position, centre);
     sprite.position = vec_add(vec_rotate(diff, 0.4 / Math.pow(vec_distance(diff) / 2, 2) ), centre);
 
-    if (distance < camera.clip_depth) {
+    if (distance < camera.clip_depth || distance > camera.far_clip_depth) {
         return;
     }
 

@@ -28,7 +28,7 @@ export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camer
         const heightDifference = (camera.height - planes[0].height);
         const yTilePreRotate = (camera.focal_length / yViewWindow) * heightDifference;
 
-        if (yTilePreRotate <= 0 || yTilePreRotate === Infinity) {
+        if (yTilePreRotate < camera.clip_depth || yTilePreRotate > camera.far_clip_depth || yTilePreRotate === Infinity) {
             continue;
         }
 

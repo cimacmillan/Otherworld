@@ -26,6 +26,7 @@ describe("Wall Profile", () => {
             x_view_window: 1,
             y_view_window: 1,
             clip_depth: 0.1,
+            far_clip_depth: 20
         };
     });
 

@@ -32,6 +32,10 @@ function drawRasterisedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, ca
             continue;
         }
 
+        if (distanceA > camera.far_clip_depth && distanceB > camera.far_clip_depth ) {
+            continue;
+        }
+
         if (distanceA < camera.clip_depth) {
             const depthAlpha = (camera.clip_depth - distanceA) / (distanceB - distanceA);
             wallX1 = wallX1 + (wallX2 - wallX1) * depthAlpha;
@@ -48,6 +52,24 @@ function drawRasterisedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, ca
             wallYT2 = wallYT2 + (wallYT1 - wallYT2) * depthAlpha;
             wallYB2 = wallYB2 + (wallYB1 - wallYB2) * depthAlpha;
             distanceB = camera.clip_depth;
+        }
+
+        if (distanceA > camera.far_clip_depth) {
+            const depthAlpha = (camera.far_clip_depth - distanceA) / (distanceB - distanceA);
+            wallX1 = wallX1 + (wallX2 - wallX1) * depthAlpha;
+            wallU1 = wallU1 + (wallU2 - wallU1) * depthAlpha;
+            wallYT1 = wallYT1 + (wallYT2 - wallYT1) * depthAlpha;
+            wallYB1 = wallYB1 + (wallYB2 - wallYB1) * depthAlpha;
+            distanceA = camera.far_clip_depth;
+        }
+
+        if (distanceB > camera.far_clip_depth) {
+            const depthAlpha = (camera.far_clip_depth - distanceB) / (distanceA - distanceB);
+            wallX2 = wallX2 + (wallX1 - wallX2) * depthAlpha;
+            wallU2 = wallU2 + (wallU1 - wallU2) * depthAlpha;
+            wallYT2 = wallYT2 + (wallYT1 - wallYT2) * depthAlpha;
+            wallYB2 = wallYB2 + (wallYB1 - wallYB2) * depthAlpha;
+            distanceB = camera.far_clip_depth;
         }
 
         const wallAX = ((wallX1 * camera.focal_length * screen.height) / distanceA) + (0.5 * screen.width);
