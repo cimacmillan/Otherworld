@@ -1,9 +1,9 @@
 import { DepthBuffer, ScreenBuffer } from ".";
-import { Camera, Sprite } from "../types";
+import { Camera, Sprite, Colour } from "../types";
 import { clipToRange, randomFloatRange, swapSort, vec_add, vec_distance, vec_rotate, vec_sub } from "../util/math";
-import { fastTextureMap } from "./Shader";
+import { shade } from "./Shader";
 
-export function drawSprites(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprites: Sprite[]) {
+export function drawSprites(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprites: Sprite[], backgroundColour: Colour) {
     for (let i = 0; i < sprites.length; i++) {
         sprites[i].projectPosition = vec_rotate(vec_sub(sprites[i].position, camera.position), -camera.angle);
     }
@@ -11,11 +11,11 @@ export function drawSprites(screen: ScreenBuffer, depth_buffer: DepthBuffer, cam
     sprites.sort((spriteA, spriteB) => (spriteA.projectPosition!.y - spriteB.projectPosition!.y));
 
     for (let i = 0; i < sprites.length; i++) {
-        drawSprite(screen, depth_buffer, camera, sprites[i]);
+        drawSprite(screen, depth_buffer, camera, sprites[i], backgroundColour);
     }
 }
 
-export function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprite: Sprite) {
+export function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprite: Sprite, backgroundColour: Colour) {
     const projectPosition = sprite.projectPosition!;
     const distance = -projectPosition.y;
 
@@ -50,11 +50,11 @@ export function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, came
             const y_alpha = (yPixel - (y - height / 2)) / (height);
             const v = (sprite.texcoord.start.y * (1.0 - y_alpha)) + (sprite.texcoord.end.y * y_alpha);
 
-            const colour = fastTextureMap(sprite.texture, u, v);
+            const colour = shade(sprite.texture, u, v, distance, camera.far_clip_depth);
 
             if (colour.a < 255) { continue; }
 
-            screen.putPixelColour(~~xPixel, ~~yPixel, colour);
+            screen.putPixelColour(~~xPixel, ~~yPixel, colour, distance, camera.far_clip_depth, backgroundColour);
             depth_buffer.setDistance(~~xPixel, ~~yPixel, distance);
         }
     }

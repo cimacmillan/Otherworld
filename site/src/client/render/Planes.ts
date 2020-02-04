@@ -1,9 +1,9 @@
 import { DepthBuffer, ScreenBuffer } from ".";
-import { Camera, Plane } from "../types";
+import { Camera, Plane, Colour } from "../types";
 import { vec_add, vec_rotate } from "../util/math";
-import { fastTextureMap } from "./Shader";
+import { shade } from "./Shader";
 
-export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camera: Camera, planes: Plane[]) {
+export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camera: Camera, planes: Plane[], backgroundColour: Colour) {
 
     const plane = planes[0];
 
@@ -56,7 +56,7 @@ export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camer
             const u = tilePositionX - tileX;
             const v = tilePositionY - tileY;
 
-            const colour = fastTextureMap(texture, u, v);
+            const colour = shade(texture, u, v, yTilePreRotate, camera.far_clip_depth);
 
             if (colour.a < 255) {
                 screen.putPixel(x, y, 0, 0, 0, 255);
@@ -64,7 +64,7 @@ export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camer
             }
 
             // depthBuffer.setDistance(x, y, distance);
-            screen.putPixelColour(x, y, colour);
+            screen.putPixelColour(x, y, colour, yTilePreRotate, camera.far_clip_depth, backgroundColour);
 
         }
     }

@@ -8,6 +8,7 @@
         "jsx": "react"
     },
     "include": [
-        "site/src/**/*"
+        "site/src/client/**/*",
+        "site/src/server/**/*"
     ]
 }

@@ -152,7 +152,19 @@ export function initialiseMap(resourceManager: ResourceManager): GameMap {
         },
     ];
 
-    const map: GameMap = {wall_buffer, sprites, planes};
+    const skyblue = {
+        r: 135,
+        g: 205,
+        b: 235,
+        a: 255
+    }
+
+    const map: GameMap = {
+        wall_buffer, 
+        sprites, 
+        planes,
+        backgroundColour: skyblue
+    };
 
     return map;
 }

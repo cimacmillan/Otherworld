@@ -45,4 +45,5 @@ export interface GameMap {
     wall_buffer: Wall[];
     sprites: Sprite[];
     planes: Plane[];
+    backgroundColour: Colour;
 }

@@ -21,16 +21,26 @@ export class ScreenBuffer {
         this.image_data.data[pixelindex + 3] = alpha;
     }
 
-    public putPixelColour(x: number, y: number, colour: Colour) {
-        this.putPixel(x, y, colour.r, colour.g, colour.b, colour.a);
+    public putPixelColour(x: number, y: number, colour: Colour, depth: number, farClip: number, backgroundColour: Colour) {
+
+        let colourMult = (depth / farClip);
+        colourMult *= colourMult;
+
+        // Breaking the rules but it's faster
+        this.putPixel(x, y, 
+            ~~(colour.r + colourMult * (backgroundColour.r - colour.r)), 
+            ~~(colour.g + colourMult * (backgroundColour.g - colour.g)), 
+            ~~(colour.b + colourMult * (backgroundColour.b - colour.b)), 
+            ~~(colour.a + colourMult * (backgroundColour.a - colour.a)), 
+            );
     }
 
     public fillBackground(red: number, green: number, blue: number, alpha: number) {
         fillPattern(this.image_data.data, [red, green, blue, alpha]);
     }
 
-    public reset() {
-        this.fillBackground(0, 0, 0, 255);
+    public reset(colour: Colour) {
+        this.fillBackground(colour.r, colour.g, colour.b, 255);
     }
 
 }
