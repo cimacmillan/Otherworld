@@ -137,20 +137,31 @@ export function initialiseMap(resourceManager: ResourceManager): GameMap {
         });
     }
 
-    const planes: Plane[] = [
-        {
-            height: 0,
-            start: {
-                x: 0,
-                y: 0,
-            },
-            end: {
-                x: 10,
-                y: 10,
-            },
-            spritesheet,
+    const floor = {
+        height: 0,
+        start: {
+            x: 0,
+            y: 0,
         },
-    ];
+        end: {
+            x: 10,
+            y: 10,
+        },
+        spritesheet,
+    };
+
+    const ceiling = {
+        height: 2,
+        start: {
+            x: 0,
+            y: 0,
+        },
+        end: {
+            x: 10,
+            y: 10,
+        },
+        spritesheet,
+    };
 
     const skyblue = {
         r: 135,
@@ -162,7 +173,8 @@ export function initialiseMap(resourceManager: ResourceManager): GameMap {
     const map: GameMap = {
         wall_buffer, 
         sprites, 
-        planes,
+        floor,
+        ceiling,
         backgroundColour: skyblue
     };
 

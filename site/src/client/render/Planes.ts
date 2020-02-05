@@ -2,30 +2,33 @@ import { DepthBuffer, ScreenBuffer } from ".";
 import { Camera, Plane, Colour } from "../types";
 import { vec_add, vec_rotate } from "../util/math";
 import { shade } from "./Shader";
+import { start } from "repl";
 
-export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camera: Camera, planes: Plane[], backgroundColour: Colour) {
-
-    const plane = planes[0];
+export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camera: Camera, backgroundColour: Colour, floor?: Plane, ceiling?: Plane) {
+    const cosTheta = Math.cos(camera.angle);
+    const sinTheta = Math.sin(camera.angle);
 
     let startY = 0;
     let endY = screen.height;
 
-    if (camera.height > plane.height) {
-        startY = screen.height / 2;
-    }
-
-    if (camera.height < plane.height) {
+    if (!floor) {
         endY = screen.height / 2;
     }
 
-    const cosTheta = Math.cos(camera.angle);
-    const sinTheta = Math.sin(camera.angle);
+    if (!ceiling) {
+        startY = screen.height / 2;
+    }
 
-    for (let y = startY; y < endY; y++) {
+    for (let y = 0; y < screen.height; y++) {
+
+        let plane = floor;
+        if (y < (screen.height / 2)) {
+            plane = ceiling;
+        }
 
         const yGrad = (y / screen.height);
         const yViewWindow = camera.y_view_window * (yGrad - 0.5);
-        const heightDifference = (camera.height - planes[0].height);
+        const heightDifference = (camera.height - plane.height);
         const yTilePreRotate = (camera.focal_length / yViewWindow) * heightDifference;
 
         if (yTilePreRotate < camera.clip_depth || yTilePreRotate > camera.far_clip_depth || yTilePreRotate === Infinity) {
@@ -62,8 +65,7 @@ export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camer
                 screen.putPixel(x, y, 0, 0, 0, 255);
                 continue;
             }
-
-            // depthBuffer.setDistance(x, y, distance);
+            
             screen.putPixelColour(x, y, colour, yTilePreRotate, camera.far_clip_depth, backgroundColour);
 
         }
