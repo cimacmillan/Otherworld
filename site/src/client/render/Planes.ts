@@ -4,6 +4,9 @@ import { vec_add, vec_rotate } from "../util/math";
 import { shade } from "./Shader";
 import { start } from "repl";
 
+
+// Draws fast when not rotated but then slows to a halt
+// Do experiments to find why, remove line by line until chrome fails
 export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camera: Camera, backgroundColour: Colour, floor?: Plane, ceiling?: Plane) {
     const cosTheta = Math.cos(camera.angle);
     const sinTheta = Math.sin(camera.angle);
