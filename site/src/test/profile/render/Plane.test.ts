@@ -12,15 +12,15 @@ const randomTexture = (width: number, height: number): Texture => {
     return {data: {data, width, height}, width, height};
 };
 
-const MANY_PLANES = 100;
+const MANY_PLANES = 5000;
 
 describe("Plane Profile", () => {
     let camera: Camera;
 
     beforeEach(() => {
         camera = {
-            position: { x: 0.0, y: 4.0 },
-            angle: 0.0,
+            position: { x: 5.0, y: 5.0 },
+            angle: -Math.PI/2 + 0.1,
             focal_length: 1,
             height: 1,
             x_view_window: 1,
@@ -30,9 +30,11 @@ describe("Plane Profile", () => {
         };
     });
 
-    describe("Many Walls", () => {
+    describe("Many planes", () => {
 
-        let planes: Plane[];
+        let floor: Plane;
+        let ceiling: Plane;
+        const colour = {r: 255, g: 255, b: 255, a: 255};
 
         beforeEach(() => {
             const texture = convertToFastTexture(randomTexture(64, 64));
@@ -42,29 +44,36 @@ describe("Plane Profile", () => {
                 height: 1,
             };
 
-            planes = [];
+            floor = {
+                height: 0,
+                start: {
+                    x: 0,
+                    y: 0,
+                },
+                end: {
+                    x: 10,
+                    y: 10,
+                },
+                spritesheet,
+            };
 
-            for (let i = 0; i < 10; i++) {
-                planes.push(
-                    {
-                        height: 0,
-                        start: {
-                            x: 0,
-                            y: 0,
-                        },
-                        end: {
-                            x: 10,
-                            y: 10,
-                        },
-                        spritesheet,
-                    },
-                );
-            }
+            ceiling = {
+                height: 2,
+                start: {
+                    x: 0,
+                    y: 0,
+                },
+                end: {
+                    x: 10,
+                    y: 10,
+                },
+                spritesheet,
+            };
 
         });
 
         test("rendering planes", () => {
-            profile(MANY_PLANES, () => drawPlanes(mockScreenBuffer, mockDepthBuffer, camera, planes));
+            profile(MANY_PLANES, () => drawPlanes(mockScreenBuffer, mockDepthBuffer, camera, colour, floor, ceiling));
         });
 
     });

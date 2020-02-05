@@ -14,10 +14,10 @@ export function initialiseCamera(screen: ScreenBuffer): Camera {
     const focal_length = (x_view_window / 2) / Math.tan(VIEWING_ANGLE / 2);
 
     return {
-        position: { x: 0.0, y: 18.0 },
-        angle: 0.0,
+        position: { x: 5.0, y: 5.0 },
+        angle: 0,
         focal_length,
-        height: 0.5,
+        height: 1,
         x_view_window,
         y_view_window,
         clip_depth: 0.1,
@@ -120,7 +120,7 @@ export function initialiseMap(resourceManager: ResourceManager): GameMap {
     });
 
     const sprites: Sprite[] = [];
-    const spriteCount = 4000;
+    const spriteCount = 0;
 
     for (let i = 0; i < spriteCount; i++) {
         const size = randomFloatRange(0.2, 0.4);

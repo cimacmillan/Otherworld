@@ -1,3 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Plane Profile Many Walls rendering planes 1`] = `49`;
+exports[`Plane Profile Many planes rendering planes 1`] = `5438`;

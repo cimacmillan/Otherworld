@@ -19,7 +19,7 @@ export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camer
         startY = screen.height / 2;
     }
 
-    for (let y = 0; y < screen.height; y++) {
+    for (let y = startY; y < endY; y++) {
 
         let plane = floor;
         if (y < (screen.height / 2)) {
@@ -30,6 +30,8 @@ export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camer
         const yViewWindow = camera.y_view_window * (yGrad - 0.5);
         const heightDifference = (camera.height - plane.height);
         const yTilePreRotate = (camera.focal_length / yViewWindow) * heightDifference;
+        const yTileCos = -yTilePreRotate * cosTheta;
+        const yTileSin = yTilePreRotate * sinTheta;
 
         if (yTilePreRotate < camera.clip_depth || yTilePreRotate > camera.far_clip_depth || yTilePreRotate === Infinity) {
             continue;
@@ -41,8 +43,8 @@ export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camer
             const xViewWindow = camera.x_view_window * (xGrad - 0.5);
             const xTilePreRotate = (xViewWindow / camera.focal_length) * yTilePreRotate;
 
-            const tilePositionX = (xTilePreRotate * cosTheta + yTilePreRotate * sinTheta) + camera.position.x;
-            const tilePositionY = (-yTilePreRotate * cosTheta + xTilePreRotate * sinTheta) + camera.position.y;
+            const tilePositionX = xTilePreRotate * cosTheta + yTileSin + camera.position.x;
+            const tilePositionY = yTileCos + xTilePreRotate * sinTheta + camera.position.y;
 
             if (tilePositionX < plane.start.x ||
                 tilePositionX > plane.end.x ||
@@ -60,12 +62,6 @@ export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camer
             const v = tilePositionY - tileY;
 
             const colour = shade(texture, u, v, yTilePreRotate, camera.far_clip_depth);
-
-            if (colour.a < 255) {
-                screen.putPixel(x, y, 0, 0, 0, 255);
-                continue;
-            }
-            
             screen.putPixelColour(x, y, colour, yTilePreRotate, camera.far_clip_depth, backgroundColour);
 
         }
