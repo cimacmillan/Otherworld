@@ -100,7 +100,8 @@ function drawRasterisedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, ca
 
             const alpha = (x - wallAX) / (wallBX - wallAX);
             const ialpha = 1 - alpha;
-            const distance = 1.0 / ((ialpha * zinv_start) + (alpha * zinv_end));
+            const invDistance = ((ialpha * zinv_start) + (alpha * zinv_end));
+            const distance = 1 / invDistance;
 
             const upper_pixel = (ialpha * upper_pixel_start) + (alpha * upper_pixel_end);
             const lower_pixel = (ialpha * lower_pixel_start) + (alpha * lower_pixel_end);
@@ -112,14 +113,13 @@ function drawRasterisedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, ca
 
             for (let y = upper_pixel_in_range; y <= lower_pixel_in_range; y++) {
 
-                if (depth_buffer.isCloser(~~x, ~~y, distance)) {
+                if (depth_buffer.isCloserAndSetInv(~~x, ~~y, invDistance)) {
                     const beta = (y - upper_pixel) / (lower_pixel - upper_pixel);
                     const v = (texcoord.end.y * beta) + ((1.0 - beta) * texcoord.start.y);
 
                     const colour = shade(texture, u, v, distance, camera.far_clip_depth);
 
                     if (colour && colour.a > 0) {     
-                        depth_buffer.setDistance(~~x, ~~y, distance);
                         screen.putPixelColour(~~x, ~~y, colour, distance, camera.far_clip_depth, backgroundColour);
                     }
                 }

@@ -25,15 +25,17 @@ export function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, came
     const projectMult = (camera.focal_length / distance) * screen.height;
 
     const width = (sprite.size.x * projectMult);
+    const halfwidth = width / 2;
     const height = (sprite.size.y * projectMult);
+    const halfheight = height / 2;
 
     const x = ((projectPosition.x * projectMult) + (0.5 * screen.width));
     const y = (((camera.height - sprite.height) * projectMult)  + (0.5 * screen.height));
 
-    const x1 = clipToRange((x - width / 2), 0, screen.width - 1);
-    const x2 = clipToRange((x + width / 2), 0, screen.width - 1);
-    const y1 = clipToRange((y - height / 2), 0, screen.height - 1);
-    const y2 = clipToRange((y + height / 2), 0, screen.height - 1);
+    const x1 = (x - halfwidth) < 0 ? 0 : x - halfwidth;
+    const x2 = (x + halfwidth) > screen.width - 1 ? screen.width - 1 : x + halfwidth;
+    const y1 = (y - halfheight) < 0 ? 0 : y - halfheight;
+    const y2 = (y + halfheight) > screen.height - 1 ? screen.height - 1 : y + halfheight;
 
     for (let xPixel = x1; xPixel < x2; xPixel++) {
 

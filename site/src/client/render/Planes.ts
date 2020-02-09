@@ -1,6 +1,6 @@
 import { DepthBuffer, ScreenBuffer } from ".";
 import { Camera, Plane, Colour } from "../types";
-import { vec_add, vec_rotate } from "../util/math";
+import { vec_add, vec_rotate, ROTATE_RESOLUTION } from "../util/math";
 import { shade } from "./Shader";
 import { start } from "repl";
 
@@ -8,8 +8,8 @@ import { start } from "repl";
 // Draws fast when not rotated but then slows to a halt
 // Do experiments to find why, remove line by line until chrome fails
 export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camera: Camera, backgroundColour: Colour, plane: Plane) {
-    const cosTheta = (~~(Math.cos(camera.angle) * 100)) / 100;
-    const sinTheta = (~~(Math.sin(camera.angle) * 100)) / 100;
+    const cosTheta = (~~(Math.cos(camera.angle) * ROTATE_RESOLUTION)) / ROTATE_RESOLUTION;
+    const sinTheta = (~~(Math.sin(camera.angle) * ROTATE_RESOLUTION)) / ROTATE_RESOLUTION;
 
     for (let y = screen.height / 2; y < screen.height; y++) {
 

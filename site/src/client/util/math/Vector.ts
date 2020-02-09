@@ -1,5 +1,7 @@
 import { Vector2D } from "../../types/TypesVector";
 
+export const ROTATE_RESOLUTION = 100;
+
 export function vec_cross(a: Vector2D, b: Vector2D) {
     return (a.x * b.y) - (a.y * b.x);
 }
@@ -32,8 +34,8 @@ export function vec_divide(a: Vector2D, b: Vector2D) {
 }
 
 export function vec_rotate(a: Vector2D, theta: number) {
-    const mathCos = (~~(Math.cos(theta) * 100)) / 100;
-    const mathsin = (~~(Math.sin(theta) * 100)) / 100;
+    const mathCos = (~~(Math.cos(theta) * ROTATE_RESOLUTION)) / ROTATE_RESOLUTION;
+    const mathsin = (~~(Math.sin(theta) * ROTATE_RESOLUTION)) / ROTATE_RESOLUTION;
 
     return {
         x: a.x * mathCos - a.y * mathsin,
