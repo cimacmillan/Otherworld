@@ -75,18 +75,20 @@ function drawRasterisedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, ca
         const wallAX = ((wallX1 * camera.focal_length * screen.height) / distanceA) + (0.5 * screen.width);
         const wallBX = ((wallX2 * camera.focal_length * screen.height) / distanceB) + (0.5 * screen.width);
 
-        const clipX1 = clipToRange(wallAX, 0, screen.width - 1);
-        const clipX2 = clipToRange(wallBX, 0, screen.width - 1);
+        const clipX1 = wallAX > screen.width - 1 ? screen.width - 1 : (wallAX < 0 ? 0 : wallAX);
+        const clipX2 = wallBX > screen.width - 1 ? screen.width - 1 : (wallBX < 0 ? 0 : wallBX);
 
-        const x1 = Math.min(clipX1, clipX2);
-        const x2 = Math.max(clipX1, clipX2);
+        const x1 = clipX1 < clipX2 ? clipX1 : clipX2;
+        const x2 = clipX1 > clipX2 ? clipX1 : clipX2;
 
-        const persp = (p: number, z: number) =>  ((p / z) * camera.focal_length * camera.y_view_window + 0.5) * screen.height;
+        const persMultiplyA = (1.0 / distanceA) * camera.focal_length * camera.y_view_window * screen.height;
+        const persMultiplyB = (1.0 / distanceB) * camera.focal_length * camera.y_view_window * screen.height;
+        const halfHeight = screen.height / 2;
 
-        const upper_pixel_start = persp(wallYT1, distanceA);
-        const upper_pixel_end = persp(wallYT2, distanceB);
-        const lower_pixel_start = persp(wallYB1, distanceA);
-        const lower_pixel_end = persp(wallYB2, distanceB);
+        const upper_pixel_start = wallYT1 * persMultiplyA + halfHeight;
+        const upper_pixel_end = wallYT2 * persMultiplyB + halfHeight;
+        const lower_pixel_start = wallYB1 * persMultiplyA + halfHeight;
+        const lower_pixel_end = wallYB2 * persMultiplyB + halfHeight;
 
         const zinv_start = 1.0 / distanceA;
         const zinv_end = 1.0 / distanceB;
@@ -97,15 +99,16 @@ function drawRasterisedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, ca
         for (let x = x1; x < x2; x++) {
 
             const alpha = (x - wallAX) / (wallBX - wallAX);
-            const distance = 1.0 / (((1.0 - alpha) * zinv_start) + (alpha * zinv_end));
+            const ialpha = 1 - alpha;
+            const distance = 1.0 / ((ialpha * zinv_start) + (alpha * zinv_end));
 
-            const upper_pixel = ((1.0 - alpha) * upper_pixel_start) + (alpha * upper_pixel_end);
-            const lower_pixel = ((1.0 - alpha) * lower_pixel_start) + (alpha * lower_pixel_end);
+            const upper_pixel = (ialpha * upper_pixel_start) + (alpha * upper_pixel_end);
+            const lower_pixel = (ialpha * lower_pixel_start) + (alpha * lower_pixel_end);
             
             const upper_pixel_in_range = upper_pixel >= screen.height ? screen.height - 1 : (upper_pixel < 0 ? 0 : upper_pixel);
             const lower_pixel_in_range = upper_pixel >= screen.height ? screen.height - 1 : (lower_pixel < 0 ? 0 : lower_pixel);
 
-            const u = (((1.0 - alpha) * u_start) + (alpha * u_end)) * distance;
+            const u = ((ialpha * u_start) + (alpha * u_end)) * distance;
 
             for (let y = upper_pixel_in_range; y <= lower_pixel_in_range; y++) {
 

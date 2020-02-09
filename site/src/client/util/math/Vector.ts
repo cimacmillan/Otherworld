@@ -32,9 +32,12 @@ export function vec_divide(a: Vector2D, b: Vector2D) {
 }
 
 export function vec_rotate(a: Vector2D, theta: number) {
+    const mathCos = (~~(Math.cos(theta) * 100)) / 100;
+    const mathsin = (~~(Math.sin(theta) * 100)) / 100;
+
     return {
-        x: a.x * Math.cos(theta) - a.y * Math.sin(theta),
-        y: a.y * Math.cos(theta) + a.x * Math.sin(theta),
+        x: a.x * mathCos - a.y * mathsin,
+        y: a.y * mathCos + a.x * mathsin,
     };
 }
 
