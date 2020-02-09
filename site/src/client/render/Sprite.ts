@@ -18,11 +18,6 @@ export function drawSprites(screen: ScreenBuffer, depth_buffer: DepthBuffer, cam
 export function drawSprite(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, sprite: Sprite, backgroundColour: Colour) {
     const projectPosition = sprite.projectPosition!;
     const distance = -projectPosition.y;
-
-    const centre = {x: randomFloatRange(15, 25), y: randomFloatRange(15, 25)};
-    const diff = vec_sub(sprite.position, centre);
-    sprite.position = vec_add(vec_rotate(diff, 0.4 / Math.pow(vec_distance(diff) / 2, 2) ), centre);
-
     if (distance < camera.clip_depth || distance > camera.far_clip_depth) {
         return;
     }

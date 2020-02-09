@@ -120,7 +120,7 @@ export function initialiseMap(resourceManager: ResourceManager): GameMap {
     });
 
     const sprites: Sprite[] = [];
-    const spriteCount = 0;
+    const spriteCount = 1000;
 
     for (let i = 0; i < spriteCount; i++) {
         const size = randomFloatRange(0.2, 0.4);
