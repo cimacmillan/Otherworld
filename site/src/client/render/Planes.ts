@@ -8,8 +8,8 @@ import { start } from "repl";
 // Draws fast when not rotated but then slows to a halt
 // Do experiments to find why, remove line by line until chrome fails
 export function drawPlanes(screen: ScreenBuffer, depthBuffer: DepthBuffer, camera: Camera, backgroundColour: Colour, plane: Plane) {
-    const cosTheta = Math.cos(camera.angle);
-    const sinTheta = Math.sin(camera.angle);
+    const cosTheta = (~~(Math.cos(camera.angle) * 100)) / 100;
+    const sinTheta = (~~(Math.sin(camera.angle) * 100)) / 100;
 
     for (let y = screen.height / 2; y < screen.height; y++) {
 

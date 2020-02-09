@@ -57,7 +57,7 @@ export function initialiseMap(resourceManager: ResourceManager): GameMap {
         },
     });
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 0; i++) {
         wall_buffer.push({
             p0: { x: 0.0 + i, y: 10.0 },
             p1: { x: 0.0 + i, y: 0.0 },
