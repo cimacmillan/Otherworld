@@ -1,21 +1,43 @@
-import { State } from "./State";
+import { BaseState } from "./State";
 import { Event, BaseEventType } from "./Event";
+import { EntityComponent } from "./EntityComponent";
 
-export class Entity <InferredState extends State>{
+export class Entity <State extends BaseState>{
 
-    private state: InferredState;
+    private state: State;
+    private components: EntityComponent<State>[];
+    private initialised: boolean = false;
 
-    public getState() {
-        return this.state;
+    constructor(...components: EntityComponent<State>[]) {
+        this.components = components;
+        for (let i = 0; i < this.components.length; i++) {
+            this.components[i].init(this);
+        }
+        this.initialised = true;
     }
 
-    public setState(state: InferredState) {
+    public update() {
+        for (let i = 0; i < this.components.length; i++) {
+            this.components[i].update(this);
+        }
+    }
+
+    public setState(state: Partial<State>) {
+        this.state = {...this.state, ...state};
+
+        if(!this.initialised) {
+            return;
+        }
+        
         if (this.state !== state) {
             this.emit({
                 type: BaseEventType.STATE_TRANSITION
             });
         }
-        this.state = state;
+    }
+
+    public getState() {
+        return this.state;
     }
 
     public emit(event: Event) {

@@ -10,6 +10,7 @@ import { loadTextureFromURL } from "./util/loader/TextureLoader";
 import { loadSound, playSound, Sound } from "./util/sound/Sound";
 import { logFPS, setFPSProportion} from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
+import { testFunction } from "./engine/World";
 
 const DOM_WIDTH = 1280;
 const DOM_HEIGHT = 720;
@@ -29,6 +30,8 @@ export class GameComponent extends React.Component {
         this.resourceManager = new ResourceManager();
         await this.resourceManager.load();
         this.initState();
+
+        testFunction();
     }
 
     public render() {

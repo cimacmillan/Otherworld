@@ -1,25 +1,22 @@
 import { EntityComponent } from "../EntityComponent";
 import { Entity } from "../Entity";
 import { Event, BaseEventType } from "../Event";
-import { State } from "../State";
+import { BaseState, TestState, TestStateType } from "../State";
 
-enum TestComponentStates {
-    NULL = "NULL"
-}
+export class TestComponent<T extends TestStateType> extends EntityComponent<T> {
+    public init(entity: Entity<TestStateType>): void {
+        entity.setState({toOther: true});
+    }
 
-export type TestComponentState = TestComponentStates | State;
-
-class TestComponent implements EntityComponent {
-
-    public update(entity: Entity<TestComponentState>): void {
+    public update(entity: Entity<TestStateType>): void {
         const state = entity.getState();
 
-        if (state === State.NULL) {
+        if (state.toOther) {
             console.log("I am in a null state");
         }
     }    
     
-    public onEvent(entity: Entity, event: Event): void {
+    public onEvent(entity: Entity<TestStateType>, event: Event): void {
         if (event.type === BaseEventType.CREATED) {
             setTimeout(() => entity.emit(
                 {
@@ -29,7 +26,7 @@ class TestComponent implements EntityComponent {
         }
     }
 
-    public onObservedEvent(entity: Entity, action: Event): void {
+    public onObservedEvent(entity: Entity<TestStateType>, action: Event): void {
 
     }
 
