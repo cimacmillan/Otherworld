@@ -12,6 +12,14 @@ export function testFunction() {
 
     newEntitiy.update();
 
+    const entityArray: Entity<BaseState>[] = [
+        newEntitiy
+    ];
+
+    entityArray.forEach((entity) => {
+        entity.setState({exists: true});
+    })
+
 }
 
 
