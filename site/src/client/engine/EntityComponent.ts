@@ -1,5 +1,5 @@
-import { GameEvent } from "./events/Event";
 import { Entity } from "./Entity";
+import { GameEvent } from "./events/Event";
 import { BaseState } from "./State";
 
 export abstract class EntityComponent<State extends BaseState> {
@@ -12,4 +12,3 @@ export abstract class EntityComponent<State extends BaseState> {
     // On event from other entities
     public abstract onObservedEvent(entity: Entity<State>, action: GameEvent): void;
 }
-

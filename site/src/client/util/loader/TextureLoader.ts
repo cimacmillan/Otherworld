@@ -3,10 +3,10 @@ import { Colour, FastTexture, Texture } from "../../types";
 export type LoadTextureCallback = (img: Texture) => void;
 
 function constructTexture(img: HTMLImageElement): Texture {
-    let canvas = document.createElement("canvas");
+    const canvas = document.createElement("canvas");
     canvas.width = img.width;
     canvas.height = img.height;
-    let ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
     ctx.drawImage(img, 0, 0);
     return {
         data: ctx.getImageData(0, 0, img.width, img.height),
@@ -17,7 +17,7 @@ function constructTexture(img: HTMLImageElement): Texture {
 
 export function loadTextureFromURL(url: string): Promise<Texture> {
     return new Promise((resolve, reject) => {
-        let img = new Image();
+        const img = new Image();
         img.onload = () => {
             resolve(constructTexture(img));
         };

@@ -1,5 +1,5 @@
 import { DepthBuffer, ScreenBuffer } from ".";
-import { Camera, Sprite, Colour } from "../types";
+import { Camera, Colour, Sprite } from "../types";
 import { clipToRange, randomFloatRange, swapSort, vec_add, vec_distance, vec_rotate, vec_sub } from "../util/math";
 import { shade } from "./Shader";
 

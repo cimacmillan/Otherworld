@@ -1,9 +1,8 @@
-import { DepthBuffer, ScreenBuffer } from ".";
-import { Camera, Plane, Colour } from "../types";
-import { vec_add, vec_rotate, ROTATE_RESOLUTION } from "../util/math";
-import { shade } from "./Shader";
 import { start } from "repl";
-
+import { DepthBuffer, ScreenBuffer } from ".";
+import { Camera, Colour, Plane } from "../types";
+import { ROTATE_RESOLUTION, vec_add, vec_rotate } from "../util/math";
+import { shade } from "./Shader";
 
 // Draws fast when not rotated but then slows to a halt
 // Do experiments to find why, remove line by line until chrome fails

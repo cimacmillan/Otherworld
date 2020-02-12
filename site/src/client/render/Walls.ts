@@ -1,13 +1,12 @@
 import { DepthBuffer, ScreenBuffer } from ".";
-import { Camera, Ray, Vector2D, Wall, Colour } from "../types";
-import { convert_unit, interpolate, vec_cross, vec_rotate, vec_sub, clipToRange } from "../util/math";
+import { Camera, Colour, Ray, Vector2D, Wall } from "../types";
+import { clipToRange, convert_unit, interpolate, vec_cross, vec_rotate, vec_sub } from "../util/math";
 import { shade } from "./Shader";
 
 export function drawWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, walls: Wall[], backgroundColour: Colour) {
     // return drawRaycastedWalls(screen, depth_buffer, camera, walls);
     return drawRasterisedWalls(screen, depth_buffer, camera, walls, backgroundColour);
 }
-
 
 function drawRasterisedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, camera: Camera, walls: Wall[], backgroundColour: Colour) {
     for (let wallIndex = 0; wallIndex < walls.length; wallIndex++) {
@@ -105,7 +104,7 @@ function drawRasterisedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, ca
 
             const upper_pixel = (ialpha * upper_pixel_start) + (alpha * upper_pixel_end);
             const lower_pixel = (ialpha * lower_pixel_start) + (alpha * lower_pixel_end);
-            
+
             const upper_pixel_in_range = upper_pixel >= screen.height ? screen.height - 1 : (upper_pixel < 0 ? 0 : upper_pixel);
             const lower_pixel_in_range = upper_pixel >= screen.height ? screen.height - 1 : (lower_pixel < 0 ? 0 : lower_pixel);
 
@@ -119,7 +118,7 @@ function drawRasterisedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, ca
 
                     const colour = shade(texture, u, v, distance, camera.far_clip_depth);
 
-                    if (colour && colour.a > 0) {     
+                    if (colour && colour.a > 0) {
                         screen.putPixelColour(~~x, ~~y, colour, distance, camera.far_clip_depth, backgroundColour);
                     }
                 }
@@ -127,4 +126,3 @@ function drawRasterisedWalls(screen: ScreenBuffer, depth_buffer: DepthBuffer, ca
         }
     }
 }
-

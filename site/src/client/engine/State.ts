@@ -15,7 +15,6 @@ export interface OtherTestState {
     another: boolean;
 }
 
-
 export type OtherTestStateType = BaseState & OtherTestState;
 export type TestStateType = BaseState & TestState;
 

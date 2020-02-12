@@ -21,7 +21,7 @@ export function initialiseCamera(screen: ScreenBuffer): Camera {
         x_view_window,
         y_view_window,
         clip_depth: 0.1,
-        far_clip_depth: 10.0
+        far_clip_depth: 10.0,
     };
 }
 
@@ -167,15 +167,15 @@ export function initialiseMap(resourceManager: ResourceManager): GameMap {
         r: 135,
         g: 205,
         b: 235,
-        a: 255
-    }
+        a: 255,
+    };
 
     const map: GameMap = {
-        wall_buffer, 
-        sprites, 
+        wall_buffer,
+        sprites,
         floor,
         ceiling,
-        backgroundColour: skyblue
+        backgroundColour: skyblue,
     };
 
     return map;

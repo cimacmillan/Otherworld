@@ -1,4 +1,4 @@
-export type GameEvent = 
+export type GameEvent =
 EntityEvents;
 
 export enum EntityEventType {
@@ -8,21 +8,19 @@ export enum EntityEventType {
 }
 
 interface EntityCreated {
-    type: EntityEventType.ENTITY_CREATED
+    type: EntityEventType.ENTITY_CREATED;
 }
 
 interface EntityDeleted {
-    type: EntityEventType.ENTITY_DELETED
+    type: EntityEventType.ENTITY_DELETED;
 }
 
 interface StateTransitionEvent {
-    type: EntityEventType.STATE_TRANSITION,
+    type: EntityEventType.STATE_TRANSITION;
     payload: {
         from: any,
-        to: any
-    }
+        to: any,
+    };
 }
 
 export type EntityEvents = StateTransitionEvent | EntityCreated | EntityDeleted;
-
-

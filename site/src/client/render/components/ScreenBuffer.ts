@@ -27,11 +27,11 @@ export class ScreenBuffer {
         colourMult *= colourMult;
 
         // Breaking the rules but it's faster
-        this.putPixel(x, y, 
-            ~~(colour.r + colourMult * (backgroundColour.r - colour.r)), 
-            ~~(colour.g + colourMult * (backgroundColour.g - colour.g)), 
-            ~~(colour.b + colourMult * (backgroundColour.b - colour.b)), 
-            ~~(colour.a + colourMult * (backgroundColour.a - colour.a)), 
+        this.putPixel(x, y,
+            ~~(colour.r + colourMult * (backgroundColour.r - colour.r)),
+            ~~(colour.g + colourMult * (backgroundColour.g - colour.g)),
+            ~~(colour.b + colourMult * (backgroundColour.b - colour.b)),
+            ~~(colour.a + colourMult * (backgroundColour.a - colour.a)),
             );
     }
 

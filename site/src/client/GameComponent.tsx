@@ -1,4 +1,5 @@
 import React = require("react");
+import { testFunction } from "./engine/World";
 import { initialiseInput, updateInput } from "./Input";
 import { createImage, DepthBuffer, ScreenBuffer } from "./render";
 import { CanvasComponent } from "./render";
@@ -10,7 +11,6 @@ import { loadTextureFromURL } from "./util/loader/TextureLoader";
 import { loadSound, playSound, Sound } from "./util/sound/Sound";
 import { logFPS, setFPSProportion} from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
-import { testFunction } from "./engine/World";
 
 const DOM_WIDTH = 1280;
 const DOM_HEIGHT = 720;

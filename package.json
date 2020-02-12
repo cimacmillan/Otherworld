@@ -41,7 +41,7 @@
     "test-unit": "npx jest site/src/test/unit/",
     "test-profile": "npx jest site/src/test/profile/ -u",
     "test": "npm run-script test-unit",
-    "lint": "tslint --fix"
+    "lint": "tslint --fix --project ./"
   },
   "watch": {
     "full-rebuild": {

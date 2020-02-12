@@ -1,7 +1,7 @@
-import { Entity } from "./Entity";
-import { TestStateType, BaseState, TestEntityState } from "./State";
-import { TestComponent } from "./components/TestComponent";
 import { OtherTestComponent } from "./components/OtherTestComponent";
+import { TestComponent } from "./components/TestComponent";
+import { Entity } from "./Entity";
+import { BaseState, TestEntityState, TestStateType } from "./State";
 
 export function testFunction() {
     const componentA = new TestComponent();
@@ -10,14 +10,12 @@ export function testFunction() {
 
     newEntitiy.update();
 
-    const entityArray: Entity<BaseState>[] = [
-        newEntitiy
+    const entityArray: Array<Entity<BaseState>> = [
+        newEntitiy,
     ];
 
     entityArray.forEach((entity) => {
         entity.setState({exists: true});
-    })
+    });
 
 }
-
-
