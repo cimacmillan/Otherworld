@@ -8,7 +8,7 @@ export abstract class EntityComponent<State extends BaseState> {
     // Update component
     public abstract update(entity: Entity<State>): void;
     // On event from other components in this entitiy
-    public abstract onEvent(entity: Entity<State>, action: GameEvent): void;
+    public abstract onEvent(entity: Entity<State>, event: GameEvent): void;
     // On event from other entities
-    public abstract onObservedEvent(entity: Entity<State>, action: GameEvent): void;
+    public abstract onObservedEvent(entity: Entity<State>, event: GameEvent): void;
 }

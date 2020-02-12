@@ -138,7 +138,7 @@ export function initialiseMap(resourceManager: ResourceManager): GameMap {
     }
 
     const floor = {
-        height: 0,
+        height: 1000,
         start: {
             x: 0,
             y: 0,
@@ -163,10 +163,17 @@ export function initialiseMap(resourceManager: ResourceManager): GameMap {
         spritesheet,
     };
 
+    // const skyblue = {
+    //     r: 135,
+    //     g: 205,
+    //     b: 235,
+    //     a: 255,
+    // };
+
     const skyblue = {
-        r: 135,
-        g: 205,
-        b: 235,
+        r: 0,
+        g: 0,
+        b: 0,
         a: 255,
     };
 

@@ -6,7 +6,9 @@ export class Entity <State extends BaseState> {
 
     private state: State;
     private components: Array<EntityComponent<State>>;
+
     private initialised: boolean = false;
+    private listeners: Array<Entity<BaseState>> = [];
 
     constructor(...components: Array<EntityComponent<State>>) {
         this.components = components;
@@ -14,6 +16,18 @@ export class Entity <State extends BaseState> {
             this.components[i].init(this);
         }
         this.initialised = true;
+    }
+
+    public getState() {
+        return this.state;
+    }
+
+    public attachListener(entity: Entity<BaseState>) {
+        this.listeners.push(entity);
+    }
+
+    public removeListener(entity: Entity<BaseState>) {
+        this.listeners.splice(this.listeners.indexOf(entity));
     }
 
     public update() {
@@ -36,12 +50,19 @@ export class Entity <State extends BaseState> {
         this.state = newState;
     }
 
-    public getState() {
-        return this.state;
+    public emit(event: GameEvent) {
+        for(let x = 0; x < this.components.length; x++) {
+            this.components[x].onEvent(this, event);
+        }
+        for(let x = 0; x < this.listeners.length; x++) {
+            this.listeners[x].onObservedEvent(event);
+        }
     }
 
-    public emit(event: GameEvent) {
-        // notify observers
+    public onObservedEvent(event: GameEvent) {
+        for(let x = 0; x < this.components.length; x++) {
+            this.components[x].onObservedEvent(this, event);
+        }
     }
 
 }

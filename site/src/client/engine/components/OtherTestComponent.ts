@@ -1,6 +1,6 @@
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
-import { BaseEventType, GameEvent } from "../events/Event";
+import { GameEvent } from "../events/Event";
 import { BaseState, OtherTestStateType, TestState, TestStateType } from "../State";
 
 export class OtherTestComponent<T extends OtherTestStateType> extends EntityComponent<T> {
@@ -18,13 +18,7 @@ export class OtherTestComponent<T extends OtherTestStateType> extends EntityComp
     }
 
     public onEvent(entity: Entity<OtherTestStateType>, event: GameEvent): void {
-        if (event.type === BaseEventType.CREATED) {
-            setTimeout(() => entity.emit(
-                {
-                    type: BaseEventType.DELETE,
-                },
-            ));
-        }
+
     }
 
     public onObservedEvent(entity: Entity<OtherTestStateType>, action: GameEvent): void {
