@@ -1,5 +1,5 @@
 import { BaseState } from "./State";
-import { Event, BaseEventType } from "./Event";
+import { GameEvent, EntityEventType } from "./events/Event";
 import { EntityComponent } from "./EntityComponent";
 
 export class Entity <State extends BaseState>{
@@ -21,26 +21,26 @@ export class Entity <State extends BaseState>{
             this.components[i].update(this);
         }
     }
-
+    
     public setState(state: Partial<State>) {
-        this.state = {...this.state, ...state};
-
-        if(!this.initialised) {
-            return;
-        }
-        
-        if (this.state !== state) {
+        const newState = {...this.state, ...state};
+        if(this.initialised) {
             this.emit({
-                type: BaseEventType.STATE_TRANSITION
+                type: EntityEventType.STATE_TRANSITION,
+                payload: {
+                    from: this.state,
+                    to: newState
+                }
             });
         }
+        this.state = newState;
     }
 
     public getState() {
         return this.state;
     }
 
-    public emit(event: Event) {
+    public emit(event: GameEvent) {
         // notify observers
     } 
 
