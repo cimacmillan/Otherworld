@@ -36,9 +36,9 @@ export class Entity <State extends BaseState> {
         }
     }
 
-    public setState(state: Partial<State>) {
+    public setState(state: Partial<State>, withEvent?: boolean) {
         const newState = {...this.state, ...state};
-        if (this.initialised) {
+        if (this.initialised && withEvent) {
             this.emit({
                 type: EntityEventType.STATE_TRANSITION,
                 payload: {
@@ -63,6 +63,10 @@ export class Entity <State extends BaseState> {
         for(let x = 0; x < this.components.length; x++) {
             this.components[x].onObservedEvent(this, event);
         }
+    }
+
+    public emitGlobally(event: GameEvent) {
+        // TODO emit event to world so higher order systems can react
     }
 
 }

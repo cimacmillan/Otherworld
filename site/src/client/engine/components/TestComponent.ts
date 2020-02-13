@@ -1,16 +1,23 @@
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
-import { GameEvent, EntityEventType } from "../events/Event";
-import { BaseState, TestState, TestStateType } from "../State";
+import { GameEvent } from "../events/Event";
+import { BaseState } from "../State";
+
+export interface TestState {
+    toOther: boolean;
+}
+
+export type TestStateType = BaseState & TestState;
 
 export class TestComponent<T extends TestStateType> extends EntityComponent<T> {
+
     public init(entity: Entity<TestStateType>): void {
         entity.setState({toOther: true});
     }
 
     public update(entity: Entity<TestStateType>): void {
 
-        if (state.toOther) {
+        if (entity.getState().toOther) {
             console.log("I am in a null state");
         }
 
