@@ -6,7 +6,3 @@ export interface BaseState {
 export interface TestState {
     toOther: boolean;
 }
-
-
-
-export type TestEntityState = OtherTestStateType & TestStateType;

@@ -1,7 +1,7 @@
 import { OtherTestComponent, OtherTestStateType } from "./components/OtherTestComponent";
 import { TestComponent, TestStateType } from "./components/TestComponent";
 import { Entity } from "./Entity";
-import { BaseState, TestEntityState } from "./State";
+import { BaseState } from "./State";
 import { GameEvent } from "./events/Event";
 
 export class World {
@@ -39,7 +39,7 @@ export function testFunction() {
 
     const componentA2 = new TestComponent();
     const componentB2 = new OtherTestComponent();
-    const newEntitiy2 = new Entity<TestEntityState>(componentA, componentB);
+    const newEntitiy2 = new Entity<TestStateType & OtherTestStateType>(componentA, componentB);
 
 
     newEntitiy.attachListener(newEntitiy2);
