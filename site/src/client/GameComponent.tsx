@@ -1,7 +1,7 @@
 import React = require("react");
 import { testFunction } from "./engine/World";
 import { initialiseInput, updateInput } from "./Input";
-import { createImage, DepthBuffer, ScreenBuffer } from "./render";
+import { ScreenBuffer, RenderService } from "./render";
 import { CanvasComponent } from "./render";
 import { ResourceManager } from "./resources/ResourceManager";
 import { GameState } from "./state/GameState";
@@ -25,10 +25,14 @@ export class GameComponent extends React.Component {
 
     private gameState: GameState;
     private resourceManager: ResourceManager;
+    private renderService: RenderService;
 
     public async componentDidMount() {
         this.resourceManager = new ResourceManager();
         await this.resourceManager.load();
+
+        this.renderService = new RenderService();
+
         this.initState();
 
         testFunction();
@@ -42,13 +46,9 @@ export class GameComponent extends React.Component {
         initialiseInput();
 
         const screen = new ScreenBuffer(
-            (this.refs.main_canvas as CanvasComponent).getImageData(),
+            (this.refs.main_canvas as CanvasComponent).getOpenGL(),
             WIDTH,
             HEIGHT,
-        );
-
-        const depthBuffer = new DepthBuffer(
-            WIDTH, HEIGHT,
         );
 
         const sound = new Sound();
@@ -65,10 +65,11 @@ export class GameComponent extends React.Component {
                 sound,
             },
             render: {
-                screen,
-                depthBuffer,
+                screen
             },
         };
+
+        this.renderService.init(this.gameState.render);
 
         // loadSound("audio/intro.mp3", (buffer) => {
             // setTimeout(
@@ -87,9 +88,9 @@ export class GameComponent extends React.Component {
 
     private draw = () => {
         // Create the image
-        createImage(this.gameState.render, this.gameState.world);
+        this.renderService.createImage(this.gameState.render, this.gameState.world);
         // Draw the image data to the canvas
-        (this.refs.main_canvas as CanvasComponent).writeImageData();
+        // (this.refs.main_canvas as CanvasComponent).writeImageData();
     }
 
     private mainLoop = (instance: TimeControlledLoop, actualMilliseconds: number, actualProportion?: number) => {

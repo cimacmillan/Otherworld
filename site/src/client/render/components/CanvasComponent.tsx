@@ -13,8 +13,8 @@ export interface CanvasComponentProps {
 export class CanvasComponent extends React.Component<CanvasComponentProps> {
 
     private canvas: HTMLCanvasElement;
-    private canvasContext: CanvasRenderingContext2D;
-    private imageData: ImageData;
+    private canvasContext: WebGLRenderingContext;
+    // private imageData: ImageData;
 
     // Draws the canvas object to the screen, not actual pixels
     public render() {
@@ -24,20 +24,24 @@ export class CanvasComponent extends React.Component<CanvasComponentProps> {
     // Gets the image data from the canvas object
     public componentDidMount() {
         this.canvas = this.refs.canvas as HTMLCanvasElement;
-        this.canvasContext = this.canvas.getContext("2d");
-        this.imageData = this.canvasContext.createImageData(this.props.width, this.props.height);
-        this.canvasContext.imageSmoothingEnabled = false;
+        this.canvasContext = this.canvas.getContext("webgl");
+        // this.imageData = this.canvasContext.createImageData(this.props.width, this.props.height);
+        // this.canvasContext.imageSmoothingEnabled = false;
     }
 
-    // Public getter for the image data reference (not very react)
-    public getImageData = () => {
-        return this.imageData;
+    public getOpenGL() {
+        return this.canvasContext;
     }
 
-    // Public call to write the image data to the screen
-    public writeImageData = () => {
-        this.canvasContext.putImageData(this.imageData, 0, 0);
-        this.canvasContext.drawImage(this.canvas, 0, 0, this.props.dom_width * this.props.resolution, this.props.dom_height * this.props.resolution);
-    }
+    // // Public getter for the image data reference (not very react)
+    // public getImageData = () => {
+    //     return this.imageData;
+    // }
+
+    // // Public call to write the image data to the screen
+    // public writeImageData = () => {
+    //     this.canvasContext.putImageData(this.imageData, 0, 0);
+    //     this.canvasContext.drawImage(this.canvas, 0, 0, this.props.dom_width * this.props.resolution, this.props.dom_height * this.props.resolution);
+    // }
 
 }

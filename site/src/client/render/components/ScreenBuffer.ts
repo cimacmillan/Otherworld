@@ -3,44 +3,49 @@ import { fillPattern } from "../../util/math/Array";
 
 export class ScreenBuffer {
 
-    public image_data: ImageData;
+    // public image_data: ImageData;
+    private gl: WebGLRenderingContext;
     public width: number;
     public height: number;
 
-    constructor(image_data: ImageData, width: number, height: number) {
-        this.image_data = image_data;
+    constructor(gl: WebGLRenderingContext, width: number, height: number) {
+        this.gl = gl;
         this.width = width;
         this.height = height;
     }
 
-    public putPixel(x: number, y: number, red: number, green: number, blue: number, alpha: number) {
-        const pixelindex = (y * this.width + x) * 4;
-        this.image_data.data[pixelindex] = red;
-        this.image_data.data[pixelindex + 1] = green;
-        this.image_data.data[pixelindex + 2] = blue;
-        this.image_data.data[pixelindex + 3] = alpha;
+    public getOpenGL() {
+        return this.gl;
     }
 
-    public putPixelColour(x: number, y: number, colour: Colour, depth: number, farClip: number, backgroundColour: Colour) {
+    // public putPixel(x: number, y: number, red: number, green: number, blue: number, alpha: number) {
+    //     const pixelindex = (y * this.width + x) * 4;
+    //     this.image_data.data[pixelindex] = red;
+    //     this.image_data.data[pixelindex + 1] = green;
+    //     this.image_data.data[pixelindex + 2] = blue;
+    //     this.image_data.data[pixelindex + 3] = alpha;
+    // }
 
-        let colourMult = (depth / farClip);
-        colourMult *= colourMult;
+    // public putPixelColour(x: number, y: number, colour: Colour, depth: number, farClip: number, backgroundColour: Colour) {
 
-        // Breaking the rules but it's faster
-        this.putPixel(x, y,
-            ~~(colour.r + colourMult * (backgroundColour.r - colour.r)),
-            ~~(colour.g + colourMult * (backgroundColour.g - colour.g)),
-            ~~(colour.b + colourMult * (backgroundColour.b - colour.b)),
-            ~~(colour.a + colourMult * (backgroundColour.a - colour.a)),
-            );
-    }
+    //     let colourMult = (depth / farClip);
+    //     colourMult *= colourMult;
 
-    public fillBackground(red: number, green: number, blue: number, alpha: number) {
-        fillPattern(this.image_data.data, [red, green, blue, alpha]);
-    }
+    //     // Breaking the rules but it's faster
+    //     this.putPixel(x, y,
+    //         ~~(colour.r + colourMult * (backgroundColour.r - colour.r)),
+    //         ~~(colour.g + colourMult * (backgroundColour.g - colour.g)),
+    //         ~~(colour.b + colourMult * (backgroundColour.b - colour.b)),
+    //         ~~(colour.a + colourMult * (backgroundColour.a - colour.a)),
+    //         );
+    // }
 
-    public reset(colour: Colour) {
-        this.fillBackground(colour.r, colour.g, colour.b, 255);
-    }
+    // public fillBackground(red: number, green: number, blue: number, alpha: number) {
+    //     fillPattern(this.image_data.data, [red, green, blue, alpha]);
+    // }
+
+    // public reset(colour: Colour) {
+    //     this.fillBackground(colour.r, colour.g, colour.b, 255);
+    // }
 
 }
