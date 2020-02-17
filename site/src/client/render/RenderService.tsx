@@ -84,9 +84,14 @@ export class RenderService {
         // Now move the drawing position a bit to where we want to
         // start drawing the square.
 
+        glm.mat4.rotateY(modelViewMatrix,     // destination matrix
+            modelViewMatrix,     // matrix to translate
+            worldState.camera.angle);  // amount to translate
+
+
         glm.mat4.translate(modelViewMatrix,     // destination matrix
                     modelViewMatrix,     // matrix to translate
-                    [-0.0, 0.0, -6.0]);  // amount to translate
+                    [-worldState.camera.position.x, -worldState.camera.height, -worldState.camera.position.y]);  // amount to translate
 
         // Tell WebGL how to pull out the positions from the position
         // buffer into the vertexPosition attribute.

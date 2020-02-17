@@ -14,7 +14,7 @@ export function initialiseCamera(screen: ScreenBuffer): Camera {
     const focal_length = (x_view_window / 2) / Math.tan(VIEWING_ANGLE / 2);
 
     return {
-        position: { x: 5.0, y: 5.0 },
+        position: { x: 0.0, y: 5.0 },
         angle: 0,
         focal_length,
         height: 1,

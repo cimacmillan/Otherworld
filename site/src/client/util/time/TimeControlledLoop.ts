@@ -46,7 +46,8 @@ export class TimeControlledLoop {
         }
 
         if (this.looping) {
-            setTimeout(() => this.loop(), 1);
+            setTimeout(() => this.loop(), wait);
+            // setTimeout(() => this.loop(), 1);
         }
     }
 
