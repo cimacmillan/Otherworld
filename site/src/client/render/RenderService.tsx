@@ -3,16 +3,25 @@ import { WorldState } from "../state/world/WorldState";
 import { initShaderProgram } from "./shaders/ShaderCompiler";
 import { render } from "react-dom";
 import * as glm from "gl-matrix";
+import { vsSource } from "./shaders/basic/Vertex";
+import { fsSource } from "./shaders/basic/Fragment";
+
 
 export class RenderService {
 
     private shaderProgram: WebGLProgram;
     private positionBuffer: WebGLBuffer;
+    private vertexPosition: number;
+    private projectionMatrix: WebGLUniformLocation;
+    private modelMatrix: WebGLUniformLocation;
 
     public init(renderState: RenderState) {
 
         const gl = renderState.screen.getOpenGL();
         this.shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+        this.vertexPosition = gl.getAttribLocation(this.shaderProgram, 'aVertexPosition');
+        this.projectionMatrix = gl.getUniformLocation(this.shaderProgram, 'uProjectionMatrix');
+        this.modelMatrix = gl.getUniformLocation(this.shaderProgram, 'uModelViewMatrix');
 
         // Create a buffer for the square's positions.
         
@@ -90,35 +99,34 @@ export class RenderService {
         const offset = 0;         // how many bytes inside the buffer to start from
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
         gl.vertexAttribPointer(
-        programInfo.attribLocations.vertexPosition,
+        this.vertexPosition,
         numComponents,
         type,
         normalize,
         stride,
         offset);
         gl.enableVertexAttribArray(
-        programInfo.attribLocations.vertexPosition);
+            this.vertexPosition);
 
 
         // Tell WebGL to use our program when drawing
 
-        gl.useProgram(programInfo.program);
+        gl.useProgram(this.shaderProgram);
 
         // Set the shader uniforms
 
         gl.uniformMatrix4fv(
-        programInfo.uniformLocations.projectionMatrix,
+        this.projectionMatrix,
         false,
         projectionMatrix);
         gl.uniformMatrix4fv(
-        programInfo.uniformLocations.modelViewMatrix,
+        this.modelMatrix,
         false,
         modelViewMatrix);
 
 
         const vertexCount = 4;
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexCount);
-
 
         // drawBackground(screen, depthBuffer, worldState.map.backgroundColour);
         // drawPlanes(screen, depthBuffer, worldState.camera, worldState.map.backgroundColour, worldState.map.floor);
