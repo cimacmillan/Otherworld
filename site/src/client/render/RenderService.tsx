@@ -15,6 +15,8 @@ export class RenderService {
     private projectionMatrix: WebGLUniformLocation;
     private modelMatrix: WebGLUniformLocation;
 
+    private positions: number[];
+
     public init(renderState: RenderState) {
 
         const gl = renderState.screen.getOpenGL();
@@ -34,19 +36,24 @@ export class RenderService {
         
         // Now create an array of positions for the square.
         
-        const positions = [
-            -1.0,  1.0,
-            1.0,  1.0,
-            -1.0, -1.0,
-            1.0, -1.0,
-        ];
+
+
+        this.positions = [];
+
+        for (let i = 0; i < 10; i ++ ){
+            this.positions = this.positions.concat([
+                -1.0,  1.0, i,
+                1.0,  1.0, i,
+                -1.0, -1.0, i, 
+            ]);
+        }
         
         // Now pass the list of positions into WebGL to build the
         // shape. We do this by creating a Float32Array from the
         // JavaScript array, then use it to fill the current buffer.
         
         gl.bufferData(gl.ARRAY_BUFFER,
-                        new Float32Array(positions),
+                        new Float32Array(this.positions),
                         gl.STATIC_DRAW);        
     }
 
@@ -96,7 +103,7 @@ export class RenderService {
         // Tell WebGL how to pull out the positions from the position
         // buffer into the vertexPosition attribute.
 
-        const numComponents = 2;  // pull out 2 values per iteration
+        const numComponents = 3;  // pull out 2 values per iteration
         const type = gl.FLOAT;    // the data in the buffer is 32bit floats
         const normalize = false;  // don't normalize
         const stride = 0;         // how many bytes to get from one set of values to the next
@@ -130,8 +137,8 @@ export class RenderService {
         modelViewMatrix);
 
 
-        const vertexCount = 4;
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexCount);
+        const vertexCount = 12;
+        gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
 
         // drawBackground(screen, depthBuffer, worldState.map.backgroundColour);
         // drawPlanes(screen, depthBuffer, worldState.camera, worldState.map.backgroundColour, worldState.map.floor);
