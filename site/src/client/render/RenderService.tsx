@@ -40,11 +40,11 @@ export class RenderService {
 
         this.positions = [];
 
-        for (let i = 0; i < 10; i ++ ){
-            this.positions = this.positions.concat([
-                -1.0,  1.0, i,
-                1.0,  1.0, i,
-                -1.0, -1.0, i, 
+        for (let i = 0; i < 10000; i ++ ){
+            this.positions.push(...[
+                -1.0,  1.0, -i - 10,
+                1.0,  1.0, -i - 10,
+                -1.0, -1.0, -i - 10, 
             ]);
         }
         
@@ -103,7 +103,7 @@ export class RenderService {
         // Tell WebGL how to pull out the positions from the position
         // buffer into the vertexPosition attribute.
 
-        const numComponents = 3;  // pull out 2 values per iteration
+        const numComponents = 3;  // pull out 3 values per iteration
         const type = gl.FLOAT;    // the data in the buffer is 32bit floats
         const normalize = false;  // don't normalize
         const stride = 0;         // how many bytes to get from one set of values to the next
@@ -117,8 +117,7 @@ export class RenderService {
         normalize,
         stride,
         offset);
-        gl.enableVertexAttribArray(
-            this.vertexPosition);
+        gl.enableVertexAttribArray(this.vertexPosition);
 
 
         // Tell WebGL to use our program when drawing
@@ -127,17 +126,10 @@ export class RenderService {
 
         // Set the shader uniforms
 
-        gl.uniformMatrix4fv(
-        this.projectionMatrix,
-        false,
-        projectionMatrix);
-        gl.uniformMatrix4fv(
-        this.modelMatrix,
-        false,
-        modelViewMatrix);
+        gl.uniformMatrix4fv(this.projectionMatrix, false, projectionMatrix);
+        gl.uniformMatrix4fv(this.modelMatrix, false, modelViewMatrix);
 
-
-        const vertexCount = 12;
+        const vertexCount = this.positions.length / 3;
         gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
 
         // drawBackground(screen, depthBuffer, worldState.map.backgroundColour);
