@@ -18,7 +18,7 @@ export class CanvasComponent extends React.Component<CanvasComponentProps> {
 
     // Draws the canvas object to the screen, not actual pixels
     public render() {
-        return <canvas ref="canvas" id={this.props.id} width={this.props.dom_width} height={this.props.dom_height}/>;
+        return <canvas ref="canvas" id={this.props.id} width={this.props.dom_width / this.props.resolution} height={this.props.dom_height / this.props.resolution} style={{width: this.props.dom_width, height: this.props.dom_height, imageRendering: "pixelated"}}/>;
     }
 
     // Gets the image data from the canvas object
