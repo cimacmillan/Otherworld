@@ -59,13 +59,13 @@ export class GameComponent extends React.Component {
             loop,
             world: {
                 map: initialiseMap(this.resourceManager),
-                camera: initialiseCamera(screen),
             },
             audio: {
                 sound,
             },
             render: {
-                screen
+                screen,
+                camera: initialiseCamera(screen),
             },
         };
 
@@ -83,12 +83,12 @@ export class GameComponent extends React.Component {
     }
 
     private update = () => {
-        updateInput(this.gameState.world.camera);
+        updateInput(this.gameState.render.camera);
     }
 
     private draw = () => {
         // Create the image
-        this.renderService.createImage(this.gameState.render, this.gameState.world);
+        this.renderService.draw(this.gameState.render);
         // Draw the image data to the canvas
         // (this.refs.main_canvas as CanvasComponent).writeImageData();
     }

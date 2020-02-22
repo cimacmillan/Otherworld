@@ -48,12 +48,12 @@ export class RenderService implements RenderInterface {
         
         glm.mat4.rotateY(modelViewMatrix,     // destination matrix
             modelViewMatrix,     // matrix to translate
-            worldState.camera.angle);  // amount to translate
+            renderState.camera.angle);  // amount to translate
 
 
         glm.mat4.translate(modelViewMatrix,     // destination matrix
                     modelViewMatrix,     // matrix to translate
-                    [-worldState.camera.position.x, -worldState.camera.height, -worldState.camera.position.y]);  // amount to translate
+                    [-renderState.camera.position.x, -renderState.camera.height, -renderState.camera.position.y]);  // amount to translate
 
     }
 
