@@ -6,16 +6,29 @@ import { vsSource } from "./shaders/basic/Vertex";
 import { fsSource } from "./shaders/basic/Fragment";
 import { RenderInterface, RenderItem, Sprite } from "./RenderInterface";
 
+interface SpriteRef {
+    sprite: Sprite,
+    renderId: number;
+}
+
 export class RenderService implements RenderInterface {
+
+    private renderIdCounter: number = 0;
+    private requireConstruction: boolean = false;
+    private requireUpdate: boolean = false;
+
+    private spriteArray: Array<SpriteRef> = [];
 
     private shaderProgram: WebGLProgram;
     private positionBuffer: WebGLBuffer;
+    private colourBuffer: WebGLBuffer;
     private vertexPosition: number;
+    private vertexColour: number;
     private projectionMatrix: WebGLUniformLocation;
     private modelMatrix: WebGLUniformLocation;
 
-
     private positions: Float32Array;
+    private colours: Float32Array;
 
     private triangles =  10000;
 
@@ -23,10 +36,13 @@ export class RenderService implements RenderInterface {
         const gl = renderState.screen.getOpenGL();
         this.shaderProgram = initShaderProgram(gl, vsSource, fsSource);
         this.vertexPosition = gl.getAttribLocation(this.shaderProgram, 'aVertexPosition');
+        this.vertexColour = gl.getAttribLocation(this.shaderProgram, 'colour');
+
         this.projectionMatrix = gl.getUniformLocation(this.shaderProgram, 'uProjectionMatrix');
         this.modelMatrix = gl.getUniformLocation(this.shaderProgram, 'uModelViewMatrix');
 
         this.positionBuffer = gl.createBuffer();
+        this.colourBuffer = gl.createBuffer();
 
         const pos = [];
         for (let i = 0; i < this.triangles; i ++ ){
@@ -36,9 +52,30 @@ export class RenderService implements RenderInterface {
                 -1.0, -1.0, -i - 10, 
             ]);
         }
+
+        const colours = [];
+        const a = 0.3;
+        for (let i = 0; i < this.triangles; i ++ ){
+            colours.push(...[
+                1, 1, 1, a
+            ]);
+            colours.push(...[
+                1, 1, 1, a
+            ]);
+            colours.push(...[
+                1, 1, 1, a
+            ]);
+        }
+
+
         this.positions = new Float32Array(pos);
+        this.colours = new Float32Array(colours);
+        
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW);        
+        gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW);        
     
     }
 
@@ -108,6 +145,10 @@ export class RenderService implements RenderInterface {
         gl.vertexAttribPointer(this.vertexPosition, numComponents, type, normalize, stride, offset); 
         gl.enableVertexAttribArray(this.vertexPosition);
 
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
+        gl.vertexAttribPointer(this.vertexColour, 4, gl.FLOAT, normalize, stride, offset); 
+        gl.enableVertexAttribArray(this.vertexColour);
+
         gl.useProgram(this.shaderProgram);
         gl.uniformMatrix4fv(this.projectionMatrix, false, projectionMatrix);
         gl.uniformMatrix4fv(this.modelMatrix, false, modelViewMatrix);
@@ -116,18 +157,57 @@ export class RenderService implements RenderInterface {
         gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
     }
 
-    public createSprite() {
+    
+
+    public createSprite(param: Sprite) {
+        this.renderIdCounter++;
+        this.spriteArray.push({sprite: param, renderId: this.renderIdCounter});
+        this.requireConstruction = true;
         return {
-            renderId: 0
+            renderId: this.renderIdCounter
         }
     }
 
     public updateSprite(ref: RenderItem, param: Partial<Sprite>) {
-
+        const index = this.findRealIndexOf(ref.renderId);
+        if (index >= 0) {
+            this.requireUpdate = true;
+            this.spriteArray[index] = {...this.spriteArray[index], ...param};
+        }
     }
 
     public freeSprite(ref: RenderItem) {
+        const index = this.findRealIndexOf(ref.renderId);
+        if (index >= 0) {
+            this.requireConstruction = true;
+            this.spriteArray.splice(index, 1);
+        }
+    }
 
+    private findRealIndexOf(renderId: number) {
+        let found = false;
+        let start = 0;
+        let end = this.spriteArray.length;
+        let midpoint;
+        while (found == false) {
+            if (start > end) {
+                break;            
+            }
+            midpoint = ~~((start + end) / 2);
+            const checkId = this.spriteArray[midpoint].renderId;
+            if (renderId === checkId) {
+                found = true;
+                break;
+            } else if (renderId < checkId) {
+                end = midpoint - 1;
+            } else if (renderId > checkId) {
+                start = midpoint + 1;
+            }
+        }
+        if (found === true) {
+            return midpoint;
+        }
+        return -1;
     }
 
 }

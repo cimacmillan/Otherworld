@@ -12,7 +12,7 @@ export interface RenderItem {
 }
 
 export interface RenderInterface {
-    createSprite: () => RenderItem;
+    createSprite: (param: Sprite) => RenderItem;
     updateSprite: (ref: RenderItem, param: Partial<Sprite>) => void; 
     freeSprite: (ref: RenderItem) => void;
 

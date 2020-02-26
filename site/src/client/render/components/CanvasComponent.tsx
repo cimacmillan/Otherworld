@@ -24,7 +24,7 @@ export class CanvasComponent extends React.Component<CanvasComponentProps> {
     // Gets the image data from the canvas object
     public componentDidMount() {
         this.canvas = this.refs.canvas as HTMLCanvasElement;
-        this.canvasContext = this.canvas.getContext("webgl");
+        this.canvasContext = this.canvas.getContext("webgl", { alpha: false });
         // this.imageData = this.canvasContext.createImageData(this.props.width, this.props.height);
         // this.canvasContext.imageSmoothingEnabled = false;
     }
