@@ -1,5 +1,4 @@
 import { RenderState } from "../state/render/RenderState";
-import { WorldState } from "../state/world/WorldState";
 import { initShaderProgram } from "./shaders/ShaderCompiler";
 import * as glm from "gl-matrix";
 import { vsSource } from "./shaders/basic/Vertex";
@@ -31,8 +30,6 @@ export class RenderService implements RenderInterface {
     private positions: Float32Array;
     private colours: Float32Array;
 
-    private triangles =  10000;
-
     public init(renderState: RenderState) {
         const gl = renderState.screen.getOpenGL();
         this.shaderProgram = initShaderProgram(gl, vsSource, fsSource);
@@ -45,32 +42,6 @@ export class RenderService implements RenderInterface {
         this.positionBuffer = gl.createBuffer();
         this.colourBuffer = gl.createBuffer();
 
-        // const pos = [];
-        // for (let i = 0; i < this.triangles; i ++ ){
-        //     pos.push(...[
-        //         -1.0,  1.0, -i - 10,
-        //         1.0,  1.0, -i - 10,
-        //         -1.0, -1.0, -i - 10, 
-        //     ]);
-        // }
-
-        // const colours = [];
-        // const a = 0.3;
-        // for (let i = 0; i < this.triangles; i ++ ){
-        //     colours.push(...[
-        //         1, 1, 1, a
-        //     ]);
-        //     colours.push(...[
-        //         1, 1, 1, a
-        //     ]);
-        //     colours.push(...[
-        //         1, 1, 1, a
-        //     ]);
-        // }
-
-        // this.positions = new Float32Array(pos);
-        // this.colours = new Float32Array(colours);
-        
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
 
@@ -127,32 +98,9 @@ export class RenderService implements RenderInterface {
             modelViewMatrix,     // matrix to translate
             renderState.camera.angle);  // amount to translate
 
-
         glm.mat4.translate(modelViewMatrix,     // destination matrix
                     modelViewMatrix,     // matrix to translate
                     [-renderState.camera.position.x, -renderState.camera.height, -renderState.camera.position.y]);  // amount to translate
-
-   
-        // this.time += 0.05;
-
-        // for (let i = 0; i < this.triangles; i ++ ){
-        //     const index = i * 3 * 3;
-        //     const sin = Math.sin(i * 0.05 + this.time) * 10;
-
-        //     this.positions[index] = -1.0 + sin;
-        //     this.positions[index + 1] = 1.0;
-        //     this.positions[index + 2] = -i - 10;
-
-        //     this.positions[index + 3] = 1.0 + sin;
-        //     this.positions[index + 4] = 1.0;
-        //     this.positions[index + 5] = -i - 10;
-
-        //     this.positions[index + 6] = -1.0 + sin;
-        //     this.positions[index + 7] = -1.0;
-        //     this.positions[index + 8] = -i - 10;
-        // }
-
-        // if (!this.positions || this.positions.length === 0) return;
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW);       
@@ -198,9 +146,6 @@ export class RenderService implements RenderInterface {
             length * 2 * 3 * 4
         ).fill(0));
 
-
-        // reconstruct position arrays
-
         for (let i = 0; i < this.spriteArray.length; i++) {
             this.inject(i, this.spriteArray[i].sprite);
             this.spriteArray[i].requireUpdate = false;
@@ -211,12 +156,6 @@ export class RenderService implements RenderInterface {
     }
 
     private updateArray(gl: WebGLRenderingContext) {
-        // for (let i = 0; i < this.spriteArray.length; i++) {
-        //     if (this.spriteArray[i].requireUpdate) {
-        //         this.inject(i, this.spriteArray[i].sprite);
-        //         this.spriteArray[i].requireUpdate = false;
-        //     }
-        // }
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
