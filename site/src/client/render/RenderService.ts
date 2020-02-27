@@ -9,6 +9,7 @@ import { RenderInterface, RenderItem, Sprite } from "./RenderInterface";
 interface SpriteRef {
     sprite: Sprite,
     renderId: number;
+    requireUpdate: boolean;
 }
 
 export class RenderService implements RenderInterface {
@@ -44,44 +45,64 @@ export class RenderService implements RenderInterface {
         this.positionBuffer = gl.createBuffer();
         this.colourBuffer = gl.createBuffer();
 
-        const pos = [];
-        for (let i = 0; i < this.triangles; i ++ ){
-            pos.push(...[
-                -1.0,  1.0, -i - 10,
-                1.0,  1.0, -i - 10,
-                -1.0, -1.0, -i - 10, 
-            ]);
-        }
+        // const pos = [];
+        // for (let i = 0; i < this.triangles; i ++ ){
+        //     pos.push(...[
+        //         -1.0,  1.0, -i - 10,
+        //         1.0,  1.0, -i - 10,
+        //         -1.0, -1.0, -i - 10, 
+        //     ]);
+        // }
 
-        const colours = [];
-        const a = 0.3;
-        for (let i = 0; i < this.triangles; i ++ ){
-            colours.push(...[
-                1, 1, 1, a
-            ]);
-            colours.push(...[
-                1, 1, 1, a
-            ]);
-            colours.push(...[
-                1, 1, 1, a
-            ]);
-        }
+        // const colours = [];
+        // const a = 0.3;
+        // for (let i = 0; i < this.triangles; i ++ ){
+        //     colours.push(...[
+        //         1, 1, 1, a
+        //     ]);
+        //     colours.push(...[
+        //         1, 1, 1, a
+        //     ]);
+        //     colours.push(...[
+        //         1, 1, 1, a
+        //     ]);
+        // }
 
-
-        this.positions = new Float32Array(pos);
-        this.colours = new Float32Array(colours);
+        // this.positions = new Float32Array(pos);
+        // this.colours = new Float32Array(colours);
         
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW);        
+        gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW); 
+        
+        for (let i = 0; i < 100; i ++) {
+
+            this.createSprite(
+                {
+                    position: [0, i],
+                    size: [1, 1],
+                    height: 0
+                }
+            );
+
+        } 
     
     }
 
-    private time = 0;
+    // private time = 0;
 
     public draw(renderState: RenderState) {
+
+        if (this.requireConstruction) {
+            this.reconstructArray(renderState.screen.getOpenGL());
+        }
+
+        if (this.requireUpdate) {
+            this.updateArray(renderState.screen.getOpenGL());
+        }
+
         const gl = renderState.screen.getOpenGL();
         gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
         gl.clearDepth(1.0);                 // Clear everything
@@ -113,24 +134,26 @@ export class RenderService implements RenderInterface {
                     [-renderState.camera.position.x, -renderState.camera.height, -renderState.camera.position.y]);  // amount to translate
 
    
-        this.time += 0.05;
+        // this.time += 0.05;
 
-        for (let i = 0; i < this.triangles; i ++ ){
-            const index = i * 3 * 3;
-            const sin = Math.sin(i * 0.05 + this.time) * 10;
+        // for (let i = 0; i < this.triangles; i ++ ){
+        //     const index = i * 3 * 3;
+        //     const sin = Math.sin(i * 0.05 + this.time) * 10;
 
-            this.positions[index] = -1.0 + sin;
-            this.positions[index + 1] = 1.0;
-            this.positions[index + 2] = -i - 10;
+        //     this.positions[index] = -1.0 + sin;
+        //     this.positions[index + 1] = 1.0;
+        //     this.positions[index + 2] = -i - 10;
 
-            this.positions[index + 3] = 1.0 + sin;
-            this.positions[index + 4] = 1.0;
-            this.positions[index + 5] = -i - 10;
+        //     this.positions[index + 3] = 1.0 + sin;
+        //     this.positions[index + 4] = 1.0;
+        //     this.positions[index + 5] = -i - 10;
 
-            this.positions[index + 6] = -1.0 + sin;
-            this.positions[index + 7] = -1.0;
-            this.positions[index + 8] = -i - 10;
-        }
+        //     this.positions[index + 6] = -1.0 + sin;
+        //     this.positions[index + 7] = -1.0;
+        //     this.positions[index + 8] = -i - 10;
+        // }
+
+        // if (!this.positions || this.positions.length === 0) return;
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW);       
@@ -157,11 +180,120 @@ export class RenderService implements RenderInterface {
         gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
     }
 
-    
+    private reconstructArray(gl: WebGLRenderingContext) {
+
+        const length = this.spriteArray.length;
+
+        this.positions = new Float32Array(new Array(
+            length * 2 * 3 * 3
+        ).fill(0));
+
+        this.colours = new Float32Array(new Array(
+            length * 2 * 3 * 4
+        ).fill(0));
+
+
+        // reconstruct position arrays
+
+        for (let i = 0; i < this.spriteArray.length; i++) {
+            this.inject(i, this.spriteArray[i].sprite);
+            this.spriteArray[i].requireUpdate = false;
+        }
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW);   
+        
+        this.requireUpdate = false;
+    }
+
+    private updateArray(gl: WebGLRenderingContext) {
+        for (let i = 0; i < this.spriteArray.length; i++) {
+            if (this.spriteArray[i].requireUpdate) {
+                this.inject(i, this.spriteArray[i].sprite);
+                this.spriteArray[i].requireUpdate = false;
+            }
+        }
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW);       
+    }
+
+    private inject(index: number, sprite: Sprite) {
+        const t1i = index * 2 * 3 * 3;
+
+        const c1i = index * 2 * 3 * 4;
+
+        const halfWidth = sprite.size[0] / 2;
+        const halfHeight = sprite.size[1] / 2;
+        const x = sprite.position[0];
+        const y = sprite.height;
+        const z = sprite.position[1];
+
+        this.positions[t1i] = x - halfWidth;
+        this.positions[t1i + 1] = y - halfHeight;
+        this.positions[t1i + 2] = z;
+
+        this.positions[t1i + 3] = x + halfWidth;
+        this.positions[t1i + 4] = y - halfHeight;
+        this.positions[t1i + 5] = z;
+
+        this.positions[t1i + 6] = x - halfWidth;
+        this.positions[t1i + 7] = y + halfHeight;
+        this.positions[t1i + 8] = z;
+
+
+        this.positions[t1i + 9] = x + halfWidth;
+        this.positions[t1i + 10] = y - halfHeight;
+        this.positions[t1i + 11] = z;
+
+        this.positions[t1i + 12] = x + halfWidth;
+        this.positions[t1i + 13] = y + halfHeight;
+        this.positions[t1i + 14] = z;
+
+        this.positions[t1i + 15] = x - halfWidth;
+        this.positions[t1i + 16] = y + halfHeight;
+        this.positions[t1i + 17] = z;
+
+
+        this.colours[c1i] = 1;
+        this.colours[c1i + 1] = 1;
+        this.colours[c1i + 2] = 1;
+        this.colours[c1i + 3] = 1;
+
+        this.colours[c1i + 4] = 1;
+        this.colours[c1i + 5] = 1;
+        this.colours[c1i + 6] = 1;
+        this.colours[c1i + 7] = 1;
+
+        this.colours[c1i + 8] = 1;
+        this.colours[c1i + 9] = 1;
+        this.colours[c1i + 10] = 1;
+        this.colours[c1i + 11] = 1;
+
+
+        this.colours[c1i + 12] = 1;
+        this.colours[c1i + 13] = 1;
+        this.colours[c1i + 14] = 1;
+        this.colours[c1i + 15] = 1;
+
+        this.colours[c1i + 16] = 1;
+        this.colours[c1i + 17] = 1;
+        this.colours[c1i + 18] = 1;
+        this.colours[c1i + 19] = 1;
+
+        this.colours[c1i + 20] = 1;
+        this.colours[c1i + 21] = 1;
+        this.colours[c1i + 22] = 1;
+        this.colours[c1i + 23] = 1;
+
+    }
 
     public createSprite(param: Sprite) {
         this.renderIdCounter++;
-        this.spriteArray.push({sprite: param, renderId: this.renderIdCounter});
+        this.spriteArray.push({sprite: param, renderId: this.renderIdCounter, requireUpdate: false});
         this.requireConstruction = true;
         return {
             renderId: this.renderIdCounter
@@ -172,7 +304,8 @@ export class RenderService implements RenderInterface {
         const index = this.findRealIndexOf(ref.renderId);
         if (index >= 0) {
             this.requireUpdate = true;
-            this.spriteArray[index] = {...this.spriteArray[index], ...param};
+            this.spriteArray[index].sprite = {...this.spriteArray[index].sprite, ...param};
+            this.spriteArray[index].requireUpdate = true;
         }
     }
 
