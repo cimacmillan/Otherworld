@@ -77,11 +77,11 @@ export class RenderService implements RenderInterface {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW); 
         
-        for (let i = 0; i < 100; i ++) {
+        for (let i = 0; i < 1000; i ++) {
 
             this.createSprite(
                 {
-                    position: [0, i],
+                    position: [0, -i],
                     size: [1, 1],
                     height: 0
                 }
@@ -91,10 +91,9 @@ export class RenderService implements RenderInterface {
     
     }
 
-    // private time = 0;
+    private time = 0;
 
     public draw(renderState: RenderState) {
-
         if (this.requireConstruction) {
             this.reconstructArray(renderState.screen.getOpenGL());
         }
@@ -178,6 +177,13 @@ export class RenderService implements RenderInterface {
 
         const vertexCount = this.positions.length / 3;
         gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
+
+        for (let i = 0; i < 1000; i ++) {
+            this.updateSprite({renderId: i + 1}, {
+                position: [Math.sin(this.time + i / 10), -i],
+            });
+        } 
+        this.time += 0.01;
     }
 
     private reconstructArray(gl: WebGLRenderingContext) {
@@ -200,25 +206,22 @@ export class RenderService implements RenderInterface {
             this.spriteArray[i].requireUpdate = false;
         }
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW);   
-        
-        this.requireUpdate = false;
+        this.updateArray(gl);
+        this.requireConstruction = false;
     }
 
     private updateArray(gl: WebGLRenderingContext) {
-        for (let i = 0; i < this.spriteArray.length; i++) {
-            if (this.spriteArray[i].requireUpdate) {
-                this.inject(i, this.spriteArray[i].sprite);
-                this.spriteArray[i].requireUpdate = false;
-            }
-        }
+        // for (let i = 0; i < this.spriteArray.length; i++) {
+        //     if (this.spriteArray[i].requireUpdate) {
+        //         this.inject(i, this.spriteArray[i].sprite);
+        //         this.spriteArray[i].requireUpdate = false;
+        //     }
+        // }
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW);       
+        gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW); 
+        this.requireUpdate = false;      
     }
 
     private inject(index: number, sprite: Sprite) {
@@ -303,9 +306,8 @@ export class RenderService implements RenderInterface {
     public updateSprite(ref: RenderItem, param: Partial<Sprite>) {
         const index = this.findRealIndexOf(ref.renderId);
         if (index >= 0) {
+            this.inject(index, {...this.spriteArray[index].sprite, ...param});
             this.requireUpdate = true;
-            this.spriteArray[index].sprite = {...this.spriteArray[index].sprite, ...param};
-            this.spriteArray[index].requireUpdate = true;
         }
     }
 
