@@ -1,5 +1,6 @@
 export const vsSource = `
     attribute vec4 aVertexPosition;
+    attribute vec4 aVertexTranslation;
     attribute vec4 colour;
 
     varying lowp vec4 vColor;
@@ -8,8 +9,16 @@ export const vsSource = `
     uniform mat4 uProjectionMatrix;
 
     void main() {
+      mat4 billboardMatrix = mat4(
+        uModelViewMatrix[0][0], 0, uModelViewMatrix[0][2], 0,
+        0, 1, 0, 0,
+        uModelViewMatrix[2][0], 0, uModelViewMatrix[2][2], 0,
+        0, 0, 0, 1
+      );
+      vec4 rotatedPosition = (aVertexPosition * billboardMatrix) + aVertexTranslation;
+
       vColor = colour;
-      gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+      gl_Position = uProjectionMatrix * uModelViewMatrix * rotatedPosition;
     }
   `;
 

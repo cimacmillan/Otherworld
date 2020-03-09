@@ -21,25 +21,32 @@ export class RenderService implements RenderInterface {
 
     private shaderProgram: WebGLProgram;
     private positionBuffer: WebGLBuffer;
-    private colourBuffer: WebGLBuffer;
+    private colourBuffer: WebGLBuffer;    
+    private translationBuffer: WebGLBuffer;
+
     private vertexPosition: number;
     private vertexColour: number;
+    private vertexTranslation: number;
+
     private projectionMatrix: WebGLUniformLocation;
     private modelMatrix: WebGLUniformLocation;
 
     private positions: Float32Array;
     private colours: Float32Array;
+    private translations: Float32Array;
 
     public init(renderState: RenderState) {
         const gl = renderState.screen.getOpenGL();
         this.shaderProgram = initShaderProgram(gl, vsSource, fsSource);
         this.vertexPosition = gl.getAttribLocation(this.shaderProgram, 'aVertexPosition');
         this.vertexColour = gl.getAttribLocation(this.shaderProgram, 'colour');
+        this.vertexTranslation = gl.getAttribLocation(this.shaderProgram, 'aVertexTranslation');
 
         this.projectionMatrix = gl.getUniformLocation(this.shaderProgram, 'uProjectionMatrix');
         this.modelMatrix = gl.getUniformLocation(this.shaderProgram, 'uModelViewMatrix');
 
         this.positionBuffer = gl.createBuffer();
+        this.translationBuffer = gl.createBuffer();
         this.colourBuffer = gl.createBuffer();
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
@@ -47,6 +54,9 @@ export class RenderService implements RenderInterface {
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW); 
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.translationBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.translations, gl.DYNAMIC_DRAW); 
         
         for (let i = 0; i < 1000; i ++) {
 
@@ -102,9 +112,6 @@ export class RenderService implements RenderInterface {
                     modelViewMatrix,     // matrix to translate
                     [-renderState.camera.position.x, -renderState.camera.height, -renderState.camera.position.y]);  // amount to translate
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW);       
-
         const numComponents = 3;  
         const type = gl.FLOAT;   
         const normalize = false;
@@ -118,6 +125,10 @@ export class RenderService implements RenderInterface {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
         gl.vertexAttribPointer(this.vertexColour, 4, gl.FLOAT, normalize, stride, offset); 
         gl.enableVertexAttribArray(this.vertexColour);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.translationBuffer);
+        gl.vertexAttribPointer(this.vertexTranslation, numComponents, type, normalize, stride, offset); 
+        gl.enableVertexAttribArray(this.vertexTranslation);
 
         gl.useProgram(this.shaderProgram);
         gl.uniformMatrix4fv(this.projectionMatrix, false, projectionMatrix);
@@ -142,6 +153,10 @@ export class RenderService implements RenderInterface {
             length * 2 * 3 * 3
         ).fill(0));
 
+        this.translations = new Float32Array(new Array(
+            length * 2 * 3 * 3
+        ).fill(0));
+
         this.colours = new Float32Array(new Array(
             length * 2 * 3 * 4
         ).fill(0));
@@ -158,6 +173,8 @@ export class RenderService implements RenderInterface {
     private updateArray(gl: WebGLRenderingContext) {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.translationBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.translations, gl.DYNAMIC_DRAW); 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW); 
         this.requireUpdate = false;      
@@ -174,31 +191,59 @@ export class RenderService implements RenderInterface {
         const y = sprite.height;
         const z = sprite.position[1];
 
-        this.positions[t1i] = x - halfWidth;
-        this.positions[t1i + 1] = y - halfHeight;
-        this.positions[t1i + 2] = z;
+        this.positions[t1i] = -halfWidth;
+        this.positions[t1i + 1] = -halfHeight;
+        this.positions[t1i + 2] = 0;
 
-        this.positions[t1i + 3] = x + halfWidth;
-        this.positions[t1i + 4] = y - halfHeight;
-        this.positions[t1i + 5] = z;
+        this.positions[t1i + 3] = halfWidth;
+        this.positions[t1i + 4] = -halfHeight;
+        this.positions[t1i + 5] = 0;
 
-        this.positions[t1i + 6] = x - halfWidth;
-        this.positions[t1i + 7] = y + halfHeight;
-        this.positions[t1i + 8] = z;
+        this.positions[t1i + 6] = -halfWidth;
+        this.positions[t1i + 7] = +halfHeight;
+        this.positions[t1i + 8] = 0;
 
 
-        this.positions[t1i + 9] = x + halfWidth;
-        this.positions[t1i + 10] = y - halfHeight;
-        this.positions[t1i + 11] = z;
+        this.positions[t1i + 9] = +halfWidth;
+        this.positions[t1i + 10] = -halfHeight;
+        this.positions[t1i + 11] = 0;
 
-        this.positions[t1i + 12] = x + halfWidth;
-        this.positions[t1i + 13] = y + halfHeight;
-        this.positions[t1i + 14] = z;
+        this.positions[t1i + 12] = +halfWidth;
+        this.positions[t1i + 13] = +halfHeight;
+        this.positions[t1i + 14] = 0;
 
-        this.positions[t1i + 15] = x - halfWidth;
-        this.positions[t1i + 16] = y + halfHeight;
-        this.positions[t1i + 17] = z;
+        this.positions[t1i + 15] = -halfWidth;
+        this.positions[t1i + 16] = +halfHeight;
+        this.positions[t1i + 17] = 0;
 
+        // 
+
+        this.translations[t1i] = x;
+        this.translations[t1i + 1] = y;
+        this.translations[t1i + 2] = z;
+
+        this.translations[t1i + 3] = x;
+        this.translations[t1i + 4] = y;
+        this.translations[t1i + 5] = z;
+
+        this.translations[t1i + 6] = x;
+        this.translations[t1i + 7] = y;
+        this.translations[t1i + 8] = z;
+
+
+        this.translations[t1i + 9] = x;
+        this.translations[t1i + 10] = y;
+        this.translations[t1i + 11] = z;
+
+        this.translations[t1i + 12] = x;
+        this.translations[t1i + 13] = y;
+        this.translations[t1i + 14] = z;
+
+        this.translations[t1i + 15] = x;
+        this.translations[t1i + 16] = y;
+        this.translations[t1i + 17] = z;
+
+        // 
 
         this.colours[c1i] = 1;
         this.colours[c1i + 1] = 1;
