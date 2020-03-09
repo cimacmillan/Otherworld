@@ -40,15 +40,15 @@ export class RenderService implements RenderInterface {
     private translations: Float32Array;
     private texture: Float32Array;
 
+    private count = 8000;
+    private sqr = Math.floor(Math.sqrt(this.count));
+
     public constructor(private resourceManager: ResourceManager) {
 
     }
 
     public init(renderState: RenderState) {
         const gl = renderState.screen.getOpenGL();
-
-        gl.enable(gl.BLEND);
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
         this.shaderProgram = initShaderProgram(gl, vsSource, fsSource);
         this.vertexPosition = gl.getAttribLocation(this.shaderProgram, 'aVertexPosition');
@@ -64,30 +64,41 @@ export class RenderService implements RenderInterface {
         this.colourBuffer = gl.createBuffer();
         this.textureBuffer = gl.createBuffer();
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW); 
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.translationBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.translations, gl.DYNAMIC_DRAW); 
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.texture, gl.DYNAMIC_DRAW); 
-        
-        for (let i = 0; i < 1000; i ++) {
+        for (let i = 0; i < this.count; i ++) {
 
             this.createSprite(
                 {
-                    position: [0, -i],
+                    position: this.getPos(i, this.time),
                     size: [1, 1],
-                    height: 0
+                    height: this.getHeight(i, this.time)
                 }
             );
 
         } 
     
+    }
+
+    private getPos(i: number, time: number): glm.vec2 {
+        const scale = Math.abs((Math.cos(this.time) + 2) * 2) * 0.4;
+        const x = ((i % this.sqr) - (this.sqr / 2)) * scale;
+        const z = (Math.floor(i / this.sqr) - (this.sqr / 2)) * scale;
+
+        const diss = (Math.sqrt(x * x + z * z) / 100) + ((Math.sin(this.time)) / 10);
+        const diff = 1 / (diss + 1);
+
+        const s = Math.sin(diss + this.time * diff);
+        const c = Math.cos(diss + this.time * diff);
+
+        const xTemp = c * x + z * s;
+        const zTemp = c * z - x * s;
+
+        return [xTemp, zTemp - (this.sqr / 2)];
+    }
+
+    private getHeight(i: number, time: number): number {
+        const speed = 20;
+        const height = Math.sin((i / this.count) * 100 + time * speed) + Math.cos((i % this.count) * 100 + time * speed);
+        return height;
     }
 
     private time = 0;
@@ -106,6 +117,8 @@ export class RenderService implements RenderInterface {
         gl.clearDepth(1.0);                 // Clear everything
         gl.enable(gl.DEPTH_TEST);           // Enable depth testing
         gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
+        // gl.enable(gl.BLEND);
+        // gl.blendFunc(gl.SRC_COLOR, gl.DST_COLOR);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         const fieldOfView = 45 * Math.PI / 180;   // in radians
@@ -165,9 +178,10 @@ export class RenderService implements RenderInterface {
         const vertexCount = this.positions.length / 3;
         gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
 
-        for (let i = 0; i < 1000; i ++) {
+        for (let i = 0; i < this.count; i ++) {
             this.updateSprite({renderId: i + 1}, {
-                position: [Math.sin(this.time + i / 10), -i],
+                position: this.getPos(i, this.time),
+                height: this.getHeight(i, this.time)
             });
         } 
         this.time += 0.01;
