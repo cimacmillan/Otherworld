@@ -46,6 +46,10 @@ export class RenderService implements RenderInterface {
 
     public init(renderState: RenderState) {
         const gl = renderState.screen.getOpenGL();
+
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
         this.shaderProgram = initShaderProgram(gl, vsSource, fsSource);
         this.vertexPosition = gl.getAttribLocation(this.shaderProgram, 'aVertexPosition');
         this.vertexColour = gl.getAttribLocation(this.shaderProgram, 'colour');
@@ -223,28 +227,28 @@ export class RenderService implements RenderInterface {
         const z = sprite.position[1];
 
         this.positions[t1i] = -halfWidth;
-        this.positions[t1i + 1] = -halfHeight;
+        this.positions[t1i + 1] = halfHeight;
         this.positions[t1i + 2] = 0;
 
         this.positions[t1i + 3] = halfWidth;
-        this.positions[t1i + 4] = -halfHeight;
+        this.positions[t1i + 4] = halfHeight;
         this.positions[t1i + 5] = 0;
 
         this.positions[t1i + 6] = -halfWidth;
-        this.positions[t1i + 7] = +halfHeight;
+        this.positions[t1i + 7] = -halfHeight;
         this.positions[t1i + 8] = 0;
 
 
         this.positions[t1i + 9] = +halfWidth;
-        this.positions[t1i + 10] = -halfHeight;
+        this.positions[t1i + 10] = halfHeight;
         this.positions[t1i + 11] = 0;
 
         this.positions[t1i + 12] = +halfWidth;
-        this.positions[t1i + 13] = +halfHeight;
+        this.positions[t1i + 13] = -halfHeight;
         this.positions[t1i + 14] = 0;
 
         this.positions[t1i + 15] = -halfWidth;
-        this.positions[t1i + 16] = +halfHeight;
+        this.positions[t1i + 16] = -halfHeight;
         this.positions[t1i + 17] = 0;
 
         // 
@@ -274,7 +278,7 @@ export class RenderService implements RenderInterface {
         this.translations[t1i + 16] = y;
         this.translations[t1i + 17] = z;
 
-        // 
+        // t1
 
         this.texture[tex] = 0.0;
         this.texture[tex + 1] = 0.0;
@@ -282,11 +286,19 @@ export class RenderService implements RenderInterface {
         this.texture[tex + 2] = 1.0;
         this.texture[tex + 3] = 0.0;
 
-        this.texture[tex + 4] = 1.0;
+        this.texture[tex + 4] = 0.0;
         this.texture[tex + 5] = 1.0;
 
-        this.texture[tex + 6] = 0.0;
-        this.texture[tex + 7] = 1.0;
+        // t2
+
+        this.texture[tex + 6] = 1.0;
+        this.texture[tex + 7] = 0.0;
+
+        this.texture[tex + 8] = 1.0;
+        this.texture[tex + 9] = 1.0;
+
+        this.texture[tex + 10] = 0.0;
+        this.texture[tex + 11] = 1.0;
 
         // 
 

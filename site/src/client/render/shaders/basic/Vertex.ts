@@ -9,7 +9,7 @@ export const vsSource = `
     uniform mat4 uModelViewMatrix;
     uniform mat4 uProjectionMatrix;
 
-    varying highp vec2 vTextureCoord;
+    varying lowp vec2 vTextureCoord;
 
     void main() {
       mat4 billboardMatrix = mat4(

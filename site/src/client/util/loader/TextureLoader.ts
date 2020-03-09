@@ -63,8 +63,8 @@ export function loadTexture(gl: WebGLRenderingContext, url: string): Promise<Web
         // we'll update the texture with the contents of the image.
         const level = 0;
         const internalFormat = gl.RGBA;
-        const width = 1;
-        const height = 1;
+        const width = 32;
+        const height = 32;
         const border = 0;
         const srcFormat = gl.RGBA;
         const srcType = gl.UNSIGNED_BYTE;
@@ -82,16 +82,18 @@ export function loadTexture(gl: WebGLRenderingContext, url: string): Promise<Web
             // WebGL1 has different requirements for power of 2 images
             // vs non power of 2 images so check if the image is a
             // power of 2 in both dimensions.
-            if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-                // Yes, it's a power of 2. Generate mips.
-                gl.generateMipmap(gl.TEXTURE_2D);
-            } else {
+            // if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+            //     // Yes, it's a power of 2. Generate mips.
+            //     gl.generateMipmap(gl.TEXTURE_2D);
+            // } else {
                 // No, it's not a power of 2. Turn off mips and set
                 // wrapping to clamp to edge
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-            }
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+            // }
             resolve(texture);
         };
         image.src = url;
