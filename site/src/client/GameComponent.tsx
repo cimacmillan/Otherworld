@@ -29,9 +29,9 @@ export class GameComponent extends React.Component {
 
     public async componentDidMount() {
         this.resourceManager = new ResourceManager();
-        await this.resourceManager.load();
+        await this.resourceManager.load((this.refs.main_canvas as CanvasComponent).getOpenGL());
 
-        this.renderService = new RenderService();
+        this.renderService = new RenderService(this.resourceManager);
 
         this.initState();
 

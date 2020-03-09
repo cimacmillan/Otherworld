@@ -4,6 +4,7 @@ import * as glm from "gl-matrix";
 import { vsSource } from "./shaders/basic/Vertex";
 import { fsSource } from "./shaders/basic/Fragment";
 import { RenderInterface, RenderItem, Sprite } from "./RenderInterface";
+import { ResourceManager } from "../resources/ResourceManager";
 
 interface SpriteRef {
     sprite: Sprite,
@@ -23,10 +24,13 @@ export class RenderService implements RenderInterface {
     private positionBuffer: WebGLBuffer;
     private colourBuffer: WebGLBuffer;    
     private translationBuffer: WebGLBuffer;
+    private textureBuffer: WebGLBuffer;
 
     private vertexPosition: number;
     private vertexColour: number;
     private vertexTranslation: number;
+    private texturePosition: number;
+    private textureSampler: WebGLUniformLocation;
 
     private projectionMatrix: WebGLUniformLocation;
     private modelMatrix: WebGLUniformLocation;
@@ -34,6 +38,11 @@ export class RenderService implements RenderInterface {
     private positions: Float32Array;
     private colours: Float32Array;
     private translations: Float32Array;
+    private texture: Float32Array;
+
+    public constructor(private resourceManager: ResourceManager) {
+
+    }
 
     public init(renderState: RenderState) {
         const gl = renderState.screen.getOpenGL();
@@ -41,13 +50,15 @@ export class RenderService implements RenderInterface {
         this.vertexPosition = gl.getAttribLocation(this.shaderProgram, 'aVertexPosition');
         this.vertexColour = gl.getAttribLocation(this.shaderProgram, 'colour');
         this.vertexTranslation = gl.getAttribLocation(this.shaderProgram, 'aVertexTranslation');
-
+        this.texturePosition = gl.getAttribLocation(this.shaderProgram, 'aTextureCoord');
+        this.textureSampler = gl.getUniformLocation(this.shaderProgram, 'uSampler');
         this.projectionMatrix = gl.getUniformLocation(this.shaderProgram, 'uProjectionMatrix');
         this.modelMatrix = gl.getUniformLocation(this.shaderProgram, 'uModelViewMatrix');
 
         this.positionBuffer = gl.createBuffer();
         this.translationBuffer = gl.createBuffer();
         this.colourBuffer = gl.createBuffer();
+        this.textureBuffer = gl.createBuffer();
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
@@ -57,6 +68,9 @@ export class RenderService implements RenderInterface {
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.translationBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.translations, gl.DYNAMIC_DRAW); 
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.texture, gl.DYNAMIC_DRAW); 
         
         for (let i = 0; i < 1000; i ++) {
 
@@ -130,9 +144,19 @@ export class RenderService implements RenderInterface {
         gl.vertexAttribPointer(this.vertexTranslation, numComponents, type, normalize, stride, offset); 
         gl.enableVertexAttribArray(this.vertexTranslation);
 
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
+        gl.vertexAttribPointer(this.texturePosition, 2, type, normalize, stride, offset); 
+        gl.enableVertexAttribArray(this.texturePosition);
+
         gl.useProgram(this.shaderProgram);
         gl.uniformMatrix4fv(this.projectionMatrix, false, projectionMatrix);
         gl.uniformMatrix4fv(this.modelMatrix, false, modelViewMatrix);
+
+        gl.activeTexture(gl.TEXTURE0);
+        // Bind the texture to texture unit 0
+        gl.bindTexture(gl.TEXTURE_2D, this.resourceManager.sprite);
+        // Tell the shader we bound the texture to texture unit 0
+        gl.uniform1i(this.textureSampler, 0);
 
         const vertexCount = this.positions.length / 3;
         gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
@@ -151,6 +175,10 @@ export class RenderService implements RenderInterface {
 
         this.positions = new Float32Array(new Array(
             length * 2 * 3 * 3
+        ).fill(0));
+
+        this.texture = new Float32Array(new Array(
+            length * 2 * 3 * 2
         ).fill(0));
 
         this.translations = new Float32Array(new Array(
@@ -177,11 +205,14 @@ export class RenderService implements RenderInterface {
         gl.bufferData(gl.ARRAY_BUFFER, this.translations, gl.DYNAMIC_DRAW); 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW); 
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.texture, gl.DYNAMIC_DRAW); 
         this.requireUpdate = false;      
     }
 
     private inject(index: number, sprite: Sprite) {
         const t1i = index * 2 * 3 * 3;
+        const tex = index * 2 * 3 * 2;
 
         const c1i = index * 2 * 3 * 4;
 
@@ -242,6 +273,20 @@ export class RenderService implements RenderInterface {
         this.translations[t1i + 15] = x;
         this.translations[t1i + 16] = y;
         this.translations[t1i + 17] = z;
+
+        // 
+
+        this.texture[tex] = 0.0;
+        this.texture[tex + 1] = 0.0;
+
+        this.texture[tex + 2] = 1.0;
+        this.texture[tex + 3] = 0.0;
+
+        this.texture[tex + 4] = 1.0;
+        this.texture[tex + 5] = 1.0;
+
+        this.texture[tex + 6] = 0.0;
+        this.texture[tex + 7] = 1.0;
 
         // 
 

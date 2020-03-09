@@ -2,11 +2,14 @@ export const vsSource = `
     attribute vec4 aVertexPosition;
     attribute vec4 aVertexTranslation;
     attribute vec4 colour;
+    attribute vec2 aTextureCoord;
 
     varying lowp vec4 vColor;
 
     uniform mat4 uModelViewMatrix;
     uniform mat4 uProjectionMatrix;
+
+    varying highp vec2 vTextureCoord;
 
     void main() {
       mat4 billboardMatrix = mat4(
@@ -19,6 +22,7 @@ export const vsSource = `
 
       vColor = colour;
       gl_Position = uProjectionMatrix * uModelViewMatrix * rotatedPosition;
+      vTextureCoord = aTextureCoord;
     }
   `;
 
