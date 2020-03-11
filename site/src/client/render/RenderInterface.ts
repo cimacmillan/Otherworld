@@ -12,10 +12,6 @@ export interface RenderItem {
 }
 
 export interface RenderInterface {
-    createSprite: (param: Sprite) => RenderItem;
-    updateSprite: (ref: RenderItem, param: Partial<Sprite>) => void; 
-    freeSprite: (ref: RenderItem) => void;
-
     init: (renderState: RenderState) => void;
     draw: (renderState: RenderState) => void;
 }
