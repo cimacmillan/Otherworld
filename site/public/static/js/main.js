@@ -590,18 +590,6 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nfuncti
 
 /***/ }),
 
-/***/ "./site/build/client/util/math/Array.js":
-/*!**********************************************!*\
-  !*** ./site/build/client/util/math/Array.js ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nfunction fillPattern(array, value) {\n    for (let x = 0; x < array.length; x++) {\n        array[x] = value[x % value.length];\n    }\n}\nexports.fillPattern = fillPattern;\nfunction fill(array, value) {\n    for (let x = 0; x < array.length; x++) {\n        array[x] = value;\n    }\n}\nexports.fill = fill;\n//# sourceMappingURL=Array.js.map\n\n//# sourceURL=webpack:///./site/build/client/util/math/Array.js?");
-
-/***/ }),
-
 /***/ "./site/build/client/util/math/Basic.js":
 /*!**********************************************!*\
   !*** ./site/build/client/util/math/Basic.js ***!
@@ -638,6 +626,18 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nfuncti
 
 /***/ }),
 
+/***/ "./site/build/client/util/math/SyncedArray.js":
+/*!****************************************************!*\
+  !*** ./site/build/client/util/math/SyncedArray.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nclass SyncedArray {\n    createItem(obj) {\n        this.uniqueId++;\n        this.array.push({\n            obj,\n            uniqueId: this.uniqueId,\n            requireUpdate: false\n        });\n        this.requireConstruction = true;\n        return this.uniqueId;\n    }\n    updateItem(ref, param) {\n        const index = this.findRealIndexOf(ref.renderId);\n        if (index >= 0) {\n            this.requireUpdate = true;\n        }\n    }\n    freeItem(ref) {\n        const index = this.findRealIndexOf(ref.renderId);\n        if (index >= 0) {\n            this.requireConstruction = true;\n            this.spriteArray.splice(index, 1);\n        }\n    }\n}\nexports.SyncedArray = SyncedArray;\n//# sourceMappingURL=SyncedArray.js.map\n\n//# sourceURL=webpack:///./site/build/client/util/math/SyncedArray.js?");
+
+/***/ }),
+
 /***/ "./site/build/client/util/math/Vector.js":
 /*!***********************************************!*\
   !*** ./site/build/client/util/math/Vector.js ***!
@@ -658,7 +658,7 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexport
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nfunction __export(m) {\n    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];\n}\nObject.defineProperty(exports, \"__esModule\", { value: true });\n__export(__webpack_require__(/*! ./Array */ \"./site/build/client/util/math/Array.js\"));\n__export(__webpack_require__(/*! ./Basic */ \"./site/build/client/util/math/Basic.js\"));\n__export(__webpack_require__(/*! ./Sorting */ \"./site/build/client/util/math/Sorting.js\"));\n__export(__webpack_require__(/*! ./Vector */ \"./site/build/client/util/math/Vector.js\"));\n__export(__webpack_require__(/*! ./Random */ \"./site/build/client/util/math/Random.js\"));\n//# sourceMappingURL=index.js.map\n\n//# sourceURL=webpack:///./site/build/client/util/math/index.js?");
+eval("\nfunction __export(m) {\n    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];\n}\nObject.defineProperty(exports, \"__esModule\", { value: true });\n__export(__webpack_require__(/*! ./SyncedArray */ \"./site/build/client/util/math/SyncedArray.js\"));\n__export(__webpack_require__(/*! ./Basic */ \"./site/build/client/util/math/Basic.js\"));\n__export(__webpack_require__(/*! ./Sorting */ \"./site/build/client/util/math/Sorting.js\"));\n__export(__webpack_require__(/*! ./Vector */ \"./site/build/client/util/math/Vector.js\"));\n__export(__webpack_require__(/*! ./Random */ \"./site/build/client/util/math/Random.js\"));\n//# sourceMappingURL=index.js.map\n\n//# sourceURL=webpack:///./site/build/client/util/math/index.js?");
 
 /***/ }),
 

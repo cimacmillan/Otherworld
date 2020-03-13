@@ -1,4 +1,4 @@
-export * from "./Array";
+export * from "./SyncedArray";
 export * from "./Basic";
 export * from "./Sorting";
 export * from "./Vector";
