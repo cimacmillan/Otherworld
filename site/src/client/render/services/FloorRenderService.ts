@@ -1,6 +1,6 @@
 // TODO change
-import { Sprite } from "../RenderInterface";
-import { RenderItemInterface, RenderItem } from "../RenderItemInterface";
+import { Sprite } from "../types/RenderInterface";
+import { RenderItemInterface, RenderItem } from "../types/RenderItemInterface";
 import { RenderState } from "../../state/render/RenderState";
 import { initShaderProgram } from "../shaders/ShaderCompiler";
 import { vsSource } from "../shaders/basic/Vertex";

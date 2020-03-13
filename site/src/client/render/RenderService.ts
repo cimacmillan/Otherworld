@@ -3,7 +3,7 @@ import { initShaderProgram } from "./shaders/ShaderCompiler";
 import * as glm from "gl-matrix";
 import { vsSource } from "./shaders/basic/Vertex";
 import { fsSource } from "./shaders/basic/Fragment";
-import { RenderInterface, RenderItem, Sprite } from "./RenderInterface";
+import { RenderInterface, RenderItem, Sprite } from "./types/RenderInterface";
 import { ResourceManager } from "../resources/ResourceManager";
 import { SpriteRenderService } from "./services/SpriteRenderService";
 
@@ -11,7 +11,7 @@ export class RenderService implements RenderInterface {
 
     public spriteRenderService: SpriteRenderService;
 
-    private count = 8000;
+    private count = 16000;
     private sqr = Math.floor(Math.sqrt(this.count));
 
     public constructor(private resourceManager: ResourceManager) {
@@ -50,9 +50,12 @@ export class RenderService implements RenderInterface {
     }
 
     private getHeight(i: number, time: number): number {
-        const speed = 20;
+        const speed = 2;
         const height = Math.sin((i / this.count) * 100 + time * speed) + Math.cos((i % this.count) * 100 + time * speed);
-        return height;
+        const x = ((i % this.sqr) - (this.sqr / 2));
+        const z = (Math.floor(i / this.sqr) - (this.sqr / 2));
+        const diss = (Math.sqrt(x * x + z * z + 100));
+        return (height / diss) * 100;
     }
 
     private time = 0;

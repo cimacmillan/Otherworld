@@ -1,5 +1,3 @@
-import { Colour } from "../../types";
-import { fillPattern } from "../../util/math/SyncedArray";
 
 export class ScreenBuffer {
   // public image_data: ImageData;
