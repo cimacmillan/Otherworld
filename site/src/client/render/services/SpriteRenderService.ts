@@ -7,20 +7,10 @@ import { initShaderProgram } from "../shaders/ShaderCompiler";
 import { vsSource } from "../shaders/basic/Vertex";
 import { fsSource } from "../shaders/basic/Fragment";
 import { vec2, mat4 } from "gl-matrix";
-
-interface SpriteRef {
-    sprite: Sprite,
-    renderId: number;
-    requireUpdate: boolean;
-}
+import { SyncedArray, ISyncedArrayRef } from "../../util/math";
 
 export class SpriteRenderService implements RenderItemInterface<Sprite> {
-
-    private renderIdCounter: number = 0;
-    private requireConstruction: boolean = false;
-    private requireUpdate: boolean = false;
-
-    private spriteArray: Array<SpriteRef> = [];
+    private spriteArray: SyncedArray<Sprite>;
 
     private shaderProgram: WebGLProgram;
     private positionBuffer: WebGLBuffer;
@@ -49,6 +39,12 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
     public init(renderState: RenderState) {
         const gl = renderState.screen.getOpenGL();
 
+        this.spriteArray = new SyncedArray({
+            onReconstruct: (array: Array<ISyncedArrayRef<Sprite>>) => this.onArrayReconstruct(gl, array),
+            onUpdate: (array: Array<ISyncedArrayRef<Sprite>>) => this.onArrayUpdate(gl, array),
+            onInjection: (index: number, ref: ISyncedArrayRef<Sprite>) => this.onInjection(index, ref.obj)
+        });
+
         this.shaderProgram = initShaderProgram(gl, vsSource, fsSource);
         this.vertexPosition = gl.getAttribLocation(this.shaderProgram, 'aVertexPosition');
         this.vertexColour = gl.getAttribLocation(this.shaderProgram, 'colour');
@@ -66,13 +62,7 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
     }
 
     public draw(renderState: RenderState) {
-        if (this.requireConstruction) {
-            this.reconstructArray(renderState.screen.getOpenGL());
-        }
-
-        if (this.requireUpdate) {
-            this.updateArray(renderState.screen.getOpenGL());
-        }
+        this.spriteArray.sync();
 
         const gl = renderState.screen.getOpenGL();
         gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
@@ -141,9 +131,8 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
     }
 
-    private reconstructArray(gl: WebGLRenderingContext) {
-
-        const length = this.spriteArray.length;
+    private onArrayReconstruct(gl: WebGLRenderingContext, array: Array<ISyncedArrayRef<Sprite>>) {
+        const length = array.length;
 
         this.positions = new Float32Array(new Array(
             length * 2 * 3 * 3
@@ -161,16 +150,14 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
             length * 2 * 3 * 4
         ).fill(0));
 
-        for (let i = 0; i < this.spriteArray.length; i++) {
-            this.inject(i, this.spriteArray[i].sprite);
-            this.spriteArray[i].requireUpdate = false;
+        for (let i = 0; i < array.length; i++) {
+            this.onInjection(i, array[i].obj);
         }
 
-        this.updateArray(gl);
-        this.requireConstruction = false;
+        this.onArrayUpdate(gl, array);
     }
 
-    private updateArray(gl: WebGLRenderingContext) {
+    private onArrayUpdate(gl: WebGLRenderingContext, array: Array<ISyncedArrayRef<Sprite>>) {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.translationBuffer);
@@ -178,11 +165,10 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW); 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.texture, gl.DYNAMIC_DRAW); 
-        this.requireUpdate = false;      
+        gl.bufferData(gl.ARRAY_BUFFER, this.texture, gl.DYNAMIC_DRAW);     
     }
 
-    private inject(index: number, sprite: Sprite) {
+    private onInjection(index: number, sprite: Sprite) {
         const t1i = index * 2 * 3 * 3;
         const tex = index * 2 * 3 * 2;
 
@@ -304,54 +290,16 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
     }
 
     public createItem(param: Sprite) {
-        this.renderIdCounter++;
-        this.spriteArray.push({sprite: param, renderId: this.renderIdCounter, requireUpdate: false});
-        this.requireConstruction = true;
         return {
-            renderId: this.renderIdCounter
-        }
+            renderId: this.spriteArray.createItem(param)
+        };
     }
 
     public updateItem(ref: RenderItem, param: Partial<Sprite>) {
-        const index = this.findRealIndexOf(ref.renderId);
-        if (index >= 0) {
-            this.inject(index, {...this.spriteArray[index].sprite, ...param});
-            this.requireUpdate = true;
-        }
+        this.spriteArray.updateItem(ref.renderId, param);
     }
 
     public freeItem(ref: RenderItem) {
-        const index = this.findRealIndexOf(ref.renderId);
-        if (index >= 0) {
-            this.requireConstruction = true;
-            this.spriteArray.splice(index, 1);
-        }
+        this.spriteArray.freeItem(ref.renderId,);
     }
-
-    private findRealIndexOf(renderId: number) {
-        let found = false;
-        let start = 0;
-        let end = this.spriteArray.length;
-        let midpoint;
-        while (found == false) {
-            if (start > end) {
-                break;            
-            }
-            midpoint = ~~((start + end) / 2);
-            const checkId = this.spriteArray[midpoint].renderId;
-            if (renderId === checkId) {
-                found = true;
-                break;
-            } else if (renderId < checkId) {
-                end = midpoint - 1;
-            } else if (renderId > checkId) {
-                start = midpoint + 1;
-            }
-        }
-        if (found === true) {
-            return midpoint;
-        }
-        return -1;
-    }
-
 }
