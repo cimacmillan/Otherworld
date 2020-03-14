@@ -78,6 +78,11 @@ export class SyncedArray<T> {
         }
         midpoint = ~~((start + end) / 2);
         const checkId = this.array[midpoint].uniqueId;
+
+        if (checkId === NaN || checkId === Infinity) {
+          return -1;
+        }
+
         if (renderId === checkId) {
             found = true;
             break;

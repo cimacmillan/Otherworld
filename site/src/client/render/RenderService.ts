@@ -11,7 +11,7 @@ export class RenderService implements RenderInterface {
 
     public spriteRenderService: SpriteRenderService;
 
-    private count = 10;
+    private count = 10000;
     private sqr = Math.floor(Math.sqrt(this.count));
 
     public constructor(private resourceManager: ResourceManager) {
