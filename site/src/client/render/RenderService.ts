@@ -11,7 +11,7 @@ export class RenderService implements RenderInterface {
 
     public spriteRenderService: SpriteRenderService;
 
-    private count = 6000;
+    private count = 10;
     private sqr = Math.floor(Math.sqrt(this.count));
 
     public constructor(private resourceManager: ResourceManager) {
@@ -61,9 +61,7 @@ export class RenderService implements RenderInterface {
     private time = 0;
 
     public draw(renderState: RenderState) {
-       
         this.spriteRenderService.draw(renderState);
-
         for (let i = 0; i < this.count; i ++) {
             this.spriteRenderService.updateItem({renderId: i + 1}, {
                 position: this.getPos(i),

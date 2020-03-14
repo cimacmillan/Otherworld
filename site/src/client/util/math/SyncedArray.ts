@@ -12,17 +12,14 @@ export interface ISyncedArrayCallbacks<T> {
 }
 
 export class SyncedArray<T> {
-  private callbacks: ISyncedArrayCallbacks<T>;
 
-  private array: Array<ISyncedArrayRef<T>>;
-  private uniqueId: number;
+  private array: Array<ISyncedArrayRef<T>> = [];
+  private uniqueId: number = 0;
 
   private requireConstruction: boolean;
   private requireUpdate: boolean;
 
-  public constructor(callbacks: ISyncedArrayCallbacks<T>) {
-    this.callbacks = callbacks;
-    this.array = [];
+  public constructor(private callbacks: ISyncedArrayCallbacks<T>) {
   }
 
   public createItem(obj: T): number {
@@ -38,10 +35,10 @@ export class SyncedArray<T> {
   public updateItem(ref: number, param: Partial<T>) {
     const index = this.findRealIndexOf(ref);
     if (index >= 0) {
-        const ref = this.array[index];
-        ref.obj = {...ref.obj, ...param};
-        this.callbacks.onInjection(index, this.array[index]);
-        this.requireUpdate = true;
+      const ref = this.array[index];
+      ref.obj = {...ref.obj, ...param};
+      this.callbacks.onInjection(index, this.array[index]);
+      this.requireUpdate = true;
     }
   }
 
@@ -67,7 +64,6 @@ export class SyncedArray<T> {
   }
 
   private findRealIndexOf(renderId: number) {
-
     if (this.array.length === 0) {
       return -1;
     }
@@ -95,6 +91,10 @@ export class SyncedArray<T> {
         return midpoint;
     }
     return -1;
+  }
+
+  public getArray() {
+    return this.array;
   }
 
 }

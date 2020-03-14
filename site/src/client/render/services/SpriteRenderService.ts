@@ -41,7 +41,7 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
 
         this.spriteArray = new SyncedArray({
             onReconstruct: (array: Array<ISyncedArrayRef<Sprite>>) => this.onArrayReconstruct(gl, array),
-            onUpdate: (array: Array<ISyncedArrayRef<Sprite>>) => this.onArrayUpdate(gl, array),
+            onUpdate: (array: Array<ISyncedArrayRef<Sprite>>) => this.onArrayUpdate(gl),
             onInjection: (index: number, ref: ISyncedArrayRef<Sprite>) => this.onInjection(index, ref.obj)
         });
 
@@ -154,10 +154,10 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
             this.onInjection(i, array[i].obj);
         }
 
-        this.onArrayUpdate(gl, array);
+        this.onArrayUpdate(gl);
     }
 
-    private onArrayUpdate(gl: WebGLRenderingContext, array: Array<ISyncedArrayRef<Sprite>>) {
+    private onArrayUpdate(gl: WebGLRenderingContext) {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.translationBuffer);
