@@ -25,3 +25,17 @@ export function getGradientIncrementor(resultStart: number, resultEnd: number, d
 export function getGradientOffset(resultStart: number, actualResultStart: number, gradientIncrementor: number) {
     return (actualResultStart - resultStart) * gradientIncrementor;
 }
+
+export function getTextureCoordinate(spriteSheetWidth: number, spriteSheetHeight: number, width: number, height: number, xPixel: number, yPixel: number): {
+    textureX: number,
+    textureY: number,
+    textureWidth: number,
+    textureHeight: number
+} {
+    return {
+        textureX: xPixel / spriteSheetWidth,
+        textureY: yPixel / spriteSheetHeight,
+        textureWidth: width / spriteSheetWidth,
+        textureHeight: height / spriteSheetHeight
+    };
+}

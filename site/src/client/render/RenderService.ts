@@ -3,6 +3,7 @@ import * as glm from "gl-matrix";
 import { RenderInterface } from "./types/RenderInterface";
 import { ResourceManager } from "../resources/ResourceManager";
 import { SpriteRenderService } from "./services/SpriteRenderService";
+import { getTextureCoordinate } from "../util/math/Basic";
 
 export class RenderService implements RenderInterface {
 
@@ -21,17 +22,14 @@ export class RenderService implements RenderInterface {
         
         ///////
         for (let i = 0; i < this.count; i ++) {
-            const xtex = 0.5 * Math.round(Math.random());
-            const ytex = 0.5 * Math.round(Math.random());
+            const xtex = 32 * Math.round(Math.random());
+            const ytex = 32 * Math.round(Math.random());
             this.spriteRenderService.createItem(
                 {
                     position: this.getPos(i),
                     size: [1, 1],
                     height: this.getHeight(i, this.time),
-                    textureX: xtex,
-                    textureY: ytex,
-                    textureWidth: 0.5,
-                    textureHeight: 0.5
+                    ...getTextureCoordinate(64, 64, 32, 32, xtex, ytex)
                 }
             );
 
