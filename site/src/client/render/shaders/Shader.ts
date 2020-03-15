@@ -1,5 +1,0 @@
-
-interface Shader {
-    source: string;
-};
-

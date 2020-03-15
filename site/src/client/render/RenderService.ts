@@ -20,7 +20,6 @@ export class RenderService implements RenderInterface {
         this.spriteRenderService.init(renderState);
         this.spriteRenderService.attachSpritesheet(this.resourceManager.sprite);
         
-        ///////
         for (let i = 0; i < this.count; i ++) {
             const xtex = 32 * Math.round(Math.random());
             const ytex = 32 * Math.round(Math.random());

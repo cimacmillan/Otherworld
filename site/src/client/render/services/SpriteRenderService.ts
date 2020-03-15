@@ -3,31 +3,20 @@
 import { Sprite } from "../types/RenderInterface";
 import { RenderItemInterface, RenderItem } from "../types/RenderItemInterface";
 import { RenderState } from "../../state/render/RenderState";
-import { initShaderProgram } from "../shaders/ShaderCompiler";
-import { vsSource } from "../shaders/basic/Vertex";
-import { fsSource } from "../shaders/basic/Fragment";
 import { vec2, mat4 } from "gl-matrix";
 import { SyncedArray, ISyncedArrayRef } from "../../util/math";
+import { compileSpriteShader } from "../shaders/Shaders";
 
 export class SpriteRenderService implements RenderItemInterface<Sprite> {
     private spriteArray: SyncedArray<Sprite>;
 
-    private shaderProgram: WebGLProgram;
+    private shader: CompiledShader;
+
     private positionBuffer: WebGLBuffer;
     private spritesheet: WebGLTexture;
-
     private colourBuffer: WebGLBuffer;    
     private translationBuffer: WebGLBuffer;
     private textureBuffer: WebGLBuffer;
-
-    private vertexPosition: number;
-    private vertexColour: number;
-    private vertexTranslation: number;
-    private texturePosition: number;
-    private textureSampler: WebGLUniformLocation;
-
-    private projectionMatrix: WebGLUniformLocation;
-    private modelMatrix: WebGLUniformLocation;
 
     private positions: Float32Array;
     private colours: Float32Array;
@@ -37,20 +26,13 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
     public init(renderState: RenderState) {
         const gl = renderState.screen.getOpenGL();
 
+        this.shader = compileSpriteShader(gl);
+
         this.spriteArray = new SyncedArray({
             onReconstruct: (array: Array<ISyncedArrayRef<Sprite>>) => this.onArrayReconstruct(gl, array),
             onUpdate: (array: Array<ISyncedArrayRef<Sprite>>) => this.onArrayUpdate(gl),
             onInjection: (index: number, ref: ISyncedArrayRef<Sprite>) => this.onInjection(index, ref.obj)
         });
-
-        this.shaderProgram = initShaderProgram(gl, vsSource, fsSource);
-        this.vertexPosition = gl.getAttribLocation(this.shaderProgram, 'aVertexPosition');
-        this.vertexColour = gl.getAttribLocation(this.shaderProgram, 'colour');
-        this.vertexTranslation = gl.getAttribLocation(this.shaderProgram, 'aVertexTranslation');
-        this.texturePosition = gl.getAttribLocation(this.shaderProgram, 'aTextureCoord');
-        this.textureSampler = gl.getUniformLocation(this.shaderProgram, 'uSampler');
-        this.projectionMatrix = gl.getUniformLocation(this.shaderProgram, 'uProjectionMatrix');
-        this.modelMatrix = gl.getUniformLocation(this.shaderProgram, 'uModelViewMatrix');
 
         this.positionBuffer = gl.createBuffer();
         this.translationBuffer = gl.createBuffer();
@@ -100,30 +82,30 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         const offset = 0;       
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-        gl.vertexAttribPointer(this.vertexPosition, numComponents, type, normalize, stride, offset); 
-        gl.enableVertexAttribArray(this.vertexPosition);
+        gl.vertexAttribPointer(this.shader.attribute.vertexPosition, numComponents, type, normalize, stride, offset); 
+        gl.enableVertexAttribArray(this.shader.attribute.vertexPosition);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
-        gl.vertexAttribPointer(this.vertexColour, 4, gl.FLOAT, normalize, stride, offset); 
-        gl.enableVertexAttribArray(this.vertexColour);
+        gl.vertexAttribPointer(this.shader.attribute.vertexColour, 4, gl.FLOAT, normalize, stride, offset); 
+        gl.enableVertexAttribArray(this.shader.attribute.vertexColour);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.translationBuffer);
-        gl.vertexAttribPointer(this.vertexTranslation, numComponents, type, normalize, stride, offset); 
-        gl.enableVertexAttribArray(this.vertexTranslation);
+        gl.vertexAttribPointer(this.shader.attribute.vertexTranslation, numComponents, type, normalize, stride, offset); 
+        gl.enableVertexAttribArray(this.shader.attribute.vertexTranslation);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
-        gl.vertexAttribPointer(this.texturePosition, 2, type, normalize, stride, offset); 
-        gl.enableVertexAttribArray(this.texturePosition);
+        gl.vertexAttribPointer(this.shader.attribute.texturePosition, 2, type, normalize, stride, offset); 
+        gl.enableVertexAttribArray(this.shader.attribute.texturePosition);
 
-        gl.useProgram(this.shaderProgram);
-        gl.uniformMatrix4fv(this.projectionMatrix, false, projectionMatrix);
-        gl.uniformMatrix4fv(this.modelMatrix, false, modelViewMatrix);
+        gl.useProgram(this.shader.shaderId);
+        gl.uniformMatrix4fv(this.shader.uniform.projectionMatrix, false, projectionMatrix);
+        gl.uniformMatrix4fv(this.shader.uniform.modelMatrix, false, modelViewMatrix);
 
         gl.activeTexture(gl.TEXTURE0);
         // Bind the texture to texture unit 0
         gl.bindTexture(gl.TEXTURE_2D, this.spritesheet);
         // Tell the shader we bound the texture to texture unit 0
-        gl.uniform1i(this.textureSampler, 0);
+        gl.uniform1i(this.shader.attribute.textureSampler, 0);
 
         const vertexCount = this.positions.length / 3;
         gl.drawArrays(gl.TRIANGLES, 0, vertexCount);

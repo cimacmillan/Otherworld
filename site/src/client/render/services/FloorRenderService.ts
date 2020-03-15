@@ -3,8 +3,8 @@ import { Sprite } from "../types/RenderInterface";
 import { RenderItemInterface, RenderItem } from "../types/RenderItemInterface";
 import { RenderState } from "../../state/render/RenderState";
 import { initShaderProgram } from "../shaders/ShaderCompiler";
-import { vsSource } from "../shaders/basic/Vertex";
-import { fsSource } from "../shaders/basic/Fragment";
+import { vsSource } from "../shaders/vertex/Vertex";
+import { fsSource } from "../shaders/fragment/Fragment";
 import { vec2, mat4 } from "gl-matrix";
 
 interface SpriteRef {
