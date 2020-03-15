@@ -5,6 +5,11 @@ export interface Sprite {
     position: glm.vec2;
     size: glm.vec2;
     height: number;
+    
+    textureX: number;
+    textureY: number;
+    textureWidth: number;
+    textureHeight: number;
 }
 
 export interface RenderItem {

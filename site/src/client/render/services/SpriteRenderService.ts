@@ -14,6 +14,8 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
 
     private shaderProgram: WebGLProgram;
     private positionBuffer: WebGLBuffer;
+    private spritesheet: WebGLTexture;
+
     private colourBuffer: WebGLBuffer;    
     private translationBuffer: WebGLBuffer;
     private textureBuffer: WebGLBuffer;
@@ -31,10 +33,6 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
     private colours: Float32Array;
     private translations: Float32Array;
     private texture: Float32Array;
-
-    constructor (private spriteSheet: WebGLTexture) {
-
-    }
 
     public init(renderState: RenderState) {
         const gl = renderState.screen.getOpenGL();
@@ -123,7 +121,7 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
 
         gl.activeTexture(gl.TEXTURE0);
         // Bind the texture to texture unit 0
-        gl.bindTexture(gl.TEXTURE_2D, this.spriteSheet);
+        gl.bindTexture(gl.TEXTURE_2D, this.spritesheet);
         // Tell the shader we bound the texture to texture unit 0
         gl.uniform1i(this.textureSampler, 0);
 
@@ -232,27 +230,32 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         this.translations[t1i + 16] = y;
         this.translations[t1i + 17] = z;
 
+        const texX = sprite.textureX;
+        const texY = sprite.textureY;
+        const texWidth = sprite.textureWidth;
+        const texHeight = sprite.textureHeight;
+
         // t1
 
-        this.texture[tex] = 0.0;
-        this.texture[tex + 1] = 0.0;
+        this.texture[tex] = texX;
+        this.texture[tex + 1] = texY;
 
-        this.texture[tex + 2] = 1.0;
-        this.texture[tex + 3] = 0.0;
+        this.texture[tex + 2] = texX + texWidth;
+        this.texture[tex + 3] = texY;
 
-        this.texture[tex + 4] = 0.0;
-        this.texture[tex + 5] = 1.0;
+        this.texture[tex + 4] = texX;
+        this.texture[tex + 5] = texY + texHeight;
 
         // t2
 
-        this.texture[tex + 6] = 1.0;
-        this.texture[tex + 7] = 0.0;
+        this.texture[tex + 6] = texX + texWidth;
+        this.texture[tex + 7] = texY;
 
-        this.texture[tex + 8] = 1.0;
-        this.texture[tex + 9] = 1.0;
+        this.texture[tex + 8] = texX + texWidth;
+        this.texture[tex + 9] = texY + texHeight;
 
-        this.texture[tex + 10] = 0.0;
-        this.texture[tex + 11] = 1.0;
+        this.texture[tex + 10] = texX
+        this.texture[tex + 11] = texY + texHeight;
 
         // 
 
@@ -301,5 +304,9 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
 
     public freeItem(ref: RenderItem) {
         this.spriteArray.freeItem(ref.renderId,);
+    }
+
+    public attachSpritesheet(spritesheet: WebGLTexture) {
+        this.spritesheet = spritesheet;
     }
 }

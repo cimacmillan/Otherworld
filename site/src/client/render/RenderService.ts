@@ -1,9 +1,6 @@
 import { RenderState } from "../state/render/RenderState";
-import { initShaderProgram } from "./shaders/ShaderCompiler";
 import * as glm from "gl-matrix";
-import { vsSource } from "./shaders/basic/Vertex";
-import { fsSource } from "./shaders/basic/Fragment";
-import { RenderInterface, RenderItem, Sprite } from "./types/RenderInterface";
+import { RenderInterface } from "./types/RenderInterface";
 import { ResourceManager } from "../resources/ResourceManager";
 import { SpriteRenderService } from "./services/SpriteRenderService";
 
@@ -15,17 +12,26 @@ export class RenderService implements RenderInterface {
     private sqr = Math.floor(Math.sqrt(this.count));
 
     public constructor(private resourceManager: ResourceManager) {
-        this.spriteRenderService = new SpriteRenderService(resourceManager.sprite);   
+        this.spriteRenderService = new SpriteRenderService();   
     }
 
     public init(renderState: RenderState) {
         this.spriteRenderService.init(renderState);
+        this.spriteRenderService.attachSpritesheet(this.resourceManager.sprite);
+        
+        ///////
         for (let i = 0; i < this.count; i ++) {
+            const xtex = 0.5 * Math.round(Math.random());
+            const ytex = 0.5 * Math.round(Math.random());
             this.spriteRenderService.createItem(
                 {
                     position: this.getPos(i),
                     size: [1, 1],
-                    height: this.getHeight(i, this.time)
+                    height: this.getHeight(i, this.time),
+                    textureX: xtex,
+                    textureY: ytex,
+                    textureWidth: 0.5,
+                    textureHeight: 0.5
                 }
             );
 
