@@ -14,12 +14,10 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
 
     private positionBuffer: WebGLBuffer;
     private spritesheet: WebGLTexture;
-    private colourBuffer: WebGLBuffer;    
     private translationBuffer: WebGLBuffer;
     private textureBuffer: WebGLBuffer;
 
     private positions: Float32Array;
-    private colours: Float32Array;
     private translations: Float32Array;
     private texture: Float32Array;
 
@@ -36,7 +34,6 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
 
         this.positionBuffer = gl.createBuffer();
         this.translationBuffer = gl.createBuffer();
-        this.colourBuffer = gl.createBuffer();
         this.textureBuffer = gl.createBuffer();
     
     }
@@ -85,10 +82,6 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         gl.vertexAttribPointer(this.shader.attribute.vertexPosition, numComponents, type, normalize, stride, offset); 
         gl.enableVertexAttribArray(this.shader.attribute.vertexPosition);
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
-        gl.vertexAttribPointer(this.shader.attribute.vertexColour, 4, gl.FLOAT, normalize, stride, offset); 
-        gl.enableVertexAttribArray(this.shader.attribute.vertexColour);
-
         gl.bindBuffer(gl.ARRAY_BUFFER, this.translationBuffer);
         gl.vertexAttribPointer(this.shader.attribute.vertexTranslation, numComponents, type, normalize, stride, offset); 
         gl.enableVertexAttribArray(this.shader.attribute.vertexTranslation);
@@ -126,10 +119,6 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
             length * 2 * 3 * 3
         ).fill(0));
 
-        this.colours = new Float32Array(new Array(
-            length * 2 * 3 * 4
-        ).fill(0));
-
         for (let i = 0; i < array.length; i++) {
             this.onInjection(i, array[i].obj);
         }
@@ -142,8 +131,6 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.translationBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.translations, gl.DYNAMIC_DRAW); 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW); 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.texture, gl.DYNAMIC_DRAW);     
     }
@@ -238,39 +225,6 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
 
         this.texture[tex + 10] = texX
         this.texture[tex + 11] = texY + texHeight;
-
-        // 
-
-        this.colours[c1i] = 1;
-        this.colours[c1i + 1] = 1;
-        this.colours[c1i + 2] = 1;
-        this.colours[c1i + 3] = 1;
-
-        this.colours[c1i + 4] = 1;
-        this.colours[c1i + 5] = 1;
-        this.colours[c1i + 6] = 1;
-        this.colours[c1i + 7] = 1;
-
-        this.colours[c1i + 8] = 1;
-        this.colours[c1i + 9] = 1;
-        this.colours[c1i + 10] = 1;
-        this.colours[c1i + 11] = 1;
-
-
-        this.colours[c1i + 12] = 1;
-        this.colours[c1i + 13] = 1;
-        this.colours[c1i + 14] = 1;
-        this.colours[c1i + 15] = 1;
-
-        this.colours[c1i + 16] = 1;
-        this.colours[c1i + 17] = 1;
-        this.colours[c1i + 18] = 1;
-        this.colours[c1i + 19] = 1;
-
-        this.colours[c1i + 20] = 1;
-        this.colours[c1i + 21] = 1;
-        this.colours[c1i + 22] = 1;
-        this.colours[c1i + 23] = 1;
 
     }
 
