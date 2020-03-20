@@ -1,5 +1,3 @@
-
-// TODO change
 import { Sprite } from "../types/RenderInterface";
 import { RenderItemInterface, RenderItem } from "../types/RenderItemInterface";
 import { RenderState } from "../../state/render/RenderState";
@@ -138,8 +136,6 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
     private onInjection(index: number, sprite: Sprite) {
         const t1i = index * 2 * 3 * 3;
         const tex = index * 2 * 3 * 2;
-
-        const c1i = index * 2 * 3 * 4;
 
         const halfWidth = sprite.size[0] / 2;
         const halfHeight = sprite.size[1] / 2;

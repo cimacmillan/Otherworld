@@ -12,6 +12,23 @@ export interface Sprite {
     textureHeight: number;
 }
 
+export interface Wall {
+    startPos: glm.vec2;
+    endPos: glm.vec2;
+
+    startHeight: number;
+    endHeight: number;
+    
+    startOffset: number;
+    endOffset: number;
+    
+    textureX: number;
+    textureY: number;
+    textureWidth: number;
+    textureHeight: number;
+}
+
+
 export interface RenderItem {
     renderId: number;
 }

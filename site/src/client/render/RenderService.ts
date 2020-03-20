@@ -4,16 +4,19 @@ import { RenderInterface } from "./types/RenderInterface";
 import { ResourceManager } from "../resources/ResourceManager";
 import { SpriteRenderService } from "./services/SpriteRenderService";
 import { getTextureCoordinate } from "../util/math/Basic";
+import { WallRenderService } from "./services/WallRenderService";
 
 export class RenderService implements RenderInterface {
 
     public spriteRenderService: SpriteRenderService;
+    public wallRenderService: WallRenderService;
 
-    private count = 10000;
+    private count = 16000;
     private sqr = Math.floor(Math.sqrt(this.count));
 
     public constructor(private resourceManager: ResourceManager) {
-        this.spriteRenderService = new SpriteRenderService();   
+        this.spriteRenderService = new SpriteRenderService();
+        this.wallRenderService = new WallRenderService();   
     }
 
     public init(renderState: RenderState) {
@@ -33,6 +36,9 @@ export class RenderService implements RenderInterface {
             );
 
         } 
+
+        this.wallRenderService.init(renderState);
+        this.wallRenderService.attachSpritesheet(this.resourceManager.wall);
     }
 
     private getPos(i: number): glm.vec2 {
@@ -65,6 +71,9 @@ export class RenderService implements RenderInterface {
 
     public draw(renderState: RenderState) {
         this.spriteRenderService.draw(renderState);
+        this.wallRenderService.draw(renderState);
+
+
         for (let i = 0; i < this.count; i ++) {
             this.spriteRenderService.updateItem({renderId: i + 1}, {
                 position: this.getPos(i),
