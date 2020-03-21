@@ -12,7 +12,7 @@ export class RenderService implements RenderInterface {
     public spriteRenderService: SpriteRenderService;
     public wallRenderService: WallRenderService;
 
-    private count = 1;
+    private count = 3000;
     private sqr = Math.floor(Math.sqrt(this.count));
 
     public constructor(private resourceManager: ResourceManager) {
@@ -40,18 +40,20 @@ export class RenderService implements RenderInterface {
 
         } 
 
-        this.wallRenderService.createItem({
-            startPos: [0, 0],
-            endPos: [1, 0],
-            startHeight: 1,
-            endHeight: 1,
-            startOffset: 0,
-            endOffset: 0,
-            textureX: 0,
-            textureY: 0,
-            textureWidth: 1, 
-            textureHeight: 1
-        });
+        for (let i = 0; i < 1000; i++) {
+            this.wallRenderService.createItem({
+                startPos: [0 -i, -i],
+                endPos: [10 -i, -i],
+                startHeight: 1,
+                endHeight: 1,
+                startOffset: 0,
+                endOffset: 0,
+                textureX: 0,
+                textureY: 0,
+                textureWidth: 10, 
+                textureHeight: 1
+            });
+        }
     }
 
     private getPos(i: number): glm.vec2 {

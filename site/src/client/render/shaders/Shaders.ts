@@ -1,6 +1,7 @@
 import { BilloardVertex } from "./vertex/BillboardVertex";
 import { Vertex } from "./vertex/Vertex";
 import { fsSource } from "./fragment/Fragment";
+import { rfsSource } from "./fragment/RepeatedFragment";
 import { initShaderProgram } from "./ShaderCompiler";
 
 export function compileSpriteShader(gl: WebGLRenderingContext) {
@@ -19,7 +20,7 @@ export function compileSpriteShader(gl: WebGLRenderingContext) {
 }
 
 export function compileModelShader(gl: WebGLRenderingContext) {
-    const shaderId = initShaderProgram(gl, Vertex.source, fsSource);
+    const shaderId = initShaderProgram(gl, Vertex.source, rfsSource);
     const uniform: UniformPositions = {
         textureSampler: gl.getUniformLocation(shaderId, Vertex.v.textureSampler),
         projectionMatrix: gl.getUniformLocation(shaderId, Vertex.v.projectionMatrix),
