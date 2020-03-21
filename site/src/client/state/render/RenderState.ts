@@ -5,6 +5,4 @@ import { mat4 } from "gl-matrix";
 export interface RenderState {
     screen: ScreenBuffer;
     camera: Camera;
-    projectionMatrix: mat4;
-    modelViewMatrix: mat4;
 }

@@ -21,7 +21,7 @@ export const source = `
     varying lowp vec2 vTextureCoord;
 
     void main() {
-      gl_Position = ${v.projectionMatrix} * ${v.modelMatrix} * rotatedPosition;
+      gl_Position = ${v.projectionMatrix} * ${v.modelMatrix} * ${v.vertexPosition};
       vTextureCoord = ${v.texturePosition};
     }
   `;

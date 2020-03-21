@@ -5,13 +5,14 @@ import { ResourceManager } from "../resources/ResourceManager";
 import { SpriteRenderService } from "./services/SpriteRenderService";
 import { getTextureCoordinate } from "../util/math/Basic";
 import { WallRenderService } from "./services/WallRenderService";
+import { mat4 } from "gl-matrix";
 
 export class RenderService implements RenderInterface {
 
     public spriteRenderService: SpriteRenderService;
     public wallRenderService: WallRenderService;
 
-    private count = 16000;
+    private count = 1;
     private sqr = Math.floor(Math.sqrt(this.count));
 
     public constructor(private resourceManager: ResourceManager) {
@@ -22,7 +23,9 @@ export class RenderService implements RenderInterface {
     public init(renderState: RenderState) {
         this.spriteRenderService.init(renderState);
         this.spriteRenderService.attachSpritesheet(this.resourceManager.sprite);
-        
+        this.wallRenderService.init(renderState);
+        this.wallRenderService.attachSpritesheet(this.resourceManager.wall);
+
         for (let i = 0; i < this.count; i ++) {
             const xtex = 32 * Math.round(Math.random());
             const ytex = 32 * Math.round(Math.random());
@@ -37,8 +40,18 @@ export class RenderService implements RenderInterface {
 
         } 
 
-        this.wallRenderService.init(renderState);
-        this.wallRenderService.attachSpritesheet(this.resourceManager.wall);
+        this.wallRenderService.createItem({
+            startPos: [0, 0],
+            endPos: [1, 0],
+            startHeight: 1,
+            endHeight: 1,
+            startOffset: 0,
+            endOffset: 0,
+            textureX: 0,
+            textureY: 0,
+            textureWidth: 1, 
+            textureHeight: 1
+        });
     }
 
     private getPos(i: number): glm.vec2 {
@@ -70,9 +83,14 @@ export class RenderService implements RenderInterface {
     private time = 0;
 
     public draw(renderState: RenderState) {
+
+        const { modelViewMatrix, projectionMatrix } = this.createCameraMatrices(renderState);
+        this.spriteRenderService.attachViewMatrices(modelViewMatrix, projectionMatrix);
+        this.wallRenderService.attachViewMatrices(modelViewMatrix, projectionMatrix);
+
+        this.clearScreen(renderState);
         this.spriteRenderService.draw(renderState);
         this.wallRenderService.draw(renderState);
-
 
         for (let i = 0; i < this.count; i ++) {
             this.spriteRenderService.updateItem({renderId: i + 1}, {
@@ -81,6 +99,43 @@ export class RenderService implements RenderInterface {
             });
         } 
         this.time += 0.01;
+    }
+
+    private clearScreen(renderState: RenderState) {
+        const gl = renderState.screen.getOpenGL();
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
+        gl.clearDepth(1.0);                 // Clear everything
+        gl.enable(gl.DEPTH_TEST);           // Enable depth testing
+        gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
+        // gl.enable(gl.BLEND);
+        // gl.blendFunc(gl.SRC_COLOR, gl.DST_COLOR);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    }
+
+    private createCameraMatrices(renderState: RenderState): {modelViewMatrix: mat4, projectionMatrix: mat4} {
+        const fieldOfView = 45 * Math.PI / 180;   // in radians
+        const aspect = 1280 / 720;
+        const zNear = 0.1;
+        const zFar = 10000.0;
+        const projectionMatrix = mat4.create();
+
+        mat4.perspective(projectionMatrix,
+                    fieldOfView,
+                    aspect,
+                    zNear,
+                    zFar);
+
+        const modelViewMatrix = mat4.create();
+        
+        mat4.rotateY(modelViewMatrix,     // destination matrix
+            modelViewMatrix,     // matrix to translate
+            renderState.camera.angle);  // amount to translate
+
+        mat4.translate(modelViewMatrix,     // destination matrix
+                    modelViewMatrix,     // matrix to translate
+                    [-renderState.camera.position.x, -renderState.camera.height, -renderState.camera.position.y]);  // amount to translate
+
+        return {modelViewMatrix, projectionMatrix};
     }
 
 }

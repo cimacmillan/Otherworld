@@ -19,6 +19,9 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
     private translations: Float32Array;
     private texture: Float32Array;
 
+    private modelViewMatrix: mat4;
+    private projectionMatrix: mat4;
+
     public init(renderState: RenderState) {
         const gl = renderState.screen.getOpenGL();
 
@@ -33,43 +36,12 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         this.positionBuffer = gl.createBuffer();
         this.translationBuffer = gl.createBuffer();
         this.textureBuffer = gl.createBuffer();
-    
     }
 
     public draw(renderState: RenderState) {
         this.spriteArray.sync();
-
         const gl = renderState.screen.getOpenGL();
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
-        gl.clearDepth(1.0);                 // Clear everything
-        gl.enable(gl.DEPTH_TEST);           // Enable depth testing
-        gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
-        // gl.enable(gl.BLEND);
-        // gl.blendFunc(gl.SRC_COLOR, gl.DST_COLOR);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-        const fieldOfView = 45 * Math.PI / 180;   // in radians
-        const aspect = 1280 / 720;
-        const zNear = 0.1;
-        const zFar = 10000.0;
-        const projectionMatrix = mat4.create();
-
-        mat4.perspective(projectionMatrix,
-                    fieldOfView,
-                    aspect,
-                    zNear,
-                    zFar);
-
-        const modelViewMatrix = mat4.create();
-        
-        mat4.rotateY(modelViewMatrix,     // destination matrix
-            modelViewMatrix,     // matrix to translate
-            renderState.camera.angle);  // amount to translate
-
-        mat4.translate(modelViewMatrix,     // destination matrix
-                    modelViewMatrix,     // matrix to translate
-                    [-renderState.camera.position.x, -renderState.camera.height, -renderState.camera.position.y]);  // amount to translate
-
+    
         const numComponents = 3;  
         const type = gl.FLOAT;   
         const normalize = false;
@@ -89,8 +61,8 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         gl.enableVertexAttribArray(this.shader.attribute.texturePosition);
 
         gl.useProgram(this.shader.shaderId);
-        gl.uniformMatrix4fv(this.shader.uniform.projectionMatrix, false, projectionMatrix);
-        gl.uniformMatrix4fv(this.shader.uniform.modelMatrix, false, modelViewMatrix);
+        gl.uniformMatrix4fv(this.shader.uniform.projectionMatrix, false, this.projectionMatrix);
+        gl.uniformMatrix4fv(this.shader.uniform.modelMatrix, false, this.modelViewMatrix);
 
         gl.activeTexture(gl.TEXTURE0);
         // Bind the texture to texture unit 0
@@ -240,5 +212,10 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
 
     public attachSpritesheet(spritesheet: WebGLTexture) {
         this.spritesheet = spritesheet;
+    }
+
+    public attachViewMatrices(modelViewMatrix: mat4, projectionMatrix: mat4) {
+        this.modelViewMatrix = modelViewMatrix;
+        this.projectionMatrix = projectionMatrix;
     }
 }
