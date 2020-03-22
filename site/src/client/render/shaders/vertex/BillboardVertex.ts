@@ -36,4 +36,4 @@ const source = `
     }
   `;
 
-export const BilloardVertex = {v, source};
+export const BilloardVertex = { v, source };

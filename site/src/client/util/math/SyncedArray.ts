@@ -6,21 +6,19 @@ export interface ISyncedArrayRef<T> {
 }
 
 export interface ISyncedArrayCallbacks<T> {
-  onUpdate: (array: Array<ISyncedArrayRef<T>> ) => void;
-  onReconstruct: (array: Array<ISyncedArrayRef<T>> ) => void;
+  onUpdate: (array: Array<ISyncedArrayRef<T>>) => void;
+  onReconstruct: (array: Array<ISyncedArrayRef<T>>) => void;
   onInjection: (index: number, obj: ISyncedArrayRef<T>) => void;
 }
 
 export class SyncedArray<T> {
-
   private array: Array<ISyncedArrayRef<T>> = [];
   private uniqueId: number = 0;
 
   private requireConstruction: boolean;
   private requireUpdate: boolean;
 
-  public constructor(private callbacks: ISyncedArrayCallbacks<T>) {
-  }
+  public constructor(private callbacks: ISyncedArrayCallbacks<T>) {}
 
   public createItem(obj: T): number {
     this.uniqueId++;
@@ -36,7 +34,7 @@ export class SyncedArray<T> {
     const index = this.findRealIndexOf(ref);
     if (index >= 0) {
       const ref = this.array[index];
-      ref.obj = {...ref.obj, ...param};
+      ref.obj = { ...ref.obj, ...param };
       this.callbacks.onInjection(index, this.array[index]);
       this.requireUpdate = true;
     }
@@ -45,8 +43,8 @@ export class SyncedArray<T> {
   public freeItem(ref: number) {
     const index = this.findRealIndexOf(ref);
     if (index >= 0) {
-        this.requireConstruction = true;
-        this.array.splice(index, 1);
+      this.requireConstruction = true;
+      this.array.splice(index, 1);
     }
   }
 
@@ -77,29 +75,28 @@ export class SyncedArray<T> {
     let end = this.array.length;
     let midpoint;
     while (found == false) {
-        if (start > end) {
-            break;
-        }
-        midpoint = ~~((start + end) / 2);
-        const checkId = this.array[midpoint].uniqueId;
+      if (start > end) {
+        break;
+      }
+      midpoint = ~~((start + end) / 2);
+      const checkId = this.array[midpoint].uniqueId;
 
-        if (checkId === NaN || checkId === Infinity) {
-          return -1;
-        }
+      if (checkId === NaN || checkId === Infinity) {
+        return -1;
+      }
 
-        if (renderId === checkId) {
-            found = true;
-            break;
-        } else if (renderId < checkId) {
-            end = midpoint - 1;
-        } else if (renderId > checkId) {
-            start = midpoint + 1;
-        }
+      if (renderId === checkId) {
+        found = true;
+        break;
+      } else if (renderId < checkId) {
+        end = midpoint - 1;
+      } else if (renderId > checkId) {
+        start = midpoint + 1;
+      }
     }
     if (found === true) {
-        return midpoint;
+      return midpoint;
     }
     return -1;
   }
-
 }

@@ -2,37 +2,37 @@ import * as glm from "gl-matrix";
 import { RenderState } from "../../state/render/RenderState";
 
 export interface Sprite {
-    position: glm.vec2;
-    size: glm.vec2;
-    height: number;
+  position: glm.vec2;
+  size: glm.vec2;
+  height: number;
 
-    textureX: number;
-    textureY: number;
-    textureWidth: number;
-    textureHeight: number;
+  textureX: number;
+  textureY: number;
+  textureWidth: number;
+  textureHeight: number;
 }
 
 export interface Wall {
-    startPos: glm.vec2;
-    endPos: glm.vec2;
+  startPos: glm.vec2;
+  endPos: glm.vec2;
 
-    startHeight: number;
-    endHeight: number;
+  startHeight: number;
+  endHeight: number;
 
-    startOffset: number;
-    endOffset: number;
+  startOffset: number;
+  endOffset: number;
 
-    textureX: number;
-    textureY: number;
-    textureWidth: number;
-    textureHeight: number;
+  textureX: number;
+  textureY: number;
+  textureWidth: number;
+  textureHeight: number;
 }
 
 export interface RenderItem {
-    renderId: number;
+  renderId: number;
 }
 
 export interface RenderInterface {
-    init: (renderState: RenderState) => void;
-    draw: (renderState: RenderState) => void;
+  init: (renderState: RenderState) => void;
+  draw: (renderState: RenderState) => void;
 }

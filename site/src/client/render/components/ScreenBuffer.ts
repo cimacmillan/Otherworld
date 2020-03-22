@@ -1,4 +1,3 @@
-
 export class ScreenBuffer {
   public width: number;
   public height: number;

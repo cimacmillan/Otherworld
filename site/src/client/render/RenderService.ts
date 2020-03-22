@@ -8,136 +8,149 @@ import { WallRenderService } from "./services/WallRenderService";
 import { RenderInterface } from "./types/RenderInterface";
 
 export class RenderService implements RenderInterface {
+  public spriteRenderService: SpriteRenderService;
+  public wallRenderService: WallRenderService;
 
-    public spriteRenderService: SpriteRenderService;
-    public wallRenderService: WallRenderService;
+  private count = 3000;
+  private sqr = Math.floor(Math.sqrt(this.count));
 
-    private count = 3000;
-    private sqr = Math.floor(Math.sqrt(this.count));
+  private time = 0;
 
-    private time = 0;
+  public constructor(private resourceManager: ResourceManager) {
+    this.spriteRenderService = new SpriteRenderService();
+    this.wallRenderService = new WallRenderService();
+  }
 
-    public constructor(private resourceManager: ResourceManager) {
-        this.spriteRenderService = new SpriteRenderService();
-        this.wallRenderService = new WallRenderService();
+  public init(renderState: RenderState) {
+    this.spriteRenderService.init(renderState);
+    this.spriteRenderService.attachSpritesheet(this.resourceManager.sprite);
+    this.wallRenderService.init(renderState);
+    this.wallRenderService.attachSpritesheet(this.resourceManager.wall);
+
+    for (let i = 0; i < this.count; i++) {
+      const xtex = 32 * Math.round(Math.random());
+      const ytex = 32 * Math.round(Math.random());
+      this.spriteRenderService.createItem({
+        position: this.getPos(i),
+        size: [1, 1],
+        height: this.getHeight(i, this.time),
+        ...getTextureCoordinate(64, 64, 32, 32, xtex, ytex),
+      });
     }
 
-    public init(renderState: RenderState) {
-        this.spriteRenderService.init(renderState);
-        this.spriteRenderService.attachSpritesheet(this.resourceManager.sprite);
-        this.wallRenderService.init(renderState);
-        this.wallRenderService.attachSpritesheet(this.resourceManager.wall);
+    for (let i = 0; i < 1000; i++) {
+      this.wallRenderService.createItem({
+        startPos: [0 - i, -i],
+        endPos: [10 - i, -i],
+        startHeight: 1,
+        endHeight: 1,
+        startOffset: 0,
+        endOffset: 0,
+        textureX: 0,
+        textureY: 0,
+        textureWidth: 10,
+        textureHeight: 1,
+      });
+    }
+  }
 
-        for (let i = 0; i < this.count; i ++) {
-            const xtex = 32 * Math.round(Math.random());
-            const ytex = 32 * Math.round(Math.random());
-            this.spriteRenderService.createItem(
-                {
-                    position: this.getPos(i),
-                    size: [1, 1],
-                    height: this.getHeight(i, this.time),
-                    ...getTextureCoordinate(64, 64, 32, 32, xtex, ytex),
-                },
-            );
+  public draw(renderState: RenderState) {
+    const { modelViewMatrix, projectionMatrix } = this.createCameraMatrices(
+      renderState
+    );
+    this.spriteRenderService.attachViewMatrices(
+      modelViewMatrix,
+      projectionMatrix
+    );
+    this.wallRenderService.attachViewMatrices(
+      modelViewMatrix,
+      projectionMatrix
+    );
 
+    this.clearScreen(renderState);
+    this.spriteRenderService.draw(renderState);
+    this.wallRenderService.draw(renderState);
+
+    for (let i = 0; i < this.count; i++) {
+      this.spriteRenderService.updateItem(
+        { renderId: i + 1 },
+        {
+          position: this.getPos(i),
+          height: this.getHeight(i, this.time),
         }
-
-        for (let i = 0; i < 1000; i++) {
-            this.wallRenderService.createItem({
-                startPos: [0 - i, -i],
-                endPos: [10 - i, -i],
-                startHeight: 1,
-                endHeight: 1,
-                startOffset: 0,
-                endOffset: 0,
-                textureX: 0,
-                textureY: 0,
-                textureWidth: 10,
-                textureHeight: 1,
-            });
-        }
+      );
     }
+    this.time += 0.01;
+  }
 
-    public draw(renderState: RenderState) {
+  private getPos(i: number): glm.vec2 {
+    const scale = Math.abs((Math.cos(this.time) + 2) * 2) * 0.4;
+    const x = ((i % this.sqr) - this.sqr / 2) * scale;
+    const z = (Math.floor(i / this.sqr) - this.sqr / 2) * scale;
 
-        const { modelViewMatrix, projectionMatrix } = this.createCameraMatrices(renderState);
-        this.spriteRenderService.attachViewMatrices(modelViewMatrix, projectionMatrix);
-        this.wallRenderService.attachViewMatrices(modelViewMatrix, projectionMatrix);
+    const diss = Math.sqrt(x * x + z * z) / 100 + Math.sin(this.time) / 10;
+    const diff = 1 / (diss + 1);
 
-        this.clearScreen(renderState);
-        this.spriteRenderService.draw(renderState);
-        this.wallRenderService.draw(renderState);
+    const s = Math.sin(diss + this.time * diff);
+    const c = Math.cos(diss + this.time * diff);
 
-        for (let i = 0; i < this.count; i ++) {
-            this.spriteRenderService.updateItem({renderId: i + 1}, {
-                position: this.getPos(i),
-                height: this.getHeight(i, this.time),
-            });
-        }
-        this.time += 0.01;
-    }
+    const xTemp = c * x + z * s;
+    const zTemp = c * z - x * s;
 
-    private getPos(i: number): glm.vec2 {
-        const scale = Math.abs((Math.cos(this.time) + 2) * 2) * 0.4;
-        const x = ((i % this.sqr) - (this.sqr / 2)) * scale;
-        const z = (Math.floor(i / this.sqr) - (this.sqr / 2)) * scale;
+    return [xTemp, zTemp - this.sqr / 2];
+  }
 
-        const diss = (Math.sqrt(x * x + z * z) / 100) + ((Math.sin(this.time)) / 10);
-        const diff = 1 / (diss + 1);
+  private getHeight(i: number, time: number): number {
+    const speed = 2;
+    const height =
+      Math.sin((i / this.count) * 100 + time * speed) +
+      Math.cos((i % this.count) * 100 + time * speed);
+    const x = (i % this.sqr) - this.sqr / 2;
+    const z = Math.floor(i / this.sqr) - this.sqr / 2;
+    const diss = Math.sqrt(x * x + z * z + 100);
+    return (height / diss) * 100;
+  }
 
-        const s = Math.sin(diss + this.time * diff);
-        const c = Math.cos(diss + this.time * diff);
+  private clearScreen(renderState: RenderState) {
+    const gl = renderState.screen.getOpenGL();
+    gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
+    gl.clearDepth(1.0); // Clear everything
+    gl.enable(gl.DEPTH_TEST); // Enable depth testing
+    gl.depthFunc(gl.LEQUAL); // Near things obscure far things
+    // gl.enable(gl.BLEND);
+    // gl.blendFunc(gl.SRC_COLOR, gl.DST_COLOR);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  }
 
-        const xTemp = c * x + z * s;
-        const zTemp = c * z - x * s;
+  private createCameraMatrices(
+    renderState: RenderState
+  ): { modelViewMatrix: mat4; projectionMatrix: mat4 } {
+    const fieldOfView = (45 * Math.PI) / 180; // in radians
+    const aspect = 1280 / 720;
+    const zNear = 0.1;
+    const zFar = 10000.0;
+    const projectionMatrix = mat4.create();
 
-        return [xTemp, zTemp - (this.sqr / 2)];
-    }
+    mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
-    private getHeight(i: number, time: number): number {
-        const speed = 2;
-        const height = Math.sin((i / this.count) * 100 + time * speed) + Math.cos((i % this.count) * 100 + time * speed);
-        const x = ((i % this.sqr) - (this.sqr / 2));
-        const z = (Math.floor(i / this.sqr) - (this.sqr / 2));
-        const diss = (Math.sqrt(x * x + z * z + 100));
-        return (height / diss) * 100;
-    }
+    const modelViewMatrix = mat4.create();
 
-    private clearScreen(renderState: RenderState) {
-        const gl = renderState.screen.getOpenGL();
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
-        gl.clearDepth(1.0);                 // Clear everything
-        gl.enable(gl.DEPTH_TEST);           // Enable depth testing
-        gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
-        // gl.enable(gl.BLEND);
-        // gl.blendFunc(gl.SRC_COLOR, gl.DST_COLOR);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    }
+    mat4.rotateY(
+      modelViewMatrix, // destination matrix
+      modelViewMatrix, // matrix to translate
+      renderState.camera.angle
+    ); // amount to translate
 
-    private createCameraMatrices(renderState: RenderState): {modelViewMatrix: mat4, projectionMatrix: mat4} {
-        const fieldOfView = 45 * Math.PI / 180;   // in radians
-        const aspect = 1280 / 720;
-        const zNear = 0.1;
-        const zFar = 10000.0;
-        const projectionMatrix = mat4.create();
+    mat4.translate(
+      modelViewMatrix, // destination matrix
+      modelViewMatrix, // matrix to translate
+      [
+        -renderState.camera.position.x,
+        -renderState.camera.height,
+        -renderState.camera.position.y,
+      ]
+    ); // amount to translate
 
-        mat4.perspective(projectionMatrix,
-                    fieldOfView,
-                    aspect,
-                    zNear,
-                    zFar);
-
-        const modelViewMatrix = mat4.create();
-
-        mat4.rotateY(modelViewMatrix,     // destination matrix
-            modelViewMatrix,     // matrix to translate
-            renderState.camera.angle);  // amount to translate
-
-        mat4.translate(modelViewMatrix,     // destination matrix
-                    modelViewMatrix,     // matrix to translate
-                    [-renderState.camera.position.x, -renderState.camera.height, -renderState.camera.position.y]);  // amount to translate
-
-        return {modelViewMatrix, projectionMatrix};
-    }
-
+    return { modelViewMatrix, projectionMatrix };
+  }
 }

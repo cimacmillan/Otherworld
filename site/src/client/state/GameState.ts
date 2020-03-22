@@ -4,10 +4,9 @@ import { RenderState } from "./render/RenderState";
 import { WorldState } from "./world/WorldState";
 
 export interface GameState {
+  loop: TimeControlledLoop;
 
-    loop: TimeControlledLoop;
-
-    world: WorldState;
-    render: RenderState;
-    audio: AudioState;
+  world: WorldState;
+  render: RenderState;
+  audio: AudioState;
 }

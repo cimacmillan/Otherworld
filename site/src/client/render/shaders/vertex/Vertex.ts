@@ -26,4 +26,4 @@ export const source = `
     }
   `;
 
-export const Vertex = {v, source};
+export const Vertex = { v, source };
