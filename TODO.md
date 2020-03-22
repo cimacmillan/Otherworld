@@ -31,6 +31,8 @@ Project Description
 ### In Progress
 
 - [ ] Migrate rendering to OpenGL  
+- [ ] Wall texture atlas repeating  
+- [ ] Floor texture atlas repreating  
 
 ### Test
 
