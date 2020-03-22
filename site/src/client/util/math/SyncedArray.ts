@@ -63,6 +63,10 @@ export class SyncedArray<T> {
     }
   }
 
+  public getArray() {
+    return this.array;
+  }
+
   private findRealIndexOf(renderId: number) {
     if (this.array.length === 0) {
       return -1;
@@ -74,7 +78,7 @@ export class SyncedArray<T> {
     let midpoint;
     while (found == false) {
         if (start > end) {
-            break;            
+            break;
         }
         midpoint = ~~((start + end) / 2);
         const checkId = this.array[midpoint].uniqueId;
@@ -96,10 +100,6 @@ export class SyncedArray<T> {
         return midpoint;
     }
     return -1;
-  }
-
-  public getArray() {
-    return this.array;
   }
 
 }

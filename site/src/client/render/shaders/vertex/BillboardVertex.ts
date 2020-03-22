@@ -1,7 +1,7 @@
-export const vertexPosition = 'aVertexPosition';
-export const vertexTranslation = 'aVertexTranslation';
-export const vertexColour = 'colour';
-export const modelMatrix = 'uModelViewMatrix';
+export const vertexPosition = "aVertexPosition";
+export const vertexTranslation = "aVertexTranslation";
+export const vertexColour = "colour";
+export const modelMatrix = "uModelViewMatrix";
 
 const v = {
   vertexPosition: `aVertexPosition`,

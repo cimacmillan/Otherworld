@@ -51,16 +51,16 @@ export class Entity <State extends BaseState> {
     }
 
     public emit(event: GameEvent) {
-        for(let x = 0; x < this.components.length; x++) {
+        for (let x = 0; x < this.components.length; x++) {
             this.components[x].onEvent(this, event);
         }
-        for(let x = 0; x < this.listeners.length; x++) {
+        for (let x = 0; x < this.listeners.length; x++) {
             this.listeners[x].onObservedEvent(event);
         }
     }
 
     public onObservedEvent(event: GameEvent) {
-        for(let x = 0; x < this.components.length; x++) {
+        for (let x = 0; x < this.components.length; x++) {
             this.components[x].onObservedEvent(this, event);
         }
     }

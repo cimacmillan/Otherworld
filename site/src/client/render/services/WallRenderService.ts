@@ -1,9 +1,9 @@
-import { Sprite, Wall } from "../types/RenderInterface";
-import { RenderItemInterface, RenderItem } from "../types/RenderItemInterface";
+import { mat4, vec2 } from "gl-matrix";
 import { RenderState } from "../../state/render/RenderState";
-import { vec2, mat4 } from "gl-matrix";
-import { SyncedArray, ISyncedArrayRef } from "../../util/math";
-import { compileSpriteShader, compileModelShader } from "../shaders/Shaders";
+import { ISyncedArrayRef, SyncedArray } from "../../util/math";
+import { compileModelShader, compileSpriteShader } from "../shaders/Shaders";
+import { Sprite, Wall } from "../types/RenderInterface";
+import { RenderItem, RenderItemInterface } from "../types/RenderItemInterface";
 
 export class WallRenderService implements RenderItemInterface<Wall> {
     private wallArray: SyncedArray<Wall>;
@@ -28,7 +28,7 @@ export class WallRenderService implements RenderItemInterface<Wall> {
         this.wallArray = new SyncedArray({
             onReconstruct: (array: Array<ISyncedArrayRef<Wall>>) => this.onArrayReconstruct(gl, array),
             onUpdate: (array: Array<ISyncedArrayRef<Wall>>) => this.onArrayUpdate(gl),
-            onInjection: (index: number, ref: ISyncedArrayRef<Wall>) => this.onInjection(index, ref.obj)
+            onInjection: (index: number, ref: ISyncedArrayRef<Wall>) => this.onInjection(index, ref.obj),
         });
 
         this.positionBuffer = gl.createBuffer();
@@ -39,18 +39,18 @@ export class WallRenderService implements RenderItemInterface<Wall> {
         this.wallArray.sync();
         const gl = renderState.screen.getOpenGL();
 
-        const numComponents = 3;  
-        const type = gl.FLOAT;   
+        const numComponents = 3;
+        const type = gl.FLOAT;
         const normalize = false;
         const stride = 0;
-        const offset = 0;       
+        const offset = 0;
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-        gl.vertexAttribPointer(this.shader.attribute.vertexPosition, numComponents, type, normalize, stride, offset); 
+        gl.vertexAttribPointer(this.shader.attribute.vertexPosition, numComponents, type, normalize, stride, offset);
         gl.enableVertexAttribArray(this.shader.attribute.vertexPosition);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
-        gl.vertexAttribPointer(this.shader.attribute.texturePosition, 2, type, normalize, stride, offset); 
+        gl.vertexAttribPointer(this.shader.attribute.texturePosition, 2, type, normalize, stride, offset);
         gl.enableVertexAttribArray(this.shader.attribute.texturePosition);
 
         gl.useProgram(this.shader.shaderId);
@@ -67,15 +67,38 @@ export class WallRenderService implements RenderItemInterface<Wall> {
         gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
     }
 
+    public createItem(param: Wall) {
+        return {
+            renderId: this.wallArray.createItem(param),
+        };
+    }
+
+    public updateItem(ref: RenderItem, param: Partial<Wall>) {
+        this.wallArray.updateItem(ref.renderId, param);
+    }
+
+    public freeItem(ref: RenderItem) {
+        this.wallArray.freeItem(ref.renderId);
+    }
+
+    public attachSpritesheet(spritesheet: WebGLTexture) {
+        this.spritesheet = spritesheet;
+    }
+
+    public attachViewMatrices(modelViewMatrix: mat4, projectionMatrix: mat4) {
+        this.modelViewMatrix = modelViewMatrix;
+        this.projectionMatrix = projectionMatrix;
+    }
+
     private onArrayReconstruct(gl: WebGLRenderingContext, array: Array<ISyncedArrayRef<Wall>>) {
         const length = array.length;
 
         this.positions = new Float32Array(new Array(
-            length * 2 * 3 * 3
+            length * 2 * 3 * 3,
         ).fill(0));
 
         this.texture = new Float32Array(new Array(
-            length * 2 * 3 * 2
+            length * 2 * 3 * 2,
         ).fill(0));
 
         for (let i = 0; i < array.length; i++) {
@@ -87,21 +110,21 @@ export class WallRenderService implements RenderItemInterface<Wall> {
 
     private onArrayUpdate(gl: WebGLRenderingContext) {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
+        gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.texture, gl.DYNAMIC_DRAW);     
+        gl.bufferData(gl.ARRAY_BUFFER, this.texture, gl.DYNAMIC_DRAW);
     }
 
     private onInjection(index: number, wall: Wall) {
         const tex = index * 2 * 3 * 2;
         const t1i = index * 2 * 3 * 3;
 
-        const { 
-            startPos, endPos, 
-            startHeight, startOffset, 
-            endHeight, endOffset, 
-            textureX, textureY, 
-            textureWidth, textureHeight 
+        const {
+            startPos, endPos,
+            startHeight, startOffset,
+            endHeight, endOffset,
+            textureX, textureY,
+            textureWidth, textureHeight,
         } = wall;
 
         this.positions[t1i] = startPos[0];
@@ -143,30 +166,7 @@ export class WallRenderService implements RenderItemInterface<Wall> {
         this.texture[tex + 8] = textureX + textureWidth;
         this.texture[tex + 9] = textureY;
 
-        this.texture[tex + 10] = textureX + textureWidth
+        this.texture[tex + 10] = textureX + textureWidth;
         this.texture[tex + 11] = textureY + textureHeight;
-    }
-
-    public createItem(param: Wall) {
-        return {
-            renderId: this.wallArray.createItem(param)
-        };
-    }
-
-    public updateItem(ref: RenderItem, param: Partial<Wall>) {
-        this.wallArray.updateItem(ref.renderId, param);
-    }
-
-    public freeItem(ref: RenderItem) {
-        this.wallArray.freeItem(ref.renderId,);
-    }
-
-    public attachSpritesheet(spritesheet: WebGLTexture) {
-        this.spritesheet = spritesheet;
-    }
-
-    public attachViewMatrices(modelViewMatrix: mat4, projectionMatrix: mat4) {
-        this.modelViewMatrix = modelViewMatrix;
-        this.projectionMatrix = projectionMatrix;
     }
 }

@@ -30,12 +30,12 @@ export function getTextureCoordinate(spriteSheetWidth: number, spriteSheetHeight
     textureX: number,
     textureY: number,
     textureWidth: number,
-    textureHeight: number
+    textureHeight: number,
 } {
     return {
         textureX: xPixel / spriteSheetWidth,
         textureY: yPixel / spriteSheetHeight,
         textureWidth: width / spriteSheetWidth,
-        textureHeight: height / spriteSheetHeight
+        textureHeight: height / spriteSheetHeight,
     };
 }

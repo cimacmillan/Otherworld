@@ -1,11 +1,11 @@
-import { RenderState } from "../state/render/RenderState";
 import * as glm from "gl-matrix";
-import { RenderInterface } from "./types/RenderInterface";
-import { ResourceManager } from "../resources/ResourceManager";
-import { SpriteRenderService } from "./services/SpriteRenderService";
-import { getTextureCoordinate } from "../util/math/Basic";
-import { WallRenderService } from "./services/WallRenderService";
 import { mat4 } from "gl-matrix";
+import { ResourceManager } from "../resources/ResourceManager";
+import { RenderState } from "../state/render/RenderState";
+import { getTextureCoordinate } from "../util/math/Basic";
+import { SpriteRenderService } from "./services/SpriteRenderService";
+import { WallRenderService } from "./services/WallRenderService";
+import { RenderInterface } from "./types/RenderInterface";
 
 export class RenderService implements RenderInterface {
 
@@ -15,9 +15,11 @@ export class RenderService implements RenderInterface {
     private count = 3000;
     private sqr = Math.floor(Math.sqrt(this.count));
 
+    private time = 0;
+
     public constructor(private resourceManager: ResourceManager) {
         this.spriteRenderService = new SpriteRenderService();
-        this.wallRenderService = new WallRenderService();   
+        this.wallRenderService = new WallRenderService();
     }
 
     public init(renderState: RenderState) {
@@ -34,26 +36,45 @@ export class RenderService implements RenderInterface {
                     position: this.getPos(i),
                     size: [1, 1],
                     height: this.getHeight(i, this.time),
-                    ...getTextureCoordinate(64, 64, 32, 32, xtex, ytex)
-                }
+                    ...getTextureCoordinate(64, 64, 32, 32, xtex, ytex),
+                },
             );
 
-        } 
+        }
 
         for (let i = 0; i < 1000; i++) {
             this.wallRenderService.createItem({
-                startPos: [0 -i, -i],
-                endPos: [10 -i, -i],
+                startPos: [0 - i, -i],
+                endPos: [10 - i, -i],
                 startHeight: 1,
                 endHeight: 1,
                 startOffset: 0,
                 endOffset: 0,
                 textureX: 0,
                 textureY: 0,
-                textureWidth: 10, 
-                textureHeight: 1
+                textureWidth: 10,
+                textureHeight: 1,
             });
         }
+    }
+
+    public draw(renderState: RenderState) {
+
+        const { modelViewMatrix, projectionMatrix } = this.createCameraMatrices(renderState);
+        this.spriteRenderService.attachViewMatrices(modelViewMatrix, projectionMatrix);
+        this.wallRenderService.attachViewMatrices(modelViewMatrix, projectionMatrix);
+
+        this.clearScreen(renderState);
+        this.spriteRenderService.draw(renderState);
+        this.wallRenderService.draw(renderState);
+
+        for (let i = 0; i < this.count; i ++) {
+            this.spriteRenderService.updateItem({renderId: i + 1}, {
+                position: this.getPos(i),
+                height: this.getHeight(i, this.time),
+            });
+        }
+        this.time += 0.01;
     }
 
     private getPos(i: number): glm.vec2 {
@@ -82,27 +103,6 @@ export class RenderService implements RenderInterface {
         return (height / diss) * 100;
     }
 
-    private time = 0;
-
-    public draw(renderState: RenderState) {
-
-        const { modelViewMatrix, projectionMatrix } = this.createCameraMatrices(renderState);
-        this.spriteRenderService.attachViewMatrices(modelViewMatrix, projectionMatrix);
-        this.wallRenderService.attachViewMatrices(modelViewMatrix, projectionMatrix);
-
-        this.clearScreen(renderState);
-        this.spriteRenderService.draw(renderState);
-        this.wallRenderService.draw(renderState);
-
-        for (let i = 0; i < this.count; i ++) {
-            this.spriteRenderService.updateItem({renderId: i + 1}, {
-                position: this.getPos(i),
-                height: this.getHeight(i, this.time)
-            });
-        } 
-        this.time += 0.01;
-    }
-
     private clearScreen(renderState: RenderState) {
         const gl = renderState.screen.getOpenGL();
         gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
@@ -128,7 +128,7 @@ export class RenderService implements RenderInterface {
                     zFar);
 
         const modelViewMatrix = mat4.create();
-        
+
         mat4.rotateY(modelViewMatrix,     // destination matrix
             modelViewMatrix,     // matrix to translate
             renderState.camera.angle);  // amount to translate

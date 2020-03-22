@@ -24,7 +24,7 @@ export class TestComponent<T extends TestStateType> extends EntityComponent<T> {
     }
 
     public onEvent(entity: Entity<TestStateType>, event: GameEvent): void {
-        
+
     }
 
     public onObservedEvent(entity: Entity<TestStateType>, event: GameEvent): void {

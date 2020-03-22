@@ -1,8 +1,8 @@
-import { BilloardVertex } from "./vertex/BillboardVertex";
-import { Vertex } from "./vertex/Vertex";
 import { fsSource } from "./fragment/Fragment";
 import { rfsSource } from "./fragment/RepeatedFragment";
 import { initShaderProgram } from "./ShaderCompiler";
+import { BilloardVertex } from "./vertex/BillboardVertex";
+import { Vertex } from "./vertex/Vertex";
 
 export function compileSpriteShader(gl: WebGLRenderingContext) {
     const shaderId = initShaderProgram(gl, BilloardVertex.source, fsSource);
@@ -14,9 +14,9 @@ export function compileSpriteShader(gl: WebGLRenderingContext) {
     const attribute: AttributePositions = {
         vertexPosition: gl.getAttribLocation(shaderId, BilloardVertex.v.vertexPosition),
         vertexTranslation: gl.getAttribLocation(shaderId, BilloardVertex.v.vertexTranslation),
-        texturePosition: gl.getAttribLocation(shaderId, BilloardVertex.v.texturePosition)
+        texturePosition: gl.getAttribLocation(shaderId, BilloardVertex.v.texturePosition),
     };
-    return {shaderId, uniform, attribute}
+    return {shaderId, uniform, attribute};
 }
 
 export function compileModelShader(gl: WebGLRenderingContext) {
@@ -28,7 +28,7 @@ export function compileModelShader(gl: WebGLRenderingContext) {
     };
     const attribute: AttributePositions = {
         vertexPosition: gl.getAttribLocation(shaderId, Vertex.v.vertexPosition),
-        texturePosition: gl.getAttribLocation(shaderId, Vertex.v.texturePosition)
+        texturePosition: gl.getAttribLocation(shaderId, Vertex.v.texturePosition),
     };
-    return {shaderId, uniform, attribute}
+    return {shaderId, uniform, attribute};
 }

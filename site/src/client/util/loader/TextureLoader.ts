@@ -49,7 +49,6 @@ export function convertToFastTexture(texture: Texture): FastTexture {
     };
 }
 
-
 export function loadTexture(gl: WebGLRenderingContext, url: string): Promise<WebGLTexture>  {
     return new Promise<WebGLTexture>((resolve, reject) => {
         const image = new Image();
@@ -68,7 +67,7 @@ export function loadTexture(gl: WebGLRenderingContext, url: string): Promise<Web
         image.src = url;
     });
   }
-  
-  function isPowerOf2(value: number) {
+
+function isPowerOf2(value: number) {
     return (value & (value - 1)) == 0;
   }

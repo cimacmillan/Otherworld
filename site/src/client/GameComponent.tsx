@@ -1,7 +1,7 @@
 import React = require("react");
 import { testFunction } from "./engine/World";
 import { initialiseInput, updateInput } from "./Input";
-import { ScreenBuffer, RenderService } from "./render";
+import { RenderService, ScreenBuffer } from "./render";
 import { CanvasComponent } from "./render";
 import { ResourceManager } from "./resources/ResourceManager";
 import { GameState } from "./state/GameState";

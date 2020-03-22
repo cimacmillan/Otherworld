@@ -1,5 +1,5 @@
 import { FastTexture, Texture } from "../types";
-import { convertToFastTexture, loadTextureFromURL, loadTexture } from "../util/loader/TextureLoader";
+import { convertToFastTexture, loadTexture, loadTextureFromURL } from "../util/loader/TextureLoader";
 
 export class ResourceManager {
 

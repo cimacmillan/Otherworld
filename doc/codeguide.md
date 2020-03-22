@@ -1,14 +1,16 @@
-# Code Guide
+# Developer Guide
 
 ## Building / NPM Scripts
 
----
-
-### Build client, server with watch script
-
 Npm watches for any changes to ts/tsx files and rebuilds the client and server.
 
-    sudo npm run watch 
+    sh build.sh
+
+which runs
+
+    sudo npm run build &
+    sudo npm run pack &
+    sudo npm run server
 
 Navigating to *localhost* on a browser will display the game.
 

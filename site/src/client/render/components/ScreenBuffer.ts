@@ -1,9 +1,9 @@
 
 export class ScreenBuffer {
-  // public image_data: ImageData;
-  private gl: WebGLRenderingContext;
   public width: number;
   public height: number;
+  // public image_data: ImageData;
+  private gl: WebGLRenderingContext;
 
   constructor(gl: WebGLRenderingContext, width: number, height: number) {
     this.gl = gl;

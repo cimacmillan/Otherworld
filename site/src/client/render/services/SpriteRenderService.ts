@@ -1,9 +1,9 @@
-import { Sprite } from "../types/RenderInterface";
-import { RenderItemInterface, RenderItem } from "../types/RenderItemInterface";
+import { mat4, vec2 } from "gl-matrix";
 import { RenderState } from "../../state/render/RenderState";
-import { vec2, mat4 } from "gl-matrix";
-import { SyncedArray, ISyncedArrayRef } from "../../util/math";
+import { ISyncedArrayRef, SyncedArray } from "../../util/math";
 import { compileSpriteShader } from "../shaders/Shaders";
+import { Sprite } from "../types/RenderInterface";
+import { RenderItem, RenderItemInterface } from "../types/RenderItemInterface";
 
 export class SpriteRenderService implements RenderItemInterface<Sprite> {
     private spriteArray: SyncedArray<Sprite>;
@@ -30,7 +30,7 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         this.spriteArray = new SyncedArray({
             onReconstruct: (array: Array<ISyncedArrayRef<Sprite>>) => this.onArrayReconstruct(gl, array),
             onUpdate: (array: Array<ISyncedArrayRef<Sprite>>) => this.onArrayUpdate(gl),
-            onInjection: (index: number, ref: ISyncedArrayRef<Sprite>) => this.onInjection(index, ref.obj)
+            onInjection: (index: number, ref: ISyncedArrayRef<Sprite>) => this.onInjection(index, ref.obj),
         });
 
         this.positionBuffer = gl.createBuffer();
@@ -41,23 +41,23 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
     public draw(renderState: RenderState) {
         this.spriteArray.sync();
         const gl = renderState.screen.getOpenGL();
-    
-        const numComponents = 3;  
-        const type = gl.FLOAT;   
+
+        const numComponents = 3;
+        const type = gl.FLOAT;
         const normalize = false;
         const stride = 0;
-        const offset = 0;       
+        const offset = 0;
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-        gl.vertexAttribPointer(this.shader.attribute.vertexPosition, numComponents, type, normalize, stride, offset); 
+        gl.vertexAttribPointer(this.shader.attribute.vertexPosition, numComponents, type, normalize, stride, offset);
         gl.enableVertexAttribArray(this.shader.attribute.vertexPosition);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.translationBuffer);
-        gl.vertexAttribPointer(this.shader.attribute.vertexTranslation, numComponents, type, normalize, stride, offset); 
+        gl.vertexAttribPointer(this.shader.attribute.vertexTranslation, numComponents, type, normalize, stride, offset);
         gl.enableVertexAttribArray(this.shader.attribute.vertexTranslation);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
-        gl.vertexAttribPointer(this.shader.attribute.texturePosition, 2, type, normalize, stride, offset); 
+        gl.vertexAttribPointer(this.shader.attribute.texturePosition, 2, type, normalize, stride, offset);
         gl.enableVertexAttribArray(this.shader.attribute.texturePosition);
 
         gl.useProgram(this.shader.shaderId);
@@ -74,19 +74,42 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
     }
 
+    public createItem(param: Sprite) {
+        return {
+            renderId: this.spriteArray.createItem(param),
+        };
+    }
+
+    public updateItem(ref: RenderItem, param: Partial<Sprite>) {
+        this.spriteArray.updateItem(ref.renderId, param);
+    }
+
+    public freeItem(ref: RenderItem) {
+        this.spriteArray.freeItem(ref.renderId);
+    }
+
+    public attachSpritesheet(spritesheet: WebGLTexture) {
+        this.spritesheet = spritesheet;
+    }
+
+    public attachViewMatrices(modelViewMatrix: mat4, projectionMatrix: mat4) {
+        this.modelViewMatrix = modelViewMatrix;
+        this.projectionMatrix = projectionMatrix;
+    }
+
     private onArrayReconstruct(gl: WebGLRenderingContext, array: Array<ISyncedArrayRef<Sprite>>) {
         const length = array.length;
 
         this.positions = new Float32Array(new Array(
-            length * 2 * 3 * 3
+            length * 2 * 3 * 3,
         ).fill(0));
 
         this.texture = new Float32Array(new Array(
-            length * 2 * 3 * 2
+            length * 2 * 3 * 2,
         ).fill(0));
 
         this.translations = new Float32Array(new Array(
-            length * 2 * 3 * 3
+            length * 2 * 3 * 3,
         ).fill(0));
 
         for (let i = 0; i < array.length; i++) {
@@ -98,11 +121,11 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
 
     private onArrayUpdate(gl: WebGLRenderingContext) {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW); 
+        gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.translationBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.translations, gl.DYNAMIC_DRAW); 
+        gl.bufferData(gl.ARRAY_BUFFER, this.translations, gl.DYNAMIC_DRAW);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.texture, gl.DYNAMIC_DRAW);     
+        gl.bufferData(gl.ARRAY_BUFFER, this.texture, gl.DYNAMIC_DRAW);
     }
 
     private onInjection(index: number, sprite: Sprite) {
@@ -127,7 +150,6 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         this.positions[t1i + 7] = -halfHeight;
         this.positions[t1i + 8] = 0;
 
-
         this.positions[t1i + 9] = +halfWidth;
         this.positions[t1i + 10] = halfHeight;
         this.positions[t1i + 11] = 0;
@@ -140,7 +162,7 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         this.positions[t1i + 16] = -halfHeight;
         this.positions[t1i + 17] = 0;
 
-        // 
+        //
 
         this.translations[t1i] = x;
         this.translations[t1i + 1] = y;
@@ -153,7 +175,6 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         this.translations[t1i + 6] = x;
         this.translations[t1i + 7] = y;
         this.translations[t1i + 8] = z;
-
 
         this.translations[t1i + 9] = x;
         this.translations[t1i + 10] = y;
@@ -191,31 +212,8 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         this.texture[tex + 8] = texX + texWidth;
         this.texture[tex + 9] = texY + texHeight;
 
-        this.texture[tex + 10] = texX
+        this.texture[tex + 10] = texX;
         this.texture[tex + 11] = texY + texHeight;
 
-    }
-
-    public createItem(param: Sprite) {
-        return {
-            renderId: this.spriteArray.createItem(param)
-        };
-    }
-
-    public updateItem(ref: RenderItem, param: Partial<Sprite>) {
-        this.spriteArray.updateItem(ref.renderId, param);
-    }
-
-    public freeItem(ref: RenderItem) {
-        this.spriteArray.freeItem(ref.renderId,);
-    }
-
-    public attachSpritesheet(spritesheet: WebGLTexture) {
-        this.spritesheet = spritesheet;
-    }
-
-    public attachViewMatrices(modelViewMatrix: mat4, projectionMatrix: mat4) {
-        this.modelViewMatrix = modelViewMatrix;
-        this.projectionMatrix = projectionMatrix;
     }
 }
