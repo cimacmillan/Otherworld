@@ -50,6 +50,8 @@ export class RenderService implements RenderInterface {
         textureY: 0,
         textureWidth: 10,
         textureHeight: 1,
+        repeatWidth: 1,
+        repeatHeight: 1,
       });
     }
   }

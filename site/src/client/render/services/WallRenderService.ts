@@ -1,7 +1,11 @@
 import { mat4, vec2 } from "gl-matrix";
 import { RenderState } from "../../state/render/RenderState";
 import { ISyncedArrayRef, SyncedArray } from "../../util/math";
-import { compileModelShader, compileSpriteShader } from "../shaders/Shaders";
+import {
+  compileModelShader,
+  compileSpriteShader,
+  compileTextureRepeatShader,
+} from "../shaders/Shaders";
 import { Sprite, Wall } from "../types/RenderInterface";
 import { RenderItem, RenderItemInterface } from "../types/RenderItemInterface";
 
@@ -13,9 +17,13 @@ export class WallRenderService implements RenderItemInterface<Wall> {
   private positionBuffer: WebGLBuffer;
   private spritesheet: WebGLTexture;
   private textureBuffer: WebGLBuffer;
+  private textureStartBuffer: WebGLBuffer;
+  private textureSizeBuffer: WebGLBuffer;
 
   private positions: Float32Array;
   private texture: Float32Array;
+  private textureStart: Float32Array;
+  private textureSize: Float32Array;
 
   private modelViewMatrix: mat4;
   private projectionMatrix: mat4;
@@ -23,7 +31,7 @@ export class WallRenderService implements RenderItemInterface<Wall> {
   public init(renderState: RenderState) {
     const gl = renderState.screen.getOpenGL();
 
-    this.shader = compileModelShader(gl);
+    this.shader = compileTextureRepeatShader(gl);
 
     this.wallArray = new SyncedArray({
       onReconstruct: (array: Array<ISyncedArrayRef<Wall>>) =>
@@ -35,6 +43,8 @@ export class WallRenderService implements RenderItemInterface<Wall> {
 
     this.positionBuffer = gl.createBuffer();
     this.textureBuffer = gl.createBuffer();
+    this.textureStartBuffer = gl.createBuffer();
+    this.textureSizeBuffer = gl.createBuffer();
   }
 
   public draw(renderState: RenderState) {
@@ -68,6 +78,28 @@ export class WallRenderService implements RenderItemInterface<Wall> {
       offset
     );
     gl.enableVertexAttribArray(this.shader.attribute.texturePosition);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.textureStartBuffer);
+    gl.vertexAttribPointer(
+      this.shader.attribute.textureStart,
+      2,
+      type,
+      normalize,
+      stride,
+      offset
+    );
+    gl.enableVertexAttribArray(this.shader.attribute.textureStart);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.textureSizeBuffer);
+    gl.vertexAttribPointer(
+      this.shader.attribute.textureSize,
+      2,
+      type,
+      normalize,
+      stride,
+      offset
+    );
+    gl.enableVertexAttribArray(this.shader.attribute.textureSize);
 
     gl.useProgram(this.shader.shaderId);
     gl.uniformMatrix4fv(
@@ -121,8 +153,9 @@ export class WallRenderService implements RenderItemInterface<Wall> {
     const length = array.length;
 
     this.positions = new Float32Array(new Array(length * 2 * 3 * 3).fill(0));
-
     this.texture = new Float32Array(new Array(length * 2 * 3 * 2).fill(0));
+    this.textureStart = new Float32Array(new Array(length * 2 * 3 * 2).fill(0));
+    this.textureSize = new Float32Array(new Array(length * 2 * 3 * 2).fill(0));
 
     for (let i = 0; i < array.length; i++) {
       this.onInjection(i, array[i].obj);
@@ -136,6 +169,10 @@ export class WallRenderService implements RenderItemInterface<Wall> {
     gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, this.texture, gl.DYNAMIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.textureStartBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, this.textureStart, gl.DYNAMIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.textureSizeBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, this.textureSize, gl.DYNAMIC_DRAW);
   }
 
   private onInjection(index: number, wall: Wall) {
@@ -153,6 +190,8 @@ export class WallRenderService implements RenderItemInterface<Wall> {
       textureY,
       textureWidth,
       textureHeight,
+      repeatWidth,
+      repeatHeight,
     } = wall;
 
     this.positions[t1i] = startPos[0];
@@ -196,5 +235,41 @@ export class WallRenderService implements RenderItemInterface<Wall> {
 
     this.texture[tex + 10] = textureX + textureWidth;
     this.texture[tex + 11] = textureY + textureHeight;
+
+    this.textureStart[tex] = textureX;
+    this.textureStart[tex + 1] = textureY;
+
+    this.textureStart[tex + 2] = textureX;
+    this.textureStart[tex + 3] = textureY;
+
+    this.textureStart[tex + 4] = textureX;
+    this.textureStart[tex + 5] = textureY;
+
+    this.textureStart[tex + 6] = textureX;
+    this.textureStart[tex + 7] = textureY;
+
+    this.textureStart[tex + 8] = textureX;
+    this.textureStart[tex + 9] = textureY;
+
+    this.textureStart[tex + 10] = textureX;
+    this.textureStart[tex + 11] = textureY;
+
+    this.textureSize[tex] = repeatWidth;
+    this.textureSize[tex + 1] = repeatHeight;
+
+    this.textureSize[tex + 2] = repeatWidth;
+    this.textureSize[tex + 3] = repeatHeight;
+
+    this.textureSize[tex + 4] = repeatWidth;
+    this.textureSize[tex + 5] = repeatHeight;
+
+    this.textureSize[tex + 6] = repeatWidth;
+    this.textureSize[tex + 7] = repeatHeight;
+
+    this.textureSize[tex + 8] = repeatWidth;
+    this.textureSize[tex + 9] = repeatHeight;
+
+    this.textureSize[tex + 10] = repeatWidth;
+    this.textureSize[tex + 11] = repeatHeight;
   }
 }

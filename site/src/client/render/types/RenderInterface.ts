@@ -26,6 +26,9 @@ export interface Wall {
   textureY: number;
   textureWidth: number;
   textureHeight: number;
+
+  repeatWidth: number;
+  repeatHeight: number;
 }
 
 export interface RenderItem {
