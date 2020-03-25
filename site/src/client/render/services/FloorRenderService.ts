@@ -6,11 +6,11 @@ import {
   compileSpriteShader,
   compileTextureRepeatShader,
 } from "../shaders/Shaders";
-import { Sprite, Wall } from "../types/RenderInterface";
+import { Sprite, Wall, Floor } from "../types/RenderInterface";
 import { RenderItem, RenderItemInterface } from "../types/RenderItemInterface";
 
-export class WallRenderService implements RenderItemInterface<Wall> {
-  private wallArray: SyncedArray<Wall>;
+export class FloorRenderService implements RenderItemInterface<Floor> {
+  private floorArray: SyncedArray<Floor>;
 
   private shader: CompiledShader;
 
@@ -33,11 +33,12 @@ export class WallRenderService implements RenderItemInterface<Wall> {
 
     this.shader = compileTextureRepeatShader(gl);
 
-    this.wallArray = new SyncedArray({
-      onReconstruct: (array: Array<ISyncedArrayRef<Wall>>) =>
+    this.floorArray = new SyncedArray({
+      onReconstruct: (array: Array<ISyncedArrayRef<Floor>>) =>
         this.onArrayReconstruct(gl, array),
-      onUpdate: (array: Array<ISyncedArrayRef<Wall>>) => this.onArrayUpdate(gl),
-      onInjection: (index: number, ref: ISyncedArrayRef<Wall>) =>
+      onUpdate: (array: Array<ISyncedArrayRef<Floor>>) =>
+        this.onArrayUpdate(gl),
+      onInjection: (index: number, ref: ISyncedArrayRef<Floor>) =>
         this.onInjection(index, ref.obj),
     });
 
@@ -48,7 +49,7 @@ export class WallRenderService implements RenderItemInterface<Wall> {
   }
 
   public draw(renderState: RenderState) {
-    this.wallArray.sync();
+    this.floorArray.sync();
     const gl = renderState.screen.getOpenGL();
 
     const numComponents = 3;
@@ -123,18 +124,18 @@ export class WallRenderService implements RenderItemInterface<Wall> {
     gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
   }
 
-  public createItem(param: Wall) {
+  public createItem(param: Floor) {
     return {
-      renderId: this.wallArray.createItem(param),
+      renderId: this.floorArray.createItem(param),
     };
   }
 
-  public updateItem(ref: RenderItem, param: Partial<Wall>) {
-    this.wallArray.updateItem(ref.renderId, param);
+  public updateItem(ref: RenderItem, param: Partial<Floor>) {
+    this.floorArray.updateItem(ref.renderId, param);
   }
 
   public freeItem(ref: RenderItem) {
-    this.wallArray.freeItem(ref.renderId);
+    this.floorArray.freeItem(ref.renderId);
   }
 
   public attachSpritesheet(spritesheet: WebGLTexture) {
@@ -148,7 +149,7 @@ export class WallRenderService implements RenderItemInterface<Wall> {
 
   private onArrayReconstruct(
     gl: WebGLRenderingContext,
-    array: Array<ISyncedArrayRef<Wall>>
+    array: Array<ISyncedArrayRef<Floor>>
   ) {
     const length = array.length;
 
@@ -175,47 +176,44 @@ export class WallRenderService implements RenderItemInterface<Wall> {
     gl.bufferData(gl.ARRAY_BUFFER, this.textureSize, gl.STATIC_DRAW);
   }
 
-  private onInjection(index: number, wall: Wall) {
+  private onInjection(index: number, floor: Floor) {
     const tex = index * 2 * 3 * 2;
     const t1i = index * 2 * 3 * 3;
 
     const {
       startPos,
       endPos,
-      startHeight,
-      startOffset,
-      endHeight,
-      endOffset,
+      height,
       textureX,
       textureY,
       textureWidth,
       textureHeight,
       repeatWidth,
       repeatHeight,
-    } = wall;
+    } = floor;
 
     this.positions[t1i] = startPos[0];
-    this.positions[t1i + 1] = startHeight + startOffset;
+    this.positions[t1i + 1] = height;
     this.positions[t1i + 2] = startPos[1];
 
     this.positions[t1i + 3] = endPos[0];
-    this.positions[t1i + 4] = endHeight + endOffset;
-    this.positions[t1i + 5] = endPos[1];
+    this.positions[t1i + 4] = height;
+    this.positions[t1i + 5] = startPos[1];
 
     this.positions[t1i + 6] = startPos[0];
-    this.positions[t1i + 7] = startOffset;
-    this.positions[t1i + 8] = startPos[1];
+    this.positions[t1i + 7] = height;
+    this.positions[t1i + 8] = endPos[1];
 
     this.positions[t1i + 9] = startPos[0];
-    this.positions[t1i + 10] = endOffset;
-    this.positions[t1i + 11] = startPos[1];
+    this.positions[t1i + 10] = height;
+    this.positions[t1i + 11] = endPos[1];
 
     this.positions[t1i + 12] = endPos[0];
-    this.positions[t1i + 13] = endHeight + endOffset;
-    this.positions[t1i + 14] = endPos[1];
+    this.positions[t1i + 13] = height;
+    this.positions[t1i + 14] = startPos[1];
 
     this.positions[t1i + 15] = endPos[0];
-    this.positions[t1i + 16] = endOffset;
+    this.positions[t1i + 16] = height;
     this.positions[t1i + 17] = endPos[1];
 
     this.texture[tex] = textureX;

@@ -31,6 +31,21 @@ export interface Wall {
   repeatHeight: number;
 }
 
+export interface Floor {
+  startPos: glm.vec2;
+  endPos: glm.vec2;
+
+  height: number;
+
+  textureX: number;
+  textureY: number;
+  textureWidth: number;
+  textureHeight: number;
+
+  repeatWidth: number;
+  repeatHeight: number;
+}
+
 export interface RenderItem {
   renderId: number;
 }

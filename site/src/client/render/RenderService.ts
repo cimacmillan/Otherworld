@@ -6,10 +6,13 @@ import { getTextureCoordinate } from "../util/math/Basic";
 import { SpriteRenderService } from "./services/SpriteRenderService";
 import { WallRenderService } from "./services/WallRenderService";
 import { RenderInterface } from "./types/RenderInterface";
+import { FloorRenderService } from "./services/FloorRenderService";
+import { render } from "react-dom";
 
 export class RenderService implements RenderInterface {
   public spriteRenderService: SpriteRenderService;
   public wallRenderService: WallRenderService;
+  public floorRenderService: FloorRenderService;
 
   private count = 3000;
   private sqr = Math.floor(Math.sqrt(this.count));
@@ -19,6 +22,7 @@ export class RenderService implements RenderInterface {
   public constructor(private resourceManager: ResourceManager) {
     this.spriteRenderService = new SpriteRenderService();
     this.wallRenderService = new WallRenderService();
+    this.floorRenderService = new FloorRenderService();
   }
 
   public init(renderState: RenderState) {
@@ -26,6 +30,8 @@ export class RenderService implements RenderInterface {
     this.spriteRenderService.attachSpritesheet(this.resourceManager.sprite);
     this.wallRenderService.init(renderState);
     this.wallRenderService.attachSpritesheet(this.resourceManager.wall);
+    this.floorRenderService.init(renderState);
+    this.floorRenderService.attachSpritesheet(this.resourceManager.floor);
 
     for (let i = 0; i < this.count; i++) {
       const xtex = 32 * Math.round(Math.random());
@@ -54,6 +60,18 @@ export class RenderService implements RenderInterface {
         repeatHeight: 1,
       });
     }
+
+    this.floorRenderService.createItem({
+      startPos: [10, 10],
+      endPos: [-10, -10],
+      height: 0,
+      textureX: 0,
+      textureY: 0,
+      textureWidth: 20,
+      textureHeight: 20,
+      repeatWidth: 1,
+      repeatHeight: 1,
+    });
   }
 
   public draw(renderState: RenderState) {
@@ -68,10 +86,15 @@ export class RenderService implements RenderInterface {
       modelViewMatrix,
       projectionMatrix
     );
+    this.floorRenderService.attachViewMatrices(
+      modelViewMatrix,
+      projectionMatrix
+    );
 
     this.clearScreen(renderState);
     this.spriteRenderService.draw(renderState);
     this.wallRenderService.draw(renderState);
+    this.floorRenderService.draw(renderState);
 
     for (let i = 0; i < this.count; i++) {
       this.spriteRenderService.updateItem(
