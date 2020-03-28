@@ -4,6 +4,7 @@ Project Description
 
 ### Todo
 
+- [ ] Work out how to do UI  
 - [ ] Create milestones doc for long-term goals  
 - [ ] Create current story doc  
 - [ ] Come up with name  

@@ -27,23 +27,24 @@ const TARGET_MILLIS = Math.floor(1000 / TARGET_FPS);
 
 export class GameComponent extends React.Component {
   private gameState: GameState;
-  private resourceManager: ResourceManager;
+  // private resourceManager: ResourceManager;
 
   private serviceLocator: ServiceLocator;
 
   public async componentDidMount() {
     const audioContext = new AudioContext();
 
-    this.resourceManager = new ResourceManager();
-    await this.resourceManager.load(
+    const resourceManager = new ResourceManager();
+    await resourceManager.load(
       (this.refs.main_canvas as CanvasComponent).getOpenGL(),
       audioContext
     );
 
+    const world = new World();
     this.serviceLocator = new ServiceLocator(
-      this.resourceManager,
-      new World(),
-      new RenderService(this.resourceManager),
+      resourceManager,
+      world,
+      new RenderService(resourceManager),
       new AudioService(audioContext)
     );
 
@@ -52,15 +53,17 @@ export class GameComponent extends React.Component {
 
   public render() {
     return (
-      <CanvasComponent
-        ref="main_canvas"
-        id={"main_canvas"}
-        dom_width={DOM_WIDTH}
-        dom_height={DOM_HEIGHT}
-        width={WIDTH}
-        height={HEIGHT}
-        resolution={RES_DIV}
-      />
+      <>
+        <CanvasComponent
+          ref="main_canvas"
+          id={"main_canvas"}
+          dom_width={DOM_WIDTH}
+          dom_height={DOM_HEIGHT}
+          width={WIDTH}
+          height={HEIGHT}
+          resolution={RES_DIV}
+        />
+      </>
     );
   }
 
@@ -77,9 +80,6 @@ export class GameComponent extends React.Component {
 
     this.gameState = {
       loop,
-      world: {
-        map: initialiseMap(this.resourceManager),
-      },
       render: {
         screen,
         camera: initialiseCamera(screen),
