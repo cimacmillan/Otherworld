@@ -114,6 +114,8 @@ export class GameComponent extends React.Component {
       repeatHeight: 1,
     });
 
+    // this.serviceLocator.getAudioService().play(this.serviceLocator.getResourceManager().intro);
+
     this.gameState.loop.start();
   };
 

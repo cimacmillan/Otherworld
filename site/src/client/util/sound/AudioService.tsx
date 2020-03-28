@@ -16,15 +16,14 @@ export class AudioService {
     this.camera = camera;
   }
 
-  public play(buffer: AudioBuffer, gain: number = 1, pan: number = 0) {
-    playSound(buffer, this.context, gain, pan);
+  public play(buffer: AudioBuffer, gain: number = 1, pan: number = 0): AudioBufferSourceNode {
+    return playSound(buffer, this.context, gain, pan);
   }
 
-  public play3D(buffer: AudioBuffer, sourcePosition: vec2, gain: number = 1) {
+  public play3D(buffer: AudioBuffer, sourcePosition: vec2, gain: number = 1): AudioBufferSourceNode {
     if (!this.camera) {
       return;
     }
-
     const difX = sourcePosition[0] - this.camera.position.x;
     const difY = sourcePosition[1] - this.camera.position.y;
     const distance = Math.sqrt(difX * difX + difY * difY);
@@ -32,12 +31,8 @@ export class AudioService {
       gain / (distance * DISTANCE_RUN_OFF),
       MAX_GAIN
     );
-
     const pan = Math.sin(Math.atan2(difX, -difY) - this.camera.angle);
-
-    playSound(buffer, this.context, distanceGain, pan);
-    // console.log(`Boing ${this.camera.position} ${sourcePosition} ${gain}`);
-    // playSound(buffer, this.context, gain, 1);
+    return playSound(buffer, this.context, distanceGain, pan);
   }
 
   public getContext() {
@@ -67,7 +62,7 @@ export function playSound(
   context: AudioContext,
   gain: number,
   pan: number
-) {
+): AudioBufferSourceNode {
   if (gain < MIN_GAIN) return;
 
   const panNode = new StereoPannerNode(context, { pan });
@@ -79,4 +74,6 @@ export function playSound(
   source.buffer = buffer; // tell the source which sound to play
   source.connect(panNode).connect(gainNode).connect(context.destination); // connect the source to the context's destination (the speakers)
   source.start(0); // play the source now
+  return source;
 }
+
