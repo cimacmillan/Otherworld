@@ -1,8 +1,8 @@
-import { RenderService } from "../render";
 import { World } from "../engine/World";
-import { AudioService } from "../util/sound/AudioService";
+import { RenderService } from "../render";
 import { ResourceManager } from "../resources/ResourceManager";
 import { GameState } from "../state/GameState";
+import { AudioService } from "../util/sound/AudioService";
 
 export class ServiceLocator {
   public constructor(

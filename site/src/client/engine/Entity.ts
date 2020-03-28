@@ -1,7 +1,7 @@
 import { EntityComponent } from "./EntityComponent";
+import { EntityEventType } from "./events/EntityEvents";
 import { GameEvent } from "./events/Event";
 import { BaseState } from "./State";
-import { EntityEventType } from "./events/EntityEvents";
 
 export class Entity<State extends BaseState> {
   private state: State;

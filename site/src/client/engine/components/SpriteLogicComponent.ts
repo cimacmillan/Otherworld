@@ -1,11 +1,11 @@
-import { Sprite, RenderItem } from "../../render/types/RenderInterface";
-import { BaseState } from "../State";
-import { EntityComponent } from "../EntityComponent";
-import { Entity } from "../Entity";
-import { GameEvent } from "../events/Event";
-import { EntityEventType } from "../events/EntityEvents";
-import { SpriteStateType } from "./SpriteRenderComponent";
+import { RenderItem, Sprite } from "../../render/types/RenderInterface";
 import { getTextureCoordinate } from "../../util/math";
+import { Entity } from "../Entity";
+import { EntityComponent } from "../EntityComponent";
+import { EntityEventType } from "../events/EntityEvents";
+import { GameEvent } from "../events/Event";
+import { BaseState } from "../State";
+import { SpriteStateType } from "./SpriteRenderComponent";
 
 export class SpriteLogicComponent<
   T extends SpriteStateType

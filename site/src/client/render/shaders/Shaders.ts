@@ -2,8 +2,8 @@ import { fsSource } from "./fragment/Fragment";
 import { rfsSource } from "./fragment/RepeatedFragment";
 import { initShaderProgram } from "./ShaderCompiler";
 import { BilloardVertex } from "./vertex/BillboardVertex";
-import { Vertex } from "./vertex/Vertex";
 import { RepeatedVertex } from "./vertex/RepeatedVertex";
+import { Vertex } from "./vertex/Vertex";
 
 export function compileSpriteShader(gl: WebGLRenderingContext) {
   const shaderId = initShaderProgram(gl, BilloardVertex.source, fsSource);

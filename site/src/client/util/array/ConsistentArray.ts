@@ -1,7 +1,7 @@
 export class ConsistentArray<T> {
-  private array: Array<T>;
-  private toAdd: Array<T>;
-  private toRemove: Array<T>;
+  private array: T[];
+  private toAdd: T[];
+  private toRemove: T[];
 
   public constructor() {
     this.array = [];

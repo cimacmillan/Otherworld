@@ -1,7 +1,7 @@
+import { ServiceLocator } from "../services/ServiceLocator";
 import { Entity } from "./Entity";
 import { GameEvent } from "./events/Event";
 import { BaseState } from "./State";
-import { ServiceLocator } from "../services/ServiceLocator";
 
 export abstract class EntityComponent<State extends BaseState> {
   public constructor(public serviceLocator: ServiceLocator) {}

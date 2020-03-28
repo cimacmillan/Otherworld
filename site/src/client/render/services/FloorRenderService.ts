@@ -6,7 +6,7 @@ import {
   compileSpriteShader,
   compileTextureRepeatShader,
 } from "../shaders/Shaders";
-import { Sprite, Wall, Floor } from "../types/RenderInterface";
+import { Floor, Sprite, Wall } from "../types/RenderInterface";
 import { RenderItem, RenderItemInterface } from "../types/RenderItemInterface";
 
 export class FloorRenderService implements RenderItemInterface<Floor> {

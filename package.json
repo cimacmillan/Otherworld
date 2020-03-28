@@ -12,6 +12,7 @@
     "prettier": "2.0.1",
     "ts-jest": "^24.1.0",
     "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.7.5",
     "webpack": "^4.41.0",
     "webpack-cli": "^3.3.9"
@@ -43,7 +44,7 @@
     "test-unit": "npx jest site/src/test/unit/",
     "test-profile": "npx jest site/src/test/profile/ -u",
     "test": "npm run-script test-unit",
-    "lint": "npx prettier --write site/src && tslint site/src && git add ."
+    "lint": "npx prettier --write site/src && tslint --fix -c tslint.json 'site/src/**/*.ts' && git add ."
   },
   "pre-commit": [
     "lint",

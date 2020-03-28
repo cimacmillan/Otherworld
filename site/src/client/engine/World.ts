@@ -1,8 +1,8 @@
+import { ConsistentArray } from "../util/array/ConsistentArray";
 import { Entity } from "./Entity";
+import { EntityEventType } from "./events/EntityEvents";
 import { GameEvent } from "./events/Event";
 import { BaseState } from "./State";
-import { ConsistentArray } from "../util/array/ConsistentArray";
-import { EntityEventType } from "./events/EntityEvents";
 
 export class World {
   private entityArray: ConsistentArray<Entity<BaseState>>;
@@ -32,6 +32,10 @@ export class World {
 
   public onGlobalEmit(event: GameEvent) {}
 
+  public getEntityArray() {
+    return this.entityArray;
+  }
+
   private performSync() {
     const toAdd = this.entityArray.getToAdd();
     const toRemove = this.entityArray.getToRemove();
@@ -47,9 +51,5 @@ export class World {
       });
     }
     this.entityArray.sync();
-  }
-
-  public getEntityArray() {
-    return this.entityArray;
   }
 }

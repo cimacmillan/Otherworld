@@ -1,9 +1,9 @@
-import { Sprite, RenderItem } from "../../render/types/RenderInterface";
-import { BaseState } from "../State";
-import { EntityComponent } from "../EntityComponent";
+import { RenderItem, Sprite } from "../../render/types/RenderInterface";
 import { Entity } from "../Entity";
-import { GameEvent } from "../events/Event";
+import { EntityComponent } from "../EntityComponent";
 import { EntityEventType } from "../events/EntityEvents";
+import { GameEvent } from "../events/Event";
+import { BaseState } from "../State";
 
 export interface SpriteState {
   toRender?: Sprite;
