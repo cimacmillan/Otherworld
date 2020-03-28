@@ -100,6 +100,10 @@ export class Game {
     return this.initialised;
   }
 
+  public getServiceLocator() {
+    return this.serviceLocator;
+  }
+
   private update = () => {
     updateInput(this.gameState.render.camera);
     this.serviceLocator.getWorld().update();
