@@ -1,8 +1,11 @@
 import { Entity } from "./Entity";
 import { GameEvent } from "./events/Event";
 import { BaseState } from "./State";
+import { ServiceLocator } from "../services/ServiceLocator";
 
 export abstract class EntityComponent<State extends BaseState> {
+  public constructor(public serviceLocator: ServiceLocator) {}
+
   // Should intialise this components part of the state
   public abstract init(entity: Entity<State>): void;
   // Update component

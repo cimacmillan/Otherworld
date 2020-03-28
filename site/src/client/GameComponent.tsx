@@ -1,5 +1,4 @@
 import React = require("react");
-import { testFunction } from "./engine/World";
 import { initialiseInput, updateInput } from "./Input";
 import { RenderService, ScreenBuffer } from "./render";
 import { CanvasComponent } from "./render";
@@ -11,6 +10,11 @@ import { loadTextureFromURL } from "./util/loader/TextureLoader";
 import { loadSound, playSound, Sound } from "./util/sound/Sound";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
+import { ServiceLocator } from "./services/ServiceLocator";
+import { World } from "./engine/World";
+import { Entity } from "./engine/Entity";
+import { SpriteRenderComponent } from "./engine/components/SpriteRenderComponent";
+import { SpriteLogicComponent } from "./engine/components/SpriteLogicComponent";
 
 const DOM_WIDTH = 1280;
 const DOM_HEIGHT = 720;
@@ -24,7 +28,8 @@ const TARGET_MILLIS = Math.floor(1000 / TARGET_FPS);
 export class GameComponent extends React.Component {
   private gameState: GameState;
   private resourceManager: ResourceManager;
-  private renderService: RenderService;
+
+  private serviceLocator: ServiceLocator;
 
   public async componentDidMount() {
     this.resourceManager = new ResourceManager();
@@ -32,11 +37,12 @@ export class GameComponent extends React.Component {
       (this.refs.main_canvas as CanvasComponent).getOpenGL()
     );
 
-    this.renderService = new RenderService(this.resourceManager);
+    this.serviceLocator = new ServiceLocator(
+      new World(),
+      new RenderService(this.resourceManager)
+    );
 
     this.initState();
-
-    testFunction();
   }
 
   public render() {
@@ -80,7 +86,15 @@ export class GameComponent extends React.Component {
       },
     };
 
-    this.renderService.init(this.gameState.render);
+    this.serviceLocator.getRenderService().init(this.gameState.render);
+    this.serviceLocator.getWorld().init();
+
+    const world = this.serviceLocator.getWorld();
+    const sprite = new Entity(
+      new SpriteRenderComponent(this.serviceLocator),
+      new SpriteLogicComponent(this.serviceLocator)
+    );
+    world.addEntity(sprite);
 
     // loadSound("audio/intro.mp3", (buffer) => {
     // setTimeout(
@@ -95,13 +109,11 @@ export class GameComponent extends React.Component {
 
   private update = () => {
     updateInput(this.gameState.render.camera);
+    this.serviceLocator.getWorld().update();
   };
 
   private draw = () => {
-    // Create the image
-    this.renderService.draw(this.gameState.render);
-    // Draw the image data to the canvas
-    // (this.refs.main_canvas as CanvasComponent).writeImageData();
+    this.serviceLocator.getRenderService().draw(this.gameState.render);
   };
 
   private mainLoop = (

@@ -33,45 +33,45 @@ export class RenderService implements RenderInterface {
     this.floorRenderService.init(renderState);
     this.floorRenderService.attachSpritesheet(this.resourceManager.floor);
 
-    for (let i = 0; i < this.count; i++) {
-      const xtex = 32 * Math.round(Math.random());
-      const ytex = 32 * Math.round(Math.random());
-      this.spriteRenderService.createItem({
-        position: this.getPos(i),
-        size: [1, 1],
-        height: this.getHeight(i, this.time),
-        ...getTextureCoordinate(64, 64, 32, 32, xtex, ytex),
-      });
-    }
+    // for (let i = 0; i < this.count; i++) {
+    //   const xtex = 32 * Math.round(Math.random());
+    //   const ytex = 32 * Math.round(Math.random());
+    //   this.spriteRenderService.createItem({
+    //     position: this.getPos(i),
+    //     size: [1, 1],
+    //     height: this.getHeight(i, this.time),
+    //     ...getTextureCoordinate(64, 64, 32, 32, xtex, ytex),
+    //   });
+    // }
 
-    for (let i = 0; i < 1000; i++) {
-      this.wallRenderService.createItem({
-        startPos: [0 - i, -i],
-        endPos: [10 - i, -i],
-        startHeight: 1,
-        endHeight: 1,
-        startOffset: 0,
-        endOffset: 0,
-        textureX: 0,
-        textureY: 0,
-        textureWidth: 10,
-        textureHeight: 1,
-        repeatWidth: 1,
-        repeatHeight: 1,
-      });
-    }
+    // for (let i = 0; i < 1000; i++) {
+    //   this.wallRenderService.createItem({
+    //     startPos: [0 - i, -i],
+    //     endPos: [10 - i, -i],
+    //     startHeight: 1,
+    //     endHeight: 1,
+    //     startOffset: 0,
+    //     endOffset: 0,
+    //     textureX: 0,
+    //     textureY: 0,
+    //     textureWidth: 10,
+    //     textureHeight: 1,
+    //     repeatWidth: 1,
+    //     repeatHeight: 1,
+    //   });
+    // }
 
-    this.floorRenderService.createItem({
-      startPos: [10, 10],
-      endPos: [-10, -10],
-      height: 0,
-      textureX: 0,
-      textureY: 0,
-      textureWidth: 20,
-      textureHeight: 20,
-      repeatWidth: 1,
-      repeatHeight: 1,
-    });
+    // this.floorRenderService.createItem({
+    //   startPos: [10, 10],
+    //   endPos: [-10, -10],
+    //   height: 0,
+    //   textureX: 0,
+    //   textureY: 0,
+    //   textureWidth: 20,
+    //   textureHeight: 20,
+    //   repeatWidth: 1,
+    //   repeatHeight: 1,
+    // });
   }
 
   public draw(renderState: RenderState) {

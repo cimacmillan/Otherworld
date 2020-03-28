@@ -27,15 +27,16 @@ Project Description
 - [ ] Sound and subtitles player? (milestone work out)  
 - [ ] Physics for puzzles (milestone work out)  
 - [ ] LineRenderService  
+- [ ] Background render service  
 
 ### In Progress
 
-- [ ] Migrate rendering to OpenGL  
-- [ ] Wall texture atlas repeating  
-- [ ] Floor texture atlas repreating  
 
 ### Test
 
+- [ ] Floor texture atlas repreating  
+- [ ] Wall texture atlas repeating  
+- [ ] Migrate rendering to OpenGL  
 - [ ] Write tests for current code  
 
 ### Done ✓
