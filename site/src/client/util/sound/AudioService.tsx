@@ -1,6 +1,10 @@
 import { vec2 } from "gl-matrix";
 import { Camera } from "../../types";
 
+const MIN_GAIN = 0;
+const MAX_GAIN = 1;
+const DISTANCE_RUN_OFF = 1;
+
 export class AudioService {
   private camera: Camera;
 
@@ -21,6 +25,17 @@ export class AudioService {
       return;
     }
 
+    const difX = sourcePosition[0] - this.camera.position.x;
+    const difY = sourcePosition[1] - this.camera.position.y;
+    const distance = Math.sqrt(difX * difX + difY * difY);
+    const distanceGain = Math.min(
+      gain / (distance * DISTANCE_RUN_OFF),
+      MAX_GAIN
+    );
+
+    const pan = Math.sin(Math.atan2(difX, -difY) - this.camera.angle);
+
+    playSound(buffer, this.context, distanceGain, pan);
     // console.log(`Boing ${this.camera.position} ${sourcePosition} ${gain}`);
     // playSound(buffer, this.context, gain, 1);
   }
@@ -53,6 +68,8 @@ export function playSound(
   gain: number,
   pan: number
 ) {
+  if (gain < MIN_GAIN) return;
+
   const panNode = new StereoPannerNode(context, { pan });
   const gainNode = context.createGain();
 

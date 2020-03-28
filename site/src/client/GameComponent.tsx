@@ -94,13 +94,25 @@ export class GameComponent extends React.Component {
 
     const world = this.serviceLocator.getWorld();
 
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 10; i++) {
       const sprite = new Entity(
         new SpriteRenderComponent(this.serviceLocator),
         new SpriteLogicComponent(this.serviceLocator)
       );
       world.addEntity(sprite);
     }
+
+    this.serviceLocator.getRenderService().floorRenderService.createItem({
+      startPos: [10, 10],
+      endPos: [-10, -10],
+      height: 0,
+      textureX: 0,
+      textureY: 0,
+      textureWidth: 20,
+      textureHeight: 20,
+      repeatWidth: 1,
+      repeatHeight: 1,
+    });
 
     this.gameState.loop.start();
   };

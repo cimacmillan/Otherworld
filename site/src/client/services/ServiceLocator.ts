@@ -27,8 +27,4 @@ export class ServiceLocator {
   public getAudioService() {
     return this.audioService;
   }
-
-  public getState() {
-    return this.state;
-  }
 }

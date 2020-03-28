@@ -12,6 +12,8 @@ export class SpriteLogicComponent<
 > extends EntityComponent<T> {
   private seed: number;
   private yVel: number = 0;
+  private bounceVelocity: number = 0;
+  private bounceVal: number = 0;
 
   public init(entity: Entity<SpriteStateType>) {
     this.seed = Math.random();
@@ -25,11 +27,13 @@ export class SpriteLogicComponent<
     }
 
     this.yVel -= 0.01;
+    this.bounceVal += this.bounceVelocity;
+
     sprite.height = sprite.height + this.yVel;
 
-    if (sprite.height < 0) {
+    if (sprite.height - sprite.size[1] / 2 < 0) {
       this.yVel = Math.abs(this.yVel);
-      sprite.height = 0;
+      sprite.height = sprite.size[1] / 2;
 
       if (this.yVel > 0.01) {
         this.serviceLocator
@@ -39,10 +43,22 @@ export class SpriteLogicComponent<
             sprite.position,
             this.yVel
           );
+        this.bounceVelocity = this.yVel;
       }
     }
 
-    this.yVel *= 0.99;
+    const speed = 10;
+    const width =
+      1 + Math.sin(this.bounceVal * speed) * this.bounceVelocity * 2;
+    const height =
+      1 +
+      Math.sin(this.bounceVal * speed + Math.PI / 2) * this.bounceVelocity * 2;
+
+    sprite.size[0] = width;
+    sprite.size[1] = height;
+
+    this.yVel *= 0.999;
+    this.bounceVelocity *= 0.9;
   }
 
   public onEvent(entity: Entity<SpriteStateType>, event: GameEvent): void {
