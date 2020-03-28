@@ -9,7 +9,7 @@ export interface CanvasComponentProps {
   height: number;
 }
 
-export class CanvasComponent extends React.Component<CanvasComponentProps> {
+export class CanvasComponent extends React.PureComponent<CanvasComponentProps> {
   private canvas: HTMLCanvasElement;
   private canvasContext: WebGLRenderingContext;
   // private imageData: ImageData;
