@@ -1,6 +1,7 @@
 import { EntityComponent } from "./EntityComponent";
-import { EntityEventType, GameEvent } from "./events/Event";
+import { GameEvent } from "./events/Event";
 import { BaseState } from "./State";
+import { EntityEventType } from "./events/EntityEvents";
 
 export class Entity<State extends BaseState> {
   private state: State;
@@ -11,9 +12,14 @@ export class Entity<State extends BaseState> {
 
   constructor(...components: Array<EntityComponent<State>>) {
     this.components = components;
+    let initialState = {};
     for (let i = 0; i < this.components.length; i++) {
-      this.components[i].init(this);
+      initialState = {
+        ...initialState,
+        ...this.components[i].init(this),
+      };
     }
+    this.state = initialState as State;
     this.initialised = true;
   }
 

@@ -35,8 +35,10 @@ export class SyncedArray<T> {
     if (index >= 0) {
       const ref = this.array[index];
       ref.obj = { ...ref.obj, ...param };
-      this.callbacks.onInjection(index, this.array[index]);
-      this.requireUpdate = true;
+      if (!this.requireConstruction) {
+        this.callbacks.onInjection(index, this.array[index]);
+        this.requireUpdate = true;
+      }
     }
   }
 

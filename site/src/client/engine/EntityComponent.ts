@@ -7,7 +7,7 @@ export abstract class EntityComponent<State extends BaseState> {
   public constructor(public serviceLocator: ServiceLocator) {}
 
   // Should intialise this components part of the state
-  public abstract init(entity: Entity<State>): void;
+  public abstract init(entity: Entity<State>): object;
   // Update component
   public abstract update(entity: Entity<State>): void;
   // On event from other components in this entitiy

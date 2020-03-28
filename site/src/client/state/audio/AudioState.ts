@@ -1,5 +1,5 @@
-import { Sound } from "../../util/sound/Sound";
+import { AudioService } from "../../util/sound/AudioService";
 
 export interface AudioState {
-  sound: Sound;
+  sound: AudioService;
 }

@@ -7,7 +7,7 @@ import { GameState } from "./state/GameState";
 import { Texture } from "./types";
 import { initialiseCamera, initialiseMap } from "./util/loader/MapLoader";
 import { loadTextureFromURL } from "./util/loader/TextureLoader";
-import { loadSound, playSound, Sound } from "./util/sound/Sound";
+import { loadSound, playSound, AudioService } from "./util/sound/AudioService";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
 import { ServiceLocator } from "./services/ServiceLocator";
@@ -32,14 +32,19 @@ export class GameComponent extends React.Component {
   private serviceLocator: ServiceLocator;
 
   public async componentDidMount() {
+    const audioContext = new AudioContext();
+
     this.resourceManager = new ResourceManager();
     await this.resourceManager.load(
-      (this.refs.main_canvas as CanvasComponent).getOpenGL()
+      (this.refs.main_canvas as CanvasComponent).getOpenGL(),
+      audioContext
     );
 
     this.serviceLocator = new ServiceLocator(
+      this.resourceManager,
       new World(),
-      new RenderService(this.resourceManager)
+      new RenderService(this.resourceManager),
+      new AudioService(audioContext)
     );
 
     this.initState();
@@ -68,8 +73,6 @@ export class GameComponent extends React.Component {
       HEIGHT
     );
 
-    const sound = new Sound();
-
     const loop = new TimeControlledLoop(TARGET_MILLIS, this.mainLoop);
 
     this.gameState = {
@@ -77,32 +80,27 @@ export class GameComponent extends React.Component {
       world: {
         map: initialiseMap(this.resourceManager),
       },
-      audio: {
-        sound,
-      },
       render: {
         screen,
         camera: initialiseCamera(screen),
       },
     };
 
+    this.serviceLocator
+      .getAudioService()
+      .attachCamera(this.gameState.render.camera);
     this.serviceLocator.getRenderService().init(this.gameState.render);
     this.serviceLocator.getWorld().init();
 
     const world = this.serviceLocator.getWorld();
-    const sprite = new Entity(
-      new SpriteRenderComponent(this.serviceLocator),
-      new SpriteLogicComponent(this.serviceLocator)
-    );
-    world.addEntity(sprite);
 
-    // loadSound("audio/intro.mp3", (buffer) => {
-    // setTimeout(
-    // () => {
-    // this.gameState.audio.sound.context.resume();
-    // playSound(buffer, this.gameState.audio.sound);
-    // }, 2000);
-    // }, this.gameState.audio.sound);
+    for (let i = 0; i < 8; i++) {
+      const sprite = new Entity(
+        new SpriteRenderComponent(this.serviceLocator),
+        new SpriteLogicComponent(this.serviceLocator)
+      );
+      world.addEntity(sprite);
+    }
 
     this.gameState.loop.start();
   };
@@ -121,7 +119,13 @@ export class GameComponent extends React.Component {
     actualMilliseconds: number,
     actualProportion?: number
   ) => {
-    logFPS();
+    logFPS((fps) => {
+      console.log(
+        `FPS: ${fps} EntityCount: ${
+          this.serviceLocator.getWorld().getEntityArray().getArray().length
+        }`
+      );
+    });
     setFPSProportion(1 / actualProportion);
 
     this.update();

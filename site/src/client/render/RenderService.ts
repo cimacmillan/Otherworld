@@ -7,17 +7,11 @@ import { SpriteRenderService } from "./services/SpriteRenderService";
 import { WallRenderService } from "./services/WallRenderService";
 import { RenderInterface } from "./types/RenderInterface";
 import { FloorRenderService } from "./services/FloorRenderService";
-import { render } from "react-dom";
 
 export class RenderService implements RenderInterface {
   public spriteRenderService: SpriteRenderService;
   public wallRenderService: WallRenderService;
   public floorRenderService: FloorRenderService;
-
-  private count = 3000;
-  private sqr = Math.floor(Math.sqrt(this.count));
-
-  private time = 0;
 
   public constructor(private resourceManager: ResourceManager) {
     this.spriteRenderService = new SpriteRenderService();

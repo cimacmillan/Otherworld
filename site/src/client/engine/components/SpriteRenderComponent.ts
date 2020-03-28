@@ -16,7 +16,9 @@ export class SpriteRenderComponent<
 > extends EntityComponent<T> {
   private toRenderRef?: RenderItem;
 
-  public init(entity: Entity<SpriteStateType>): void {}
+  public init(entity: Entity<SpriteStateType>) {
+    return {};
+  }
 
   public update(entity: Entity<SpriteStateType>): void {
     const { toRender } = entity.getState();

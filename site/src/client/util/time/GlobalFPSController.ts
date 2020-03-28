@@ -6,8 +6,8 @@ export function fpsNorm(x: number) {
   return getInstance().norm(x);
 }
 
-export function logFPS() {
-  getInstance().logFPS();
+export function logFPS(callback: (number: number) => void) {
+  getInstance().logFPS(callback);
 }
 
 class GlobalFPSController {
@@ -23,11 +23,11 @@ class GlobalFPSController {
     return x * this.proportion;
   }
 
-  public logFPS() {
+  public logFPS(callback: (number: number) => void) {
     this.framesSinceLastLog++;
     const timeSincelastLog = Date.now() - this.previousLogTime;
     if (timeSincelastLog >= 1000) {
-      console.log("FPS: ", this.framesSinceLastLog);
+      callback(this.framesSinceLastLog);
       this.framesSinceLastLog = 0;
       this.previousLogTime = Date.now();
     }
