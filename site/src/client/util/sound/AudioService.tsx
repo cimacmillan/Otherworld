@@ -16,11 +16,19 @@ export class AudioService {
     this.camera = camera;
   }
 
-  public play(buffer: AudioBuffer, gain: number = 1, pan: number = 0): AudioBufferSourceNode {
+  public play(
+    buffer: AudioBuffer,
+    gain: number = 1,
+    pan: number = 0
+  ): AudioBufferSourceNode {
     return playSound(buffer, this.context, gain, pan);
   }
 
-  public play3D(buffer: AudioBuffer, sourcePosition: vec2, gain: number = 1): AudioBufferSourceNode {
+  public play3D(
+    buffer: AudioBuffer,
+    sourcePosition: vec2,
+    gain: number = 1
+  ): AudioBufferSourceNode {
     if (!this.camera) {
       return;
     }
@@ -76,4 +84,3 @@ export function playSound(
   source.start(0); // play the source now
   return source;
 }
-

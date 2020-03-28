@@ -43,7 +43,7 @@
     "test-unit": "npx jest site/src/test/unit/",
     "test-profile": "npx jest site/src/test/profile/ -u",
     "test": "npm run-script test-unit",
-    "lint": "npx prettier --write site/src && git add ."
+    "lint": "npx prettier --write site/src && tslint site/src && git add ."
   },
   "pre-commit": [
     "lint",
