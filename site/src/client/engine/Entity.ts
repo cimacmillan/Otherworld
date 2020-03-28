@@ -1,3 +1,4 @@
+import { ServiceLocator } from "../services/ServiceLocator";
 import { EntityComponent } from "./EntityComponent";
 import { EntityEventType } from "./events/EntityEvents";
 import { GameEvent } from "./events/Event";
@@ -10,7 +11,10 @@ export class Entity<State extends BaseState> {
   private initialised: boolean = false;
   private listeners: Array<Entity<BaseState>> = [];
 
-  constructor(...components: Array<EntityComponent<State>>) {
+  constructor(
+    private serviceLocator: ServiceLocator,
+    ...components: Array<EntityComponent<State>>
+  ) {
     this.components = components;
     let initialState = {};
     for (let i = 0; i < this.components.length; i++) {
@@ -71,6 +75,10 @@ export class Entity<State extends BaseState> {
   }
 
   public emitGlobally(event: GameEvent) {
-    // TODO emit event to world so higher order systems can react
+    this.serviceLocator.getWorld().onGlobalEmit(event);
+  }
+
+  public getServiceLocator() {
+    return this.serviceLocator;
   }
 }

@@ -23,7 +23,8 @@ export class SpriteRenderComponent<
   public update(entity: Entity<SpriteStateType>): void {
     const { toRender } = entity.getState();
     if (toRender) {
-      this.serviceLocator
+      entity
+        .getServiceLocator()
         .getRenderService()
         .spriteRenderService.updateItem(this.toRenderRef, toRender);
     }
@@ -32,7 +33,7 @@ export class SpriteRenderComponent<
   public onEvent(entity: Entity<SpriteStateType>, event: GameEvent): void {
     switch (event.type) {
       case EntityEventType.STATE_TRANSITION:
-        this.onStateTransition(event.payload.from, event.payload.to);
+        this.onStateTransition(entity, event.payload.from, event.payload.to);
         break;
     }
   }
@@ -42,13 +43,19 @@ export class SpriteRenderComponent<
     event: GameEvent
   ): void {}
 
-  private onStateTransition(from: SpriteState, to: SpriteState) {
+  private onStateTransition(
+    entity: Entity<SpriteStateType>,
+    from: SpriteState,
+    to: SpriteState
+  ) {
     if (!from.toRender && to.toRender) {
-      this.toRenderRef = this.serviceLocator
+      this.toRenderRef = entity
+        .getServiceLocator()
         .getRenderService()
         .spriteRenderService.createItem(to.toRender);
     } else if (from.toRender && !to.toRender) {
-      this.serviceLocator
+      entity
+        .getServiceLocator()
         .getRenderService()
         .spriteRenderService.freeItem(this.toRenderRef);
     }

@@ -2,6 +2,7 @@ import { RenderItem, Sprite } from "../../render/types/RenderInterface";
 import { getTextureCoordinate } from "../../util/math";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
+import { BallEventType } from "../events/BallEvents";
 import { EntityEventType } from "../events/EntityEvents";
 import { GameEvent } from "../events/Event";
 import { BaseState } from "../State";
@@ -36,10 +37,14 @@ export class SpriteLogicComponent<
       sprite.height = sprite.size[1] / 2;
 
       if (this.yVel > 0.01) {
-        this.serviceLocator
+        entity.emitGlobally({
+          type: BallEventType.BOUNCE,
+        });
+        entity
+          .getServiceLocator()
           .getAudioService()
           .play3D(
-            this.serviceLocator.getResourceManager().boing,
+            entity.getServiceLocator().getResourceManager().boing,
             sprite.position,
             this.yVel
           );

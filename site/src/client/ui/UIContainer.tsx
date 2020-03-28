@@ -8,12 +8,12 @@ export interface OwnProps {
 }
 
 export interface StateProps {
-  text: string;
+  count: number;
 }
 
 function mapStateToProps(state: State) {
   return {
-    text: state.uiState.text,
+    count: state.uiState.bounceCount,
   };
 }
 
@@ -24,7 +24,7 @@ class UIContainer extends React.Component<UIContainerProps> {
     return (
       <h1 style={{ position: "absolute", color: "white" }}>
         {" "}
-        {this.props.text}{" "}
+        {this.props.count}{" "}
       </h1>
     );
   }

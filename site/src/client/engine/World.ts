@@ -6,6 +6,11 @@ import { BaseState } from "./State";
 
 export class World {
   private entityArray: ConsistentArray<Entity<BaseState>>;
+  private worldDispatch: (event: GameEvent) => void;
+
+  public constructor(worldDispatch: (event: GameEvent) => void) {
+    this.worldDispatch = worldDispatch;
+  }
 
   public init() {
     this.entityArray = new ConsistentArray<Entity<BaseState>>();
@@ -30,7 +35,9 @@ export class World {
   // TOOD add global observer type
   public addGlobalObserver() {}
 
-  public onGlobalEmit(event: GameEvent) {}
+  public onGlobalEmit(event: GameEvent) {
+    this.worldDispatch(event);
+  }
 
   public getEntityArray() {
     return this.entityArray;

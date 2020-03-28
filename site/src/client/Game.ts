@@ -2,10 +2,11 @@ import React = require("react");
 import { SpriteLogicComponent } from "./engine/components/SpriteLogicComponent";
 import { SpriteRenderComponent } from "./engine/components/SpriteRenderComponent";
 import { Entity } from "./engine/Entity";
+import { GameEvent } from "./engine/events/Event";
 import { World } from "./engine/World";
 import { initialiseInput, updateInput } from "./Input";
-import { CanvasComponent } from "./render";
 import { RenderService, ScreenBuffer } from "./render";
+import { CanvasComponent } from "./render";
 import { ResourceManager } from "./resources/ResourceManager";
 import { ServiceLocator } from "./services/ServiceLocator";
 import { GameState } from "./state/GameState";
@@ -30,13 +31,16 @@ export class Game {
   private serviceLocator: ServiceLocator;
   private initialised: boolean = false;
 
-  public async init(openGL: WebGLRenderingContext) {
+  public async init(
+    openGL: WebGLRenderingContext,
+    worldDispatch: (event: GameEvent) => void
+  ) {
     const audioContext = new AudioContext();
 
     const resourceManager = new ResourceManager();
     await resourceManager.load(openGL, audioContext);
 
-    const world = new World();
+    const world = new World(worldDispatch);
     this.serviceLocator = new ServiceLocator(
       resourceManager,
       world,
@@ -66,8 +70,9 @@ export class Game {
 
     for (let i = 0; i < 10; i++) {
       const sprite = new Entity(
-        new SpriteRenderComponent(this.serviceLocator),
-        new SpriteLogicComponent(this.serviceLocator)
+        this.serviceLocator,
+        new SpriteRenderComponent(),
+        new SpriteLogicComponent()
       );
       world.addEntity(sprite);
     }

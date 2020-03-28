@@ -5,14 +5,19 @@ import { Game } from "./Game";
 import { createStore } from "redux";
 import { reducers } from "./ui/reducers/UIReducer";
 import { Provider } from "react-redux";
+import { GameEvent } from "./engine/events/Event";
 
 const game = new Game();
 const store = createStore(reducers);
 
+const worldDispatch = (event: GameEvent) => {
+  store.dispatch(event);
+};
+
 const render = () => {
   ReactDOM.render(
     <Provider store={store}>
-      <GameComponent game={game} />
+      <GameComponent game={game} worldDispatch={worldDispatch} />
     </Provider>,
     document.getElementById("root")
   );

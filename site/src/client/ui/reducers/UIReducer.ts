@@ -1,35 +1,24 @@
 import { combineReducers } from "redux";
+import { BallEventType } from "../../engine/events/BallEvents";
+import { GameEvent } from "../../engine/events/Event";
 
 export interface UIState {
-  text: string;
+  bounceCount: number;
 }
 
 export interface State {
   uiState: UIState;
 }
-
-export const SEND_MESSAGE = "SEND_MESSAGE";
-export const DELETE_MESSAGE = "DELETE_MESSAGE";
-
-interface SendMessageAction {
-  type: typeof SEND_MESSAGE;
-  payload: string;
-}
-
-interface DeleteMessageAction {
-  type: typeof DELETE_MESSAGE;
-  meta: {
-    timestamp: number;
-  };
-}
-
-export type ChatActionTypes = SendMessageAction | DeleteMessageAction;
-
 const initialUIState = {
-  text: "Hello WOrl",
+  bounceCount: 0,
 };
 
-function uiReducer(state: UIState = initialUIState, action: ChatActionTypes) {
+function uiReducer(state: UIState = initialUIState, action: GameEvent) {
+  switch (action.type) {
+    case BallEventType.BOUNCE:
+      return { bounceCount: state.bounceCount + 1 };
+  }
+
   return state;
 }
 
