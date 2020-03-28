@@ -43,6 +43,10 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
 
   public draw(renderState: RenderState) {
     this.spriteArray.sync();
+    if (this.spriteArray.getArray().length === 0) {
+      return;
+    }
+
     const gl = renderState.screen.getOpenGL();
 
     const numComponents = 3;

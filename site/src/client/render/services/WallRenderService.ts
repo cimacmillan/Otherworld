@@ -49,6 +49,10 @@ export class WallRenderService implements RenderItemInterface<Wall> {
 
   public draw(renderState: RenderState) {
     this.wallArray.sync();
+    if (this.wallArray.getArray().length === 0) {
+      return;
+    }
+
     const gl = renderState.screen.getOpenGL();
 
     const numComponents = 3;

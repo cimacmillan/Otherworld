@@ -50,6 +50,10 @@ export class FloorRenderService implements RenderItemInterface<Floor> {
 
   public draw(renderState: RenderState) {
     this.floorArray.sync();
+    if (this.floorArray.getArray().length === 0) {
+      return;
+    }
+
     const gl = renderState.screen.getOpenGL();
 
     const numComponents = 3;

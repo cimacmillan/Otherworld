@@ -32,46 +32,6 @@ export class RenderService implements RenderInterface {
     this.wallRenderService.attachSpritesheet(this.resourceManager.wall);
     this.floorRenderService.init(renderState);
     this.floorRenderService.attachSpritesheet(this.resourceManager.floor);
-
-    // for (let i = 0; i < this.count; i++) {
-    //   const xtex = 32 * Math.round(Math.random());
-    //   const ytex = 32 * Math.round(Math.random());
-    //   this.spriteRenderService.createItem({
-    //     position: this.getPos(i),
-    //     size: [1, 1],
-    //     height: this.getHeight(i, this.time),
-    //     ...getTextureCoordinate(64, 64, 32, 32, xtex, ytex),
-    //   });
-    // }
-
-    // for (let i = 0; i < 1000; i++) {
-    //   this.wallRenderService.createItem({
-    //     startPos: [0 - i, -i],
-    //     endPos: [10 - i, -i],
-    //     startHeight: 1,
-    //     endHeight: 1,
-    //     startOffset: 0,
-    //     endOffset: 0,
-    //     textureX: 0,
-    //     textureY: 0,
-    //     textureWidth: 10,
-    //     textureHeight: 1,
-    //     repeatWidth: 1,
-    //     repeatHeight: 1,
-    //   });
-    // }
-
-    // this.floorRenderService.createItem({
-    //   startPos: [10, 10],
-    //   endPos: [-10, -10],
-    //   height: 0,
-    //   textureX: 0,
-    //   textureY: 0,
-    //   textureWidth: 20,
-    //   textureHeight: 20,
-    //   repeatWidth: 1,
-    //   repeatHeight: 1,
-    // });
   }
 
   public draw(renderState: RenderState) {
@@ -95,45 +55,6 @@ export class RenderService implements RenderInterface {
     this.spriteRenderService.draw(renderState);
     this.wallRenderService.draw(renderState);
     this.floorRenderService.draw(renderState);
-
-    for (let i = 0; i < this.count; i++) {
-      this.spriteRenderService.updateItem(
-        { renderId: i + 1 },
-        {
-          position: this.getPos(i),
-          height: this.getHeight(i, this.time),
-        }
-      );
-    }
-    this.time += 0.01;
-  }
-
-  private getPos(i: number): glm.vec2 {
-    const scale = Math.abs((Math.cos(this.time) + 2) * 2) * 0.4;
-    const x = ((i % this.sqr) - this.sqr / 2) * scale;
-    const z = (Math.floor(i / this.sqr) - this.sqr / 2) * scale;
-
-    const diss = Math.sqrt(x * x + z * z) / 100 + Math.sin(this.time) / 10;
-    const diff = 1 / (diss + 1);
-
-    const s = Math.sin(diss + this.time * diff);
-    const c = Math.cos(diss + this.time * diff);
-
-    const xTemp = c * x + z * s;
-    const zTemp = c * z - x * s;
-
-    return [xTemp, zTemp - this.sqr / 2];
-  }
-
-  private getHeight(i: number, time: number): number {
-    const speed = 2;
-    const height =
-      Math.sin((i / this.count) * 100 + time * speed) +
-      Math.cos((i % this.count) * 100 + time * speed);
-    const x = (i % this.sqr) - this.sqr / 2;
-    const z = Math.floor(i / this.sqr) - this.sqr / 2;
-    const diss = Math.sqrt(x * x + z * z + 100);
-    return (height / diss) * 100;
   }
 
   private clearScreen(renderState: RenderState) {
