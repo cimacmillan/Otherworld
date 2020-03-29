@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import { Entity } from "../engine/Entity";
 import { SpriteRenderComponent } from "../engine/components/SpriteRenderComponent";
 import { SpriteLogicComponent } from "../engine/components/SpriteLogicComponent";
+import { BallEventType } from "../engine/events/BallEvents";
+import { GameEventSource } from "../engine/EventRouter";
 
 export interface OwnProps {
   game: Game;
@@ -28,6 +30,7 @@ class UIContainer extends React.Component<UIContainerProps> {
       <div style={{ position: "absolute" }}>
         <h1 style={{ color: "white" }}> {this.props.count} </h1>
         <button onClick={this.createBall}>Create Ball</button>
+        <button onClick={this.bounceBalls}>Bounce</button>
       </div>
     );
   }
@@ -39,6 +42,15 @@ class UIContainer extends React.Component<UIContainerProps> {
       new SpriteLogicComponent()
     );
     this.props.game.getServiceLocator().getWorld().addEntity(sprite);
+  };
+
+  private bounceBalls = () => {
+    this.props.game
+      .getServiceLocator()
+      .getEventRouter()
+      .routeEvent(GameEventSource.UI, {
+        type: BallEventType.FORCE_BOUNCE,
+      });
   };
 }
 

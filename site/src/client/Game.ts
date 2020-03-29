@@ -2,6 +2,7 @@ import React = require("react");
 import { SpriteLogicComponent } from "./engine/components/SpriteLogicComponent";
 import { SpriteRenderComponent } from "./engine/components/SpriteRenderComponent";
 import { Entity } from "./engine/Entity";
+import { EventRouter, GameEventSource } from "./engine/EventRouter";
 import { GameEvent } from "./engine/events/Event";
 import { World } from "./engine/World";
 import { initialiseInput, updateInput } from "./Input";
@@ -33,19 +34,29 @@ export class Game {
 
   public async init(
     openGL: WebGLRenderingContext,
-    worldDispatch: (event: GameEvent) => void
+    uiListener: (event: GameEvent) => void
   ) {
     const audioContext = new AudioContext();
 
     const resourceManager = new ResourceManager();
     await resourceManager.load(openGL, audioContext);
 
-    const world = new World(worldDispatch);
+    const router = new EventRouter();
+    router.attachEventListener(GameEventSource.UI, uiListener);
+
+    const world = new World((event: GameEvent) =>
+      router.routeEvent(GameEventSource.WORLD, event)
+    );
+    router.attachEventListener(GameEventSource.WORLD, (event: GameEvent) =>
+      world.emitIntoWorld(event)
+    );
+
     this.serviceLocator = new ServiceLocator(
       resourceManager,
       world,
       new RenderService(resourceManager),
-      new AudioService(audioContext)
+      new AudioService(audioContext),
+      router
     );
 
     initialiseInput();

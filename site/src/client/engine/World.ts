@@ -33,9 +33,14 @@ export class World {
   }
 
   // TOOD add global observer type
-  public addGlobalObserver() {}
+  public emitIntoWorld(event: GameEvent) {
+    const entities = this.getEntityArray().getArray();
+    for (let i = 0; i < entities.length; i++) {
+      entities[i].onObservedEvent(event);
+    }
+  }
 
-  public onGlobalEmit(event: GameEvent) {
+  public emitOutOfWorld(event: GameEvent) {
     this.worldDispatch(event);
   }
 

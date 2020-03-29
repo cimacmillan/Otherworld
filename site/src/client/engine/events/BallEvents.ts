@@ -2,9 +2,13 @@ interface BallBounce {
   type: BallEventType.BOUNCE;
 }
 
-export enum BallEventType {
-  BOUNCE = "BOUNCE",
-  CREATE = "CREATE",
+interface ForceBounce {
+  type: BallEventType.FORCE_BOUNCE;
 }
 
-export type BallEvents = BallBounce;
+export enum BallEventType {
+  BOUNCE = "BOUNCE",
+  FORCE_BOUNCE = "FORCE_BOUNCE",
+}
+
+export type BallEvents = BallBounce | ForceBounce;

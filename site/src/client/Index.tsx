@@ -10,14 +10,14 @@ import { GameEvent } from "./engine/events/Event";
 const game = new Game();
 const store = createStore(reducers);
 
-const worldDispatch = (event: GameEvent) => {
+const uiListener = (event: GameEvent) => {
   store.dispatch(event);
 };
 
 const render = () => {
   ReactDOM.render(
     <Provider store={store}>
-      <GameComponent game={game} worldDispatch={worldDispatch} />
+      <GameComponent game={game} uiListener={uiListener} />
     </Provider>,
     document.getElementById("root")
   );

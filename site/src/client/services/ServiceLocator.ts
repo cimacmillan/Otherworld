@@ -1,3 +1,4 @@
+import { EventRouter } from "../engine/EventRouter";
 import { World } from "../engine/World";
 import { RenderService } from "../render";
 import { ResourceManager } from "../resources/ResourceManager";
@@ -9,7 +10,8 @@ export class ServiceLocator {
     private resourceManager: ResourceManager,
     private world: World,
     private renderService: RenderService,
-    private audioService: AudioService
+    private audioService: AudioService,
+    private eventRouter: EventRouter
   ) {}
 
   public getResourceManager() {
@@ -26,5 +28,9 @@ export class ServiceLocator {
 
   public getAudioService() {
     return this.audioService;
+  }
+
+  public getEventRouter() {
+    return this.eventRouter;
   }
 }

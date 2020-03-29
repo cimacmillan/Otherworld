@@ -22,14 +22,14 @@ const HEIGHT = DOM_HEIGHT / RES_DIV;
 
 export interface GameComponentProps {
   game: Game;
-  worldDispatch: (event: GameEvent) => void;
+  uiListener: (event: GameEvent) => void;
 }
 
 export class GameComponent extends React.Component<GameComponentProps> {
   public async componentDidMount() {
     this.props.game.init(
       (this.refs.main_canvas as CanvasComponent).getOpenGL(),
-      this.props.worldDispatch
+      this.props.uiListener
     );
   }
 

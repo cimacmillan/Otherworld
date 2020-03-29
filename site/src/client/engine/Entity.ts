@@ -75,7 +75,7 @@ export class Entity<State extends BaseState> {
   }
 
   public emitGlobally(event: GameEvent) {
-    this.serviceLocator.getWorld().onGlobalEmit(event);
+    this.serviceLocator.getWorld().emitOutOfWorld(event);
   }
 
   public getServiceLocator() {

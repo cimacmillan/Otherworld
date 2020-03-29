@@ -62,7 +62,7 @@ export class SpriteLogicComponent<
     sprite.size[0] = width;
     sprite.size[1] = height;
 
-    this.yVel *= 0.999;
+    this.yVel *= 0.995;
     this.bounceVelocity *= 0.9;
   }
 
@@ -102,5 +102,11 @@ export class SpriteLogicComponent<
   public onObservedEvent(
     entity: Entity<SpriteStateType>,
     event: GameEvent
-  ): void {}
+  ): void {
+    switch (event.type) {
+      case BallEventType.FORCE_BOUNCE:
+        this.yVel = Math.random() * 1;
+        return;
+    }
+  }
 }
