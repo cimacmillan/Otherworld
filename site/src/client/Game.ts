@@ -1,4 +1,6 @@
 import React = require("react");
+import { HEIGHT, TARGET_MILLIS, WIDTH } from "./Config";
+import { FlowerLogicComponent } from "./engine/components/FlowerLogicComponent";
 import { SpriteLogicComponent } from "./engine/components/SpriteLogicComponent";
 import { SpriteRenderComponent } from "./engine/components/SpriteRenderComponent";
 import { Entity } from "./engine/Entity";
@@ -6,26 +8,18 @@ import { EventRouter, GameEventSource } from "./engine/EventRouter";
 import { GameEvent } from "./engine/events/Event";
 import { World } from "./engine/World";
 import { initialiseInput, updateInput } from "./Input";
-import { RenderService, ScreenBuffer } from "./render";
 import { CanvasComponent } from "./render";
+import { RenderService, ScreenBuffer } from "./render";
 import { ResourceManager } from "./resources/ResourceManager";
 import { ServiceLocator } from "./services/ServiceLocator";
 import { GameState } from "./state/GameState";
 import { Texture } from "./types";
 import { initialiseCamera, initialiseMap } from "./util/loader/MapLoader";
 import { loadTextureFromURL } from "./util/loader/TextureLoader";
+import { getTextureCoordinate } from "./util/math";
 import { AudioService, loadSound, playSound } from "./util/sound/AudioService";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
-
-const DOM_WIDTH = 1280;
-const DOM_HEIGHT = 720;
-const RES_DIV = 4;
-const WIDTH = DOM_WIDTH / RES_DIV;
-const HEIGHT = DOM_HEIGHT / RES_DIV;
-
-const TARGET_FPS = 60;
-const TARGET_MILLIS = Math.floor(1000 / TARGET_FPS);
 
 export class Game {
   private gameState: GameState;
@@ -88,16 +82,87 @@ export class Game {
       world.addEntity(sprite);
     }
 
+    for (let i = 0; i < 10000; i++) {
+      const sprite = new Entity(
+        this.serviceLocator,
+        new SpriteRenderComponent(),
+        new FlowerLogicComponent()
+      );
+      world.addEntity(sprite);
+    }
+
+    const floorTexture = getTextureCoordinate(32, 64, 32, 32, 0, 32);
     this.serviceLocator.getRenderService().floorRenderService.createItem({
-      startPos: [10, 10],
-      endPos: [-10, -10],
+      startPos: [-10, -10],
+      endPos: [10, 10],
       height: 0,
-      textureX: 0,
-      textureY: 0,
+      textureX: floorTexture.textureX,
+      textureY: floorTexture.textureY,
       textureWidth: 20,
       textureHeight: 20,
-      repeatWidth: 1,
-      repeatHeight: 1,
+      repeatWidth: floorTexture.textureWidth,
+      repeatHeight: floorTexture.textureHeight,
+    });
+
+    const wallTexture = getTextureCoordinate(32, 64, 32, 32, 0, 0);
+    this.serviceLocator.getRenderService().wallRenderService.createItem({
+      startPos: [-10, -10],
+      endPos: [10, -10],
+      startHeight: 1,
+      endHeight: 1,
+      startOffset: 0,
+      endOffset: 0,
+      textureX: wallTexture.textureX,
+      textureY: wallTexture.textureY,
+      textureWidth: 20,
+      textureHeight: wallTexture.textureHeight,
+      repeatWidth: wallTexture.textureWidth,
+      repeatHeight: wallTexture.textureHeight,
+    });
+
+    this.serviceLocator.getRenderService().wallRenderService.createItem({
+      startPos: [10, -10],
+      endPos: [10, 10],
+      startHeight: 1,
+      endHeight: 1,
+      startOffset: 0,
+      endOffset: 0,
+      textureX: wallTexture.textureX,
+      textureY: wallTexture.textureY,
+      textureWidth: 20,
+      textureHeight: wallTexture.textureHeight,
+      repeatWidth: wallTexture.textureWidth,
+      repeatHeight: wallTexture.textureHeight,
+    });
+
+    this.serviceLocator.getRenderService().wallRenderService.createItem({
+      startPos: [10, 10],
+      endPos: [-10, 10],
+      startHeight: 1,
+      endHeight: 1,
+      startOffset: 0,
+      endOffset: 0,
+      textureX: wallTexture.textureX,
+      textureY: wallTexture.textureY,
+      textureWidth: 20,
+      textureHeight: wallTexture.textureHeight,
+      repeatWidth: wallTexture.textureWidth,
+      repeatHeight: wallTexture.textureHeight,
+    });
+
+    this.serviceLocator.getRenderService().wallRenderService.createItem({
+      startPos: [-10, 10],
+      endPos: [-10, -10],
+      startHeight: 1,
+      endHeight: 1,
+      startOffset: 0,
+      endOffset: 0,
+      textureX: wallTexture.textureX,
+      textureY: wallTexture.textureY,
+      textureWidth: 20,
+      textureHeight: wallTexture.textureHeight,
+      repeatWidth: wallTexture.textureWidth,
+      repeatHeight: wallTexture.textureHeight,
     });
 
     // this.serviceLocator.getAudioService().play(this.serviceLocator.getResourceManager().intro);

@@ -71,7 +71,7 @@ export class SpriteLogicComponent<
 
     switch (event.type) {
       case EntityEventType.ENTITY_CREATED:
-        const xtex = 0;
+        const xtex = Math.floor(Math.random() * 4) * 32;
         const ytex = 0;
         entity.setState(
           {
@@ -82,7 +82,7 @@ export class SpriteLogicComponent<
               ],
               size: [1, 1],
               height: 10 * this.seed,
-              ...getTextureCoordinate(32, 32, 32, 32, xtex, ytex),
+              ...getTextureCoordinate(512, 64, 32, 32, xtex, 32),
             },
           },
           true

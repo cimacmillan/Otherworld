@@ -23,7 +23,7 @@ export class RenderService implements RenderInterface {
     this.spriteRenderService.init(renderState);
     this.spriteRenderService.attachSpritesheet(this.resourceManager.sprite);
     this.wallRenderService.init(renderState);
-    this.wallRenderService.attachSpritesheet(this.resourceManager.wall);
+    this.wallRenderService.attachSpritesheet(this.resourceManager.floor);
     this.floorRenderService.init(renderState);
     this.floorRenderService.attachSpritesheet(this.resourceManager.floor);
   }

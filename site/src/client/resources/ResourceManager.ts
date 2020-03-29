@@ -16,10 +16,10 @@ export class ResourceManager {
   public boing: AudioBuffer;
 
   public async load(gl: WebGLRenderingContext, audio: AudioContext) {
-    // this.sprite = await loadTexture(gl, "img/sprite.png");
+    this.sprite = await loadTexture(gl, "img/sprite.png");
     this.wall = await loadTexture(gl, "img/wall.png");
     this.floor = await loadTexture(gl, "img/floor.png");
-    this.sprite = await loadTexture(gl, "img/glorp.png");
+    // this.sprite = await loadTexture(gl, "img/glorp.png");
 
     this.intro = await loadSound("audio/intro.mp3", audio);
     this.boing = await loadSound("audio/boing.mp3", audio);
