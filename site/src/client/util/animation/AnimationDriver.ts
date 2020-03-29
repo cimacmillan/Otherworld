@@ -10,8 +10,9 @@ export class AnimationDriver {
   private speedMilliseconds: number = 1000;
   private loop: boolean = false;
   private currentPosition: number = 0;
-
-  private intervalID: NodeJS.Timeout;
+  private playCount = 0;
+  private onFinish: () => void;
+  private playing: boolean = false;
 
   public constructor(private callback: AnimationDriverCallback) {}
 
@@ -26,28 +27,35 @@ export class AnimationDriver {
     return this;
   }
 
-  public start(offset?: number, loop?: boolean) {
+  public start(
+    offset?: number,
+    loop?: boolean,
+    onFinish?: () => void
+  ): AnimationDriver {
     if (offset) {
       this.currentPosition = offset;
+    } else {
+      this.currentPosition = 0;
     }
+    this.onFinish = onFinish;
     this.loop = loop;
-    // this.intervalID = setInterval(() => this.onInterval(), RESOLUTION);
+    this.playing = true;
+    return this;
   }
 
   public pause() {
-    if (this.intervalID) {
-      // clearInterval(this.intervalID);
-    }
+    this.playing = false;
   }
 
   public stop() {
-    if (this.intervalID) {
-      // clearInterval(this.intervalID);
-      this.currentPosition = 0;
-    }
+    this.playing = false;
+    this.currentPosition = 0;
   }
 
   public tick() {
+    if (!this.playing) {
+      return;
+    }
     if (this.currentPosition >= 1.0) {
       this.callback(this.tweenFunction(1));
       if (this.loop) {
@@ -55,10 +63,20 @@ export class AnimationDriver {
       } else {
         this.stop();
       }
+      this.playCount++;
+      this.onFinish && this.onFinish();
     } else {
       this.callback(this.tweenFunction(this.currentPosition));
       const increment = RESOLUTION / this.speedMilliseconds;
       this.currentPosition += increment;
     }
+  }
+
+  public getPlayCount() {
+    return this.playCount;
+  }
+
+  public isPlaying() {
+    return this.isPlaying;
   }
 }

@@ -14,6 +14,7 @@ export class FlowerLogicComponent<
   T extends SpriteStateType
 > extends EntityComponent<T> {
   private seed: number;
+  private animation: AnimationDriver;
 
   public init(entity: Entity<SpriteStateType>) {
     this.seed = Math.random();
@@ -21,9 +22,11 @@ export class FlowerLogicComponent<
   }
 
   public update(entity: Entity<SpriteStateType>): void {
-    const sprite = entity.getState().toRender;
-    if (!sprite) {
-      return;
+    if (this.animation) {
+      this.animation.tick();
+    }
+    if (this.animation.getPlayCount() > 5) {
+      this.animation.stop();
     }
   }
 
@@ -67,7 +70,7 @@ export class FlowerLogicComponent<
     const getAnimationTexture = (xTex: number) =>
       getTextureCoordinate(512, 64, 32, 32, xTex * 32, 0);
 
-    const driver = new AnimationDriver((x: number) => {
+    this.animation = new AnimationDriver((x: number) => {
       const toRender = entity.getState().toRender;
       const texture = getAnimationTexture(x);
       toRender.textureX = texture.textureX;
