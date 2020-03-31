@@ -25,8 +25,10 @@ Project Description
 - [ ] Physics for puzzles (milestone work out)  
 - [ ] LineRenderService  
 - [ ] Background render service  
+- [ ] Research skyrim scripting language  
 
-###  Backlog (P0)
+### Backlog (P0)
+
 
 ### In Progress
 
