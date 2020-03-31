@@ -4,12 +4,9 @@ Project Description
 
 ### Todo
 
-- [ ] Work out how to do UI  
-- [ ] Create milestones doc for long-term goals  
 - [ ] Create current story doc  
 - [ ] Come up with name  
 - [ ] Create sprint for first milestone  
-- [ ] SpriteRenderingComponent  
 - [ ] WallRenderingComponent  
 - [ ] FloorRenderingComponent  
 - [ ] Factory for creating entities with sets of components  
@@ -23,8 +20,6 @@ Project Description
 - [ ] Dynamically load JS from server  
 - [ ] Dynamically load JSON from server  
 - [ ] Automated Github deployment CI/CD  
-- [ ] Animation component (milestone work out, prob 1)  
-- [ ] Text rendering either (through React?) (milestone work out)  
 - [ ] Sound and subtitles player? (milestone work out)  
 - [ ] Physics for puzzles (milestone work out)  
 - [ ] LineRenderService  
@@ -32,14 +27,17 @@ Project Description
 
 ### In Progress
 
-
-### Test
-
-- [ ] Floor texture atlas repreating  
-- [ ] Wall texture atlas repeating  
-- [ ] Migrate rendering to OpenGL  
-- [ ] Write tests for current code  
+- [ ] Create milestones  
+- [ ] Learn hooks  
 
 ### Done ✓
 
+- [x] Text rendering either (through React?) (milestone work out)  
+- [x] Animation component (milestone work out, prob 1)  
+- [x] SpriteRenderingComponent  
+- [x] Work out how to do UI  
+- [x] Floor texture atlas repreating  
+- [x] Wall texture atlas repeating  
+- [x] Migrate rendering to OpenGL  
+- [x] Write tests for current code  
 
