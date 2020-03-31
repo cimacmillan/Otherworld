@@ -2,7 +2,7 @@
 
 Project Description
 
-### Todo
+### Backlog (Other)
 
 - [ ] Create current story doc  
 - [ ] Come up with name  
@@ -26,10 +26,12 @@ Project Description
 - [ ] LineRenderService  
 - [ ] Background render service  
 
+###  Backlog (P0)
+
 ### In Progress
 
 - [ ] Get rid of dead code  
-- [ ] Breakdown P0 tasks into sprint  
+- [ ] Breakdown P0 tasks into list  
 
 ### Done ✓
 
