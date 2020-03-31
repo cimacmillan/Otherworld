@@ -12,6 +12,7 @@ Project Description
 - [ ] Factory for creating entities with sets of components  
 - [ ] Add touch control handling for phone usage  
 - [ ] Add translucent rendering service  
+- [ ] Learn hooks for UI  
 - [ ] Proper resource manager loading  
 - [ ] Refactor renderer types  
 - [ ] How to change the GameState?  
@@ -27,11 +28,12 @@ Project Description
 
 ### In Progress
 
-- [ ] Create milestones  
-- [ ] Learn hooks  
+- [ ] Get rid of dead code  
+- [ ] Breakdown P0 tasks into sprint  
 
 ### Done ✓
 
+- [x] Create milestones  
 - [x] Text rendering either (through React?) (milestone work out)  
 - [x] Animation component (milestone work out, prob 1)  
 - [x] SpriteRenderingComponent  
