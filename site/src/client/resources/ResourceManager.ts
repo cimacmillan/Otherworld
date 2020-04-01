@@ -1,9 +1,5 @@
 import { FastTexture, Texture } from "../types";
-import {
-  convertToFastTexture,
-  loadTexture,
-  loadTextureFromURL,
-} from "../util/loader/TextureLoader";
+import { loadImage, loadTexture } from "../util/loader/TextureLoader";
 import { loadSound } from "../util/sound/AudioService";
 
 export class ResourceManager {
@@ -15,6 +11,8 @@ export class ResourceManager {
   public intro: AudioBuffer;
   public boing: AudioBuffer;
 
+  public uiImage: HTMLImageElement;
+
   public async load(gl: WebGLRenderingContext, audio: AudioContext) {
     this.sprite = await loadTexture(gl, "img/sprite.png");
     this.wall = await loadTexture(gl, "img/wall.png");
@@ -23,5 +21,7 @@ export class ResourceManager {
 
     this.intro = await loadSound("audio/intro.mp3", audio);
     this.boing = await loadSound("audio/boing.mp3", audio);
+
+    this.uiImage = await loadImage("img/floor.png");
   }
 }

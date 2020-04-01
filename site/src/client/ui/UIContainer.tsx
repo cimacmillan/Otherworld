@@ -31,9 +31,22 @@ class UIContainer extends React.Component<UIContainerProps> {
         <h1 style={{ color: "white" }}> {this.props.count} </h1>
         <button onClick={this.createBall}>Create Ball</button>
         <button onClick={this.bounceBalls}>Bounce</button>
+        {this.getGameImage()}
       </div>
     );
   }
+
+  private getGameImage = () => {
+    return this.props.game.isInitialised() ? (
+      <img
+        src={
+          this.props.game.getServiceLocator().getResourceManager().uiImage.src
+        }
+      />
+    ) : (
+      <p>Missing</p>
+    );
+  };
 
   private createBall = () => {
     const sprite = new Entity(

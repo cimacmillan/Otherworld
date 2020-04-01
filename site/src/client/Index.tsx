@@ -8,7 +8,11 @@ import { Provider } from "react-redux";
 import { GameEvent } from "./engine/events/Event";
 
 const game = new Game();
-const store = createStore(reducers);
+const store = createStore(
+  reducers,
+  (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 const uiListener = (event: GameEvent) => {
   store.dispatch(event);

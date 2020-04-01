@@ -14,6 +14,7 @@ Project Description
 - [ ] Add translucent rendering service  
 - [ ] Learn hooks for UI  
 - [ ] Proper resource manager loading  
+- [ ] Organise P0 kanban board  
 - [ ] Refactor renderer types  
 - [ ] How to change the GameState?  
 - [ ] Start button so audio can start  
@@ -26,9 +27,6 @@ Project Description
 - [ ] LineRenderService  
 - [ ] Background render service  
 - [ ] Research skyrim scripting language  
-
-### Backlog (P0)
-
 
 ### In Progress
 
