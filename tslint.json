@@ -2,9 +2,14 @@
     "defaultSeverity": "warn",
     "extends": [
         "tslint:latest",
+        "tslint-etc",
         "tslint-config-prettier"
     ],
     "jsRules": {},
-    "rules": {},
+    "rules": {
+        "no-unused-variable": true,
+        "interface-name": false,
+        "object-literal-sort-keys": false
+    },
     "rulesDirectory": []
 }

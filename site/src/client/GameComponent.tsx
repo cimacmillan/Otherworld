@@ -1,6 +1,4 @@
 import React = require("react");
-import { initialiseInput, updateInput } from "./Input";
-import { RenderService, ScreenBuffer } from "./render";
 import { CanvasComponent } from "./render";
 import { Game } from "./Game";
 import UIContainer from "./ui/UIContainer";

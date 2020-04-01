@@ -1,13 +1,10 @@
-import { RenderItem, Sprite } from "../../render/types/RenderInterface";
 import { AnimationDriver } from "../../util/animation/AnimationDriver";
 import { floorStepper } from "../../util/animation/TweenFunction";
 import { getTextureCoordinate } from "../../util/math";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
-import { BallEventType } from "../events/BallEvents";
 import { EntityEventType } from "../events/EntityEvents";
 import { GameEvent } from "../events/Event";
-import { BaseState } from "../State";
 import { SpriteStateType } from "./SpriteRenderComponent";
 
 export class FlowerLogicComponent<

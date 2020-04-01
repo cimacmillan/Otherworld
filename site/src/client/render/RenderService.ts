@@ -1,8 +1,6 @@
-import * as glm from "gl-matrix";
 import { mat4 } from "gl-matrix";
 import { ResourceManager } from "../resources/ResourceManager";
 import { RenderState } from "../state/render/RenderState";
-import { getTextureCoordinate } from "../util/math/Basic";
 import { FloorRenderService } from "./services/FloorRenderService";
 import { SpriteRenderService } from "./services/SpriteRenderService";
 import { WallRenderService } from "./services/WallRenderService";

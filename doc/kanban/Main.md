@@ -5,7 +5,6 @@ Project Description
 ### Backlog (Other)
 
 - [ ] Create current story doc  
-- [ ] Come up with name  
 - [ ] Create sprint for first milestone  
 - [ ] WallRenderingComponent  
 - [ ] FloorRenderingComponent  
@@ -27,14 +26,16 @@ Project Description
 - [ ] LineRenderService  
 - [ ] Background render service  
 - [ ] Research skyrim scripting language  
+- [ ] Remove State pattern  
 
 ### In Progress
 
-- [ ] Get rid of dead code  
 - [ ] Breakdown P0 tasks into list  
+- [ ] Come up with name  
 
 ### Done ✓
 
+- [x] Get rid of dead code  
 - [x] Create milestones  
 - [x] Text rendering either (through React?) (milestone work out)  
 - [x] Animation component (milestone work out, prob 1)  

@@ -1,4 +1,3 @@
-import * as glm from "gl-matrix";
 import { RenderState } from "../../state/render/RenderState";
 import { RenderInterface } from "./RenderInterface";
 

@@ -1,5 +1,3 @@
-import { Sprite } from "../../types";
-
 export interface ISyncedArrayRef<T> {
   obj: T;
   uniqueId: number;

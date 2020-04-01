@@ -1,4 +1,4 @@
-import { mat4, vec2 } from "gl-matrix";
+import { mat4 } from "gl-matrix";
 import { RenderState } from "../../state/render/RenderState";
 import { ISyncedArrayRef, SyncedArray } from "../../util/array/SyncedArray";
 import { compileSpriteShader } from "../shaders/Shaders";

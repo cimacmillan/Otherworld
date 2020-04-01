@@ -2,7 +2,6 @@ import { EventRouter } from "../engine/EventRouter";
 import { World } from "../engine/World";
 import { RenderService } from "../render";
 import { ResourceManager } from "../resources/ResourceManager";
-import { GameState } from "../state/GameState";
 import { AudioService } from "../util/sound/AudioService";
 
 export class ServiceLocator {

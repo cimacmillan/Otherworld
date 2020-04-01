@@ -1,4 +1,3 @@
-import { FastTexture, Texture } from "../types";
 import { loadImage, loadTexture } from "../util/loader/TextureLoader";
 import { loadSound } from "../util/sound/AudioService";
 

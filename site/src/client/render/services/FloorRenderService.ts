@@ -1,12 +1,8 @@
-import { mat4, vec2 } from "gl-matrix";
+import { mat4 } from "gl-matrix";
 import { RenderState } from "../../state/render/RenderState";
 import { ISyncedArrayRef, SyncedArray } from "../../util/array/SyncedArray";
-import {
-  compileModelShader,
-  compileSpriteShader,
-  compileTextureRepeatShader,
-} from "../shaders/Shaders";
-import { Floor, Sprite, Wall } from "../types/RenderInterface";
+import { compileTextureRepeatShader } from "../shaders/Shaders";
+import { Floor } from "../types/RenderInterface";
 import { RenderItem, RenderItemInterface } from "../types/RenderItemInterface";
 
 export class FloorRenderService implements RenderItemInterface<Floor> {

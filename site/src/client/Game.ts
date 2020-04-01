@@ -1,4 +1,3 @@
-import React = require("react");
 import { HEIGHT, TARGET_MILLIS, WIDTH } from "./Config";
 import { FlowerLogicComponent } from "./engine/components/FlowerLogicComponent";
 import { SpriteLogicComponent } from "./engine/components/SpriteLogicComponent";
@@ -8,16 +7,13 @@ import { EventRouter, GameEventSource } from "./engine/EventRouter";
 import { GameEvent } from "./engine/events/Event";
 import { World } from "./engine/World";
 import { initialiseInput, updateInput } from "./Input";
-import { CanvasComponent } from "./render";
 import { RenderService, ScreenBuffer } from "./render";
 import { ResourceManager } from "./resources/ResourceManager";
 import { ServiceLocator } from "./services/ServiceLocator";
 import { GameState } from "./state/GameState";
-import { Texture } from "./types";
-import { initialiseCamera, initialiseMap } from "./util/loader/MapLoader";
-import { loadTextureFromURL } from "./util/loader/TextureLoader";
+import { initialiseCamera } from "./util/loader/MapLoader";
 import { getTextureCoordinate } from "./util/math";
-import { AudioService, loadSound, playSound } from "./util/sound/AudioService";
+import { AudioService } from "./util/sound/AudioService";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
 

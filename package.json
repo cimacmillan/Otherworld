@@ -35,7 +35,8 @@
         "react-dom": "^16.10.2",
         "react-redux": "^7.2.0",
         "redux": "^4.0.5",
-        "rxjs": "^6.5.4"
+        "rxjs": "^6.5.4",
+        "tslint-etc": "^1.10.1"
     },
     "scripts": {
         "clean": "rm -rf ./site/build/",
@@ -47,7 +48,7 @@
         "test-unit": "npx jest site/src/test/unit/",
         "test-profile": "npx jest site/src/test/profile/ -u",
         "test": "npm run-script test-unit",
-        "lint": "npx prettier --write site/src && tslint --fix -c tslint.json 'site/src/**/*.ts' && git add ."
+        "lint": "npx prettier --write site/src && tslint --project tsconfig.json --fix -c tslint.json 'site/src/**/*.ts' && git add ."
     },
     "pre-commit": [
         "lint",

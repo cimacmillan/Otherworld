@@ -1,4 +1,3 @@
-import { ServiceLocator } from "../services/ServiceLocator";
 import { Entity } from "./Entity";
 import { GameEvent } from "./events/Event";
 import { BaseState } from "./State";
