@@ -3,25 +3,25 @@ import { BallEventType } from "../../engine/events/BallEvents";
 import { GameEvent } from "../../engine/events/Event";
 
 export interface UIState {
-  bounceCount: number;
+	bounceCount: number;
 }
 
 export interface State {
-  uiState: UIState;
+	uiState: UIState;
 }
 const initialUIState = {
-  bounceCount: 0,
+	bounceCount: 0,
 };
 
 function uiReducer(state: UIState = initialUIState, action: GameEvent) {
-  switch (action.type) {
-    case BallEventType.BOUNCE:
-      return { bounceCount: state.bounceCount + 1 };
-  }
+	switch (action.type) {
+		case BallEventType.BOUNCE:
+			return { bounceCount: state.bounceCount + 1 };
+	}
 
-  return state;
+	return state;
 }
 
 export const reducers = combineReducers({
-  uiState: uiReducer,
+	uiState: uiReducer,
 });

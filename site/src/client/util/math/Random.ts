@@ -1,15 +1,15 @@
 export function randomFloat(): number {
-  return Math.random();
+	return Math.random();
 }
 
 export function randomIntRange(lowerBound: number, upperBound: number): number {
-  return Math.floor(randomFloat() * (upperBound - lowerBound)) + lowerBound;
+	return Math.floor(randomFloat() * (upperBound - lowerBound)) + lowerBound;
 }
 
 export function randomFloatRange(
-  lowerBound: number,
-  upperBound: number
+	lowerBound: number,
+	upperBound: number
 ): number {
-  const alpha = randomFloat();
-  return alpha * upperBound + (1 - alpha) * lowerBound;
+	const alpha = randomFloat();
+	return alpha * upperBound + (1 - alpha) * lowerBound;
 }

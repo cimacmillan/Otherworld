@@ -4,12 +4,12 @@ export const vertexColour = "colour";
 export const modelMatrix = "uModelViewMatrix";
 
 const v = {
-  vertexPosition: `aVertexPosition`,
-  vertexTranslation: `aVertexTranslation`,
-  modelMatrix: `uModelViewMatrix`,
-  textureSampler: `uSampler`,
-  projectionMatrix: `uProjectionMatrix`,
-  texturePosition: `aTextureCoord`,
+	vertexPosition: `aVertexPosition`,
+	vertexTranslation: `aVertexTranslation`,
+	modelMatrix: `uModelViewMatrix`,
+	textureSampler: `uSampler`,
+	projectionMatrix: `uProjectionMatrix`,
+	texturePosition: `aTextureCoord`,
 };
 
 const source = `
