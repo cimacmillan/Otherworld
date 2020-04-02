@@ -54,6 +54,9 @@
         "lint",
         "test"
     ],
+    "prettier": {
+        "tabWidth": 4
+    },
     "watch": {
         "full-rebuild": {
             "patterns": [

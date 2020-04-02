@@ -1,8 +1,8 @@
-# Untitled JSGame
+# Otherworld
 
 ## Summary
 
-Repo for untitled JSGame
+Repo for Otherworld
 
 ## Sections
 

@@ -1,14 +1,14 @@
 interface BallBounce {
-	type: BallEventType.BOUNCE;
+    type: BallEventType.BOUNCE;
 }
 
 interface ForceBounce {
-	type: BallEventType.FORCE_BOUNCE;
+    type: BallEventType.FORCE_BOUNCE;
 }
 
 export enum BallEventType {
-	BOUNCE = "BOUNCE",
-	FORCE_BOUNCE = "FORCE_BOUNCE",
+    BOUNCE = "BOUNCE",
+    FORCE_BOUNCE = "FORCE_BOUNCE",
 }
 
 export type BallEvents = BallBounce | ForceBounce;

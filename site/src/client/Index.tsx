@@ -9,22 +9,22 @@ import { GameEvent } from "./engine/events/Event";
 
 const game = new Game();
 const store = createStore(
-  reducers,
-  (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
-    (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+    reducers,
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
+        (window as any).__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 const uiListener = (event: GameEvent) => {
-  store.dispatch(event);
+    store.dispatch(event);
 };
 
 const render = () => {
-  ReactDOM.render(
-    <Provider store={store}>
-      <GameComponent game={game} uiListener={uiListener} />
-    </Provider>,
-    document.getElementById("root")
-  );
+    ReactDOM.render(
+        <Provider store={store}>
+            <GameComponent game={game} uiListener={uiListener} />
+        </Provider>,
+        document.getElementById("root")
+    );
 };
 
 store.subscribe(render);

@@ -18,27 +18,27 @@ const app = Express();
 app.use(Express.static(STATIC_DIRECTORY));
 
 app.get("/home", (req: Express.Request, res: Express.Response) => {
-  try {
-    res.sendFile(INDEX_DIRECTORY + "home.html", INDEX_DIRECTORY);
-  } catch (err) {
-    console.log(err);
-  }
+    try {
+        res.sendFile(INDEX_DIRECTORY + "home.html", INDEX_DIRECTORY);
+    } catch (err) {
+        console.log(err);
+    }
 });
 
 app.use(function (
-  err: HttpException,
-  req: Express.Request,
-  res: Express.Response,
-  next: Express.NextFunction
+    err: HttpException,
+    req: Express.Request,
+    res: Express.Response,
+    next: Express.NextFunction
 ) {
-  // * Unauthorised error
-  if (401 == err.status) {
-    res.redirect("/home");
-  }
+    // * Unauthorised error
+    if (401 == err.status) {
+        res.redirect("/home");
+    }
 });
 
 app.get("*", function (req, res) {
-  res.redirect("/home");
+    res.redirect("/home");
 });
 
 const port = 80;

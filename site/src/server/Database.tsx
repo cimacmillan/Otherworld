@@ -1,5 +1,5 @@
 function placeholder() {
-  console.log("Database");
+    console.log("Database");
 }
 
 export { placeholder };

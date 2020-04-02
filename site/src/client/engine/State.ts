@@ -1,7 +1,7 @@
 export interface BaseState {
-	exists: boolean;
+    exists: boolean;
 }
 
 export interface TestState {
-	toOther: boolean;
+    toOther: boolean;
 }

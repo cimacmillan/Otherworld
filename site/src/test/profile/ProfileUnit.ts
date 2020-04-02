@@ -8,28 +8,28 @@ export const SAMPLE_SMA = Math.pow(10, 4);
 export const SAMPLE_LIL = Math.pow(10, 3);
 
 export function profile(sampleSize: number, toProfile: ProfileFunction) {
-  const before = new Date().getTime();
-  for (let i = 0; i < sampleSize; i++) {
-    toProfile();
-  }
-  const after = new Date().getTime();
-  const time = after - before;
+    const before = new Date().getTime();
+    for (let i = 0; i < sampleSize; i++) {
+        toProfile();
+    }
+    const after = new Date().getTime();
+    const time = after - before;
 
-  expect(time).toMatchSnapshot();
+    expect(time).toMatchSnapshot();
 }
 
 export function profileWithCheck(
-  sampleSize: number,
-  toProfile: ProfileFunction,
-  expected: any
+    sampleSize: number,
+    toProfile: ProfileFunction,
+    expected: any
 ) {
-  let sum = 0;
-  for (let i = 0; i < sampleSize; i++) {
-    const before = new Date().getTime();
-    const result = toProfile();
-    const after = new Date().getTime();
-    sum += after - before;
-    expect(result).toEqual(expected);
-  }
-  expect(sum).toMatchSnapshot();
+    let sum = 0;
+    for (let i = 0; i < sampleSize; i++) {
+        const before = new Date().getTime();
+        const result = toProfile();
+        const after = new Date().getTime();
+        sum += after - before;
+        expect(result).toEqual(expected);
+    }
+    expect(sum).toMatchSnapshot();
 }

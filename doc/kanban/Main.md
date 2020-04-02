@@ -1,11 +1,10 @@
-# Untitled JSGame
+# Otherworld
 
-Project Description
+Main TODO Taskboard 
 
 ### Backlog (Other)
 
 - [ ] Create current story doc  
-- [ ] Create sprint for first milestone  
 - [ ] WallRenderingComponent  
 - [ ] FloorRenderingComponent  
 - [ ] Factory for creating entities with sets of components  
@@ -13,7 +12,6 @@ Project Description
 - [ ] Add translucent rendering service  
 - [ ] Learn hooks for UI  
 - [ ] Proper resource manager loading  
-- [ ] Organise P0 kanban board  
 - [ ] Refactor renderer types  
 - [ ] How to change the GameState?  
 - [ ] Start button so audio can start  
@@ -30,12 +28,15 @@ Project Description
 
 ### In Progress
 
-- [ ] Breakdown P0 tasks into list  
-- [ ] Come up with name  
+- [ ] Finish P0 tasks  
 
 ### Done ✓
 
+- [x] Organise P0 kanban board  
+- [x] Create sprint for first milestone  
 - [x] Get rid of dead code  
+- [x] Breakdown P0 tasks into list  
+- [x] Come up with name  
 - [x] Create milestones  
 - [x] Text rendering either (through React?) (milestone work out)  
 - [x] Animation component (milestone work out, prob 1)  
