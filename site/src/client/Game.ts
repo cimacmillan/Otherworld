@@ -1,4 +1,5 @@
 import { HEIGHT, TARGET_MILLIS, WIDTH } from "./Config";
+import { CrabletLogicComponent } from "./engine/components/CrabletLogicComponent";
 import { FlowerLogicComponent } from "./engine/components/FlowerLogicComponent";
 import { SpriteLogicComponent } from "./engine/components/SpriteLogicComponent";
 import { SpriteRenderComponent } from "./engine/components/SpriteRenderComponent";
@@ -78,11 +79,20 @@ export class Game {
             world.addEntity(sprite);
         }
 
-        for (let i = 0; i < 5000; i++) {
+        for (let i = 0; i < 100; i++) {
             const sprite = new Entity(
                 this.serviceLocator,
                 new SpriteRenderComponent(),
                 new FlowerLogicComponent()
+            );
+            world.addEntity(sprite);
+        }
+
+        for (let i = 0; i < 100; i++) {
+            const sprite = new Entity(
+                this.serviceLocator,
+                new SpriteRenderComponent(),
+                new CrabletLogicComponent()
             );
             world.addEntity(sprite);
         }

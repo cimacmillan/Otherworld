@@ -1,4 +1,3 @@
-import { getTextureCoordinate } from "../../util/math";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 import { BallEventType } from "../events/BallEvents";
@@ -82,7 +81,10 @@ export class SpriteLogicComponent<
                             ],
                             size: [1, 1],
                             height: 10 * this.seed,
-                            ...getTextureCoordinate(512, 64, 32, 32, xtex, 32),
+                            ...entity
+                                .getServiceLocator()
+                                .getResourceManager()
+                                .sprite.getTextureCoordinate(32, 32, xtex, 32),
                         },
                     },
                     true

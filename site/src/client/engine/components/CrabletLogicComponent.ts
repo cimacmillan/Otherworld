@@ -6,23 +6,18 @@ import { EntityEventType } from "../events/EntityEvents";
 import { GameEvent } from "../events/Event";
 import { SpriteStateType } from "./SpriteRenderComponent";
 
-export class FlowerLogicComponent<
+export class CrabletLogicComponent<
     T extends SpriteStateType
 > extends EntityComponent<T> {
-    private seed: number;
     private animation: AnimationDriver;
 
     public init(entity: Entity<SpriteStateType>) {
-        this.seed = Math.random();
         return {};
     }
 
     public update(entity: Entity<SpriteStateType>): void {
         if (this.animation) {
             this.animation.tick();
-        }
-        if (this.animation.getPlayCount() > 5) {
-            this.animation.stop();
         }
     }
 
@@ -50,17 +45,23 @@ export class FlowerLogicComponent<
     private onCreate(entity: Entity<SpriteStateType>) {
         const x = -(Math.random() * 20) + 10;
         const y = -(Math.random() * 20) + 10;
-        const xtex = Math.floor(Math.random() * 16) * 32;
+        const xtex = Math.floor(Math.random() * 8) * 16;
+        const crabType = Math.floor(Math.random() * 3);
         entity.setState(
             {
                 toRender: {
                     position: [x, y],
-                    size: [2, 2],
-                    height: 1,
+                    size: [1, 1],
+                    height: 0.5,
                     ...entity
                         .getServiceLocator()
                         .getResourceManager()
-                        .sprite.getTextureCoordinate(32, 32, xtex, 0),
+                        .sprite.getTextureCoordinate(
+                            16,
+                            16,
+                            xtex,
+                            64 + 16 * crabType
+                        ),
                 },
             },
             true
@@ -70,7 +71,12 @@ export class FlowerLogicComponent<
             entity
                 .getServiceLocator()
                 .getResourceManager()
-                .sprite.getTextureCoordinate(32, 32, xTex * 32, 0);
+                .sprite.getTextureCoordinate(
+                    16,
+                    16,
+                    xTex * 16,
+                    64 + 16 * crabType
+                );
 
         this.animation = new AnimationDriver((x: number) => {
             const toRender = entity.getState().toRender;
@@ -78,8 +84,8 @@ export class FlowerLogicComponent<
             toRender.textureX = texture.textureX;
             toRender.textureY = texture.textureY;
         })
-            .tween(floorStepper(16))
-            .speed(2000)
+            .tween(floorStepper(8))
+            .speed(400)
             .start(Math.random(), true);
     }
 }

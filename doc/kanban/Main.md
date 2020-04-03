@@ -25,6 +25,7 @@ Main TODO Taskboard
 - [ ] Background render service  
 - [ ] Research skyrim scripting language  
 - [ ] Remove State pattern  
+- [ ] Unified spritesheet JSON format for referencing coordinates  
 
 ### In Progress
 

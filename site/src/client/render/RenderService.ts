@@ -19,7 +19,9 @@ export class RenderService implements RenderInterface {
 
     public init(renderState: RenderState) {
         this.spriteRenderService.init(renderState);
-        this.spriteRenderService.attachSpritesheet(this.resourceManager.sprite);
+        this.spriteRenderService.attachSpritesheet(
+            this.resourceManager.sprite.getTexture()
+        );
         this.wallRenderService.init(renderState);
         this.wallRenderService.attachSpritesheet(this.resourceManager.floor);
         this.floorRenderService.init(renderState);

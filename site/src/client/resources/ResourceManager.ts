@@ -1,8 +1,13 @@
-import { loadImage, loadTexture } from "../util/loader/TextureLoader";
+import {
+    loadImage,
+    loadSpriteSheet,
+    loadTextureFromURL,
+} from "../util/loader/TextureLoader";
 import { loadSound } from "../util/sound/AudioService";
+import { SpriteSheet } from "./SpriteSheet";
 
 export class ResourceManager {
-    public sprite: WebGLTexture;
+    public sprite: SpriteSheet;
     public wall: WebGLTexture;
     public floor: WebGLTexture;
     public glorp: WebGLTexture;
@@ -13,9 +18,9 @@ export class ResourceManager {
     public uiImage: HTMLImageElement;
 
     public async load(gl: WebGLRenderingContext, audio: AudioContext) {
-        this.sprite = await loadTexture(gl, "img/sprite.png");
-        this.wall = await loadTexture(gl, "img/wall.png");
-        this.floor = await loadTexture(gl, "img/floor.png");
+        this.sprite = await loadSpriteSheet(gl, "img/sprite.png");
+        this.wall = await loadTextureFromURL(gl, "img/wall.png");
+        this.floor = await loadTextureFromURL(gl, "img/floor.png");
         // this.sprite = await loadTexture(gl, "img/glorp.png");
 
         this.intro = await loadSound("audio/intro.mp3", audio);
