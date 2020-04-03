@@ -1,4 +1,4 @@
-import { SpriteSheet } from "../../resources/SpriteSheet";
+import { SpriteSheet } from "./SpriteSheet";
 
 export function loadImage(url: string): Promise<HTMLImageElement> {
     return new Promise<HTMLImageElement>((resolve) => {

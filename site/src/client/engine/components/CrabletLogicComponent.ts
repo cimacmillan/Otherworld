@@ -1,5 +1,5 @@
+import { Animations } from "../../resources/ResourceManager";
 import { AnimationDriver } from "../../util/animation/AnimationDriver";
-import { floorStepper } from "../../util/animation/TweenFunction";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 import { EntityEventType } from "../events/EntityEvents";
@@ -45,8 +45,22 @@ export class CrabletLogicComponent<
     private onCreate(entity: Entity<SpriteStateType>) {
         const x = -(Math.random() * 20) + 10;
         const y = -(Math.random() * 20) + 10;
-        const xtex = Math.floor(Math.random() * 8) * 16;
-        const crabType = Math.floor(Math.random() * 3);
+        const xtex = Math.random();
+
+        let crabType = Animations.CRABLET_BROWN;
+
+        switch (Math.floor(Math.random() * 3)) {
+            case 0:
+                crabType = Animations.CRABLET_BROWN;
+                break;
+            case 1:
+                crabType = Animations.CRABLET_GREEN;
+                break;
+            case 2:
+                crabType = Animations.CRABLET_BLUE;
+                break;
+        }
+
         entity.setState(
             {
                 toRender: {
@@ -56,12 +70,7 @@ export class CrabletLogicComponent<
                     ...entity
                         .getServiceLocator()
                         .getResourceManager()
-                        .sprite.getTextureCoordinate(
-                            16,
-                            16,
-                            xtex,
-                            64 + 16 * crabType
-                        ),
+                        .sprite.getAnimationInterp(crabType, xtex),
                 },
             },
             true
@@ -71,12 +80,7 @@ export class CrabletLogicComponent<
             entity
                 .getServiceLocator()
                 .getResourceManager()
-                .sprite.getTextureCoordinate(
-                    16,
-                    16,
-                    xTex * 16,
-                    64 + 16 * crabType
-                );
+                .sprite.getAnimationInterp(crabType, xTex);
 
         this.animation = new AnimationDriver((x: number) => {
             const toRender = entity.getState().toRender;
@@ -84,7 +88,7 @@ export class CrabletLogicComponent<
             toRender.textureX = texture.textureX;
             toRender.textureY = texture.textureY;
         })
-            .tween(floorStepper(8))
+
             .speed(400)
             .start(Math.random(), true);
     }

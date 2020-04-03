@@ -79,7 +79,7 @@ export class Game {
             world.addEntity(sprite);
         }
 
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 1000; i++) {
             const sprite = new Entity(
                 this.serviceLocator,
                 new SpriteRenderComponent(),
@@ -88,7 +88,7 @@ export class Game {
             world.addEntity(sprite);
         }
 
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 500; i++) {
             const sprite = new Entity(
                 this.serviceLocator,
                 new SpriteRenderComponent(),
