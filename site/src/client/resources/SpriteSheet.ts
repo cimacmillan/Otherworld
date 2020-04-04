@@ -5,8 +5,12 @@ interface TextureCoordinate {
     textureHeight: number;
 }
 
-interface SpriteHash { [name: string]: TextureCoordinate }
-interface AnimationHash { [name: string]: TextureCoordinate[] }
+interface SpriteHash {
+    [name: string]: TextureCoordinate;
+}
+interface AnimationHash {
+    [name: string]: TextureCoordinate[];
+}
 
 export class SpriteSheet {
     private spriteHash: SpriteHash = {};

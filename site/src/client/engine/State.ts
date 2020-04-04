@@ -5,3 +5,5 @@ export interface BaseState {
 export interface TestState {
     toOther: boolean;
 }
+
+export interface PlayerState extends BaseState {}

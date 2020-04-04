@@ -6,7 +6,7 @@ import { Entity } from "../engine/Entity";
 import { SpriteRenderComponent } from "../engine/components/SpriteRenderComponent";
 import { SpriteLogicComponent } from "../engine/components/SpriteLogicComponent";
 import { BallEventType } from "../engine/events/BallEvents";
-import { GameEventSource } from "../engine/EventRouter";
+import { GameEventSource } from "../services/EventRouter";
 
 export interface OwnProps {
     game: Game;

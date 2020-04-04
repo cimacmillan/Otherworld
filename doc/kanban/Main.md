@@ -4,6 +4,7 @@ Main TODO Taskboard
 
 ### Backlog (Other)
 
+- [ ] Animation Sequencer  
 - [ ] Create current story doc  
 - [ ] WallRenderingComponent  
 - [ ] FloorRenderingComponent  
@@ -25,7 +26,6 @@ Main TODO Taskboard
 - [ ] Background render service  
 - [ ] Research skyrim scripting language  
 - [ ] Remove State pattern  
-- [ ] Unified spritesheet JSON format for referencing coordinates  
 
 ### In Progress
 
@@ -40,6 +40,7 @@ Main TODO Taskboard
 - [x] Come up with name  
 - [x] Create milestones  
 - [x] Text rendering either (through React?) (milestone work out)  
+- [x] Unified spritesheet JSON format for referencing coordinates  
 - [x] Animation component (milestone work out, prob 1)  
 - [x] SpriteRenderingComponent  
 - [x] Work out how to do UI  
