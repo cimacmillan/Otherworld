@@ -1,5 +1,4 @@
 import * as glm from "gl-matrix";
-import { RenderState } from "../../state/render/RenderState";
 
 export interface Sprite {
     position: glm.vec2;
@@ -51,6 +50,6 @@ export interface RenderItem {
 }
 
 export interface RenderInterface {
-    init: (renderState: RenderState) => void;
-    draw: (renderState: RenderState) => void;
+    init: (gl: WebGLRenderingContext) => void;
+    draw: () => void;
 }

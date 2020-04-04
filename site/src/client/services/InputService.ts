@@ -10,8 +10,12 @@ import { ServiceLocator } from "./ServiceLocator";
  * are fired.
  */
 export class InputService {
-    private keys_down_set: any = {};
+    private keydown: { [key: string]: boolean };
     private serviceLocator: ServiceLocator;
+
+    public constructor() {
+        this.keydown = {};
+    }
 
     public init(serviceLocator: ServiceLocator) {
         this.serviceLocator = serviceLocator;
@@ -21,22 +25,9 @@ export class InputService {
         this.attachWindowHooks();
     }
 
-    private attachWindowHooks() {
-        window.addEventListener("keydown", this.onKeyDown);
-        window.addEventListener("keyup", this.onKeyUp);
-    }
-
-    private onKeyUp(keyboardEvent: KeyboardEvent) {}
-
-    private onKeyDown(keyboardEvent: KeyboardEvent) {}
-
-    private isKeyDown(key: string) {
-        return this.keys_down_set[key] == true;
-    }
-
-    private poll() {
+    public update() {
         const speed = fpsNorm(0.1);
-        const camera: any = 1;
+        const camera = this.serviceLocator.getScriptingService().camera;
 
         if (this.isKeyDown("KeyW")) {
             const camera_add = vec_rotate({ x: 0, y: -speed }, camera.angle);
@@ -70,5 +61,22 @@ export class InputService {
         }
     }
 
-    private onGameEvent(event: GameEvent, source: GameEventSource) {}
+    private attachWindowHooks() {
+        window.addEventListener("keydown", this.onKeyDown);
+        window.addEventListener("keyup", this.onKeyUp);
+    }
+
+    private onKeyUp = (keyboardEvent: KeyboardEvent) => {
+        this.keydown[keyboardEvent.code] = false;
+    };
+
+    private onKeyDown = (keyboardEvent: KeyboardEvent) => {
+        this.keydown[keyboardEvent.code] = true;
+    };
+
+    private isKeyDown(key: string) {
+        return this.keydown[key] == true;
+    }
+
+    private onGameEvent = (event: GameEvent, source: GameEventSource) => {};
 }

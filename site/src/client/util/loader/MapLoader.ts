@@ -1,11 +1,11 @@
-import { ScreenBuffer } from "../../render";
+import { HEIGHT, WIDTH } from "../../Config";
 import { Camera } from "../../types";
 import { toRadians } from "../math";
 
 const VIEWING_ANGLE = toRadians(110.0);
 
-export function initialiseCamera(screen: ScreenBuffer): Camera {
-    const aspect_ratio = screen.width / screen.height;
+export function initialiseCamera(): Camera {
+    const aspect_ratio = WIDTH / HEIGHT;
     const x_view_window = aspect_ratio;
     const y_view_window = 1.0;
     const focal_length = x_view_window / 2 / Math.tan(VIEWING_ANGLE / 2);

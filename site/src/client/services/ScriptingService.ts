@@ -4,6 +4,8 @@ import { SpriteLogicComponent } from "../engine/components/SpriteLogicComponent"
 import { SpriteRenderComponent } from "../engine/components/SpriteRenderComponent";
 import { Entity } from "../engine/Entity";
 import { PlayerState } from "../engine/State";
+import { Camera } from "../types";
+import { initialiseCamera } from "../util/loader/MapLoader";
 import { getTextureCoordinate } from "../util/math";
 import { ServiceLocator } from "./ServiceLocator";
 
@@ -13,6 +15,8 @@ import { ServiceLocator } from "./ServiceLocator";
  * GameScriptingService.getPlayer().damage();
  */
 export class ScriptingService {
+
+    public camera: Camera;
     private serviceLocator: ServiceLocator;
     private player: Entity<PlayerState>;
 
@@ -27,6 +31,8 @@ export class ScriptingService {
 
     private bootstrapContent() {
         const world = this.serviceLocator.getWorld();
+
+        this.camera = initialiseCamera();
 
         for (let i = 0; i < 10; i++) {
             const sprite = new Entity(

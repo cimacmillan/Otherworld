@@ -3,6 +3,7 @@ import { RenderService } from "../render";
 import { ResourceManager } from "../resources/ResourceManager";
 import { AudioService } from "../util/sound/AudioService";
 import { EventRouter } from "./EventRouter";
+import { InputService } from "./InputService";
 import { ScriptingService } from "./ScriptingService";
 
 export class ServiceLocator {
@@ -12,7 +13,8 @@ export class ServiceLocator {
         private renderService: RenderService,
         private audioService: AudioService,
         private eventRouter: EventRouter,
-        private scriptingService: ScriptingService
+        private scriptingService: ScriptingService,
+        private inputService: InputService
     ) {}
 
     public getResourceManager() {
@@ -37,5 +39,9 @@ export class ServiceLocator {
 
     public getScriptingService() {
         return this.scriptingService;
+    }
+
+    public getInputService() {
+        return this.inputService;
     }
 }

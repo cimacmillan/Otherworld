@@ -1,15 +1,19 @@
 import { mat4 } from "gl-matrix";
 import { ResourceManager } from "../resources/ResourceManager";
-import { RenderState } from "../state/render/RenderState";
+import { Camera } from "../types";
 import { FloorRenderService } from "./services/FloorRenderService";
 import { SpriteRenderService } from "./services/SpriteRenderService";
 import { WallRenderService } from "./services/WallRenderService";
 import { RenderInterface } from "./types/RenderInterface";
 
 export class RenderService implements RenderInterface {
+
     public spriteRenderService: SpriteRenderService;
     public wallRenderService: WallRenderService;
     public floorRenderService: FloorRenderService;
+    private gl: WebGLRenderingContext;
+
+    private camera: Camera;
 
     public constructor(private resourceManager: ResourceManager) {
         this.spriteRenderService = new SpriteRenderService();
@@ -17,21 +21,27 @@ export class RenderService implements RenderInterface {
         this.floorRenderService = new FloorRenderService();
     }
 
-    public init(renderState: RenderState) {
-        this.spriteRenderService.init(renderState);
+    public init(gl: WebGLRenderingContext) {
+        this.gl = gl;
+        this.spriteRenderService.init(gl);
         this.spriteRenderService.attachSpritesheet(
             this.resourceManager.sprite.getTexture()
         );
-        this.wallRenderService.init(renderState);
+        this.wallRenderService.init(gl);
         this.wallRenderService.attachSpritesheet(this.resourceManager.floor);
-        this.floorRenderService.init(renderState);
+        this.floorRenderService.init(gl);
         this.floorRenderService.attachSpritesheet(this.resourceManager.floor);
     }
 
-    public draw(renderState: RenderState) {
-        const { modelViewMatrix, projectionMatrix } = this.createCameraMatrices(
-            renderState
-        );
+    public draw() {
+        if (!this.camera) {
+            return;
+        }
+
+        const {
+            modelViewMatrix,
+            projectionMatrix,
+        } = this.createCameraMatrices();
         this.spriteRenderService.attachViewMatrices(
             modelViewMatrix,
             projectionMatrix
@@ -45,26 +55,30 @@ export class RenderService implements RenderInterface {
             projectionMatrix
         );
 
-        this.clearScreen(renderState);
-        this.spriteRenderService.draw(renderState);
-        this.wallRenderService.draw(renderState);
-        this.floorRenderService.draw(renderState);
+        this.clearScreen();
+        this.spriteRenderService.draw();
+        this.wallRenderService.draw();
+        this.floorRenderService.draw();
     }
 
-    private clearScreen(renderState: RenderState) {
-        const gl = renderState.screen.getOpenGL();
-        gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
-        gl.clearDepth(1.0); // Clear everything
-        gl.enable(gl.DEPTH_TEST); // Enable depth testing
-        gl.depthFunc(gl.LEQUAL); // Near things obscure far things
+    public attachCamera(camera: Camera) {
+        this.camera = camera;
+    }
+
+    private clearScreen() {
+        this.gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
+        this.gl.clearDepth(1.0); // Clear everything
+        this.gl.enable(this.gl.DEPTH_TEST); // Enable depth testing
+        this.gl.depthFunc(this.gl.LEQUAL); // Near things obscure far things
         // gl.enable(gl.BLEND);
         // gl.blendFunc(gl.SRC_COLOR, gl.DST_COLOR);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     }
 
-    private createCameraMatrices(
-        renderState: RenderState
-    ): { modelViewMatrix: mat4; projectionMatrix: mat4 } {
+    private createCameraMatrices(): {
+        modelViewMatrix: mat4;
+        projectionMatrix: mat4;
+    } {
         const fieldOfView = (45 * Math.PI) / 180; // in radians
         const aspect = 1280 / 720;
         const zNear = 0.1;
@@ -78,16 +92,16 @@ export class RenderService implements RenderInterface {
         mat4.rotateY(
             modelViewMatrix, // destination matrix
             modelViewMatrix, // matrix to translate
-            renderState.camera.angle
+            this.camera.angle
         ); // amount to translate
 
         mat4.translate(
             modelViewMatrix, // destination matrix
             modelViewMatrix, // matrix to translate
             [
-                -renderState.camera.position.x,
-                -renderState.camera.height,
-                -renderState.camera.position.y,
+                -this.camera.position.x,
+                -this.camera.height,
+                -this.camera.position.y,
             ]
         ); // amount to translate
 

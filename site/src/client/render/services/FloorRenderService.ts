@@ -1,11 +1,12 @@
 import { mat4 } from "gl-matrix";
-import { RenderState } from "../../state/render/RenderState";
 import { ISyncedArrayRef, SyncedArray } from "../../util/array/SyncedArray";
 import { compileTextureRepeatShader } from "../shaders/Shaders";
 import { Floor } from "../types/RenderInterface";
 import { RenderItem, RenderItemInterface } from "../types/RenderItemInterface";
 
 export class FloorRenderService implements RenderItemInterface<Floor> {
+    private gl: WebGLRenderingContext;
+
     private floorArray: SyncedArray<Floor>;
 
     private shader: CompiledShader;
@@ -24,9 +25,8 @@ export class FloorRenderService implements RenderItemInterface<Floor> {
     private modelViewMatrix: mat4;
     private projectionMatrix: mat4;
 
-    public init(renderState: RenderState) {
-        const gl = renderState.screen.getOpenGL();
-
+    public init(gl: WebGLRenderingContext) {
+        this.gl = gl;
         this.shader = compileTextureRepeatShader(gl);
 
         this.floorArray = new SyncedArray({
@@ -44,22 +44,20 @@ export class FloorRenderService implements RenderItemInterface<Floor> {
         this.textureSizeBuffer = gl.createBuffer();
     }
 
-    public draw(renderState: RenderState) {
+    public draw() {
         this.floorArray.sync();
         if (this.floorArray.getArray().length === 0) {
             return;
         }
 
-        const gl = renderState.screen.getOpenGL();
-
         const numComponents = 3;
-        const type = gl.FLOAT;
+        const type = this.gl.FLOAT;
         const normalize = false;
         const stride = 0;
         const offset = 0;
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-        gl.vertexAttribPointer(
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+        this.gl.vertexAttribPointer(
             this.shader.attribute.vertexPosition,
             numComponents,
             type,
@@ -67,10 +65,10 @@ export class FloorRenderService implements RenderItemInterface<Floor> {
             stride,
             offset
         );
-        gl.enableVertexAttribArray(this.shader.attribute.vertexPosition);
+        this.gl.enableVertexAttribArray(this.shader.attribute.vertexPosition);
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
-        gl.vertexAttribPointer(
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+        this.gl.vertexAttribPointer(
             this.shader.attribute.texturePosition,
             2,
             type,
@@ -78,10 +76,10 @@ export class FloorRenderService implements RenderItemInterface<Floor> {
             stride,
             offset
         );
-        gl.enableVertexAttribArray(this.shader.attribute.texturePosition);
+        this.gl.enableVertexAttribArray(this.shader.attribute.texturePosition);
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.textureStartBuffer);
-        gl.vertexAttribPointer(
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureStartBuffer);
+        this.gl.vertexAttribPointer(
             this.shader.attribute.textureStart,
             2,
             type,
@@ -89,10 +87,10 @@ export class FloorRenderService implements RenderItemInterface<Floor> {
             stride,
             offset
         );
-        gl.enableVertexAttribArray(this.shader.attribute.textureStart);
+        this.gl.enableVertexAttribArray(this.shader.attribute.textureStart);
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.textureSizeBuffer);
-        gl.vertexAttribPointer(
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureSizeBuffer);
+        this.gl.vertexAttribPointer(
             this.shader.attribute.textureSize,
             2,
             type,
@@ -100,28 +98,28 @@ export class FloorRenderService implements RenderItemInterface<Floor> {
             stride,
             offset
         );
-        gl.enableVertexAttribArray(this.shader.attribute.textureSize);
+        this.gl.enableVertexAttribArray(this.shader.attribute.textureSize);
 
-        gl.useProgram(this.shader.shaderId);
-        gl.uniformMatrix4fv(
+        this.gl.useProgram(this.shader.shaderId);
+        this.gl.uniformMatrix4fv(
             this.shader.uniform.projectionMatrix,
             false,
             this.projectionMatrix
         );
-        gl.uniformMatrix4fv(
+        this.gl.uniformMatrix4fv(
             this.shader.uniform.modelMatrix,
             false,
             this.modelViewMatrix
         );
 
-        gl.activeTexture(gl.TEXTURE0);
+        this.gl.activeTexture(this.gl.TEXTURE0);
         // Bind the texture to texture unit 0
-        gl.bindTexture(gl.TEXTURE_2D, this.spritesheet);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.spritesheet);
         // Tell the shader we bound the texture to texture unit 0
-        gl.uniform1i(this.shader.attribute.textureSampler, 0);
+        this.gl.uniform1i(this.shader.attribute.textureSampler, 0);
 
         const vertexCount = this.positions.length / 3;
-        gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, vertexCount);
     }
 
     public createItem(param: Floor) {

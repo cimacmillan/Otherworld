@@ -1,11 +1,12 @@
 import { mat4 } from "gl-matrix";
-import { RenderState } from "../../state/render/RenderState";
 import { ISyncedArrayRef, SyncedArray } from "../../util/array/SyncedArray";
 import { compileSpriteShader } from "../shaders/Shaders";
 import { Sprite } from "../types/RenderInterface";
 import { RenderItem, RenderItemInterface } from "../types/RenderItemInterface";
 
 export class SpriteRenderService implements RenderItemInterface<Sprite> {
+    private gl: WebGLRenderingContext;
+
     private spriteArray: SyncedArray<Sprite>;
 
     private shader: CompiledShader;
@@ -22,9 +23,8 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
     private modelViewMatrix: mat4;
     private projectionMatrix: mat4;
 
-    public init(renderState: RenderState) {
-        const gl = renderState.screen.getOpenGL();
-
+    public init(gl: WebGLRenderingContext) {
+        this.gl = gl;
         this.shader = compileSpriteShader(gl);
 
         this.spriteArray = new SyncedArray({
@@ -41,22 +41,20 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         this.textureBuffer = gl.createBuffer();
     }
 
-    public draw(renderState: RenderState) {
+    public draw() {
         this.spriteArray.sync();
         if (this.spriteArray.getArray().length === 0) {
             return;
         }
 
-        const gl = renderState.screen.getOpenGL();
-
         const numComponents = 3;
-        const type = gl.FLOAT;
+        const type = this.gl.FLOAT;
         const normalize = false;
         const stride = 0;
         const offset = 0;
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-        gl.vertexAttribPointer(
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+        this.gl.vertexAttribPointer(
             this.shader.attribute.vertexPosition,
             numComponents,
             type,
@@ -64,10 +62,10 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
             stride,
             offset
         );
-        gl.enableVertexAttribArray(this.shader.attribute.vertexPosition);
+        this.gl.enableVertexAttribArray(this.shader.attribute.vertexPosition);
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.translationBuffer);
-        gl.vertexAttribPointer(
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.translationBuffer);
+        this.gl.vertexAttribPointer(
             this.shader.attribute.vertexTranslation,
             numComponents,
             type,
@@ -75,10 +73,12 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
             stride,
             offset
         );
-        gl.enableVertexAttribArray(this.shader.attribute.vertexTranslation);
+        this.gl.enableVertexAttribArray(
+            this.shader.attribute.vertexTranslation
+        );
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
-        gl.vertexAttribPointer(
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+        this.gl.vertexAttribPointer(
             this.shader.attribute.texturePosition,
             2,
             type,
@@ -86,28 +86,28 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
             stride,
             offset
         );
-        gl.enableVertexAttribArray(this.shader.attribute.texturePosition);
+        this.gl.enableVertexAttribArray(this.shader.attribute.texturePosition);
 
-        gl.useProgram(this.shader.shaderId);
-        gl.uniformMatrix4fv(
+        this.gl.useProgram(this.shader.shaderId);
+        this.gl.uniformMatrix4fv(
             this.shader.uniform.projectionMatrix,
             false,
             this.projectionMatrix
         );
-        gl.uniformMatrix4fv(
+        this.gl.uniformMatrix4fv(
             this.shader.uniform.modelMatrix,
             false,
             this.modelViewMatrix
         );
 
-        gl.activeTexture(gl.TEXTURE0);
+        this.gl.activeTexture(this.gl.TEXTURE0);
         // Bind the texture to texture unit 0
-        gl.bindTexture(gl.TEXTURE_2D, this.spritesheet);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.spritesheet);
         // Tell the shader we bound the texture to texture unit 0
-        gl.uniform1i(this.shader.attribute.textureSampler, 0);
+        this.gl.uniform1i(this.shader.attribute.textureSampler, 0);
 
         const vertexCount = this.positions.length / 3;
-        gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, vertexCount);
     }
 
     public createItem(param: Sprite) {

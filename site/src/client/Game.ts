@@ -1,21 +1,19 @@
 import { HEIGHT, TARGET_MILLIS, WIDTH } from "./Config";
 import { GameEvent } from "./engine/events/Event";
 import { World } from "./engine/World";
-import { initialiseInput, updateInput } from "./Input";
 import { RenderService, ScreenBuffer } from "./render";
 import { ResourceManager } from "./resources/ResourceManager";
 import { EventRouter, GameEventSource } from "./services/EventRouter";
+import { InputService } from "./services/InputService";
 import { ScriptingService } from "./services/ScriptingService";
 import { ServiceLocator } from "./services/ServiceLocator";
-import { GameState } from "./state/GameState";
-import { initialiseCamera } from "./util/loader/MapLoader";
 import { AudioService } from "./util/sound/AudioService";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
 
 export class Game {
-    private gameState: GameState;
     private serviceLocator: ServiceLocator;
+
     private initialised: boolean = false;
     private updateWorld: boolean = true;
 
@@ -24,6 +22,7 @@ export class Game {
         uiListener: (event: GameEvent) => void
     ) {
         const audioContext = new AudioContext();
+        const screen = new ScreenBuffer(openGL, WIDTH, HEIGHT);
 
         const resourceManager = new ResourceManager();
         await resourceManager.load(openGL, audioContext);
@@ -40,41 +39,32 @@ export class Game {
 
         const scriptingService = new ScriptingService();
 
+        const inputService = new InputService();
+
         this.serviceLocator = new ServiceLocator(
             resourceManager,
             world,
             new RenderService(resourceManager),
             new AudioService(audioContext),
             router,
-            scriptingService
+            scriptingService,
+            inputService
         );
 
-        initialiseInput();
+        this.serviceLocator.getInputService().init(this.serviceLocator);
+        this.serviceLocator.getRenderService().init(screen.getOpenGL());
+        this.serviceLocator.getWorld().init();
 
-        const screen = new ScreenBuffer(openGL, WIDTH, HEIGHT);
+        this.serviceLocator.getScriptingService().init(this.serviceLocator);
+        const camera = this.serviceLocator.getScriptingService().camera;
+
+        this.serviceLocator.getAudioService().attachCamera(camera);
+
+        this.serviceLocator.getRenderService().attachCamera(camera);
 
         const loop = new TimeControlledLoop(TARGET_MILLIS, this.mainLoop);
-
-        this.gameState = {
-            loop,
-            render: {
-                screen,
-                camera: initialiseCamera(screen),
-            },
-        };
-
-        this.serviceLocator
-            .getAudioService()
-            .attachCamera(this.gameState.render.camera);
-        this.serviceLocator.getRenderService().init(this.gameState.render);
-        this.serviceLocator.getWorld().init();
-        this.serviceLocator.getScriptingService().init(this.serviceLocator);
-
-        // this.serviceLocator.getAudioService().play(this.serviceLocator.getResourceManager().intro);
-
-        this.gameState.loop.start();
-
         this.initialised = true;
+        loop.start();
     }
 
     public isInitialised() {
@@ -90,14 +80,14 @@ export class Game {
     }
 
     private update = () => {
-        updateInput(this.gameState.render.camera);
+        this.serviceLocator.getInputService().update();
         if (this.updateWorld) {
             this.serviceLocator.getWorld().update();
         }
     };
 
     private draw = () => {
-        this.serviceLocator.getRenderService().draw(this.gameState.render);
+        this.serviceLocator.getRenderService().draw();
     };
 
     private mainLoop = (
