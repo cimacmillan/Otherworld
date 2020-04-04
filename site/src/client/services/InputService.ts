@@ -6,6 +6,8 @@ import { ServiceLocator } from "./ServiceLocator";
 
 /**
  * Service for handling input and window events
+ * Depending on what state we're in, changes what commands
+ * are fired.
  */
 export class InputService {
     private keys_down_set: any = {};
