@@ -1,7 +1,8 @@
 export type TimeControlledLoopCallback = (
     instance?: TimeControlledLoop,
     actualMilliseconds?: number,
-    actualProportion?: number
+    actualProportion?: number,
+    budgetUsage?: number
 ) => void;
 
 export class TimeControlledLoop {
@@ -14,6 +15,7 @@ export class TimeControlledLoop {
 
     private actualMilliseconds: number;
     private actualProportion: number;
+    private budgetUsage: number;
 
     public constructor(
         targetMilliseconds: number,
@@ -23,6 +25,7 @@ export class TimeControlledLoop {
         this.callback = callback;
         this.actualMilliseconds = targetMilliseconds;
         this.actualProportion = 1;
+        this.budgetUsage = 0;
     }
 
     public start() {
@@ -36,9 +39,15 @@ export class TimeControlledLoop {
 
     private loop() {
         this.startMilliseconds = Date.now();
-        this.callback(this, this.actualMilliseconds, this.actualProportion);
+        this.callback(
+            this,
+            this.actualMilliseconds,
+            this.actualProportion,
+            this.budgetUsage
+        );
         this.endMilliseconds = Date.now();
         const diff = this.endMilliseconds - this.startMilliseconds;
+        this.budgetUsage = diff / this.targetMilliseconds;
         let wait = this.targetMilliseconds - diff;
         wait = wait >= 0 ? wait : 0;
 

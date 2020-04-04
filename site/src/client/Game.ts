@@ -93,11 +93,14 @@ export class Game {
     private mainLoop = (
         instance: TimeControlledLoop,
         actualMilliseconds: number,
-        actualProportion?: number
+        actualProportion: number,
+        budgetUsage: number
     ) => {
         logFPS((fps) => {
             console.log(
-                `FPS: ${fps} EntityCount: ${
+                `FPS: ${fps} BudgetUsage: ${Math.floor(
+                    budgetUsage * 100
+                )}% EntityCount: ${
                     this.serviceLocator.getWorld().getEntityArray().getArray()
                         .length
                 }`

@@ -15,7 +15,6 @@ import { ServiceLocator } from "./ServiceLocator";
  * GameScriptingService.getPlayer().damage();
  */
 export class ScriptingService {
-
     public camera: Camera;
     private serviceLocator: ServiceLocator;
     private player: Entity<PlayerState>;

@@ -7,7 +7,6 @@ import { WallRenderService } from "./services/WallRenderService";
 import { RenderInterface } from "./types/RenderInterface";
 
 export class RenderService implements RenderInterface {
-
     public spriteRenderService: SpriteRenderService;
     public wallRenderService: WallRenderService;
     public floorRenderService: FloorRenderService;
