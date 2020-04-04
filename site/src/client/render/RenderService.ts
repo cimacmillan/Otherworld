@@ -40,7 +40,7 @@ export class RenderService implements RenderInterface {
         const {
             modelViewMatrix,
             projectionMatrix,
-        } = this.createCameraMatrices();
+        } = this.calculateCameraMatrices();
         this.spriteRenderService.attachViewMatrices(
             modelViewMatrix,
             projectionMatrix
@@ -74,19 +74,19 @@ export class RenderService implements RenderInterface {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     }
 
-    private createCameraMatrices(): {
-        modelViewMatrix: mat4;
-        projectionMatrix: mat4;
-    } {
-        const fieldOfView = (45 * Math.PI) / 180; // in radians
-        const aspect = 1280 / 720;
-        const zNear = 0.1;
-        const zFar = 10000.0;
+    private calculateCameraMatrices() {
+        const fieldOfView = (this.camera.fov * Math.PI) / 180; // in radians
+
         const projectionMatrix = mat4.create();
-
-        mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
-
         const modelViewMatrix = mat4.create();
+
+        mat4.perspective(
+            projectionMatrix,
+            fieldOfView,
+            this.camera.aspectRatio,
+            this.camera.zNear,
+            this.camera.zFar
+        );
 
         mat4.rotateY(
             modelViewMatrix, // destination matrix

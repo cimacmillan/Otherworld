@@ -56,11 +56,6 @@ export class Game {
         this.serviceLocator.getWorld().init();
 
         this.serviceLocator.getScriptingService().init(this.serviceLocator);
-        const camera = this.serviceLocator.getScriptingService().camera;
-
-        this.serviceLocator.getAudioService().attachCamera(camera);
-
-        this.serviceLocator.getRenderService().attachCamera(camera);
 
         const loop = new TimeControlledLoop(TARGET_MILLIS, this.mainLoop);
         this.initialised = true;

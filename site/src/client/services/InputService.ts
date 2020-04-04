@@ -27,37 +27,52 @@ export class InputService {
 
     public update() {
         const speed = fpsNorm(0.1);
-        const camera = this.serviceLocator.getScriptingService().camera;
+        const playerState = this.serviceLocator
+            .getScriptingService()
+            .getPlayer()
+            .getState();
 
         if (this.isKeyDown("KeyW")) {
-            const camera_add = vec_rotate({ x: 0, y: -speed }, camera.angle);
-            camera.position = vec_add(camera.position, camera_add);
+            const camera_add = vec_rotate(
+                { x: 0, y: -speed },
+                playerState.angle
+            );
+            playerState.position = vec_add(playerState.position, camera_add);
         }
         if (this.isKeyDown("KeyS")) {
-            const camera_add = vec_rotate({ x: 0, y: speed }, camera.angle);
-            camera.position = vec_add(camera.position, camera_add);
+            const camera_add = vec_rotate(
+                { x: 0, y: speed },
+                playerState.angle
+            );
+            playerState.position = vec_add(playerState.position, camera_add);
         }
         if (this.isKeyDown("KeyA")) {
-            const camera_add = vec_rotate({ x: -speed, y: 0 }, camera.angle);
-            camera.position = vec_add(camera.position, camera_add);
+            const camera_add = vec_rotate(
+                { x: -speed, y: 0 },
+                playerState.angle
+            );
+            playerState.position = vec_add(playerState.position, camera_add);
         }
         if (this.isKeyDown("KeyD")) {
-            const camera_add = vec_rotate({ x: speed, y: 0 }, camera.angle);
-            camera.position = vec_add(camera.position, camera_add);
+            const camera_add = vec_rotate(
+                { x: speed, y: 0 },
+                playerState.angle
+            );
+            playerState.position = vec_add(playerState.position, camera_add);
         }
 
         if (this.isKeyDown("Space")) {
-            camera.height += speed;
+            playerState.height += speed;
         }
         if (this.isKeyDown("ShiftLeft")) {
-            camera.height -= speed;
+            playerState.height -= speed;
         }
 
         if (this.isKeyDown("ArrowLeft")) {
-            camera.angle -= speed / 3;
+            playerState.angle -= speed / 3;
         }
         if (this.isKeyDown("ArrowRight")) {
-            camera.angle += speed / 3;
+            playerState.angle += speed / 3;
         }
     }
 
