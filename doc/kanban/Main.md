@@ -26,6 +26,8 @@ Main TODO Taskboard
 - [ ] Background render service  
 - [ ] Research skyrim scripting language  
 - [ ] Remove State pattern  
+- [ ] Scripting service entity grouping  
+- [ ] Scripting service commands  
 
 ### In Progress
 

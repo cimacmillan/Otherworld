@@ -1,8 +1,12 @@
 import { GameEvent } from "../engine/events/Event";
-import { vec_add, vec_rotate } from "../util/math";
-import { fpsNorm } from "../util/time/GlobalFPSController";
 import { GameEventSource } from "./EventRouter";
+import { ControlScheme } from "./input/ControlScheme";
+import { DefaultControlScheme } from "./input/DefaultControlScheme";
 import { ServiceLocator } from "./ServiceLocator";
+
+export enum InputState {
+    DEFAULT = "DEFAULT",
+}
 
 /**
  * Service for handling input and window events
@@ -12,6 +16,8 @@ import { ServiceLocator } from "./ServiceLocator";
 export class InputService {
     private keydown: { [key: string]: boolean };
     private serviceLocator: ServiceLocator;
+    private controlScheme: ControlScheme;
+    private inputState: InputState;
 
     public constructor() {
         this.keydown = {};
@@ -22,58 +28,12 @@ export class InputService {
         this.serviceLocator
             .getEventRouter()
             .attachEventListener(GameEventSource.INPUT, this.onGameEvent);
+        this.setInputState(InputState.DEFAULT);
         this.attachWindowHooks();
     }
 
     public update() {
-        const speed = fpsNorm(0.1);
-        const playerState = this.serviceLocator
-            .getScriptingService()
-            .getPlayer()
-            .getState();
-
-        if (this.isKeyDown("KeyW")) {
-            const camera_add = vec_rotate(
-                { x: 0, y: -speed },
-                playerState.angle
-            );
-            playerState.position = vec_add(playerState.position, camera_add);
-        }
-        if (this.isKeyDown("KeyS")) {
-            const camera_add = vec_rotate(
-                { x: 0, y: speed },
-                playerState.angle
-            );
-            playerState.position = vec_add(playerState.position, camera_add);
-        }
-        if (this.isKeyDown("KeyA")) {
-            const camera_add = vec_rotate(
-                { x: -speed, y: 0 },
-                playerState.angle
-            );
-            playerState.position = vec_add(playerState.position, camera_add);
-        }
-        if (this.isKeyDown("KeyD")) {
-            const camera_add = vec_rotate(
-                { x: speed, y: 0 },
-                playerState.angle
-            );
-            playerState.position = vec_add(playerState.position, camera_add);
-        }
-
-        if (this.isKeyDown("Space")) {
-            playerState.height += speed;
-        }
-        if (this.isKeyDown("ShiftLeft")) {
-            playerState.height -= speed;
-        }
-
-        if (this.isKeyDown("ArrowLeft")) {
-            playerState.angle -= speed / 3;
-        }
-        if (this.isKeyDown("ArrowRight")) {
-            playerState.angle += speed / 3;
-        }
+        this.controlScheme.poll(this.keydown);
     }
 
     private attachWindowHooks() {
@@ -83,15 +43,23 @@ export class InputService {
 
     private onKeyUp = (keyboardEvent: KeyboardEvent) => {
         this.keydown[keyboardEvent.code] = false;
+        this.controlScheme.onKeyUp(keyboardEvent.code, this.keydown);
     };
 
     private onKeyDown = (keyboardEvent: KeyboardEvent) => {
         this.keydown[keyboardEvent.code] = true;
+        this.controlScheme.onKeyDown(keyboardEvent.code, this.keydown);
     };
 
-    private isKeyDown(key: string) {
-        return this.keydown[key] == true;
-    }
-
     private onGameEvent = (event: GameEvent, source: GameEventSource) => {};
+
+    private setInputState = (inputState: InputState) => {
+        this.inputState = inputState;
+        switch (inputState) {
+            case InputState.DEFAULT:
+                this.controlScheme = new DefaultControlScheme(
+                    this.serviceLocator
+                );
+        }
+    };
 }
