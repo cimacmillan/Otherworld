@@ -7,10 +7,17 @@ import {
     ZNEAR,
 } from "../../Config";
 import { Vector2D } from "../../types";
+import { vec_add, vec_rotate } from "../../util/math";
+import { fpsNorm } from "../../util/time/GlobalFPSController";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 import { EntityEventType } from "../events/EntityEvents";
 import { GameEvent } from "../events/Event";
+import {
+    TravelEventType,
+    TurnDirection,
+    WalkDirection,
+} from "../events/TravelEvents";
 import { BaseState, CameraState, SurfacePositionState } from "../State";
 
 export type PlayerState = BaseState & SurfacePositionState & CameraState;
@@ -56,6 +63,12 @@ export class PlayerComponent extends EntityComponent<PlayerState> {
             case EntityEventType.ENTITY_DELETED:
                 this.onDelete(entity);
                 break;
+            case TravelEventType.WALK:
+                this.onWalk(entity, event.payload);
+                break;
+            case TravelEventType.TURN:
+                this.onTurn(entity, event.payload);
+                break;
         }
     }
 
@@ -63,6 +76,40 @@ export class PlayerComponent extends EntityComponent<PlayerState> {
         entity: Entity<PlayerState>,
         event: GameEvent
     ): void {}
+
+    private onWalk(entity: Entity<PlayerState>, direction: WalkDirection) {
+        const speed = fpsNorm(0.1);
+        const state = entity.getState();
+        let camera_add = { x: 0, y: 0 };
+        switch (direction) {
+            case WalkDirection.FORWARD:
+                camera_add = vec_rotate({ x: 0, y: -speed }, state.angle);
+                break;
+            case WalkDirection.BACK:
+                camera_add = vec_rotate({ x: 0, y: speed }, state.angle);
+                break;
+            case WalkDirection.LEFT:
+                camera_add = vec_rotate({ x: -speed, y: 0 }, state.angle);
+                break;
+            case WalkDirection.RIGHT:
+                camera_add = vec_rotate({ x: speed, y: 0 }, state.angle);
+                break;
+        }
+        state.position = vec_add(state.position, camera_add);
+    }
+
+    private onTurn(entity: Entity<PlayerState>, direction: TurnDirection) {
+        const speed = fpsNorm(0.1);
+        const state = entity.getState();
+        switch (direction) {
+            case TurnDirection.ANTICLOCKWISE:
+                state.angle = state.angle - speed / 3;
+                break;
+            case TurnDirection.CLOCKWISE:
+                state.angle = state.angle + speed / 3;
+                break;
+        }
+    }
 
     private onCreate(entity: Entity<PlayerState>) {}
 
