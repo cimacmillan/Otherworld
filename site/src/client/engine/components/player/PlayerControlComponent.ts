@@ -57,6 +57,7 @@ export class PlayerControlComponent<
             angle: this.initialAngle,
             velocity: { x: 0, y: 0 },
             friction: 0.8,
+            mass: 1,
         };
     }
 
@@ -130,9 +131,23 @@ export class PlayerControlComponent<
         }
     }
 
-    private onCreate(entity: Entity<PlayerState>) {}
+    private onCreate(entity: Entity<PlayerState>) {
+        entity.setState(
+            {
+                collides: true,
+            },
+            true
+        );
+    }
 
-    private onDelete(entity: Entity<PlayerState>) {}
+    private onDelete(entity: Entity<PlayerState>) {
+        entity.setState(
+            {
+                collides: false,
+            },
+            true
+        );
+    }
 
     private syncCamera(entity: Entity<PlayerState>) {
         const { position, height, angle, camera } = entity.getState();

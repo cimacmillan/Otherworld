@@ -59,7 +59,7 @@ export class ScriptingService {
         //     world.addEntity(sprite);
         // }
 
-        for (let i = 0; i < 800; i++) {
+        for (let i = 0; i < 100; i++) {
             const sprite = new Entity(
                 this.serviceLocator,
                 new SpriteRenderComponent(),
