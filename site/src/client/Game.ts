@@ -1,10 +1,11 @@
 import { HEIGHT, TARGET_MILLIS, WIDTH } from "./Config";
 import { GameEvent } from "./engine/events/Event";
 import { World } from "./engine/World";
-import { RenderService, ScreenBuffer } from "./render";
-import { ResourceManager } from "./resources/ResourceManager";
 import { EventRouter, GameEventSource } from "./services/EventRouter";
 import { InputService } from "./services/InputService";
+import { PhysicsService } from "./services/physics/PhysicsService";
+import { RenderService, ScreenBuffer } from "./services/render";
+import { ResourceManager } from "./services/resources/ResourceManager";
 import { ScriptingService } from "./services/ScriptingService";
 import { ServiceLocator } from "./services/ServiceLocator";
 import { AudioService } from "./util/sound/AudioService";
@@ -48,7 +49,8 @@ export class Game {
             new AudioService(audioContext),
             router,
             scriptingService,
-            inputService
+            inputService,
+            new PhysicsService()
         );
 
         this.serviceLocator.getInputService().init(this.serviceLocator);
@@ -78,6 +80,7 @@ export class Game {
         this.serviceLocator.getInputService().update();
         if (this.updateWorld) {
             this.serviceLocator.getWorld().update();
+            this.serviceLocator.getPhysicsService().update();
         }
     };
 

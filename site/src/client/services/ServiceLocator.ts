@@ -1,9 +1,10 @@
 import { World } from "../engine/World";
-import { RenderService } from "../render";
-import { ResourceManager } from "../resources/ResourceManager";
 import { AudioService } from "../util/sound/AudioService";
 import { EventRouter } from "./EventRouter";
 import { InputService } from "./InputService";
+import { PhysicsService } from "./physics/PhysicsService";
+import { RenderService } from "./render";
+import { ResourceManager } from "./resources/ResourceManager";
 import { ScriptingService } from "./ScriptingService";
 
 export class ServiceLocator {
@@ -14,7 +15,8 @@ export class ServiceLocator {
         private audioService: AudioService,
         private eventRouter: EventRouter,
         private scriptingService: ScriptingService,
-        private inputService: InputService
+        private inputService: InputService,
+        private physicsService: PhysicsService
     ) {}
 
     public getResourceManager() {
@@ -43,5 +45,9 @@ export class ServiceLocator {
 
     public getInputService() {
         return this.inputService;
+    }
+
+    public getPhysicsService() {
+        return this.physicsService;
     }
 }

@@ -33,6 +33,13 @@ export function vec_divide(a: Vector2D, b: Vector2D) {
     };
 }
 
+export function vec_mult_scalar(a: Vector2D, b: number) {
+    return {
+        x: a.x * b,
+        y: a.y * b,
+    };
+}
+
 export function vec_rotate(a: Vector2D, theta: number) {
     const mathCos = ~~(Math.cos(theta) * ROTATE_RESOLUTION) / ROTATE_RESOLUTION;
     const mathsin = ~~(Math.sin(theta) * ROTATE_RESOLUTION) / ROTATE_RESOLUTION;
@@ -74,4 +81,20 @@ export function vec_interpolate(vecs: Vector2D[], alphas: number[]) {
         sum.y += vec.y * alphas[index];
     });
     return sum;
+}
+
+export function vec_normalize(vec: Vector2D) {
+    const distance = Math.sqrt(vec.x * vec.x + vec.y * vec.y);
+
+    if (distance === 0) {
+        return {
+            x: 0,
+            y: 0,
+        };
+    }
+
+    return {
+        x: vec.x / distance,
+        y: vec.y / distance,
+    };
 }

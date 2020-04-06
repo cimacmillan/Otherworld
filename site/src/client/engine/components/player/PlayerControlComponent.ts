@@ -5,24 +5,33 @@ import {
     FOV,
     ZFAR,
     ZNEAR,
-} from "../../Config";
-import { Vector2D } from "../../types";
-import { vec_add, vec_rotate } from "../../util/math";
-import { fpsNorm } from "../../util/time/GlobalFPSController";
-import { Entity } from "../Entity";
-import { EntityComponent } from "../EntityComponent";
-import { EntityEventType } from "../events/EntityEvents";
-import { GameEvent } from "../events/Event";
+} from "../../../Config";
+import { Vector2D } from "../../../types";
+import { vec_add, vec_rotate } from "../../../util/math";
+import { fpsNorm } from "../../../util/time/GlobalFPSController";
+import { Entity } from "../../Entity";
+import { EntityComponent } from "../../EntityComponent";
+import { EntityEventType } from "../../events/EntityEvents";
+import { GameEvent } from "../../events/Event";
 import {
     TravelEventType,
     TurnDirection,
     WalkDirection,
-} from "../events/TravelEvents";
-import { BaseState, CameraState, SurfacePositionState } from "../State";
+} from "../../events/TravelEvents";
+import { BaseState, CameraState } from "../../State";
+import { PhysicsStateType } from "../PhysicsComponent";
 
-export type PlayerState = BaseState & SurfacePositionState & CameraState;
+export type PlayerState = BaseState & PhysicsStateType & CameraState;
 
-export class PlayerComponent extends EntityComponent<PlayerState> {
+const WALK_SPEED = 0.02;
+const TURN_SPEED = 0.1;
+
+export class PlayerControlComponent<
+    T extends PlayerState
+> extends EntityComponent<T> {
+    private accumulatedWalk: Vector2D = { x: 0, y: 0 };
+    private accumulatedAngle: number = 0;
+
     public constructor(
         private initialPosition: Vector2D,
         private initialAngle: number
@@ -46,13 +55,23 @@ export class PlayerComponent extends EntityComponent<PlayerState> {
             height: DEFAULT_PLAYER_HEIGHT,
             radius: DEFAULT_PLAYER_RADIUS,
             angle: this.initialAngle,
+            velocity: { x: 0, y: 0 },
+            friction: 0.8,
         };
     }
 
     public update(entity: Entity<PlayerState>): void {
-        if (entity.getState().cameraShouldSync) {
+        const state = entity.getState();
+
+        if (state.cameraShouldSync) {
             this.syncCamera(entity);
         }
+
+        state.velocity = vec_add(state.velocity, this.accumulatedWalk);
+        state.angle = state.angle + this.accumulatedAngle;
+
+        this.accumulatedAngle = 0;
+        this.accumulatedWalk = { x: 0, y: 0 };
     }
 
     public onEvent(entity: Entity<PlayerState>, event: GameEvent): void {
@@ -78,7 +97,7 @@ export class PlayerComponent extends EntityComponent<PlayerState> {
     ): void {}
 
     private onWalk(entity: Entity<PlayerState>, direction: WalkDirection) {
-        const speed = fpsNorm(0.1);
+        const speed = fpsNorm(WALK_SPEED);
         const state = entity.getState();
         let camera_add = { x: 0, y: 0 };
         switch (direction) {
@@ -95,18 +114,18 @@ export class PlayerComponent extends EntityComponent<PlayerState> {
                 camera_add = vec_rotate({ x: speed, y: 0 }, state.angle);
                 break;
         }
-        state.position = vec_add(state.position, camera_add);
+        this.accumulatedWalk = vec_add(this.accumulatedWalk, camera_add);
     }
 
     private onTurn(entity: Entity<PlayerState>, direction: TurnDirection) {
-        const speed = fpsNorm(0.1);
+        const speed = fpsNorm(TURN_SPEED);
         const state = entity.getState();
         switch (direction) {
             case TurnDirection.ANTICLOCKWISE:
-                state.angle = state.angle - speed / 3;
+                this.accumulatedAngle = this.accumulatedAngle - speed / 3;
                 break;
             case TurnDirection.CLOCKWISE:
-                state.angle = state.angle + speed / 3;
+                this.accumulatedAngle = this.accumulatedAngle + speed / 3;
                 break;
         }
     }

@@ -1,27 +1,56 @@
-import { Animations } from "../../resources/ResourceManager";
+import { Animations } from "../../services/resources/ResourceManager";
 import { AnimationDriver } from "../../util/animation/AnimationDriver";
+import {
+    vec_add,
+    vec_mult_scalar,
+    vec_normalize,
+    vec_sub,
+} from "../../util/math";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 import { EntityEventType } from "../events/EntityEvents";
 import { GameEvent } from "../events/Event";
+import { BaseState } from "../State";
+import { PhysicsStateType } from "./PhysicsComponent";
 import { SpriteStateType } from "./SpriteRenderComponent";
 
+export type MacatorStateType = BaseState & SpriteStateType & PhysicsStateType;
+
+const WALK_SPEED = 0.005;
+
 export class CrabletLogicComponent<
-    T extends SpriteStateType
+    T extends MacatorStateType
 > extends EntityComponent<T> {
     private animation: AnimationDriver;
 
-    public init(entity: Entity<SpriteStateType>) {
-        return {};
+    public init(entity: Entity<MacatorStateType>) {
+        return {
+            velocity: { x: 0, y: 0 },
+            friction: 0.8,
+        };
     }
 
-    public update(entity: Entity<SpriteStateType>): void {
+    public update(entity: Entity<MacatorStateType>): void {
         if (this.animation) {
             this.animation.tick();
         }
+        this.syncSprite(entity);
+
+        const playerPos = entity
+            .getServiceLocator()
+            .getScriptingService()
+            .getPlayer()
+            .getState().position;
+        const macatorPos = entity.getState().position;
+        const direction = vec_normalize(vec_sub(playerPos, macatorPos));
+
+        entity.getState().velocity = vec_add(
+            entity.getState().velocity,
+            vec_mult_scalar(direction, WALK_SPEED)
+        );
     }
 
-    public onEvent(entity: Entity<SpriteStateType>, event: GameEvent): void {
+    public onEvent(entity: Entity<MacatorStateType>, event: GameEvent): void {
         switch (event.type) {
             case EntityEventType.ENTITY_CREATED:
                 this.onCreate(entity);
@@ -38,11 +67,11 @@ export class CrabletLogicComponent<
     }
 
     public onObservedEvent(
-        entity: Entity<SpriteStateType>,
+        entity: Entity<MacatorStateType>,
         event: GameEvent
     ): void {}
 
-    private onCreate(entity: Entity<SpriteStateType>) {
+    private onCreate(entity: Entity<MacatorStateType>) {
         const x = -(Math.random() * 20) + 10;
         const y = -(Math.random() * 20) + 10;
         const xtex = Math.random();
@@ -72,6 +101,11 @@ export class CrabletLogicComponent<
                         .getResourceManager()
                         .sprite.getAnimationInterp(crabType, xtex),
                 },
+                position: { x, y },
+                height: 0.5,
+                radius: 0.5,
+                angle: 0,
+                collides: true,
             },
             true
         );
@@ -91,5 +125,10 @@ export class CrabletLogicComponent<
 
             .speed(400)
             .start(Math.random(), true);
+    }
+
+    private syncSprite(entity: Entity<MacatorStateType>) {
+        const state = entity.getState();
+        state.toRender.position = [state.position.x, state.position.y];
     }
 }

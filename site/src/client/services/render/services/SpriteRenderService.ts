@@ -1,5 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { ISyncedArrayRef, SyncedArray } from "../../util/array/SyncedArray";
+import { ISyncedArrayRef, SyncedArray } from "../../../util/array/SyncedArray";
 import { compileSpriteShader } from "../shaders/Shaders";
 import { Sprite } from "../types/RenderInterface";
 import { RenderItem, RenderItemInterface } from "../types/RenderItemInterface";

@@ -1,5 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { ISyncedArrayRef, SyncedArray } from "../../util/array/SyncedArray";
+import { ISyncedArrayRef, SyncedArray } from "../../../util/array/SyncedArray";
 import { compileTextureRepeatShader } from "../shaders/Shaders";
 import { Floor } from "../types/RenderInterface";
 import { RenderItem, RenderItemInterface } from "../types/RenderItemInterface";

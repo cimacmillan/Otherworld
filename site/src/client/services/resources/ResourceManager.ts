@@ -1,4 +1,4 @@
-import { loadSound } from "../util/sound/AudioService";
+import { loadSound } from "../../util/sound/AudioService";
 import { SpriteSheet } from "./SpriteSheet";
 import {
     loadImage,

@@ -1,4 +1,7 @@
-import { RenderItem, Sprite } from "../../render/types/RenderInterface";
+import {
+    RenderItem,
+    Sprite,
+} from "../../services/render/types/RenderInterface";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 import { EntityEventType } from "../events/EntityEvents";

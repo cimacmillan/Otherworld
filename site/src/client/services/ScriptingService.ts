@@ -1,10 +1,9 @@
 import { CrabletLogicComponent } from "../engine/components/CrabletLogicComponent";
-import { FlowerLogicComponent } from "../engine/components/FlowerLogicComponent";
+import { PhysicsComponent } from "../engine/components/PhysicsComponent";
 import {
-    PlayerComponent,
+    PlayerControlComponent,
     PlayerState,
-} from "../engine/components/PlayerComponent";
-import { SpriteLogicComponent } from "../engine/components/SpriteLogicComponent";
+} from "../engine/components/player/PlayerControlComponent";
 import { SpriteRenderComponent } from "../engine/components/SpriteRenderComponent";
 import { Entity } from "../engine/Entity";
 import { getTextureCoordinate } from "../util/math";
@@ -31,9 +30,10 @@ export class ScriptingService {
     private bootstrapContent() {
         const world = this.serviceLocator.getWorld();
 
-        this.player = new Entity(
+        this.player = new Entity<PlayerState>(
             this.serviceLocator,
-            new PlayerComponent({ x: 0, y: 2 }, 0)
+            new PhysicsComponent(),
+            new PlayerControlComponent({ x: 0, y: 2 }, 0)
         );
         world.addEntity(this.player);
 
@@ -41,29 +41,30 @@ export class ScriptingService {
         this.serviceLocator.getAudioService().attachCamera(camera);
         this.serviceLocator.getRenderService().attachCamera(camera);
 
-        for (let i = 0; i < 10; i++) {
-            const sprite = new Entity(
-                this.serviceLocator,
-                new SpriteRenderComponent(),
-                new SpriteLogicComponent()
-            );
-            world.addEntity(sprite);
-        }
+        // for (let i = 0; i < 10; i++) {
+        //     const sprite = new Entity(
+        //         this.serviceLocator,
+        //         new SpriteRenderComponent(),
+        //         new SpriteLogicComponent()
+        //     );
+        //     world.addEntity(sprite);
+        // }
 
-        for (let i = 0; i < 1000; i++) {
-            const sprite = new Entity(
-                this.serviceLocator,
-                new SpriteRenderComponent(),
-                new FlowerLogicComponent()
-            );
-            world.addEntity(sprite);
-        }
+        // for (let i = 0; i < 1000; i++) {
+        //     const sprite = new Entity(
+        //         this.serviceLocator,
+        //         new SpriteRenderComponent(),
+        //         new FlowerLogicComponent()
+        //     );
+        //     world.addEntity(sprite);
+        // }
 
-        for (let i = 0; i < 500; i++) {
+        for (let i = 0; i < 800; i++) {
             const sprite = new Entity(
                 this.serviceLocator,
                 new SpriteRenderComponent(),
-                new CrabletLogicComponent()
+                new CrabletLogicComponent(),
+                new PhysicsComponent()
             );
             world.addEntity(sprite);
         }
