@@ -97,7 +97,9 @@ export class PhysicsService {
                 normal.x * state.velocity.x + normal.y * state.velocity.y;
 
             const resultingMove =
-                velocityAlongNormal > 0 ? 0 : velocityAlongNormal;
+                velocityAlongNormal > 0
+                    ? 0
+                    : velocityAlongNormal * (1 + state.elastic);
 
             state.velocity.x = state.velocity.x - resultingMove * normal.x;
             state.velocity.y = state.velocity.y - resultingMove * normal.y;

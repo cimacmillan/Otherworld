@@ -10,6 +10,7 @@ export interface PhysicsState {
     friction: number;
     mass: number;
     collides: boolean;
+    elastic: number;
 }
 
 export type PhysicsStateType = BaseState & SurfacePositionState & PhysicsState;

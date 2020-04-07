@@ -58,6 +58,7 @@ export class PlayerControlComponent<
             velocity: { x: 0, y: 0 },
             friction: 0.8,
             mass: 1,
+            elastic: 0,
         };
     }
 

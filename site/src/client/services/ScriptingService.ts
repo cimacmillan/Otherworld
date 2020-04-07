@@ -6,6 +6,7 @@ import {
 } from "../engine/components/player/PlayerControlComponent";
 import { SpriteRenderComponent } from "../engine/components/SpriteRenderComponent";
 import { Entity } from "../engine/Entity";
+import { Vector2D } from "../types";
 import { getTextureCoordinate } from "../util/math";
 import { ServiceLocator } from "./ServiceLocator";
 
@@ -59,7 +60,7 @@ export class ScriptingService {
         //     world.addEntity(sprite);
         // }
 
-        for (let i = 0; i < 0; i++) {
+        for (let i = 0; i < 500; i++) {
             const sprite = new Entity(
                 this.serviceLocator,
                 new SpriteRenderComponent(),
@@ -71,92 +72,49 @@ export class ScriptingService {
 
         const floorTexture = getTextureCoordinate(32, 64, 32, 32, 0, 32);
         this.serviceLocator.getRenderService().floorRenderService.createItem({
-            startPos: [-10, -10],
-            endPos: [10, 10],
+            startPos: [-50, -50],
+            endPos: [50, 50],
             height: 0,
             textureX: floorTexture.textureX,
             textureY: floorTexture.textureY,
-            textureWidth: 20,
-            textureHeight: 20,
+            textureWidth: 100,
+            textureHeight: 100,
             repeatWidth: floorTexture.textureWidth,
             repeatHeight: floorTexture.textureHeight,
         });
 
+        this.createWall({ x: -10, y: -10 }, { x: 10, y: -10 });
+        this.createWall({ x: -10, y: -10 }, { x: -10, y: 10 });
+        this.createWall({ x: 10, y: -10 }, { x: 10, y: 10 });
+
+        this.createWall({ x: -10, y: 10 }, { x: -0.5, y: 20 });
+        this.createWall({ x: 10, y: 10 }, { x: 0.5, y: 20 });
+
+        this.createWall({ x: -0.5, y: 20 }, { x: -0.5, y: 30 });
+        this.createWall({ x: 0.5, y: 20 }, { x: 0.5, y: 30 });
+    }
+
+    private createWall(start: Vector2D, end: Vector2D) {
         const wallTexture = getTextureCoordinate(32, 64, 32, 32, 0, 0);
         this.serviceLocator.getRenderService().wallRenderService.createItem({
-            startPos: [-10, -10],
-            endPos: [10, -10],
+            startPos: [start.x, start.y],
+            endPos: [end.x, end.y],
             startHeight: 1,
             endHeight: 1,
             startOffset: 0,
             endOffset: 0,
             textureX: wallTexture.textureX,
             textureY: wallTexture.textureY,
-            textureWidth: 20,
+            textureWidth: Math.sqrt(
+                Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2)
+            ),
             textureHeight: wallTexture.textureHeight,
             repeatWidth: wallTexture.textureWidth,
             repeatHeight: wallTexture.textureHeight,
         });
         this.serviceLocator.getPhysicsService().registerBoundary({
-            start: { x: -10, y: -10 },
-            end: { x: 10, y: -10 },
-        });
-
-        this.serviceLocator.getRenderService().wallRenderService.createItem({
-            startPos: [10, -10],
-            endPos: [10, 10],
-            startHeight: 1,
-            endHeight: 1,
-            startOffset: 0,
-            endOffset: 0,
-            textureX: wallTexture.textureX,
-            textureY: wallTexture.textureY,
-            textureWidth: 20,
-            textureHeight: wallTexture.textureHeight,
-            repeatWidth: wallTexture.textureWidth,
-            repeatHeight: wallTexture.textureHeight,
-        });
-        this.serviceLocator.getPhysicsService().registerBoundary({
-            start: { x: 10, y: -10 },
-            end: { x: 10, y: 10 },
-        });
-
-        this.serviceLocator.getRenderService().wallRenderService.createItem({
-            startPos: [10, 10],
-            endPos: [-10, 10],
-            startHeight: 1,
-            endHeight: 1,
-            startOffset: 0,
-            endOffset: 0,
-            textureX: wallTexture.textureX,
-            textureY: wallTexture.textureY,
-            textureWidth: 20,
-            textureHeight: wallTexture.textureHeight,
-            repeatWidth: wallTexture.textureWidth,
-            repeatHeight: wallTexture.textureHeight,
-        });
-        this.serviceLocator.getPhysicsService().registerBoundary({
-            start: { x: 10, y: 10 },
-            end: { x: -10, y: 10 },
-        });
-
-        this.serviceLocator.getRenderService().wallRenderService.createItem({
-            startPos: [-10, 10],
-            endPos: [-10, -10],
-            startHeight: 1,
-            endHeight: 1,
-            startOffset: 0,
-            endOffset: 0,
-            textureX: wallTexture.textureX,
-            textureY: wallTexture.textureY,
-            textureWidth: 20,
-            textureHeight: wallTexture.textureHeight,
-            repeatWidth: wallTexture.textureWidth,
-            repeatHeight: wallTexture.textureHeight,
-        });
-        this.serviceLocator.getPhysicsService().registerBoundary({
-            start: { x: -10, y: 10 },
-            end: { x: -10, y: -10 },
+            start,
+            end,
         });
     }
 }

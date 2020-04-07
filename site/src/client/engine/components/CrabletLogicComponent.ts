@@ -28,6 +28,7 @@ export class CrabletLogicComponent<
             velocity: { x: 0, y: 0 },
             friction: 0.8,
             mass: 0.4,
+            elastic: 0,
         };
     }
 
