@@ -59,7 +59,7 @@ export class ScriptingService {
         //     world.addEntity(sprite);
         // }
 
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 0; i++) {
             const sprite = new Entity(
                 this.serviceLocator,
                 new SpriteRenderComponent(),
@@ -97,6 +97,10 @@ export class ScriptingService {
             repeatWidth: wallTexture.textureWidth,
             repeatHeight: wallTexture.textureHeight,
         });
+        this.serviceLocator.getPhysicsService().registerBoundary({
+            start: { x: -10, y: -10 },
+            end: { x: 10, y: -10 },
+        });
 
         this.serviceLocator.getRenderService().wallRenderService.createItem({
             startPos: [10, -10],
@@ -111,6 +115,10 @@ export class ScriptingService {
             textureHeight: wallTexture.textureHeight,
             repeatWidth: wallTexture.textureWidth,
             repeatHeight: wallTexture.textureHeight,
+        });
+        this.serviceLocator.getPhysicsService().registerBoundary({
+            start: { x: 10, y: -10 },
+            end: { x: 10, y: 10 },
         });
 
         this.serviceLocator.getRenderService().wallRenderService.createItem({
@@ -127,6 +135,10 @@ export class ScriptingService {
             repeatWidth: wallTexture.textureWidth,
             repeatHeight: wallTexture.textureHeight,
         });
+        this.serviceLocator.getPhysicsService().registerBoundary({
+            start: { x: 10, y: 10 },
+            end: { x: -10, y: 10 },
+        });
 
         this.serviceLocator.getRenderService().wallRenderService.createItem({
             startPos: [-10, 10],
@@ -141,6 +153,10 @@ export class ScriptingService {
             textureHeight: wallTexture.textureHeight,
             repeatWidth: wallTexture.textureWidth,
             repeatHeight: wallTexture.textureHeight,
+        });
+        this.serviceLocator.getPhysicsService().registerBoundary({
+            start: { x: -10, y: 10 },
+            end: { x: -10, y: -10 },
         });
     }
 }
