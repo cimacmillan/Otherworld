@@ -1,10 +1,8 @@
-import { CrabletLogicComponent } from "../engine/components/CrabletLogicComponent";
 import { PhysicsComponent } from "../engine/components/PhysicsComponent";
 import {
     PlayerControlComponent,
     PlayerState,
 } from "../engine/components/player/PlayerControlComponent";
-import { SpriteRenderComponent } from "../engine/components/SpriteRenderComponent";
 import { Entity } from "../engine/Entity";
 import { Vector2D } from "../types";
 import { getTextureCoordinate } from "../util/math";
@@ -60,15 +58,15 @@ export class ScriptingService {
         //     world.addEntity(sprite);
         // }
 
-        for (let i = 0; i < 500; i++) {
-            const sprite = new Entity(
-                this.serviceLocator,
-                new SpriteRenderComponent(),
-                new CrabletLogicComponent(),
-                new PhysicsComponent()
-            );
-            world.addEntity(sprite);
-        }
+        // for (let i = 0; i < 500; i++) {
+        //     const sprite = new Entity(
+        //         this.serviceLocator,
+        //         new SpriteRenderComponent(),
+        //         new CrabletLogicComponent(),
+        //         new PhysicsComponent()
+        //     );
+        //     world.addEntity(sprite);
+        // }
 
         const floorTexture = getTextureCoordinate(32, 64, 32, 32, 0, 32);
         this.serviceLocator.getRenderService().floorRenderService.createItem({

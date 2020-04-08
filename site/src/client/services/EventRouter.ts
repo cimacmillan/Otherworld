@@ -6,6 +6,7 @@ export type GameEventListener = (
 ) => void;
 
 export enum GameEventSource {
+    ROOT = "ROOT",
     WORLD = "WORLD",
     UI = "UI",
     INPUT = "INPUT",
@@ -13,6 +14,7 @@ export enum GameEventSource {
 
 export class EventRouter {
     private listeners: { [key in GameEventSource]: GameEventListener } = {
+        [GameEventSource.ROOT]: () => {},
         [GameEventSource.WORLD]: () => {},
         [GameEventSource.UI]: () => {},
         [GameEventSource.INPUT]: () => {},

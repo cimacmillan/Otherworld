@@ -7,6 +7,7 @@ import { SpriteRenderComponent } from "../engine/components/SpriteRenderComponen
 import { SpriteLogicComponent } from "../engine/components/SpriteLogicComponent";
 import { BallEventType } from "../engine/events/BallEvents";
 import { GameEventSource } from "../services/EventRouter";
+import { WeaponComponent } from "./components/WeaponComponent";
 
 export interface OwnProps {
     game: Game;
@@ -14,11 +15,13 @@ export interface OwnProps {
 
 export interface StateProps {
     count: number;
+    canAccessGame: boolean;
 }
 
 function mapStateToProps(state: State) {
     return {
         count: state.uiState.bounceCount,
+        canAccessGame: state.uiState.canAccessGame,
     };
 }
 
@@ -31,22 +34,25 @@ class UIContainer extends React.Component<UIContainerProps> {
                 <h1 style={{ color: "white" }}> {this.props.count} </h1>
                 <button onClick={this.createBall}>Create Ball</button>
                 <button onClick={this.bounceBalls}>Bounce</button>
-                {this.getGameImage()}
+                {/* {this.getGameImage()} */}
+                <WeaponComponent />
             </div>
         );
     }
 
     private getGameImage = () => {
-        return this.props.game.isInitialised() ? (
-            <img
-                src={
-                    this.props.game.getServiceLocator().getResourceManager()
-                        .uiImage.src
-                }
-            />
-        ) : (
-            <p>Missing</p>
-        );
+        if (this.props.canAccessGame) {
+            return (
+                <img
+                    src={
+                        this.props.game.getServiceLocator().getResourceManager()
+                            .uiSword
+                    }
+                />
+            );
+        } else {
+            return <p>Loading</p>;
+        }
     };
 
     private createBall = () => {

@@ -1,5 +1,5 @@
 import { HEIGHT, TARGET_MILLIS, WIDTH } from "./Config";
-import { GameEvent } from "./engine/events/Event";
+import { GameEvent, RootEventType } from "./engine/events/Event";
 import { World } from "./engine/World";
 import { EventRouter, GameEventSource } from "./services/EventRouter";
 import { InputService } from "./services/InputService";
@@ -61,6 +61,10 @@ export class Game {
 
         const loop = new TimeControlledLoop(TARGET_MILLIS, this.mainLoop);
         this.initialised = true;
+        this.serviceLocator.getEventRouter().routeEvent(GameEventSource.ROOT, {
+            type: RootEventType.GAME_INITIALISED,
+        });
+
         loop.start();
     }
 

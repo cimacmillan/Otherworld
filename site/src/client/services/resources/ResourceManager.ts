@@ -24,6 +24,8 @@ export class ResourceManager {
 
     public uiImage: HTMLImageElement;
 
+    public uiSword: string = "img/zelda.png";
+
     public async load(gl: WebGLRenderingContext, audio: AudioContext) {
         this.sprite = await loadSpriteSheet(gl, "img/sprite.png");
 

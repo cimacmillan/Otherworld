@@ -16,7 +16,7 @@ import { SpriteStateType } from "./SpriteRenderComponent";
 
 export type MacatorStateType = BaseState & SpriteStateType & PhysicsStateType;
 
-const WALK_SPEED = 0.005;
+const WALK_SPEED = 0.01;
 
 export class CrabletLogicComponent<
     T extends MacatorStateType
