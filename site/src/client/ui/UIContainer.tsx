@@ -31,11 +31,11 @@ class UIContainer extends React.Component<UIContainerProps> {
     public render() {
         return (
             <div style={{ position: "absolute" }}>
-                <h1 style={{ color: "white" }}> {this.props.count} </h1>
-                <button onClick={this.createBall}>Create Ball</button>
-                <button onClick={this.bounceBalls}>Bounce</button>
-                {/* {this.getGameImage()} */}
-                <WeaponComponent />
+                {this.props.canAccessGame ? (
+                    <WeaponComponent
+                        serviceLocator={this.props.game.getServiceLocator()}
+                    />
+                ) : undefined}
             </div>
         );
     }

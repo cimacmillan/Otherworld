@@ -3,12 +3,7 @@ import { CanvasComponent } from "./services/render";
 import { Game } from "./Game";
 import UIContainer from "./ui/UIContainer";
 import { GameEvent } from "./engine/events/Event";
-
-const DOM_WIDTH = 1280;
-const DOM_HEIGHT = 720;
-const RES_DIV = 4;
-const WIDTH = DOM_WIDTH / RES_DIV;
-const HEIGHT = DOM_HEIGHT / RES_DIV;
+import { DOM_WIDTH, DOM_HEIGHT, WIDTH, HEIGHT, RES_DIV } from "./Config";
 
 export interface GameComponentProps {
     game: Game;
