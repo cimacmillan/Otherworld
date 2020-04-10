@@ -16,7 +16,7 @@ export interface WeaponComponentProps {
     serviceLocator: ServiceLocator;
 }
 
-const WEAPON_HEIGHT = 1.3;
+const WEAPON_HEIGHT = 1.1;
 const WEAPON_WIDTH = WEAPON_HEIGHT / 2;
 const POS_X = 1;
 const POS_Y = 0.55;
@@ -37,11 +37,11 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
                 new GameAnimation((x: number) => {
                     this.posY = POS_Y + x / 4;
                     this.forceUpdate();
-                }).speed(300),
+                }).speed(100),
                 new GameAnimation((x: number) => {
                     this.rotate = x * 180;
                     this.forceUpdate();
-                }).speed(300),
+                }).speed(100),
             ],
             type: CompositeAnimationType.PARALLEL,
         });
@@ -50,11 +50,12 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
                 new GameAnimation((x: number) => {
                     this.posY = POS_Y + 1 / 4 - x / 4;
                     this.forceUpdate();
-                }),
+                }).speed(200),
                 new GameAnimation((x: number) => {
                     this.rotate = (1 - x) * 180;
                     this.forceUpdate();
-                }),
+                }).speed(200),
+                ,
             ],
             type: CompositeAnimationType.PARALLEL,
         });
@@ -122,6 +123,9 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
                     width: DOM_WIDTH,
                     height: DOM_HEIGHT,
                     overflow: "hidden",
+
+                    borderStyle: "solid",
+                    borderColor: "white",
                 }}
             >
                 <div
