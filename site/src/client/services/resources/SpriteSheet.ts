@@ -5,8 +5,16 @@ export interface TextureCoordinate {
     textureHeight: number;
 }
 
+export interface Sprite {
+    textureCoordinate: TextureCoordinate;
+    pixelCoordinate: TextureCoordinate;
+    spriteSheetWidth: number;
+    spriteSheetHeight: number;
+    source: string;
+}
+
 interface SpriteHash {
-    [name: string]: TextureCoordinate;
+    [name: string]: Sprite;
 }
 interface AnimationHash {
     [name: string]: TextureCoordinate[];
@@ -30,12 +38,23 @@ export class SpriteSheet {
         xPixel: number,
         yPixel: number
     ) {
-        this.spriteHash[name] = this.getTextureCoordinate(
-            width,
-            height,
-            xPixel,
-            yPixel
-        );
+        this.spriteHash[name] = {
+            textureCoordinate: this.getTextureCoordinate(
+                width,
+                height,
+                xPixel,
+                yPixel
+            ),
+            pixelCoordinate: {
+                textureX: xPixel,
+                textureY: yPixel,
+                textureWidth: width,
+                textureHeight: height,
+            },
+            spriteSheetWidth: this.width,
+            spriteSheetHeight: this.height,
+            source: this.image.src,
+        };
     }
 
     public registerAnimation(

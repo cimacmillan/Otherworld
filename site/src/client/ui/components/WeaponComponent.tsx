@@ -11,12 +11,15 @@ import { WeaponActionSubject } from "../reducers/WeaponReducer";
 import { Subscription } from "rxjs";
 import { vec_distance } from "../../util/math";
 import { Transform } from "stream";
+import { getImagePropsFromSprite } from "../../util/math/UI";
+import { Sprites } from "../../services/resources/ResourceManager";
+import { Viewport } from "./Viewport";
 
 export interface WeaponComponentProps {
     serviceLocator: ServiceLocator;
 }
 
-const WEAPON_HEIGHT = 1.1;
+const WEAPON_HEIGHT = 1;
 const WEAPON_WIDTH = WEAPON_HEIGHT / 2;
 const POS_X = 1;
 const POS_Y = 0.55;
@@ -95,60 +98,32 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
     }
 
     public render() {
-        const domWidth = DOM_HEIGHT * WEAPON_WIDTH;
-        const domHeight = DOM_HEIGHT * WEAPON_HEIGHT;
-
-        const spriteWidth = 16;
-        const spriteHeight = 32;
-        const spritePosX = 128;
-        const spritePosY = 32;
-
-        const spriteSheetWidth = 512;
-        const spriteSheetHeight = 128;
-
-        const scalarWidth = domWidth / spriteWidth;
-        const scalarHeight = domHeight / spriteHeight;
-
-        const backgroundWidth = Math.ceil(spriteSheetWidth * scalarWidth);
-        const backgroundHeight = Math.ceil(spriteSheetHeight * scalarHeight);
-
-        const backgroundPositionX = Math.ceil(spritePosX * scalarWidth);
-        const backgroundPositionY = Math.ceil(spritePosY * scalarHeight);
+        const width = DOM_HEIGHT * WEAPON_WIDTH;
+        const height = DOM_HEIGHT * WEAPON_HEIGHT;
+        const marginLeft = DOM_WIDTH * POS_X;
+        const marginTop = DOM_HEIGHT * this.posY;
 
         return (
-            <div
-                style={{
-                    maxWidth: DOM_WIDTH,
-                    maxHeight: DOM_HEIGHT,
-                    width: DOM_WIDTH,
-                    height: DOM_HEIGHT,
-                    overflow: "hidden",
-
-                    borderStyle: "solid",
-                    borderColor: "white",
-                }}
-            >
+            <Viewport x={0} y={0} width={DOM_WIDTH} height={DOM_HEIGHT}>
                 <div
                     style={{
-                        marginLeft: DOM_WIDTH * POS_X,
-                        marginTop: DOM_HEIGHT * this.posY,
+                        marginLeft,
+                        marginTop,
+                        width,
+                        height,
+                        ...getImagePropsFromSprite(
+                            this.props.serviceLocator
+                                .getResourceManager()
+                                .sprite.getSprite(Sprites.SWORD),
+                            DOM_HEIGHT * WEAPON_WIDTH,
+                            DOM_HEIGHT * WEAPON_HEIGHT
+                        ),
                         transform: `rotate(-${
                             Math.floor(this.rotate) + DEFAULT_ROTATION
                         }deg) translate(-50%, -50%)`,
-
-                        width: DOM_HEIGHT * WEAPON_WIDTH,
-                        height: DOM_HEIGHT * WEAPON_HEIGHT,
-                        backgroundImage: `url(${
-                            this.props.serviceLocator
-                                .getResourceManager()
-                                .sprite.getImage().src
-                        })`,
-                        backgroundPosition: `-${backgroundPositionX}px -${backgroundPositionY}px`,
-                        backgroundSize: `${backgroundWidth}px ${backgroundHeight}px`,
-                        imageRendering: "pixelated",
                     }}
                 />
-            </div>
+            </Viewport>
         );
     }
 }
