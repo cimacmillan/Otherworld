@@ -1,11 +1,18 @@
 import { TARGET_FPS } from "../../Config";
+import { IntervalDriver } from "./AnimationIntervalDriver";
 import { identity, TweenFunction } from "./TweenFunction";
 
 export type AnimationDriverCallback = (x: number) => void;
 
-const RESOLUTION = Math.floor(1000 / TARGET_FPS);
+export interface StartParameters {
+    offset?: number;
+    loop?: boolean;
+    onFinish?: () => void;
+}
 
-export class AnimationDriver {
+export const ANIMATION_RESOLUTION = Math.floor(1000 / TARGET_FPS);
+
+export class GameAnimation {
     private tweenFunction = identity;
     private speedMilliseconds: number = 1000;
     private loop: boolean = false;
@@ -14,24 +21,26 @@ export class AnimationDriver {
     private onFinish: () => void;
     private playing: boolean = false;
 
-    public constructor(private callback: AnimationDriverCallback) {}
+    public constructor(
+        private callback: AnimationDriverCallback,
+        private driver?: IntervalDriver
+    ) {
+        return this;
+    }
 
-    public speed(milliseconds: number): AnimationDriver {
+    public speed(milliseconds: number): GameAnimation {
         this.speedMilliseconds = milliseconds;
         return this;
     }
 
-    public tween(tween: TweenFunction): AnimationDriver {
+    public tween(tween: TweenFunction): GameAnimation {
         // this.tweenFunction = (x: number) => tween(this.tweenFunction(x));
         this.tweenFunction = tween;
         return this;
     }
 
-    public start(
-        offset?: number,
-        loop?: boolean,
-        onFinish?: () => void
-    ): AnimationDriver {
+    public start(params: StartParameters): GameAnimation {
+        const { offset, loop, onFinish } = params;
         if (offset) {
             this.currentPosition = offset;
         } else {
@@ -40,16 +49,25 @@ export class AnimationDriver {
         this.onFinish = onFinish;
         this.loop = loop;
         this.playing = true;
+        if (this.driver) {
+            this.driver.drive(() => this.tick());
+        }
         return this;
     }
 
     public pause() {
         this.playing = false;
+        if (this.driver) {
+            this.driver.undrive();
+        }
     }
 
     public stop() {
         this.playing = false;
         this.currentPosition = 0;
+        if (this.driver) {
+            this.driver.undrive();
+        }
     }
 
     public tick() {
@@ -67,7 +85,7 @@ export class AnimationDriver {
             this.onFinish && this.onFinish();
         } else {
             this.callback(this.tweenFunction(this.currentPosition));
-            const increment = RESOLUTION / this.speedMilliseconds;
+            const increment = ANIMATION_RESOLUTION / this.speedMilliseconds;
             this.currentPosition += increment;
         }
     }

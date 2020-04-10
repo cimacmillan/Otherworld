@@ -1,4 +1,4 @@
-import { AnimationDriver } from "../../util/animation/AnimationDriver";
+import { GameAnimation } from "../../util/animation/Animation";
 import { floorStepper } from "../../util/animation/TweenFunction";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
@@ -10,7 +10,7 @@ export class FlowerLogicComponent<
     T extends SpriteStateType
 > extends EntityComponent<T> {
     private seed: number;
-    private animation: AnimationDriver;
+    private animation: GameAnimation;
 
     public init(entity: Entity<SpriteStateType>) {
         this.seed = Math.random();
@@ -72,7 +72,7 @@ export class FlowerLogicComponent<
                 .getResourceManager()
                 .sprite.getTextureCoordinate(32, 32, xTex * 32, 0);
 
-        this.animation = new AnimationDriver((x: number) => {
+        this.animation = new GameAnimation((x: number) => {
             const toRender = entity.getState().toRender;
             const texture = getAnimationTexture(x);
             toRender.textureX = texture.textureX;
@@ -80,6 +80,9 @@ export class FlowerLogicComponent<
         })
             .tween(floorStepper(16))
             .speed(2000)
-            .start(Math.random(), true);
+            .start({
+                offset: Math.random(),
+                loop: true,
+            });
     }
 }

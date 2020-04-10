@@ -1,5 +1,5 @@
 import { Animations } from "../../services/resources/ResourceManager";
-import { AnimationDriver } from "../../util/animation/AnimationDriver";
+import { GameAnimation } from "../../util/animation/Animation";
 import {
     vec_add,
     vec_mult_scalar,
@@ -21,7 +21,7 @@ const WALK_SPEED = 0.01;
 export class CrabletLogicComponent<
     T extends MacatorStateType
 > extends EntityComponent<T> {
-    private animation: AnimationDriver;
+    private animation: GameAnimation;
 
     public init(entity: Entity<MacatorStateType>) {
         return {
@@ -118,7 +118,7 @@ export class CrabletLogicComponent<
                 .getResourceManager()
                 .sprite.getAnimationInterp(crabType, xTex);
 
-        this.animation = new AnimationDriver((x: number) => {
+        this.animation = new GameAnimation((x: number) => {
             const toRender = entity.getState().toRender;
             const texture = getAnimationTexture(x);
             toRender.textureX = texture.textureX;
@@ -126,7 +126,7 @@ export class CrabletLogicComponent<
         })
 
             .speed(400)
-            .start(Math.random(), true);
+            .start({ offset: Math.random(), loop: true });
     }
 
     private syncSprite(entity: Entity<MacatorStateType>) {
