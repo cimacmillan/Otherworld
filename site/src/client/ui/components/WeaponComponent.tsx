@@ -9,17 +9,20 @@ import {
 } from "../../util/animation/CompositeAnimation";
 import { WeaponActionSubject } from "../reducers/WeaponReducer";
 import { Subscription } from "rxjs";
+import { vec_distance } from "../../util/math";
 
 export interface WeaponComponentProps {
     serviceLocator: ServiceLocator;
 }
 
-const WEAPON_HEIGHT = 1;
-const POS_X = 0.9;
-const POS_Y = 0.5;
+const WEAPON_HEIGHT = 1.3;
+const POS_X = 1;
+const POS_Y = 0.55;
+const DEFAULT_ROTATION = 10;
 
 export class WeaponComponent extends React.Component<WeaponComponentProps> {
     private composite: CompositeAnimation;
+    private headBob: GameAnimation;
     private posY = POS_Y;
     private rotate = 0;
 
@@ -58,13 +61,31 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
             type: CompositeAnimationType.SERIAL,
             driver: new IntervalDriver(),
         });
+
+        this.headBob = new GameAnimation((x: number) => {
+            this.onHeadBobAnimation(x);
+            this.forceUpdate();
+        }, new IntervalDriver()).speed(400);
     }
 
     public componentDidMount() {
         this.subscription = WeaponActionSubject.subscribe((event) => {
             this.composite.start({});
         });
+
+        this.headBob.start({
+            loop: true,
+        });
     }
+
+    private onHeadBobAnimation = (x: number) => {
+        const velocity = this.props.serviceLocator
+            .getScriptingService()
+            .getPlayer()
+            .getState().velocity;
+        const speed = vec_distance(velocity);
+        this.posY = POS_Y + Math.sin(x * Math.PI * 2) * speed;
+    };
 
     public componentWillUnmount() {
         this.subscription.unsubscribe();
@@ -89,9 +110,9 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
                         width: "auto",
                         height: DOM_HEIGHT * WEAPON_HEIGHT,
                         overflow: "hidden",
-                        transform: `rotate(-${Math.floor(
-                            this.rotate
-                        )}deg) translate(-50%, -50%)`,
+                        transform: `rotate(-${
+                            Math.floor(this.rotate) + DEFAULT_ROTATION
+                        }deg) translate(-50%, -50%)`,
                     }}
                 />
             </div>

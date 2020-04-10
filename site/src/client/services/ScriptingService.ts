@@ -58,15 +58,15 @@ export class ScriptingService {
         //     world.addEntity(sprite);
         // }
 
-        // for (let i = 0; i < 500; i++) {
-        //     const sprite = new Entity(
-        //         this.serviceLocator,
-        //         new SpriteRenderComponent(),
-        //         new CrabletLogicComponent(),
-        //         new PhysicsComponent()
-        //     );
-        //     world.addEntity(sprite);
-        // }
+        for (let i = 0; i < 500; i++) {
+            const sprite = new Entity(
+                this.serviceLocator,
+                new SpriteRenderComponent(),
+                new CrabletLogicComponent(),
+                new PhysicsComponent()
+            );
+            world.addEntity(sprite);
+        }
 
         const floorTexture = getTextureCoordinate(32, 64, 32, 32, 0, 32);
         this.serviceLocator.getRenderService().floorRenderService.createItem({

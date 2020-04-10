@@ -1,4 +1,3 @@
-
 interface PlayerAttack {
     type: PlayerEventType.PLAYER_ATTACK;
 }

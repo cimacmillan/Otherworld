@@ -1,4 +1,3 @@
-
 interface Attack {
     type: InteractionEventType.ATTACK;
 }
