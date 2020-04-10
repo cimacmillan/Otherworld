@@ -1,8 +1,10 @@
+import { CrabletLogicComponent } from "../engine/components/CrabletLogicComponent";
 import { PhysicsComponent } from "../engine/components/PhysicsComponent";
 import {
     PlayerControlComponent,
     PlayerState,
 } from "../engine/components/player/PlayerControlComponent";
+import { SpriteRenderComponent } from "../engine/components/SpriteRenderComponent";
 import { Entity } from "../engine/Entity";
 import { Vector2D } from "../types";
 import { getTextureCoordinate } from "../util/math";
@@ -58,7 +60,7 @@ export class ScriptingService {
         //     world.addEntity(sprite);
         // }
 
-        for (let i = 0; i < 500; i++) {
+        for (let i = 0; i < 100; i++) {
             const sprite = new Entity(
                 this.serviceLocator,
                 new SpriteRenderComponent(),

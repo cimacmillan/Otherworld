@@ -40,6 +40,6 @@ export function loadSpriteSheet(
 ): Promise<SpriteSheet> {
     return loadImage(url).then((image: HTMLImageElement) => {
         const texture = loadTextureFromImage(gl, image);
-        return new SpriteSheet(image.width, image.height, texture);
+        return new SpriteSheet(image.width, image.height, texture, image);
     });
 }

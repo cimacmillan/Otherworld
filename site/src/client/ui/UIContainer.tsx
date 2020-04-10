@@ -40,21 +40,6 @@ class UIContainer extends React.Component<UIContainerProps> {
         );
     }
 
-    private getGameImage = () => {
-        if (this.props.canAccessGame) {
-            return (
-                <img
-                    src={
-                        this.props.game.getServiceLocator().getResourceManager()
-                            .uiSword
-                    }
-                />
-            );
-        } else {
-            return <p>Loading</p>;
-        }
-    };
-
     private createBall = () => {
         const sprite = new Entity(
             this.props.game.getServiceLocator(),

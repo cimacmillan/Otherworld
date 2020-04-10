@@ -1,4 +1,4 @@
-interface TextureCoordinate {
+export interface TextureCoordinate {
     textureX: number;
     textureY: number;
     textureWidth: number;
@@ -19,7 +19,8 @@ export class SpriteSheet {
     public constructor(
         private width: number,
         private height: number,
-        private texture: WebGLTexture
+        private texture: WebGLTexture,
+        private image: HTMLImageElement
     ) {}
 
     public registerSprite(
@@ -102,6 +103,10 @@ export class SpriteSheet {
 
     public getTexture() {
         return this.texture;
+    }
+
+    public getImage() {
+        return this.image;
     }
 
     public getTextureCoordinate(

@@ -12,6 +12,10 @@ export enum Animations {
     CRABLET_BLUE = "CRABLET_BLUE",
 }
 
+export enum Sprites {
+    SWORD = "SWORD",
+}
+
 export class ResourceManager {
     public sprite: SpriteSheet;
 
@@ -23,8 +27,6 @@ export class ResourceManager {
     public boing: AudioBuffer;
 
     public uiImage: HTMLImageElement;
-
-    public uiSword: string = "img/zelda.png";
 
     public async load(gl: WebGLRenderingContext, audio: AudioContext) {
         this.sprite = await loadSpriteSheet(gl, "img/sprite.png");
@@ -55,6 +57,8 @@ export class ResourceManager {
             96,
             8
         );
+
+        this.sprite.registerSprite(Sprites.SWORD, 16, 32, 128, 32);
 
         this.wall = await loadTextureFromURL(gl, "img/wall.png");
         this.floor = await loadTextureFromURL(gl, "img/floor.png");
