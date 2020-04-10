@@ -1,6 +1,8 @@
 import { BallEvents } from "./BallEvents";
 import { EntityEvents } from "./EntityEvents";
+import { InteractionEvents } from "./InteractionEvents";
 import { PhysicsEvents } from "./PhysicsEvents";
+import { PlayerEvents } from "./PlayerEvents";
 import { TravelEvents } from "./TravelEvents";
 
 export enum RootEventType {
@@ -16,4 +18,6 @@ export type GameEvent =
     | EntityEvents
     | BallEvents
     | TravelEvents
-    | PhysicsEvents;
+    | PhysicsEvents
+    | InteractionEvents
+    | PlayerEvents;

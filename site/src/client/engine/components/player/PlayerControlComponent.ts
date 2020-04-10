@@ -8,11 +8,14 @@ import {
 } from "../../../Config";
 import { Vector2D } from "../../../types";
 import { vec_add, vec_rotate } from "../../../util/math";
+import { ActionDelay } from "../../../util/time/ActionDelay";
 import { fpsNorm } from "../../../util/time/GlobalFPSController";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { EntityEventType } from "../../events/EntityEvents";
 import { GameEvent } from "../../events/Event";
+import { InteractionEventType } from "../../events/InteractionEvents";
+import { PlayerEventType } from "../../events/PlayerEvents";
 import {
     TravelEventType,
     TurnDirection,
@@ -31,12 +34,14 @@ export class PlayerControlComponent<
 > extends EntityComponent<T> {
     private accumulatedWalk: Vector2D = { x: 0, y: 0 };
     private accumulatedAngle: number = 0;
+    private attackDelay: ActionDelay;
 
     public constructor(
         private initialPosition: Vector2D,
         private initialAngle: number
     ) {
         super();
+        this.attackDelay = new ActionDelay(1000);
     }
 
     public init(entity: Entity<PlayerState>) {
@@ -90,6 +95,11 @@ export class PlayerControlComponent<
             case TravelEventType.TURN:
                 this.onTurn(entity, event.payload);
                 break;
+            case InteractionEventType.ATTACK:
+                if (this.attackDelay.canAction()) {
+                    this.onAttack(entity);
+                }
+                break;
         }
     }
 
@@ -97,6 +107,17 @@ export class PlayerControlComponent<
         entity: Entity<PlayerState>,
         event: GameEvent
     ): void {}
+
+    private onAttack(entity: Entity<PlayerState>) {
+        entity.emitGlobally({
+            type: PlayerEventType.PLAYER_ATTACK,
+        });
+        this.attackDelay.onAction();
+    }
+
+    private canAttack(entity: Entity<PlayerState>) {
+        return true;
+    }
 
     private onWalk(entity: Entity<PlayerState>, direction: WalkDirection) {
         const speed = fpsNorm(WALK_SPEED);

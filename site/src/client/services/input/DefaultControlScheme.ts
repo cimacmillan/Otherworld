@@ -1,4 +1,4 @@
-import { Turn, Walk } from "../../engine/commands/PlayerCommands";
+import { Attack, Turn, Walk } from "../../engine/commands/PlayerCommands";
 import { TurnDirection, WalkDirection } from "../../engine/events/TravelEvents";
 import { ServiceLocator } from "../ServiceLocator";
 import { ControlScheme } from "./ControlScheme";
@@ -25,6 +25,10 @@ export class DefaultControlScheme implements ControlScheme {
         }
         if (keysDown.ArrowRight) {
             Turn(this.serviceLocator)(TurnDirection.CLOCKWISE);
+        }
+
+        if (keysDown.KeyE) {
+            Attack(this.serviceLocator)();
         }
 
         // TODO Remove and add godmode

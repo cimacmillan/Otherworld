@@ -1,4 +1,5 @@
 import { ServiceLocator } from "../../services/ServiceLocator";
+import { InteractionEventType } from "../events/InteractionEvents";
 import {
     TravelEventType,
     TurnDirection,
@@ -20,4 +21,9 @@ export const Turn: CommandCreator = (serviceLocator: ServiceLocator) => (
     serviceLocator.getScriptingService().getPlayer().emit({
         type: TravelEventType.TURN,
         payload: turnDirection,
+    });
+
+export const Attack: CommandCreator = (serviceLocator: ServiceLocator) => () =>
+    serviceLocator.getScriptingService().getPlayer().emit({
+        type: InteractionEventType.ATTACK,
     });

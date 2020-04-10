@@ -3,9 +3,9 @@ import * as ReactDOM from "react-dom";
 import { GameComponent } from "./GameComponent";
 import { Game } from "./Game";
 import { createStore } from "redux";
-import { reducers } from "./ui/reducers/UIReducer";
 import { Provider } from "react-redux";
 import { GameEvent } from "./engine/events/Event";
+import { reducers } from "./ui/State";
 
 const game = new Game();
 const store = createStore(

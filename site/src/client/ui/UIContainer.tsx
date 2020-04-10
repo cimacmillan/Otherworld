@@ -1,6 +1,5 @@
 import { Game } from "../Game";
 import React = require("react");
-import { State, UIState } from "./reducers/UIReducer";
 import { connect } from "react-redux";
 import { Entity } from "../engine/Entity";
 import { SpriteRenderComponent } from "../engine/components/SpriteRenderComponent";
@@ -8,6 +7,7 @@ import { SpriteLogicComponent } from "../engine/components/SpriteLogicComponent"
 import { BallEventType } from "../engine/events/BallEvents";
 import { GameEventSource } from "../services/EventRouter";
 import { WeaponComponent } from "./components/WeaponComponent";
+import { State } from "./State";
 
 export interface OwnProps {
     game: Game;

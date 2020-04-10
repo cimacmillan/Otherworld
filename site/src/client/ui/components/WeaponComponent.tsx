@@ -7,6 +7,8 @@ import {
     CompositeAnimation,
     CompositeAnimationType,
 } from "../../util/animation/CompositeAnimation";
+import { WeaponActionSubject } from "../reducers/WeaponReducer";
+import { Subscription } from "rxjs";
 
 export interface WeaponComponentProps {
     serviceLocator: ServiceLocator;
@@ -20,6 +22,8 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
     private composite: CompositeAnimation;
     private posY = POS_Y;
     private rotate = 0;
+
+    private subscription: Subscription;
 
     public constructor(props: WeaponComponentProps) {
         super(props);
@@ -57,14 +61,13 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
     }
 
     public componentDidMount() {
-        // Start listening to player events and movement info
-        this.composite.start({
-            loop: true,
+        this.subscription = WeaponActionSubject.subscribe((event) => {
+            this.composite.start({});
         });
     }
 
     public componentWillUnmount() {
-        // Un listening to player events and movement info
+        this.subscription.unsubscribe();
     }
 
     public render() {
