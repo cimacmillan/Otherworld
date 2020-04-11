@@ -1,11 +1,12 @@
 import { World } from "../engine/World";
 import { AudioService } from "../util/sound/AudioService";
 import { EventRouter } from "./EventRouter";
-import { InputService } from "./InputService";
+import { InputService } from "./input/InputService";
 import { PhysicsService } from "./physics/PhysicsService";
 import { RenderService } from "./render";
 import { ResourceManager } from "./resources/ResourceManager";
-import { ScriptingService } from "./ScriptingService";
+import { ScriptingService } from "./scripting/ScriptingService";
+import { InteractionService } from "./interaction/InteractionService";
 
 export class ServiceLocator {
     public constructor(
@@ -16,7 +17,8 @@ export class ServiceLocator {
         private eventRouter: EventRouter,
         private scriptingService: ScriptingService,
         private inputService: InputService,
-        private physicsService: PhysicsService
+        private physicsService: PhysicsService,
+        private interactionService: InteractionService
     ) {}
 
     public getResourceManager() {

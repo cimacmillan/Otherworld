@@ -2,15 +2,16 @@ import { HEIGHT, TARGET_MILLIS, WIDTH } from "./Config";
 import { GameEvent, RootEventType } from "./engine/events/Event";
 import { World } from "./engine/World";
 import { EventRouter, GameEventSource } from "./services/EventRouter";
-import { InputService } from "./services/InputService";
+import { InputService } from "./services/input/InputService";
 import { PhysicsService } from "./services/physics/PhysicsService";
 import { RenderService, ScreenBuffer } from "./services/render";
 import { ResourceManager } from "./services/resources/ResourceManager";
-import { ScriptingService } from "./services/ScriptingService";
+import { ScriptingService } from "./services/scripting/ScriptingService";
 import { ServiceLocator } from "./services/ServiceLocator";
 import { AudioService } from "./util/sound/AudioService";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
+import { InteractionService } from "./services/interaction/InteractionService";
 
 export class Game {
     private serviceLocator: ServiceLocator;
@@ -41,6 +42,8 @@ export class Game {
         const scriptingService = new ScriptingService();
 
         const inputService = new InputService();
+        
+        const interactionService = new InteractionService();
 
         this.serviceLocator = new ServiceLocator(
             resourceManager,
@@ -50,7 +53,8 @@ export class Game {
             router,
             scriptingService,
             inputService,
-            new PhysicsService()
+            new PhysicsService(),
+            interactionService
         );
 
         this.serviceLocator.getInputService().init(this.serviceLocator);
