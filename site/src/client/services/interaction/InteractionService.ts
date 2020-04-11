@@ -49,9 +49,9 @@ export class InteractionService {
         range: number
     ): InteractionEntity | undefined {
         const array = this.interactionMap[type].getArray();
-        const interactableEntities = array.map((entity) =>
-            this.canInteract(entity, position, angle, range)
-        );
+        const interactableEntities = array
+            .map((entity) => this.canInteract(entity, position, angle, range))
+            .filter((info) => info.canInteract);
         if (interactableEntities.length === 0) {
             return undefined;
         }
@@ -80,6 +80,17 @@ export class InteractionService {
         const cx = state.position.x;
         const cy = state.position.y;
         const r = state.radius;
+
+        const cxDist = cx - x1;
+        const cyDist = cy - y1;
+
+        if (cxDist * distx + cyDist * disty < 0) {
+            return {
+                canInteract: false,
+                distance: -1,
+                ref: entity,
+            };
+        }
 
         const len = Math.sqrt(distx * distx + disty * disty);
         let dot = ((cx - x1) * (x2 - x1) + (cy - y1) * (y2 - y1)) / (len * len);
