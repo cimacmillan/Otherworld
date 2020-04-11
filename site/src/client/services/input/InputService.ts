@@ -1,8 +1,8 @@
 import { GameEvent } from "../../engine/events/Event";
 import { GameEventSource } from "../EventRouter";
+import { ServiceLocator } from "../ServiceLocator";
 import { ControlScheme } from "./ControlScheme";
 import { DefaultControlScheme } from "./DefaultControlScheme";
-import { ServiceLocator } from "../ServiceLocator";
 
 export enum InputState {
     DEFAULT = "DEFAULT",

@@ -1,18 +1,18 @@
-
-
+import { InteractionType } from "../../services/interaction/InteractionType";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 import { GameEvent } from "../events/Event";
 import { BaseState, SurfacePositionState } from "../State";
-import { InteractionType } from "../../services/interaction/InteractionType";
 
-type InteractableMap = {[key in InteractionType]?: boolean};
+type InteractableMap = { [key in InteractionType]?: boolean };
 
 export interface InteractionState {
-    interactable: InteractableMap
+    interactable: InteractableMap;
 }
 
-export type InteractionStateType = BaseState & SurfacePositionState & InteractionState;
+export type InteractionStateType = BaseState &
+    SurfacePositionState &
+    InteractionState;
 
 export class InteractionComponent<
     T extends InteractionStateType
@@ -23,9 +23,10 @@ export class InteractionComponent<
 
     public update(entity: Entity<InteractionStateType>): void {}
 
-    public onEvent(entity: Entity<InteractionStateType>, event: GameEvent): void {
-
-    }
+    public onEvent(
+        entity: Entity<InteractionStateType>,
+        event: GameEvent
+    ): void {}
 
     public onObservedEvent(
         entity: Entity<InteractionStateType>,

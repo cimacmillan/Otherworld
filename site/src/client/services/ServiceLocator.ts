@@ -2,11 +2,11 @@ import { World } from "../engine/World";
 import { AudioService } from "../util/sound/AudioService";
 import { EventRouter } from "./EventRouter";
 import { InputService } from "./input/InputService";
+import { InteractionService } from "./interaction/InteractionService";
 import { PhysicsService } from "./physics/PhysicsService";
 import { RenderService } from "./render";
 import { ResourceManager } from "./resources/ResourceManager";
 import { ScriptingService } from "./scripting/ScriptingService";
-import { InteractionService } from "./interaction/InteractionService";
 
 export class ServiceLocator {
     public constructor(
@@ -51,5 +51,9 @@ export class ServiceLocator {
 
     public getPhysicsService() {
         return this.physicsService;
+    }
+
+    public getInteractionService() {
+        return this.interactionService;
     }
 }
