@@ -1,9 +1,20 @@
+import { SurfacePositionState } from "../State";
+
 interface Attack {
     type: InteractionEventType.ATTACK;
 }
 
-export enum InteractionEventType {
-    ATTACK = "ATTACK",
+interface OnDamaged {
+    type: InteractionEventType.ON_DAMAGED;
+    payload: {
+        amount: number;
+        source?: SurfacePositionState;
+    };
 }
 
-export type InteractionEvents = Attack;
+export enum InteractionEventType {
+    ATTACK = "ATTACK",
+    ON_DAMAGED = "ON_DAMAGED",
+}
+
+export type InteractionEvents = Attack | OnDamaged;

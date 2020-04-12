@@ -45,7 +45,7 @@ export class Entity<State extends BaseState> {
         }
     }
 
-    public setState(state: Partial<State>, withEvent?: boolean) {
+    public setState(state: Partial<State>, withEvent: boolean = true) {
         const newState = { ...this.state, ...state };
         if (this.initialised && withEvent) {
             this.emit({

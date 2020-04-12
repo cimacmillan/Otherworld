@@ -1,9 +1,12 @@
 import { vec2 } from "gl-matrix";
 import { Camera } from "../../types";
+import { AudioObject } from "./AudioObject";
 
 const MIN_GAIN = 0;
 const MAX_GAIN = 1;
 const DISTANCE_RUN_OFF = 1;
+
+const MIN_PLAY_BETWEEN = 100;
 
 export class AudioService {
     private camera: Camera;
@@ -17,19 +20,21 @@ export class AudioService {
     }
 
     public play(
-        buffer: AudioBuffer,
+        audioObject: AudioObject,
         gain: number = 1,
         pan: number = 0
-    ): AudioBufferSourceNode {
-        return playSound(buffer, this.context, gain, pan);
+    ): AudioBufferSourceNode | undefined {
+        if (this.canPlay(audioObject)) {
+            return playSound(audioObject, this.context, gain, pan);
+        }
     }
 
     public play3D(
-        buffer: AudioBuffer,
+        audioObject: AudioObject,
         sourcePosition: vec2,
         gain: number = 1
-    ): AudioBufferSourceNode {
-        if (!this.camera) {
+    ): AudioBufferSourceNode | undefined {
+        if (!this.camera || !this.canPlay(audioObject)) {
             return;
         }
         const difX = sourcePosition[0] - this.camera.position.x;
@@ -40,18 +45,29 @@ export class AudioService {
             MAX_GAIN
         );
         const pan = Math.sin(Math.atan2(difX, -difY) - this.camera.angle);
-        return playSound(buffer, this.context, distanceGain, pan);
+        return playSound(audioObject, this.context, distanceGain, pan);
     }
 
     public getContext() {
         return this.context;
+    }
+
+    public canPlay(audioObject: AudioObject): boolean {
+        if (audioObject.timeSinceLastPlayed === undefined) {
+            return true;
+        }
+
+        const currentTime = Date.now();
+        return (
+            currentTime - audioObject.timeSinceLastPlayed >= MIN_PLAY_BETWEEN
+        );
     }
 }
 
 export function loadSound(
     url: string,
     context: AudioContext
-): Promise<AudioBuffer> {
+): Promise<AudioObject> {
     return new Promise((resolve) => {
         const request = new XMLHttpRequest();
         request.open("GET", url, true);
@@ -59,8 +75,14 @@ export function loadSound(
 
         // Decode asynchronously
         request.onload = function () {
-            context.decodeAudioData(request.response, resolve, (e) =>
-                console.log(e)
+            context.decodeAudioData(
+                request.response,
+                (audioBuffer: AudioBuffer) => {
+                    resolve({
+                        buffer: audioBuffer,
+                    });
+                },
+                (e) => console.log(e)
             );
         };
         request.send();
@@ -68,12 +90,14 @@ export function loadSound(
 }
 
 export function playSound(
-    buffer: AudioBuffer,
+    audioObject: AudioObject,
     context: AudioContext,
     gain: number,
     pan: number
 ): AudioBufferSourceNode {
-    if (gain < MIN_GAIN) return;
+    audioObject.timeSinceLastPlayed = Date.now();
+
+    if (gain < MIN_GAIN) { return; }
 
     const panNode = new StereoPannerNode(context, { pan });
     const gainNode = context.createGain();
@@ -81,7 +105,7 @@ export function playSound(
     gainNode.gain.setValueAtTime(gain, context.currentTime);
 
     const source = context.createBufferSource(); // creates a sound source
-    source.buffer = buffer; // tell the source which sound to play
+    source.buffer = audioObject.buffer; // tell the source which sound to play
     source.connect(panNode).connect(gainNode).connect(context.destination); // connect the source to the context's destination (the speakers)
     source.start(0); // play the source now
     return source;

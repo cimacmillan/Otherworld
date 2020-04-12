@@ -113,6 +113,12 @@ export class PlayerControlComponent<
         entity.emitGlobally({
             type: PlayerEventType.PLAYER_ATTACK,
         });
+
+        entity
+            .getServiceLocator()
+            .getAudioService()
+            .play(entity.getServiceLocator().getResourceManager().whoosh);
+
         this.attackDelay.onAction();
         const state = entity.getState();
         const attacks = entity
@@ -122,18 +128,24 @@ export class PlayerControlComponent<
                 InteractionType.ATTACK,
                 state.position,
                 state.angle,
-                3
+                1
             );
-        attacks.forEach(
-            (attacked) => {
-                const eState = attacked.getState() as any;
-                eState.velocity = vec_add(eState.velocity, {
-                    x: Math.sin(state.angle) * 0.3,
-                    y: -Math.cos(state.angle) * 0.3,
-                });
-            }
-            // entity.getServiceLocator().getWorld().removeEntity(attacked)
-        );
+
+        if (attacks.length > 0) {
+            entity
+                .getServiceLocator()
+                .getAudioService()
+                .play(entity.getServiceLocator().getResourceManager().slam);
+        }
+        attacks.forEach((attacked) => {
+            attacked.emit({
+                type: InteractionEventType.ON_DAMAGED,
+                payload: {
+                    amount: 0.4,
+                    source: state,
+                },
+            });
+        });
     }
 
     private canAttack(entity: Entity<PlayerState>) {

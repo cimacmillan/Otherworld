@@ -15,3 +15,7 @@ export interface CameraState {
     camera: Camera;
     cameraShouldSync: boolean;
 }
+
+export interface HealthState {
+    health: number;
+}

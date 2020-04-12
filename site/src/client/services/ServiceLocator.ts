@@ -1,5 +1,5 @@
 import { World } from "../engine/World";
-import { AudioService } from "../util/sound/AudioService";
+import { AudioService } from "./audio/AudioService";
 import { EventRouter } from "./EventRouter";
 import { InputService } from "./input/InputService";
 import { InteractionService } from "./interaction/InteractionService";

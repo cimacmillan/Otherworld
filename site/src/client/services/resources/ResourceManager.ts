@@ -1,4 +1,5 @@
-import { loadSound } from "../../util/sound/AudioService";
+import { AudioObject } from "../audio/AudioObject";
+import { loadSound } from "../audio/AudioService";
 import { SpriteSheet } from "./SpriteSheet";
 import {
     loadImage,
@@ -14,6 +15,10 @@ export enum Animations {
 
 export enum Sprites {
     SWORD = "SWORD",
+    MACATOR_DAMAGED = "MACATOR_DAMAGED",
+    MACATOR_DEAD_BROWN = "MACATOR_DEAD_BROWN",
+    MACATOR_DEAD_GREEN = "MACATOR_DEAD_GREEN",
+    MACATOR_DEAD_BLUE = "MACATOR_DEAD_BLUE",
 }
 
 export class ResourceManager {
@@ -23,8 +28,11 @@ export class ResourceManager {
     public floor: WebGLTexture;
     public glorp: WebGLTexture;
 
-    public intro: AudioBuffer;
-    public boing: AudioBuffer;
+    public intro: AudioObject;
+    public boing: AudioObject;
+    public whoosh: AudioObject;
+    public slam: AudioObject;
+    public point: AudioObject;
 
     public uiImage: HTMLImageElement;
 
@@ -59,6 +67,10 @@ export class ResourceManager {
         );
 
         this.sprite.registerSprite(Sprites.SWORD, 16, 32, 128, 32);
+        this.sprite.registerSprite(Sprites.MACATOR_DAMAGED, 16, 16, 0, 112);
+        this.sprite.registerSprite(Sprites.MACATOR_DEAD_BROWN, 16, 16, 16, 112);
+        this.sprite.registerSprite(Sprites.MACATOR_DEAD_GREEN, 16, 16, 32, 112);
+        this.sprite.registerSprite(Sprites.MACATOR_DEAD_BLUE, 16, 16, 48, 112);
 
         this.wall = await loadTextureFromURL(gl, "img/wall.png");
         this.floor = await loadTextureFromURL(gl, "img/floor.png");
@@ -66,6 +78,9 @@ export class ResourceManager {
 
         this.intro = await loadSound("audio/intro.mp3", audio);
         this.boing = await loadSound("audio/boing.mp3", audio);
+        this.point = await loadSound("audio/point.mp3", audio);
+        this.slam = await loadSound("audio/slam.mp3", audio);
+        this.whoosh = await loadSound("audio/whoosh.mp3", audio);
 
         this.uiImage = await loadImage("img/floor.png");
     }

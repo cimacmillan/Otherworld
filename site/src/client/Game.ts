@@ -1,6 +1,7 @@
 import { HEIGHT, TARGET_MILLIS, WIDTH } from "./Config";
 import { GameEvent, RootEventType } from "./engine/events/Event";
 import { World } from "./engine/World";
+import { AudioService } from "./services/audio/AudioService";
 import { EventRouter, GameEventSource } from "./services/EventRouter";
 import { InputService } from "./services/input/InputService";
 import { InteractionService } from "./services/interaction/InteractionService";
@@ -9,7 +10,6 @@ import { RenderService, ScreenBuffer } from "./services/render";
 import { ResourceManager } from "./services/resources/ResourceManager";
 import { ScriptingService } from "./services/scripting/ScriptingService";
 import { ServiceLocator } from "./services/ServiceLocator";
-import { AudioService } from "./util/sound/AudioService";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
 
