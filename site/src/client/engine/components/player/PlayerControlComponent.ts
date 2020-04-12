@@ -42,7 +42,7 @@ export class PlayerControlComponent<
         private initialAngle: number
     ) {
         super();
-        this.attackDelay = new ActionDelay(1000);
+        this.attackDelay = new ActionDelay(300);
     }
 
     public init(entity: Entity<PlayerState>) {
@@ -122,10 +122,17 @@ export class PlayerControlComponent<
                 InteractionType.ATTACK,
                 state.position,
                 state.angle,
-                2
+                3
             );
-        attacks.forEach((attacked) =>
-            entity.getServiceLocator().getWorld().removeEntity(attacked)
+        attacks.forEach(
+            (attacked) => {
+                const eState = attacked.getState() as any;
+                eState.velocity = vec_add(eState.velocity, {
+                    x: Math.sin(state.angle) * 0.3,
+                    y: -Math.cos(state.angle) * 0.3,
+                });
+            }
+            // entity.getServiceLocator().getWorld().removeEntity(attacked)
         );
     }
 
