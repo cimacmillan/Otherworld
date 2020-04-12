@@ -14,10 +14,11 @@ interface InteractionInfo {
 
 export class InteractionService {
     private interactionMap: {
-        [key in InteractionType]: ConsistentArray<InteractionEntity>;
+        [key in InteractionType]?: ConsistentArray<InteractionEntity>;
     };
 
     public constructor() {
+        this.interactionMap = {};
         for (const key in InteractionType) {
             this.interactionMap[key as InteractionType] = new ConsistentArray();
         }
@@ -36,8 +37,9 @@ export class InteractionService {
         range: number
     ): InteractionEntity[] {
         const array = this.interactionMap[type].getArray();
-        const interactableEntities = array.filter((entity) =>
-            this.canInteract(entity, position, angle, range)
+        const interactableEntities = array.filter(
+            (entity) =>
+                this.canInteract(entity, position, angle, range).canInteract
         );
         return interactableEntities;
     }

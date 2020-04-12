@@ -42,6 +42,9 @@ export class SpriteRenderComponent<
                     event.payload.to
                 );
                 break;
+            case EntityEventType.ENTITY_DELETED:
+                this.onDeleted(entity);
+                break;
         }
     }
 
@@ -60,11 +63,22 @@ export class SpriteRenderComponent<
                 .getServiceLocator()
                 .getRenderService()
                 .spriteRenderService.createItem(to.toRender);
-        } else if (from.toRender && !to.toRender) {
+        } else if (from.toRender && !to.toRender && this.toRenderRef) {
             entity
                 .getServiceLocator()
                 .getRenderService()
                 .spriteRenderService.freeItem(this.toRenderRef);
+            this.toRenderRef = undefined;
+        }
+    }
+
+    private onDeleted(entity: Entity<SpriteStateType>) {
+        if (this.toRenderRef) {
+            entity
+                .getServiceLocator()
+                .getRenderService()
+                .spriteRenderService.freeItem(this.toRenderRef);
+            this.toRenderRef = undefined;
         }
     }
 }

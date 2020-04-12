@@ -33,6 +33,9 @@ export class PhysicsComponent<
                     event.payload.to as PhysicsStateType
                 );
                 break;
+            case EntityEventType.ENTITY_DELETED:
+                this.onDeleted(entity);
+                break;
         }
     }
 
@@ -58,5 +61,12 @@ export class PhysicsComponent<
                 .getPhysicsService()
                 .unregisterPhysicsEntity(entity);
         }
+    }
+
+    private onDeleted(entity: Entity<PhysicsStateType>) {
+        entity
+            .getServiceLocator()
+            .getPhysicsService()
+            .unregisterPhysicsEntity(entity);
     }
 }

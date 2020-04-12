@@ -11,10 +11,14 @@ import { EntityComponent } from "../EntityComponent";
 import { EntityEventType } from "../events/EntityEvents";
 import { GameEvent } from "../events/Event";
 import { BaseState } from "../State";
+import { InteractionStateType } from "./InteractionComponent";
 import { PhysicsStateType } from "./PhysicsComponent";
 import { SpriteStateType } from "./SpriteRenderComponent";
 
-export type MacatorStateType = BaseState & SpriteStateType & PhysicsStateType;
+export type MacatorStateType = BaseState &
+    SpriteStateType &
+    PhysicsStateType &
+    InteractionStateType;
 
 const WALK_SPEED = 0.01;
 
@@ -58,12 +62,6 @@ export class CrabletLogicComponent<
                 this.onCreate(entity);
                 break;
             case EntityEventType.ENTITY_DELETED:
-                entity.setState(
-                    {
-                        toRender: undefined,
-                    },
-                    true
-                );
                 break;
         }
     }
@@ -108,6 +106,9 @@ export class CrabletLogicComponent<
                 radius: 0.5,
                 angle: 0,
                 collides: true,
+                interactable: {
+                    ATTACK: true,
+                },
             },
             true
         );

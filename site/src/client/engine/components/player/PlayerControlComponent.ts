@@ -6,6 +6,7 @@ import {
     ZFAR,
     ZNEAR,
 } from "../../../Config";
+import { InteractionType } from "../../../services/interaction/InteractionType";
 import { Vector2D } from "../../../types";
 import { vec_add, vec_rotate } from "../../../util/math";
 import { ActionDelay } from "../../../util/time/ActionDelay";
@@ -113,6 +114,19 @@ export class PlayerControlComponent<
             type: PlayerEventType.PLAYER_ATTACK,
         });
         this.attackDelay.onAction();
+        const state = entity.getState();
+        const attacks = entity
+            .getServiceLocator()
+            .getInteractionService()
+            .getInteractables(
+                InteractionType.ATTACK,
+                state.position,
+                state.angle,
+                2
+            );
+        attacks.forEach((attacked) =>
+            entity.getServiceLocator().getWorld().removeEntity(attacked)
+        );
     }
 
     private canAttack(entity: Entity<PlayerState>) {

@@ -1,4 +1,5 @@
 import { CrabletLogicComponent } from "../../engine/components/CrabletLogicComponent";
+import { InteractionComponent } from "../../engine/components/InteractionComponent";
 import { PhysicsComponent } from "../../engine/components/PhysicsComponent";
 import {
     PlayerControlComponent,
@@ -65,7 +66,8 @@ export class ScriptingService {
                 this.serviceLocator,
                 new SpriteRenderComponent(),
                 new CrabletLogicComponent(),
-                new PhysicsComponent()
+                new PhysicsComponent(),
+                new InteractionComponent()
             );
             world.addEntity(sprite);
         }
