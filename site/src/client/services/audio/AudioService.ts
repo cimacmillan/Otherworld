@@ -97,7 +97,9 @@ export function playSound(
 ): AudioBufferSourceNode {
     audioObject.timeSinceLastPlayed = Date.now();
 
-    if (gain < MIN_GAIN) { return; }
+    if (gain < MIN_GAIN) {
+        return;
+    }
 
     const panNode = new StereoPannerNode(context, { pan });
     const gainNode = context.createGain();

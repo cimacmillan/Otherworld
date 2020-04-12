@@ -1,6 +1,7 @@
 import { Animations, Sprites } from "../../services/resources/ResourceManager";
 import { TextureCoordinate } from "../../services/resources/SpriteSheet";
 import { GameAnimation } from "../../util/animation/Animation";
+import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
 import {
     vec_add,
     vec_mult_scalar,
@@ -209,18 +210,23 @@ export class CrabletLogicComponent<
         }
 
         const state = entity.getState();
-        state.velocity = vec_add(state.velocity, {
-            x: Math.sin(source.angle) * 0.3,
-            y: -Math.cos(source.angle) * 0.3,
-        });
-
         state.health -= amount;
 
         if (state.health <= 0) {
+            state.velocity = vec_add(state.velocity, {
+                x: Math.sin(source.angle) * 0.5,
+                y: -Math.cos(source.angle) * 0.5,
+            });
+
             entity.setState({
                 macatorState: MacatorState.DYING,
             });
         } else {
+            state.velocity = vec_add(state.velocity, {
+                x: Math.sin(source.angle) * 0.3,
+                y: -Math.cos(source.angle) * 0.3,
+            });
+
             entity.setState({
                 macatorState: MacatorState.DAMAGED,
             });
@@ -245,6 +251,19 @@ export class CrabletLogicComponent<
             toRender.textureWidth = texture.textureCoordinate.textureWidth;
             toRender.textureHeight = texture.textureCoordinate.textureHeight;
 
+            new GameAnimation((x: number) => {
+                toRender.size[0] = 0.5 + x;
+                toRender.size[1] = 0.5 + x;
+            }, new IntervalDriver())
+                .tween((x: number) => Math.sin(x * Math.PI))
+                .speed(200)
+                .start({
+                    onFinish: () => {
+                        toRender.size[0] = 1;
+                        toRender.size[1] = 1;
+                    },
+                });
+
             setTimeout(
                 () =>
                     entity.setState({
@@ -260,11 +279,24 @@ export class CrabletLogicComponent<
 
         if (to === MacatorState.DYING) {
             this.animation.stop();
+            const texture = entity
+                .getServiceLocator()
+                .getResourceManager()
+                .sprite.getSprite(Sprites.MACATOR_DAMAGED);
             const toRender = entity.getState().toRender;
-            toRender.textureX = this.deadTexture.textureX;
-            toRender.textureY = this.deadTexture.textureY;
-            toRender.textureWidth = this.deadTexture.textureWidth;
-            toRender.textureHeight = this.deadTexture.textureHeight;
+            toRender.textureX = texture.textureCoordinate.textureX;
+            toRender.textureY = texture.textureCoordinate.textureY;
+            toRender.textureWidth = texture.textureCoordinate.textureWidth;
+            toRender.textureHeight = texture.textureCoordinate.textureHeight;
+
+            setTimeout(() => {
+                const toRender = entity.getState().toRender;
+                toRender.textureX = this.deadTexture.textureX;
+                toRender.textureY = this.deadTexture.textureY;
+                toRender.textureWidth = this.deadTexture.textureWidth;
+                toRender.textureHeight = this.deadTexture.textureHeight;
+            }, 200);
+
             entity
                 .getServiceLocator()
                 .getAudioService()
