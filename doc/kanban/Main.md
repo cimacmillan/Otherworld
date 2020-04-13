@@ -26,6 +26,8 @@ Main TODO Taskboard
 - [ ] Scripting service entity grouping  
 - [ ] Scripting service commands  
 - [ ] Scripting service fast static interactions using spacial particioning  
+- [ ] Loading screen  
+- [ ] Better resource loading api  
 
 ### In Progress
 
