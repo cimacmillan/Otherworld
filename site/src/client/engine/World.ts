@@ -41,6 +41,7 @@ export class World {
     }
 
     public emitOutOfWorld(event: GameEvent) {
+        // console.log("World Dispatch: ", event);
         this.worldDispatch(event);
     }
 

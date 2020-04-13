@@ -28,6 +28,7 @@ Main TODO Taskboard
 - [ ] Scripting service fast static interactions using spacial particioning  
 - [ ] Loading screen  
 - [ ] Better resource loading api  
+- [ ] Add debug log messages  
 
 ### In Progress
 

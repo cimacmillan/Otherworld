@@ -22,10 +22,13 @@ import {
     TurnDirection,
     WalkDirection,
 } from "../../events/TravelEvents";
-import { BaseState, CameraState } from "../../State";
+import { BaseState, CameraState, HealthState } from "../../State";
 import { PhysicsStateType } from "../PhysicsComponent";
 
-export type PlayerState = BaseState & PhysicsStateType & CameraState;
+export type PlayerState = BaseState &
+    PhysicsStateType &
+    CameraState &
+    HealthState;
 
 const WALK_SPEED = 0.02;
 const TURN_SPEED = 0.1;
@@ -36,6 +39,7 @@ export class PlayerControlComponent<
     private accumulatedWalk: Vector2D = { x: 0, y: 0 };
     private accumulatedAngle: number = 0;
     private attackDelay: ActionDelay;
+    private killed = false;
 
     public constructor(
         private initialPosition: Vector2D,
@@ -65,6 +69,7 @@ export class PlayerControlComponent<
             friction: 0.8,
             mass: 1,
             elastic: 0,
+            health: 1,
         };
     }
 
@@ -101,6 +106,9 @@ export class PlayerControlComponent<
                     this.onAttack(entity);
                 }
                 break;
+            case InteractionEventType.ON_DAMAGED:
+                this.onDamaged(entity, event.payload.amount);
+                break;
         }
     }
 
@@ -108,6 +116,33 @@ export class PlayerControlComponent<
         entity: Entity<PlayerState>,
         event: GameEvent
     ): void {}
+
+    private onDamaged(entity: Entity<PlayerState>, amount: number) {
+        entity.setState({ health: entity.getState().health - amount });
+        if (entity.getState().health <= 0 && !this.killed) {
+            entity.emitGlobally({
+                type: PlayerEventType.PLAYER_KILLED,
+            });
+            this.onKilled(entity);
+            this.killed = true;
+            entity
+                .getServiceLocator()
+                .getAudioService()
+                .play(entity.getServiceLocator().getResourceManager().end);
+        } else if (!this.killed) {
+            entity.emitGlobally({
+                type: PlayerEventType.PLAYER_DAMAGED,
+            });
+            entity
+                .getServiceLocator()
+                .getAudioService()
+                .play(
+                    entity.getServiceLocator().getResourceManager().playerHit
+                );
+        }
+    }
+
+    private onKilled(entity: Entity<PlayerState>) {}
 
     private onAttack(entity: Entity<PlayerState>) {
         entity.emitGlobally({

@@ -28,6 +28,9 @@ export enum Animations {
     CRABLET_BROWN = "CRABLET_BROWN",
     CRABLET_GREEN = "CRABLET_GREEN",
     CRABLET_BLUE = "CRABLET_BLUE",
+    CRABLET_BROWN_ATTACK = "CRABLET_BROWN_ATTACK",
+    CRABLET_GREEN_ATTACK = "CRABLET_GREEN_ATTACK",
+    CRABLET_BLUE_ATTACK = "CRABLET_BLUE_ATTACK",
 }
 
 export enum Sprites {
@@ -50,6 +53,9 @@ export class ResourceManager {
     public whoosh: AudioObject;
     public slam: AudioObject;
     public point: AudioObject;
+    public playerHit: AudioObject;
+    public end: AudioObject;
+    public hiss: AudioObject;
 
     public uiImage: HTMLImageElement;
 
@@ -83,6 +89,33 @@ export class ResourceManager {
             8
         );
 
+        this.sprite.registerAnimation(
+            Animations.CRABLET_BROWN_ATTACK,
+            16,
+            16,
+            128,
+            64,
+            8
+        );
+
+        this.sprite.registerAnimation(
+            Animations.CRABLET_GREEN_ATTACK,
+            16,
+            16,
+            128,
+            80,
+            8
+        );
+
+        this.sprite.registerAnimation(
+            Animations.CRABLET_BLUE_ATTACK,
+            16,
+            16,
+            128,
+            96,
+            8
+        );
+
         this.sprite.registerSprite(Sprites.SWORD, 16, 32, 128, 32);
         this.sprite.registerSprite(Sprites.MACATOR_DAMAGED, 16, 16, 0, 112);
         this.sprite.registerSprite(Sprites.MACATOR_DEAD_BROWN, 16, 16, 16, 112);
@@ -98,6 +131,9 @@ export class ResourceManager {
         this.point = await loadSound("audio/point.mp3", audio);
         this.slam = await loadSound("audio/slam.mp3", audio);
         this.whoosh = await loadSound("audio/whoosh.mp3", audio);
+        this.playerHit = await loadSound("audio/player_hit.mp3", audio);
+        this.end = await loadSound("audio/end.mp3", audio);
+        this.hiss = await loadSound("audio/hiss.mp3", audio);
 
         this.uiImage = await loadImage("img/floor.png");
     }
