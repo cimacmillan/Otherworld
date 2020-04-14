@@ -64,13 +64,13 @@ export class SpriteSheet {
         xPixel: number,
         yPixel: number,
         frameCount: number,
-        horizontal: boolean = true
+        vertical?: boolean
     ) {
         const spriteWidth = width;
         const spriteHeight = height;
 
         let xPos = xPixel;
-        const yPos = yPixel;
+        let yPos = yPixel;
 
         this.animationHash[name] = [];
 
@@ -78,7 +78,11 @@ export class SpriteSheet {
             this.animationHash[name].push(
                 this.getTextureCoordinate(spriteWidth, spriteHeight, xPos, yPos)
             );
-            xPos += spriteWidth;
+            if (vertical) {
+                yPos += spriteHeight;
+            } else {
+                xPos += spriteWidth;
+            }
         }
     }
 

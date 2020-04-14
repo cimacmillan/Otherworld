@@ -7,23 +7,6 @@ import {
     loadTextureFromURL,
 } from "./TextureLoader";
 
-interface SpriteSheetManifest {
-    [key: string]: string;
-}
-
-interface SpriteManifest {}
-
-interface AnimationManifest {}
-
-interface AudioManifest {}
-
-interface ResourceManifest {
-    spritesheets: SpriteSheetManifest;
-    sprites: SpriteManifest;
-    animations: AnimationManifest;
-    audio: AudioManifest;
-}
-
 export enum Animations {
     CRABLET_BROWN = "CRABLET_BROWN",
     CRABLET_GREEN = "CRABLET_GREEN",
