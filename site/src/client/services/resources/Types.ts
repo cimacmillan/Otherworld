@@ -1,12 +1,14 @@
 export interface ResourceManifest {
     spritesheets: SpriteSheetManifest;
-    sprites: SpriteManifest;
-    animations: AnimationManifest;
     audio: AudioManifest;
 }
 
 export interface SpriteSheetManifest {
-    [key: string]: string;
+    [key: string]: {
+        url: string;
+        sprites: SpriteManifest;
+        animations: AnimationManifest;
+    };
 }
 
 export interface SpriteInfo {
@@ -25,7 +27,7 @@ export interface AnimationInfo {
     height: number;
     x: number;
     y: number;
-    framecount: number;
+    frames: number;
     vertical?: boolean;
 }
 
