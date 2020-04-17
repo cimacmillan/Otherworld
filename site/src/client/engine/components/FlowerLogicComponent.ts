@@ -1,3 +1,4 @@
+import { SpriteSheets } from "../../services/resources/manifests/DefaultManifest";
 import { GameAnimation } from "../../util/animation/Animation";
 import { floorStepper } from "../../util/animation/TweenFunction";
 import { Entity } from "../Entity";
@@ -60,7 +61,9 @@ export class FlowerLogicComponent<
                     ...entity
                         .getServiceLocator()
                         .getResourceManager()
-                        .sprite.getTextureCoordinate(32, 32, xtex, 0),
+                        .manifest.spritesheets[
+                            SpriteSheets.SPRITE
+                        ].getTextureCoordinate(32, 32, xtex, 0),
                 },
             },
             true
@@ -70,7 +73,9 @@ export class FlowerLogicComponent<
             entity
                 .getServiceLocator()
                 .getResourceManager()
-                .sprite.getTextureCoordinate(32, 32, xTex * 32, 0);
+                .manifest.spritesheets[
+                    SpriteSheets.SPRITE
+                ].getTextureCoordinate(32, 32, xTex * 32, 0);
 
         this.animation = new GameAnimation((x: number) => {
             const toRender = entity.getState().toRender;

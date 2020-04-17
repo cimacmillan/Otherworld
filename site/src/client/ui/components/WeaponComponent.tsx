@@ -10,10 +10,12 @@ import {
 import { WeaponActionSubject } from "../reducers/WeaponReducer";
 import { Subscription } from "rxjs";
 import { vec_distance } from "../../util/math";
-import { Transform } from "stream";
 import { getImagePropsFromSprite } from "../../util/math/UI";
-import { Sprites } from "../../services/resources/ResourceManager";
 import { Viewport } from "./Viewport";
+import {
+    SpriteSheets,
+    Sprites,
+} from "../../services/resources/manifests/DefaultManifest";
 
 export interface WeaponComponentProps {
     serviceLocator: ServiceLocator;
@@ -114,7 +116,9 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
                         ...getImagePropsFromSprite(
                             this.props.serviceLocator
                                 .getResourceManager()
-                                .sprite.getSprite(Sprites.SWORD),
+                                .manifest.spritesheets[
+                                    SpriteSheets.SPRITE
+                                ].getSprite(Sprites.SWORD),
                             DOM_HEIGHT * WEAPON_WIDTH,
                             DOM_HEIGHT * WEAPON_HEIGHT
                         ),

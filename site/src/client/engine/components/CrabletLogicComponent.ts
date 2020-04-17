@@ -1,5 +1,10 @@
 import { InteractionType } from "../../services/interaction/InteractionType";
-import { Animations, Sprites } from "../../services/resources/ResourceManager";
+import {
+    Animations,
+    Audios,
+    Sprites,
+    SpriteSheets,
+} from "../../services/resources/manifests/DefaultManifest";
 import { TextureCoordinate } from "../../services/resources/SpriteSheet";
 import { GameAnimation } from "../../util/animation/Animation";
 import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
@@ -176,7 +181,7 @@ export class CrabletLogicComponent<
                 this.deadTexture = entity
                     .getServiceLocator()
                     .getResourceManager()
-                    .sprite.getSprite(
+                    .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(
                         Sprites.MACATOR_DEAD_BROWN
                     ).textureCoordinate;
                 break;
@@ -186,7 +191,7 @@ export class CrabletLogicComponent<
                 this.deadTexture = entity
                     .getServiceLocator()
                     .getResourceManager()
-                    .sprite.getSprite(
+                    .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(
                         Sprites.MACATOR_DEAD_GREEN
                     ).textureCoordinate;
                 break;
@@ -196,7 +201,7 @@ export class CrabletLogicComponent<
                 this.deadTexture = entity
                     .getServiceLocator()
                     .getResourceManager()
-                    .sprite.getSprite(
+                    .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(
                         Sprites.MACATOR_DEAD_BLUE
                     ).textureCoordinate;
                 break;
@@ -211,7 +216,9 @@ export class CrabletLogicComponent<
                     ...entity
                         .getServiceLocator()
                         .getResourceManager()
-                        .sprite.getAnimationInterp(crabType, xtex),
+                        .manifest.spritesheets[
+                            SpriteSheets.SPRITE
+                        ].getAnimationInterp(crabType, xtex),
                 },
                 position: { x, y },
                 height: DEFAULT_HEIGHT,
@@ -225,11 +232,14 @@ export class CrabletLogicComponent<
             true
         );
 
-        const getAnimationTexture = (crabType: string, xTex: number) =>
+        const getAnimationTexture = (crabType: number, xTex: number) =>
             entity
                 .getServiceLocator()
                 .getResourceManager()
-                .sprite.getAnimationInterp(crabType, xTex);
+                .manifest.spritesheets[SpriteSheets.SPRITE].getAnimationInterp(
+                    crabType,
+                    xTex
+                );
 
         this.animation = new GameAnimation((x: number) => {
             const toRender = entity.getState().toRender;
@@ -318,7 +328,9 @@ export class CrabletLogicComponent<
             const texture = entity
                 .getServiceLocator()
                 .getResourceManager()
-                .sprite.getSprite(Sprites.MACATOR_DAMAGED);
+                .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(
+                    Sprites.MACATOR_DAMAGED
+                );
             const toRender = entity.getState().toRender;
             toRender.textureX = texture.textureCoordinate.textureX;
             toRender.textureY = texture.textureCoordinate.textureY;
@@ -367,10 +379,11 @@ export class CrabletLogicComponent<
             entity
                 .getServiceLocator()
                 .getAudioService()
-                .play3D(entity.getServiceLocator().getResourceManager().hiss, [
-                    entity.getState().position.x,
-                    entity.getState().position.y,
-                ]);
+                .play3D(
+                    entity.getServiceLocator().getResourceManager().manifest
+                        .audio[Audios.HISS],
+                    [entity.getState().position.x, entity.getState().position.y]
+                );
         }
 
         if (to === MacatorState.DYING) {
@@ -380,7 +393,9 @@ export class CrabletLogicComponent<
             const texture = entity
                 .getServiceLocator()
                 .getResourceManager()
-                .sprite.getSprite(Sprites.MACATOR_DAMAGED);
+                .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(
+                    Sprites.MACATOR_DAMAGED
+                );
             const toRender = entity.getState().toRender;
             toRender.textureX = texture.textureCoordinate.textureX;
             toRender.textureY = texture.textureCoordinate.textureY;
@@ -403,7 +418,10 @@ export class CrabletLogicComponent<
             entity
                 .getServiceLocator()
                 .getAudioService()
-                .play(entity.getServiceLocator().getResourceManager().point);
+                .play(
+                    entity.getServiceLocator().getResourceManager().manifest
+                        .audio[Audios.POINT]
+                );
         }
     }
 }

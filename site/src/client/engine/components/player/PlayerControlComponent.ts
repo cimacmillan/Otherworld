@@ -7,6 +7,7 @@ import {
     ZNEAR,
 } from "../../../Config";
 import { InteractionType } from "../../../services/interaction/InteractionType";
+import { Audios } from "../../../services/resources/manifests/DefaultManifest";
 import { Vector2D } from "../../../types";
 import { vec_add, vec_rotate } from "../../../util/math";
 import { ActionDelay } from "../../../util/time/ActionDelay";
@@ -128,7 +129,10 @@ export class PlayerControlComponent<
             entity
                 .getServiceLocator()
                 .getAudioService()
-                .play(entity.getServiceLocator().getResourceManager().end);
+                .play(
+                    entity.getServiceLocator().getResourceManager().manifest
+                        .audio[Audios.END]
+                );
         } else if (!this.killed) {
             entity.emitGlobally({
                 type: PlayerEventType.PLAYER_DAMAGED,
@@ -137,7 +141,8 @@ export class PlayerControlComponent<
                 .getServiceLocator()
                 .getAudioService()
                 .play(
-                    entity.getServiceLocator().getResourceManager().playerHit
+                    entity.getServiceLocator().getResourceManager().manifest
+                        .audio[Audios.PLAYER_HIT]
                 );
         }
     }
@@ -152,7 +157,11 @@ export class PlayerControlComponent<
         entity
             .getServiceLocator()
             .getAudioService()
-            .play(entity.getServiceLocator().getResourceManager().whoosh);
+            .play(
+                entity.getServiceLocator().getResourceManager().manifest.audio[
+                    Audios.WHOOSH
+                ]
+            );
 
         this.attackDelay.onAction();
         const state = entity.getState();
@@ -170,7 +179,10 @@ export class PlayerControlComponent<
             entity
                 .getServiceLocator()
                 .getAudioService()
-                .play(entity.getServiceLocator().getResourceManager().slam);
+                .play(
+                    entity.getServiceLocator().getResourceManager().manifest
+                        .audio[Audios.SLAM]
+                );
         }
         attacks.forEach((attacked) => {
             attacked.emit({

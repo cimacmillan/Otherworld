@@ -86,14 +86,14 @@ export class SpriteSheet {
         }
     }
 
-    public getSprite(name: string) {
+    public getSprite(name: number) {
         if (!this.spriteHash[name]) {
             console.log(`SpriteSheet ${name} missing`);
         }
         return this.spriteHash[name];
     }
 
-    public getAnimationFrame(name: string, frame: number) {
+    public getAnimationFrame(name: number, frame: number) {
         const animation = this.animationHash[name];
         if (!animation) {
             console.log(`Animation ${name} missing`);
@@ -107,7 +107,7 @@ export class SpriteSheet {
         return this.animationHash[name][frame];
     }
 
-    public getAnimationInterp(name: string, interp: number) {
+    public getAnimationInterp(name: number, interp: number) {
         const animation = this.animationHash[name];
         if (!animation) {
             console.log(`Animation ${name} missing`);

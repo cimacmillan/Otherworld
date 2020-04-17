@@ -40,6 +40,7 @@
     },
     "scripts": {
         "clean": "rm -rf ./site/build/",
+        "check-type": "tsc",
         "build": "tsc -w",
         "pack": "npx webpack --config webpack.config.js site/build/client/ -o site/public/static/js/main.js",
         "server": "nodemon site/build/server/Run.js",
@@ -51,6 +52,7 @@
         "lint": "npx prettier --write site/src && tslint --project tsconfig.json --fix -c tslint.json 'site/src/**/*.ts' && git add ."
     },
     "pre-commit": [
+        "check-type",
         "lint",
         "test"
     ],

@@ -1,3 +1,7 @@
+import {
+    Audios,
+    SpriteSheets,
+} from "../../services/resources/manifests/DefaultManifest";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 import { BallEventType } from "../events/BallEvents";
@@ -41,7 +45,8 @@ export class SpriteLogicComponent<
                     .getServiceLocator()
                     .getAudioService()
                     .play3D(
-                        entity.getServiceLocator().getResourceManager().boing,
+                        entity.getServiceLocator().getResourceManager().manifest
+                            .audio[Audios.BOING],
                         sprite.position,
                         this.yVel
                     );
@@ -84,7 +89,9 @@ export class SpriteLogicComponent<
                             ...entity
                                 .getServiceLocator()
                                 .getResourceManager()
-                                .sprite.getTextureCoordinate(32, 32, xtex, 32),
+                                .manifest.spritesheets[
+                                    SpriteSheets.SPRITE
+                                ].getTextureCoordinate(32, 32, xtex, 32),
                         },
                     },
                     true

@@ -1,3 +1,15 @@
+import { AudioObject } from "../audio/AudioObject";
+import { SpriteSheet } from "./SpriteSheet";
+
+export interface LoadedManifest {
+    spritesheets: {
+        [key: string]: SpriteSheet;
+    };
+    audio: {
+        [key: string]: AudioObject;
+    };
+}
+
 export interface ResourceManifest {
     spritesheets: SpriteSheetManifest;
     audio: AudioManifest;
