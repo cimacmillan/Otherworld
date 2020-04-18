@@ -18,7 +18,6 @@ import {
 import { ActionDelay } from "../../util/time/ActionDelay";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
-import { EntityEventType } from "../events/EntityEvents";
 import { GameEvent } from "../events/Event";
 import { InteractionEventType } from "../events/InteractionEvents";
 import { BaseState, HealthState, SurfacePositionState } from "../State";
@@ -139,18 +138,6 @@ export class CrabletLogicComponent<
 
     public onEvent(entity: Entity<MacatorStateType>, event: GameEvent): void {
         switch (event.type) {
-            case EntityEventType.ENTITY_CREATED:
-                this.onCreate(entity);
-                break;
-            case EntityEventType.ENTITY_DELETED:
-                break;
-            case EntityEventType.STATE_TRANSITION:
-                this.onStateTransition(
-                    entity,
-                    event.payload.from as MacatorStateType,
-                    event.payload.to as MacatorStateType
-                );
-                break;
             case InteractionEventType.ON_DAMAGED:
                 this.onDamaged(
                     entity,
@@ -166,7 +153,7 @@ export class CrabletLogicComponent<
         event: GameEvent
     ): void {}
 
-    private onCreate(entity: Entity<MacatorStateType>) {
+    public onCreate(entity: Entity<MacatorStateType>) {
         const x = -(Math.random() * 20) + 10;
         const y = -(Math.random() * 20) + 10;
         const xtex = Math.random();
@@ -260,12 +247,9 @@ export class CrabletLogicComponent<
         }).speed(400);
     }
 
-    private syncSprite(entity: Entity<MacatorStateType>) {
-        const state = entity.getState();
-        state.toRender.position = [state.position.x, state.position.y];
-    }
+    public onDestroy(entity: Entity<MacatorStateType>) {}
 
-    private onStateTransition(
+    public onStateTransition(
         entity: Entity<MacatorStateType>,
         from: MacatorStateType,
         to: MacatorStateType
@@ -277,6 +261,11 @@ export class CrabletLogicComponent<
                 to.macatorState
             );
         }
+    }
+
+    private syncSprite(entity: Entity<MacatorStateType>) {
+        const state = entity.getState();
+        state.toRender.position = [state.position.x, state.position.y];
     }
 
     private onDamaged(

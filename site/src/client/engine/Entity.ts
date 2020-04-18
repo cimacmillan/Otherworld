@@ -62,6 +62,23 @@ export class Entity<State extends BaseState> {
     public emit(event: GameEvent) {
         for (let x = 0; x < this.components.length; x++) {
             this.components[x].onEvent(this, event);
+
+            // Helper so I don't repeat the same code
+            switch (event.type) {
+                case EntityEventType.STATE_TRANSITION:
+                    this.components[x].onStateTransition(
+                        this,
+                        event.payload.from as State,
+                        event.payload.to as State
+                    );
+                    break;
+                case EntityEventType.ENTITY_CREATED:
+                    this.components[x].onCreate(this);
+                    break;
+                case EntityEventType.ENTITY_DELETED:
+                    this.components[x].onDestroy(this);
+                    break;
+            }
         }
         for (let x = 0; x < this.listeners.length; x++) {
             this.listeners[x].onObservedEvent(event);

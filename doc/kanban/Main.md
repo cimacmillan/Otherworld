@@ -29,6 +29,9 @@ Main TODO Taskboard
 - [ ] Loading screen  
 - [ ] Better resource loading api  
 - [ ] Add debug log messages  
+- [ ] God mode / Dev mode for viewing maps  
+- [ ] In browser map editor?  
+- [ ] Render FPS and buget in UI in god mode  
 
 ### In Progress
 

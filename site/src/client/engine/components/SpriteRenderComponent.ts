@@ -4,7 +4,6 @@ import {
 } from "../../services/render/types/RenderInterface";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
-import { EntityEventType } from "../events/EntityEvents";
 import { GameEvent } from "../events/Event";
 import { BaseState } from "../State";
 
@@ -33,27 +32,14 @@ export class SpriteRenderComponent<
         }
     }
 
-    public onEvent(entity: Entity<SpriteStateType>, event: GameEvent): void {
-        switch (event.type) {
-            case EntityEventType.STATE_TRANSITION:
-                this.onStateTransition(
-                    entity,
-                    event.payload.from,
-                    event.payload.to
-                );
-                break;
-            case EntityEventType.ENTITY_DELETED:
-                this.onDeleted(entity);
-                break;
-        }
-    }
+    public onEvent(entity: Entity<SpriteStateType>, event: GameEvent): void {}
 
     public onObservedEvent(
         entity: Entity<SpriteStateType>,
         event: GameEvent
     ): void {}
 
-    private onStateTransition(
+    public onStateTransition(
         entity: Entity<SpriteStateType>,
         from: SpriteState,
         to: SpriteState
@@ -72,7 +58,9 @@ export class SpriteRenderComponent<
         }
     }
 
-    private onDeleted(entity: Entity<SpriteStateType>) {
+    public onCreate(entity: Entity<SpriteStateType>): void {}
+
+    public onDestroy(entity: Entity<SpriteStateType>) {
         if (this.toRenderRef) {
             entity
                 .getServiceLocator()

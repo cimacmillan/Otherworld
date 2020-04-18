@@ -3,7 +3,6 @@ import React = require("react");
 import { connect } from "react-redux";
 import { Entity } from "../engine/Entity";
 import { SpriteRenderComponent } from "../engine/components/SpriteRenderComponent";
-import { SpriteLogicComponent } from "../engine/components/SpriteLogicComponent";
 import { BallEventType } from "../engine/events/BallEvents";
 import { GameEventSource } from "../services/EventRouter";
 import { WeaponComponent } from "./components/WeaponComponent";
@@ -39,24 +38,6 @@ class UIContainer extends React.Component<UIContainerProps> {
             </div>
         );
     }
-
-    private createBall = () => {
-        const sprite = new Entity(
-            this.props.game.getServiceLocator(),
-            new SpriteRenderComponent(),
-            new SpriteLogicComponent()
-        );
-        this.props.game.getServiceLocator().getWorld().addEntity(sprite);
-    };
-
-    private bounceBalls = () => {
-        this.props.game
-            .getServiceLocator()
-            .getEventRouter()
-            .routeEvent(GameEventSource.UI, {
-                type: BallEventType.FORCE_BOUNCE,
-            });
-    };
 }
 
 export default connect(mapStateToProps)(UIContainer);

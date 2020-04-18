@@ -1,7 +1,6 @@
 import { InteractionType } from "../../services/interaction/InteractionType";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
-import { EntityEventType } from "../events/EntityEvents";
 import { GameEvent } from "../events/Event";
 import { BaseState, SurfacePositionState } from "../State";
 
@@ -29,27 +28,14 @@ export class InteractionComponent<
     public onEvent(
         entity: Entity<InteractionStateType>,
         event: GameEvent
-    ): void {
-        switch (event.type) {
-            case EntityEventType.STATE_TRANSITION:
-                this.onStateTransition(
-                    entity,
-                    event.payload.from as InteractionStateType,
-                    event.payload.to as InteractionStateType
-                );
-                break;
-            case EntityEventType.ENTITY_DELETED:
-                this.onDeleted(entity);
-                break;
-        }
-    }
+    ): void {}
 
     public onObservedEvent(
         entity: Entity<InteractionStateType>,
         event: GameEvent
     ): void {}
 
-    private onStateTransition(
+    public onStateTransition(
         entity: Entity<InteractionStateType>,
         from: InteractionStateType,
         to: InteractionStateType
@@ -73,7 +59,9 @@ export class InteractionComponent<
         }
     }
 
-    private onDeleted(entity: Entity<InteractionStateType>) {
+    public onCreate(entity: Entity<T>): void {}
+
+    public onDestroy(entity: Entity<InteractionStateType>) {
         for (const type in InteractionType) {
             const interactionType = type as InteractionType;
             if (entity.getState().interactable[interactionType]) {

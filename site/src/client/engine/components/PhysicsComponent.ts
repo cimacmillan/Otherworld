@@ -1,7 +1,6 @@
 import { Vector2D } from "../../types";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
-import { EntityEventType } from "../events/EntityEvents";
 import { GameEvent } from "../events/Event";
 import { BaseState, SurfacePositionState } from "../State";
 
@@ -24,27 +23,16 @@ export class PhysicsComponent<
 
     public update(entity: Entity<PhysicsStateType>): void {}
 
-    public onEvent(entity: Entity<PhysicsStateType>, event: GameEvent): void {
-        switch (event.type) {
-            case EntityEventType.STATE_TRANSITION:
-                this.onStateTransition(
-                    entity,
-                    event.payload.from as PhysicsStateType,
-                    event.payload.to as PhysicsStateType
-                );
-                break;
-            case EntityEventType.ENTITY_DELETED:
-                this.onDeleted(entity);
-                break;
-        }
-    }
+    public onEvent(entity: Entity<PhysicsStateType>, event: GameEvent): void {}
 
     public onObservedEvent(
         entity: Entity<PhysicsStateType>,
         event: GameEvent
     ): void {}
 
-    private onStateTransition(
+    public onCreate(entity: Entity<PhysicsStateType>) {}
+
+    public onStateTransition(
         entity: Entity<PhysicsStateType>,
         from: PhysicsStateType,
         to: PhysicsStateType
@@ -63,7 +51,7 @@ export class PhysicsComponent<
         }
     }
 
-    private onDeleted(entity: Entity<PhysicsStateType>) {
+    public onDestroy(entity: Entity<PhysicsStateType>) {
         entity
             .getServiceLocator()
             .getPhysicsService()

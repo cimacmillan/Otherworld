@@ -14,4 +14,12 @@ export abstract class EntityComponent<State extends BaseState> {
         entity: Entity<State>,
         event: GameEvent
     ): void;
+
+    public abstract onStateTransition(
+        entity: Entity<State>,
+        from: State,
+        to: State
+    ): void;
+    public abstract onCreate(entity: Entity<State>): void;
+    public abstract onDestroy(entity: Entity<State>): void;
 }

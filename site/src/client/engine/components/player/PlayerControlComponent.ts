@@ -14,7 +14,6 @@ import { ActionDelay } from "../../../util/time/ActionDelay";
 import { fpsNorm } from "../../../util/time/GlobalFPSController";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import { EntityEventType } from "../../events/EntityEvents";
 import { GameEvent } from "../../events/Event";
 import { InteractionEventType } from "../../events/InteractionEvents";
 import { PlayerEventType } from "../../events/PlayerEvents";
@@ -90,12 +89,6 @@ export class PlayerControlComponent<
 
     public onEvent(entity: Entity<PlayerState>, event: GameEvent): void {
         switch (event.type) {
-            case EntityEventType.ENTITY_CREATED:
-                this.onCreate(entity);
-                break;
-            case EntityEventType.ENTITY_DELETED:
-                this.onDelete(entity);
-                break;
             case TravelEventType.WALK:
                 this.onWalk(entity, event.payload);
                 break;
@@ -117,6 +110,26 @@ export class PlayerControlComponent<
         entity: Entity<PlayerState>,
         event: GameEvent
     ): void {}
+
+    public onCreate(entity: Entity<PlayerState>) {
+        entity.setState(
+            {
+                collides: true,
+            },
+            true
+        );
+    }
+
+    public onDestroy(entity: Entity<PlayerState>) {
+        entity.setState(
+            {
+                collides: false,
+            },
+            true
+        );
+    }
+
+    public onStateTransition(entity: Entity<T>, from: T, to: T): void {}
 
     private onDamaged(entity: Entity<PlayerState>, amount: number) {
         entity.setState({ health: entity.getState().health - amount });
@@ -147,7 +160,9 @@ export class PlayerControlComponent<
         }
     }
 
-    private onKilled(entity: Entity<PlayerState>) {}
+    private onKilled(entity: Entity<PlayerState>) {
+        entity.getServiceLocator().getScriptingService().resetContent();
+    }
 
     private onAttack(entity: Entity<PlayerState>) {
         entity.emitGlobally({
@@ -195,10 +210,6 @@ export class PlayerControlComponent<
         });
     }
 
-    private canAttack(entity: Entity<PlayerState>) {
-        return true;
-    }
-
     private onWalk(entity: Entity<PlayerState>, direction: WalkDirection) {
         const speed = fpsNorm(WALK_SPEED);
         const state = entity.getState();
@@ -231,24 +242,6 @@ export class PlayerControlComponent<
                 this.accumulatedAngle = this.accumulatedAngle + speed / 3;
                 break;
         }
-    }
-
-    private onCreate(entity: Entity<PlayerState>) {
-        entity.setState(
-            {
-                collides: true,
-            },
-            true
-        );
-    }
-
-    private onDelete(entity: Entity<PlayerState>) {
-        entity.setState(
-            {
-                collides: false,
-            },
-            true
-        );
     }
 
     private syncCamera(entity: Entity<PlayerState>) {
