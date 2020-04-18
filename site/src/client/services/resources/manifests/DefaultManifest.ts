@@ -2,6 +2,16 @@ import { ResourceManifest } from "../Types";
 
 export enum SpriteSheets {
     SPRITE,
+    UI,
+}
+
+export enum UIANIMATIONS {
+    HEALTH_BAR,
+}
+
+export enum UISPRITES {
+    BUTTON_WIDE_ON,
+    BUTTON_WIDE_OFF,
 }
 
 export enum Animations {
@@ -110,6 +120,33 @@ export const defaultManifest: ResourceManifest = {
                     height: 16,
                     x: 48,
                     y: 112,
+                },
+            },
+        },
+        [SpriteSheets.UI]: {
+            url: "img/ui.png",
+            animations: {
+                [UIANIMATIONS.HEALTH_BAR]: {
+                    width: 96,
+                    height: 32,
+                    x: 0,
+                    y: 0,
+                    vertical: true,
+                    frames: 10,
+                },
+            },
+            sprites: {
+                [UISPRITES.BUTTON_WIDE_OFF]: {
+                    width: 64,
+                    height: 16,
+                    x: 96,
+                    y: 0,
+                },
+                [UISPRITES.BUTTON_WIDE_ON]: {
+                    width: 64,
+                    height: 16,
+                    x: 96,
+                    y: 16,
                 },
             },
         },

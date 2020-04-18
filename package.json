@@ -52,7 +52,6 @@
         "lint": "npx prettier --write site/src && tslint --project tsconfig.json --fix -c tslint.json 'site/src/**/*.ts' && git add ."
     },
     "pre-commit": [
-        "check-type",
         "lint",
         "test"
     ],

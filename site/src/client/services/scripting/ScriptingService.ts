@@ -1,6 +1,4 @@
-import {
-    PlayerState,
-} from "../../engine/components/player/PlayerControlComponent";
+import { PlayerState } from "../../engine/components/player/PlayerControlComponent";
 import { Entity } from "../../engine/Entity";
 import { getTextureCoordinate } from "../../util/math";
 import { ServiceLocator } from "../ServiceLocator";

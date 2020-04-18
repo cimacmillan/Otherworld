@@ -7,6 +7,7 @@ import { BallEventType } from "../engine/events/BallEvents";
 import { GameEventSource } from "../services/EventRouter";
 import { WeaponComponent } from "./components/WeaponComponent";
 import { State } from "./State";
+import { HealthBarComponent } from "./components/HealthBarComponent";
 
 export interface OwnProps {
     game: Game;
@@ -31,9 +32,14 @@ class UIContainer extends React.Component<UIContainerProps> {
         return (
             <div style={{ position: "absolute" }}>
                 {this.props.canAccessGame ? (
-                    <WeaponComponent
-                        serviceLocator={this.props.game.getServiceLocator()}
-                    />
+                    <>
+                        <HealthBarComponent
+                            serviceLocator={this.props.game.getServiceLocator()}
+                        />
+                        <WeaponComponent
+                            serviceLocator={this.props.game.getServiceLocator()}
+                        />
+                    </>
                 ) : undefined}
             </div>
         );

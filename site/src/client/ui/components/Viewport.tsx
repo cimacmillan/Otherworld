@@ -19,8 +19,9 @@ export class Viewport extends React.Component<ViewportProps> {
                     overflow: "hidden",
                     marginLeft: this.props.x,
                     marginTop: this.props.y,
-                    borderStyle: "solid",
-                    borderColor: "white",
+                    // borderStyle: "solid",
+                    // borderColor: "#3e2731",
+                    position: "absolute",
                 }}
             >
                 <div

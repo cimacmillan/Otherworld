@@ -1,15 +1,15 @@
 import { GameEvent } from "../../engine/events/Event";
 
-export interface WeaponState {
+export interface HealthBarState {
     showing: boolean;
 }
 
-const initialWeaponState = {
+const initialHealthState = {
     showing: true,
 };
 
-export function weaponReducer(
-    state: WeaponState = initialWeaponState,
+export function healthBarReducer(
+    state: HealthBarState = initialHealthState,
     action: GameEvent
 ) {
     return state;

@@ -7,7 +7,6 @@ import {
     CompositeAnimation,
     CompositeAnimationType,
 } from "../../util/animation/CompositeAnimation";
-import { WeaponActionSubject } from "../reducers/WeaponReducer";
 import { Subscription } from "rxjs";
 import { vec_distance } from "../../util/math";
 import { getImagePropsFromSprite } from "../../util/math/UI";
@@ -16,6 +15,8 @@ import {
     SpriteSheets,
     Sprites,
 } from "../../services/resources/manifests/DefaultManifest";
+import { GameEventSubject } from "../reducers/UIReducer";
+import { PlayerEventType } from "../../engine/events/PlayerEvents";
 
 export interface WeaponComponentProps {
     serviceLocator: ServiceLocator;
@@ -77,8 +78,10 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
     }
 
     public componentDidMount() {
-        this.subscription = WeaponActionSubject.subscribe((event) => {
-            this.composite.start({});
+        this.subscription = GameEventSubject.subscribe((event) => {
+            if (event.type === PlayerEventType.PLAYER_ATTACK) {
+                this.composite.start({});
+            }
         });
 
         this.headBob.start({

@@ -205,7 +205,7 @@ export class CrabletLogicComponent<
                         .getResourceManager()
                         .manifest.spritesheets[
                             SpriteSheets.SPRITE
-                        ].getAnimationInterp(crabType, xtex),
+                        ].getAnimationInterp(crabType, xtex).textureCoordinate,
                 },
                 position: { x, y },
                 height: DEFAULT_HEIGHT,
@@ -230,7 +230,7 @@ export class CrabletLogicComponent<
 
         this.animation = new GameAnimation((x: number) => {
             const toRender = entity.getState().toRender;
-            const texture = getAnimationTexture(crabType, x);
+            const texture = getAnimationTexture(crabType, x).textureCoordinate;
             toRender.textureX = texture.textureX;
             toRender.textureY = texture.textureY;
         })
@@ -239,7 +239,8 @@ export class CrabletLogicComponent<
 
         this.attackAnimation = new GameAnimation((x: number) => {
             const toRender = entity.getState().toRender;
-            const texture = getAnimationTexture(crabAttackAnimation, x);
+            const texture = getAnimationTexture(crabAttackAnimation, x)
+                .textureCoordinate;
             toRender.textureX = texture.textureX;
             toRender.textureY = texture.textureY;
             toRender.height =

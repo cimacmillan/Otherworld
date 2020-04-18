@@ -1,4 +1,4 @@
-import { BallEventType } from "../../engine/events/BallEvents";
+import { Subject } from "rxjs";
 import { GameEvent, RootEventType } from "../../engine/events/Event";
 
 export interface UIState {
@@ -11,12 +11,13 @@ const initialUIState = {
     bounceCount: 0,
 };
 
+export const GameEventSubject = new Subject<GameEvent>();
+
 export function uiReducer(state: UIState = initialUIState, action: GameEvent) {
+    GameEventSubject.next(action);
     switch (action.type) {
         case RootEventType.GAME_INITIALISED:
             return { ...state, canAccessGame: true };
-        case BallEventType.BOUNCE:
-            return { ...state, bounceCount: state.bounceCount + 1 };
     }
     return state;
 }

@@ -17,7 +17,7 @@ interface SpriteHash {
     [name: string]: Sprite;
 }
 interface AnimationHash {
-    [name: string]: TextureCoordinate[];
+    [name: string]: Sprite[];
 }
 
 export class SpriteSheet {
@@ -75,9 +75,23 @@ export class SpriteSheet {
         this.animationHash[name] = [];
 
         for (let i = 0; i < frameCount; i++) {
-            this.animationHash[name].push(
-                this.getTextureCoordinate(spriteWidth, spriteHeight, xPos, yPos)
-            );
+            this.animationHash[name].push({
+                textureCoordinate: this.getTextureCoordinate(
+                    spriteWidth,
+                    spriteHeight,
+                    xPos,
+                    yPos
+                ),
+                pixelCoordinate: {
+                    textureX: xPos,
+                    textureY: yPos,
+                    textureWidth: spriteWidth,
+                    textureHeight: spriteHeight,
+                },
+                spriteSheetWidth: this.width,
+                spriteSheetHeight: this.height,
+                source: this.image.src,
+            });
             if (vertical) {
                 yPos += spriteHeight;
             } else {
@@ -114,6 +128,10 @@ export class SpriteSheet {
         }
         const frame = Math.floor(interp * animation.length);
         return this.getAnimationFrame(name, frame);
+    }
+
+    public getAnimationFrameCount(name: number) {
+        return this.animationHash[name].length;
     }
 
     public getWidth() {
