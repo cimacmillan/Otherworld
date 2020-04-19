@@ -13,7 +13,7 @@ export class GamePanelComponent extends React.PureComponent<
     public render() {
         return (
             <div style={this.props.style}>
-                <TextComponent text={"Hello Worlds"} />
+                <TextComponent text={"Otherworld"} />
                 {/* Images for the panel */}
                 {/* Viewport & children*/}
             </div>

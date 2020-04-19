@@ -1,9 +1,13 @@
 import React = require("react");
 
+export enum TextFont {
+    REGULAR = "yoster_islandregular",
+}
+
 export enum TextSize {
-    SMALL,
-    MED,
-    BIG,
+    SMALL = 20,
+    MED = 36,
+    BIG = 50,
 }
 
 export enum TextColour {
@@ -17,16 +21,16 @@ export interface TextComponentProps {
 
 export function TextComponent(props: TextComponentProps) {
     return (
-        <cavas
+        <div
             style={{
-                fontSize: 10,
+                fontFamily: TextFont.REGULAR,
+                fontSize: TextSize.BIG,
                 color: TextColour.LIGHT,
                 left: 100,
                 top: 100,
-                transform: "scale(4, 4) translate(100px, 100px)",
             }}
         >
             {props.text}
-        </cavas>
+        </div>
     );
 }
