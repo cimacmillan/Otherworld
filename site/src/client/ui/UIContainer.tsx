@@ -8,6 +8,7 @@ import { GameEventSource } from "../services/EventRouter";
 import { WeaponComponent } from "./components/WeaponComponent";
 import { State } from "./State";
 import { HealthBarComponent } from "./components/HealthBarComponent";
+import { GamePanelComponent } from "./components/GamePanelComponent";
 
 export interface OwnProps {
     game: Game;
@@ -38,6 +39,14 @@ class UIContainer extends React.Component<UIContainerProps> {
                         />
                         <WeaponComponent
                             serviceLocator={this.props.game.getServiceLocator()}
+                        />
+                        <GamePanelComponent
+                            cellWidth={3}
+                            cellHeight={2}
+                            style={{
+                                width: 400,
+                                height: 200,
+                            }}
                         />
                     </>
                 ) : undefined}

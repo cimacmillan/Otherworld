@@ -1,4 +1,5 @@
 import React = require("react");
+import { TextComponent } from "./Text";
 
 export interface GamePanelComponentProps {
     cellWidth: number;
@@ -7,11 +8,12 @@ export interface GamePanelComponentProps {
 }
 
 export class GamePanelComponent extends React.PureComponent<
-    GamePanelComponent
+    GamePanelComponentProps
 > {
     public render() {
         return (
-            <div>
+            <div style={this.props.style}>
+                <TextComponent text={"Hello Worlds"} />
                 {/* Images for the panel */}
                 {/* Viewport & children*/}
             </div>

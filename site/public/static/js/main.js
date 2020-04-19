@@ -2587,7 +2587,7 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\nconst react_redux_1 = __webpack_require__(/*! react-redux */ \"./node_modules/react-redux/es/index.js\");\nconst WeaponComponent_1 = __webpack_require__(/*! ./components/WeaponComponent */ \"./site/build/client/ui/components/WeaponComponent.js\");\nconst HealthBarComponent_1 = __webpack_require__(/*! ./components/HealthBarComponent */ \"./site/build/client/ui/components/HealthBarComponent.js\");\nfunction mapStateToProps(state) {\n    return {\n        count: state.uiState.bounceCount,\n        canAccessGame: state.uiState.canAccessGame,\n    };\n}\nclass UIContainer extends React.Component {\n    render() {\n        return (React.createElement(\"div\", { style: { position: \"absolute\" } }, this.props.canAccessGame ? (React.createElement(React.Fragment, null,\n            React.createElement(HealthBarComponent_1.HealthBarComponent, { serviceLocator: this.props.game.getServiceLocator() }),\n            React.createElement(WeaponComponent_1.WeaponComponent, { serviceLocator: this.props.game.getServiceLocator() }))) : undefined));\n    }\n}\nexports.default = react_redux_1.connect(mapStateToProps)(UIContainer);\n//# sourceMappingURL=UIContainer.js.map\n\n//# sourceURL=webpack:///./site/build/client/ui/UIContainer.js?");
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\nconst react_redux_1 = __webpack_require__(/*! react-redux */ \"./node_modules/react-redux/es/index.js\");\nconst WeaponComponent_1 = __webpack_require__(/*! ./components/WeaponComponent */ \"./site/build/client/ui/components/WeaponComponent.js\");\nconst HealthBarComponent_1 = __webpack_require__(/*! ./components/HealthBarComponent */ \"./site/build/client/ui/components/HealthBarComponent.js\");\nconst GamePanelComponent_1 = __webpack_require__(/*! ./components/GamePanelComponent */ \"./site/build/client/ui/components/GamePanelComponent.js\");\nfunction mapStateToProps(state) {\n    return {\n        count: state.uiState.bounceCount,\n        canAccessGame: state.uiState.canAccessGame,\n    };\n}\nclass UIContainer extends React.Component {\n    render() {\n        return (React.createElement(\"div\", { style: { position: \"absolute\" } }, this.props.canAccessGame ? (React.createElement(React.Fragment, null,\n            React.createElement(HealthBarComponent_1.HealthBarComponent, { serviceLocator: this.props.game.getServiceLocator() }),\n            React.createElement(WeaponComponent_1.WeaponComponent, { serviceLocator: this.props.game.getServiceLocator() }),\n            React.createElement(GamePanelComponent_1.GamePanelComponent, { cellWidth: 3, cellHeight: 2, style: {\n                    width: 400,\n                    height: 200,\n                } }))) : undefined));\n    }\n}\nexports.default = react_redux_1.connect(mapStateToProps)(UIContainer);\n//# sourceMappingURL=UIContainer.js.map\n\n//# sourceURL=webpack:///./site/build/client/ui/UIContainer.js?");
 
 /***/ }),
 
@@ -2599,7 +2599,19 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\nconst UI_1 = __webpack_require__(/*! ../../util/math/UI */ \"./site/build/client/util/math/UI.js\");\nfunction AnimationImageComponent(props) {\n    const sheet = props.serviceLocator.getResourceManager().manifest.spritesheets[props.spriteSheet];\n    return (React.createElement(\"div\", { style: Object.assign(Object.assign({}, UI_1.getImagePropsFromSprite(sheet.getAnimationInterp(props.animation, props.interp), props.style.width, props.style.height)), props.style) }));\n}\nexports.AnimationImageComponent = AnimationImageComponent;\n//# sourceMappingURL=AnimationImageComponent.js.map\n\n//# sourceURL=webpack:///./site/build/client/ui/components/AnimationImageComponent.js?");
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\nconst UI_1 = __webpack_require__(/*! ../../util/math/UI */ \"./site/build/client/util/math/UI.js\");\nfunction AnimationImageComponent(props) {\n    const sheet = props.serviceLocator.getResourceManager().manifest\n        .spritesheets[props.spriteSheet];\n    return (React.createElement(\"div\", { style: Object.assign(Object.assign({}, UI_1.getImagePropsFromSprite(sheet.getAnimationInterp(props.animation, props.interp), props.style.width, props.style.height)), props.style) }));\n}\nexports.AnimationImageComponent = AnimationImageComponent;\n//# sourceMappingURL=AnimationImageComponent.js.map\n\n//# sourceURL=webpack:///./site/build/client/ui/components/AnimationImageComponent.js?");
+
+/***/ }),
+
+/***/ "./site/build/client/ui/components/GamePanelComponent.js":
+/*!***************************************************************!*\
+  !*** ./site/build/client/ui/components/GamePanelComponent.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\nconst Text_1 = __webpack_require__(/*! ./Text */ \"./site/build/client/ui/components/Text.js\");\nclass GamePanelComponent extends React.PureComponent {\n    render() {\n        return (React.createElement(\"div\", { style: this.props.style },\n            React.createElement(Text_1.TextComponent, { text: \"Hello Worlds\" })));\n    }\n}\nexports.GamePanelComponent = GamePanelComponent;\n//# sourceMappingURL=GamePanelComponent.js.map\n\n//# sourceURL=webpack:///./site/build/client/ui/components/GamePanelComponent.js?");
 
 /***/ }),
 
@@ -2623,7 +2635,19 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\nconst UI_1 = __webpack_require__(/*! ../../util/math/UI */ \"./site/build/client/util/math/UI.js\");\nfunction SpriteImageComponent(props) {\n    const sheet = props.serviceLocator.getResourceManager().manifest.spritesheets[props.spriteSheet];\n    return (React.createElement(\"div\", { style: Object.assign(Object.assign({}, UI_1.getImagePropsFromSprite(sheet.getSprite(props.sprite), props.style.width, props.style.height)), props.style) }));\n}\nexports.SpriteImageComponent = SpriteImageComponent;\n//# sourceMappingURL=SpriteImageComponent.js.map\n\n//# sourceURL=webpack:///./site/build/client/ui/components/SpriteImageComponent.js?");
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\nconst UI_1 = __webpack_require__(/*! ../../util/math/UI */ \"./site/build/client/util/math/UI.js\");\nfunction SpriteImageComponent(props) {\n    const sheet = props.serviceLocator.getResourceManager().manifest\n        .spritesheets[props.spriteSheet];\n    return (React.createElement(\"div\", { style: Object.assign(Object.assign({}, UI_1.getImagePropsFromSprite(sheet.getSprite(props.sprite), props.style.width, props.style.height)), props.style) }));\n}\nexports.SpriteImageComponent = SpriteImageComponent;\n//# sourceMappingURL=SpriteImageComponent.js.map\n\n//# sourceURL=webpack:///./site/build/client/ui/components/SpriteImageComponent.js?");
+
+/***/ }),
+
+/***/ "./site/build/client/ui/components/Text.js":
+/*!*************************************************!*\
+  !*** ./site/build/client/ui/components/Text.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\nvar TextSize;\n(function (TextSize) {\n    TextSize[TextSize[\"SMALL\"] = 0] = \"SMALL\";\n    TextSize[TextSize[\"MED\"] = 1] = \"MED\";\n    TextSize[TextSize[\"BIG\"] = 2] = \"BIG\";\n})(TextSize = exports.TextSize || (exports.TextSize = {}));\nvar TextColour;\n(function (TextColour) {\n    TextColour[\"LIGHT\"] = \"#c0cbdc\";\n    TextColour[\"DARK\"] = \"#3e2731\";\n})(TextColour = exports.TextColour || (exports.TextColour = {}));\nfunction TextComponent(props) {\n    return (React.createElement(\"div\", { style: {\n            fontSize: 20,\n            color: TextColour.LIGHT,\n            transform: \"scale(2)\",\n        } }, props.text));\n}\nexports.TextComponent = TextComponent;\n//# sourceMappingURL=Text.js.map\n\n//# sourceURL=webpack:///./site/build/client/ui/components/Text.js?");
 
 /***/ }),
 
