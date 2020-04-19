@@ -12,6 +12,7 @@ import {
 } from "../../services/resources/manifests/DefaultManifest";
 import { GameAnimation } from "../../util/animation/Animation";
 import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
+import { AnimationImageComponent } from "./AnimationImageComponent";
 
 const HEALTH_BAR_WIDTH = 0.5;
 const HEALTH_BAR_HEIGHT = HEALTH_BAR_WIDTH / 3;
@@ -62,8 +63,7 @@ export class HealthBarComponent extends React.Component<
             .getScriptingService()
             .getPlayer()
             .getState().health;
-        const uisheet = this.props.serviceLocator.getResourceManager().manifest
-            .spritesheets[SpriteSheets.UI];
+
         const width = DOM_HEIGHT * HEALTH_BAR_WIDTH;
         const height = DOM_HEIGHT * HEALTH_BAR_HEIGHT;
         const marginLeft = 10;
@@ -72,21 +72,17 @@ export class HealthBarComponent extends React.Component<
         const translate = Math.floor(this.healthBarYOffset * 10);
         return (
             <div style={{ position: "absolute" }}>
-                <div
+                <AnimationImageComponent
+                    serviceLocator={this.props.serviceLocator}
+                    spriteSheet={SpriteSheets.UI}
+                    animation={UIANIMATIONS.HEALTH_BAR}
+                    interp={1 - health}
                     style={{
                         marginLeft,
                         marginTop,
                         width,
                         height,
                         transform: `translate(0, ${translate}px)`,
-                        ...getImagePropsFromSprite(
-                            uisheet.getAnimationInterp(
-                                UIANIMATIONS.HEALTH_BAR,
-                                1 - health
-                            ),
-                            width,
-                            height
-                        ),
                     }}
                 />
             </div>

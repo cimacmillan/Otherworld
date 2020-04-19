@@ -17,6 +17,7 @@ import {
 } from "../../services/resources/manifests/DefaultManifest";
 import { GameEventSubject } from "../reducers/UIReducer";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
+import { SpriteImageComponent } from "./SpriteImageComponent";
 
 export interface WeaponComponentProps {
     serviceLocator: ServiceLocator;
@@ -110,21 +111,15 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
 
         return (
             <Viewport x={0} y={0} width={DOM_WIDTH} height={DOM_HEIGHT}>
-                <div
+                <SpriteImageComponent
+                    serviceLocator={this.props.serviceLocator}
+                    spriteSheet={SpriteSheets.SPRITE}
+                    sprite={Sprites.SWORD}
                     style={{
                         marginLeft,
                         marginTop,
                         width,
                         height,
-                        ...getImagePropsFromSprite(
-                            this.props.serviceLocator
-                                .getResourceManager()
-                                .manifest.spritesheets[
-                                    SpriteSheets.SPRITE
-                                ].getSprite(Sprites.SWORD),
-                            DOM_HEIGHT * WEAPON_WIDTH,
-                            DOM_HEIGHT * WEAPON_HEIGHT
-                        ),
                         transform: `rotate(-${
                             Math.floor(this.rotate) + DEFAULT_ROTATION
                         }deg) translate(-50%, -50%)`,
