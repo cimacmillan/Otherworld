@@ -17,14 +17,16 @@ export interface TextComponentProps {
 
 export function TextComponent(props: TextComponentProps) {
     return (
-        <div
+        <cavas
             style={{
-                fontSize: 20,
+                fontSize: 10,
                 color: TextColour.LIGHT,
-                transform: "scale(2)",
+                left: 100,
+                top: 100,
+                transform: "scale(4, 4) translate(100px, 100px)",
             }}
         >
             {props.text}
-        </div>
+        </cavas>
     );
 }
