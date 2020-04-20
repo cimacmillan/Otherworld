@@ -55,7 +55,7 @@ class UIContainer extends React.Component<UIContainerProps> {
                                 text={"Otherworld"}
                                 style={{
                                     position: "absolute",
-                                    width: 500,
+                                    width: "100%",
                                     textAlign: "center",
                                     marginTop: 10,
                                 }}

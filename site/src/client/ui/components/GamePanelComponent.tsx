@@ -68,6 +68,8 @@ export class GamePanelComponent extends React.PureComponent<
                 style={{
                     marginLeft: this.props.x,
                     marginTop: this.props.y,
+                    width: resultingWidth,
+                    height: resultingHeight,
                     ...this.props.style,
                 }}
             >
