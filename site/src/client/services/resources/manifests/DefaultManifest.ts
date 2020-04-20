@@ -10,8 +10,19 @@ export enum UIANIMATIONS {
 }
 
 export enum UISPRITES {
-    BUTTON_WIDE_ON,
-    BUTTON_WIDE_OFF,
+    PANEL_CENTER,
+    PANEL_TL,
+    PANEL_TM,
+    PANEL_TR,
+    PANEL_ML,
+    PANEL_MR,
+    PANEL_BL,
+    PANEL_BM,
+    PANEL_BR,
+    PANEL_SL,
+    PANEL_SM,
+    PANEL_SR,
+    PANEL_SS,
 }
 
 export enum Animations {
@@ -136,17 +147,83 @@ export const defaultManifest: ResourceManifest = {
                 },
             },
             sprites: {
-                [UISPRITES.BUTTON_WIDE_OFF]: {
-                    width: 64,
+                [UISPRITES.PANEL_TL]: {
+                    width: 16,
                     height: 16,
-                    x: 96,
+                    x: 240,
                     y: 0,
                 },
-                [UISPRITES.BUTTON_WIDE_ON]: {
-                    width: 64,
+                [UISPRITES.PANEL_TM]: {
+                    width: 16,
+                    height: 16,
+                    x: 256,
+                    y: 0,
+                },
+                [UISPRITES.PANEL_TR]: {
+                    width: 16,
+                    height: 16,
+                    x: 272,
+                    y: 0,
+                },
+                [UISPRITES.PANEL_ML]: {
+                    width: 16,
+                    height: 16,
+                    x: 240,
+                    y: 16,
+                },
+                [UISPRITES.PANEL_CENTER]: {
+                    width: 16,
+                    height: 16,
+                    x: 256,
+                    y: 16,
+                },
+                [UISPRITES.PANEL_MR]: {
+                    width: 16,
+                    height: 16,
+                    x: 272,
+                    y: 16,
+                },
+                [UISPRITES.PANEL_BL]: {
+                    width: 16,
+                    height: 16,
+                    x: 240,
+                    y: 32,
+                },
+                [UISPRITES.PANEL_BM]: {
+                    width: 16,
+                    height: 16,
+                    x: 256,
+                    y: 32,
+                },
+                [UISPRITES.PANEL_BR]: {
+                    width: 16,
+                    height: 16,
+                    x: 272,
+                    y: 32,
+                },
+                [UISPRITES.PANEL_SL]: {
+                    width: 16,
                     height: 16,
                     x: 96,
-                    y: 16,
+                    y: 32,
+                },
+                [UISPRITES.PANEL_SM]: {
+                    width: 16,
+                    height: 16,
+                    x: 112,
+                    y: 32,
+                },
+                [UISPRITES.PANEL_SR]: {
+                    width: 16,
+                    height: 16,
+                    x: 128,
+                    y: 32,
+                },
+                [UISPRITES.PANEL_SS]: {
+                    width: 16,
+                    height: 16,
+                    x: 128,
+                    y: 64,
                 },
             },
         },

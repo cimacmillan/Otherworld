@@ -17,6 +17,7 @@ export enum TextColour {
 
 export interface TextComponentProps {
     text: string;
+    style: React.CSSProperties;
 }
 
 export function TextComponent(props: TextComponentProps) {
@@ -26,8 +27,7 @@ export function TextComponent(props: TextComponentProps) {
                 fontFamily: TextFont.REGULAR,
                 fontSize: TextSize.BIG,
                 color: TextColour.LIGHT,
-                left: 100,
-                top: 100,
+                ...props.style,
             }}
         >
             {props.text}

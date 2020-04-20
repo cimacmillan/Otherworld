@@ -33,6 +33,8 @@ Main TODO Taskboard
 - [ ] In browser map editor?  
 - [ ] Render FPS and buget in UI in god mode  
 - [ ] Particles  
+- [ ] Chickens n foods n eggs  
+- [ ] Oriented sprites  
 
 ### In Progress
 

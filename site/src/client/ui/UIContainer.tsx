@@ -9,6 +9,7 @@ import { WeaponComponent } from "./components/WeaponComponent";
 import { State } from "./State";
 import { HealthBarComponent } from "./components/HealthBarComponent";
 import { GamePanelComponent } from "./components/GamePanelComponent";
+import { TextComponent } from "./components/Text";
 
 export interface OwnProps {
     game: Game;
@@ -41,13 +42,25 @@ class UIContainer extends React.Component<UIContainerProps> {
                             serviceLocator={this.props.game.getServiceLocator()}
                         />
                         <GamePanelComponent
-                            cellWidth={3}
-                            cellHeight={2}
+                            serviceLocator={this.props.game.getServiceLocator()}
+                            width={500}
+                            height={300}
+                            x={400}
+                            y={200}
                             style={{
-                                width: 400,
-                                height: 200,
+                                position: "absolute",
                             }}
-                        />
+                        >
+                            <TextComponent
+                                text={"Otherworld"}
+                                style={{
+                                    position: "absolute",
+                                    width: 500,
+                                    textAlign: "center",
+                                    marginTop: 10,
+                                }}
+                            />
+                        </GamePanelComponent>
                     </>
                 ) : undefined}
             </div>
