@@ -10,6 +10,8 @@ import { State } from "./State";
 import { HealthBarComponent } from "./components/HealthBarComponent";
 import { GamePanelComponent } from "./components/GamePanelComponent";
 import { TextComponent } from "./components/TextComponent";
+import { DARK_PANEL } from "../services/resources/manifests/DefaultManifest";
+import { GameButtonContainer } from "./containers/GameButtonContainer";
 
 export interface OwnProps {
     game: Game;
@@ -55,6 +57,7 @@ class UIContainer extends React.Component<UIContainerProps> {
                                 flexDirection: "column",
                                 alignItems: "center",
                             }}
+                            panelMap={DARK_PANEL}
                         >
                             <TextComponent
                                 text={"Otherworld"}
@@ -66,12 +69,16 @@ class UIContainer extends React.Component<UIContainerProps> {
                                 }}
                             />
 
-                            <GamePanelComponent
+                            <GameButtonContainer
                                 serviceLocator={this.props.game.getServiceLocator()}
                                 width={300}
                                 height={100}
                                 style={{}}
                                 childStyle={{}}
+                                panelMapDefault={DARK_PANEL}
+                                panelMapHover={DARK_PANEL}
+                                panelMapPress={DARK_PANEL}
+                                onSelect={() => console.log("Button select")}
                             />
                         </GamePanelComponent>
                     </>

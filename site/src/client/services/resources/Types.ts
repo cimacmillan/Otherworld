@@ -50,3 +50,27 @@ export interface AnimationManifest {
 export interface AudioManifest {
     [key: string]: string;
 }
+
+export interface PanelImageMap {
+    spritesheet: number;
+
+    topLeft: number;
+    topMiddle: number;
+    topRight: number;
+    middleLeft: number;
+    middleMiddle: number;
+    middleRight: number;
+    bottomLeft: number;
+    bottomMiddle: number;
+    bottomRight: number;
+
+    wideLeft: number;
+    wideMiddle: number;
+    wideRight: number;
+
+    thinLeft: number;
+    thinMiddle: number;
+    thinight: number;
+
+    tiny: number;
+}

@@ -8,6 +8,8 @@ import {
 } from "../../services/resources/manifests/DefaultManifest";
 import { Sprite } from "../../services/resources/SpriteSheet";
 import { ViewportComponent } from "./ViewportComponent";
+import { PanelImageMap } from "../../services/resources/Types";
+import { memoize } from "lodash";
 
 const GAME_PANEL_RESOLUTION = 4;
 const GAME_PANEL_SIZE = 16;
@@ -19,6 +21,7 @@ export interface GamePanelComponentProps {
     height: number;
     style: React.CSSProperties;
     childStyle: React.CSSProperties;
+    panelMap: PanelImageMap;
 }
 
 export class GamePanelComponent extends React.PureComponent<
@@ -26,6 +29,19 @@ export class GamePanelComponent extends React.PureComponent<
 > {
     constructor(props: GamePanelComponentProps) {
         super(props);
+        this.createPanelSprites = memoize(
+            this.createPanelSprites,
+            (
+                panelMap: PanelImageMap,
+                panelsWidth: number,
+                panelsHeight: number,
+                panelDomWidth: number,
+                panelDomHeight: number
+            ) => {
+                const images = Object.values(panelMap).join("-");
+                return `${images}-${panelsWidth}-${panelsHeight}-${panelDomWidth}-${panelDomHeight}`;
+            }
+        );
     }
 
     public render() {
@@ -41,21 +57,13 @@ export class GamePanelComponent extends React.PureComponent<
         const resultingWidth = panelsWidth * panelDomWidth;
         const resultingHeight = panelsHeight * panelDomHeight;
 
-        const panelSprites: JSX.Element[] = [];
-        for (let x = 0; x < panelsWidth; x++) {
-            for (let y = 0; y < panelsHeight; y++) {
-                panelSprites.push(
-                    this.createPanelSprite(
-                        x,
-                        y,
-                        panelDomWidth,
-                        panelDomHeight,
-                        panelsWidth,
-                        panelsHeight
-                    )
-                );
-            }
-        }
+        const panelSprites = this.createPanelSprites(
+            this.props.panelMap,
+            panelsWidth,
+            panelsHeight,
+            panelDomWidth,
+            panelDomHeight
+        );
 
         const viewportX = BOUNDARY;
         const viewportY = BOUNDARY;
@@ -84,7 +92,34 @@ export class GamePanelComponent extends React.PureComponent<
         );
     }
 
+    private createPanelSprites(
+        panelMap: PanelImageMap,
+        panelsWidth: number,
+        panelsHeight: number,
+        panelDomWidth: number,
+        panelDomHeight: number
+    ) {
+        const panelSprites: JSX.Element[] = [];
+        for (let x = 0; x < panelsWidth; x++) {
+            for (let y = 0; y < panelsHeight; y++) {
+                panelSprites.push(
+                    this.createPanelSprite(
+                        panelMap,
+                        x,
+                        y,
+                        panelDomWidth,
+                        panelDomHeight,
+                        panelsWidth,
+                        panelsHeight
+                    )
+                );
+            }
+        }
+        return panelSprites;
+    }
+
     private createPanelSprite(
+        panelMap: PanelImageMap,
         x: number,
         y: number,
         domWidth: number,
@@ -94,9 +129,16 @@ export class GamePanelComponent extends React.PureComponent<
     ) {
         const xTranslate = x * domWidth;
         const yTranslate = y * domHeight;
-        const sprite = this.getPanelSprite(x, y, panelsWidth, panelsHeight);
+        const sprite = this.getPanelSprite(
+            panelMap,
+            x,
+            y,
+            panelsWidth,
+            panelsHeight
+        );
         return (
             <SpriteImageComponent
+                key={`${x}-${y}`}
                 serviceLocator={this.props.serviceLocator}
                 spriteSheet={SpriteSheets.UI}
                 sprite={sprite}
@@ -111,13 +153,14 @@ export class GamePanelComponent extends React.PureComponent<
     }
 
     private getPanelSprite(
+        panelMap: PanelImageMap,
         x: number,
         y: number,
         width: number,
         height: number
     ) {
         if (width === 1 && height === 1) {
-            return UISPRITES.PANEL_SS;
+            return panelMap.tiny;
         }
 
         if (width === 1) {
@@ -126,48 +169,48 @@ export class GamePanelComponent extends React.PureComponent<
 
         if (height === 1) {
             if (x === 0) {
-                return UISPRITES.PANEL_SL;
+                return panelMap.wideLeft;
             }
 
             if (x === width - 1) {
-                return UISPRITES.PANEL_SR;
+                return panelMap.wideRight;
             }
 
-            return UISPRITES.PANEL_SM;
+            return panelMap.wideMiddle;
         }
 
-        let sprite = UISPRITES.PANEL_CENTER;
+        let sprite = panelMap.middleMiddle;
 
         if (x === 0) {
-            sprite = UISPRITES.PANEL_ML;
+            sprite = panelMap.middleLeft;
         }
 
         if (x === width - 1) {
-            sprite = UISPRITES.PANEL_MR;
+            sprite = panelMap.middleRight;
         }
 
         if (y === 0) {
-            sprite = UISPRITES.PANEL_TM;
+            sprite = panelMap.topMiddle;
         }
 
         if (y === height - 1) {
-            sprite = UISPRITES.PANEL_BM;
+            sprite = panelMap.bottomMiddle;
         }
 
         if (x === 0 && y === 0) {
-            sprite = UISPRITES.PANEL_TL;
+            sprite = panelMap.topLeft;
         }
 
         if (x === width - 1 && y === 0) {
-            sprite = UISPRITES.PANEL_TR;
+            sprite = panelMap.topRight;
         }
 
         if (x === 0 && y === height - 1) {
-            sprite = UISPRITES.PANEL_BL;
+            sprite = panelMap.bottomLeft;
         }
 
         if (x === width - 1 && y === height - 1) {
-            sprite = UISPRITES.PANEL_BR;
+            sprite = panelMap.bottomRight;
         }
 
         return sprite;
