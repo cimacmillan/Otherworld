@@ -1,5 +1,5 @@
 import React = require("react");
-import { TextComponent } from "./Text";
+import { TextComponent } from "./TextComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import {
@@ -7,7 +7,7 @@ import {
     UISPRITES,
 } from "../../services/resources/manifests/DefaultManifest";
 import { Sprite } from "../../services/resources/SpriteSheet";
-import { Viewport } from "./Viewport";
+import { ViewportComponent } from "./ViewportComponent";
 
 const GAME_PANEL_RESOLUTION = 4;
 const GAME_PANEL_SIZE = 16;
@@ -71,7 +71,7 @@ export class GamePanelComponent extends React.PureComponent<
                 }}
             >
                 {panelSprites}
-                <Viewport
+                <ViewportComponent
                     x={viewportX}
                     y={viewportY}
                     width={viewportWidth}
@@ -79,7 +79,7 @@ export class GamePanelComponent extends React.PureComponent<
                     style={this.props.childStyle}
                 >
                     {this.props.children}
-                </Viewport>
+                </ViewportComponent>
             </div>
         );
     }

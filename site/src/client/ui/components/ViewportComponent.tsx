@@ -8,7 +8,7 @@ export interface ViewportProps {
     style: React.CSSProperties;
 }
 
-export class Viewport extends React.Component<ViewportProps> {
+export class ViewportComponent extends React.Component<ViewportProps> {
     public render() {
         return (
             <div

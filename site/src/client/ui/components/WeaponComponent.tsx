@@ -10,7 +10,7 @@ import {
 import { Subscription } from "rxjs";
 import { vec_distance } from "../../util/math";
 import { getImagePropsFromSprite } from "../../util/math/UI";
-import { Viewport } from "./Viewport";
+import { ViewportComponent } from "./ViewportComponent";
 import {
     SpriteSheets,
     Sprites,
@@ -110,7 +110,13 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
         const marginTop = DOM_HEIGHT * this.posY;
 
         return (
-            <Viewport x={0} y={0} width={DOM_WIDTH} height={DOM_HEIGHT}>
+            <ViewportComponent
+                x={0}
+                y={0}
+                width={DOM_WIDTH}
+                height={DOM_HEIGHT}
+                style={{}}
+            >
                 <SpriteImageComponent
                     serviceLocator={this.props.serviceLocator}
                     spriteSheet={SpriteSheets.SPRITE}
@@ -125,7 +131,7 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
                         }deg) translate(-50%, -50%)`,
                     }}
                 />
-            </Viewport>
+            </ViewportComponent>
         );
     }
 }

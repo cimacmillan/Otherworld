@@ -9,7 +9,7 @@ import { WeaponComponent } from "./components/WeaponComponent";
 import { State } from "./State";
 import { HealthBarComponent } from "./components/HealthBarComponent";
 import { GamePanelComponent } from "./components/GamePanelComponent";
-import { TextComponent } from "./components/Text";
+import { TextComponent } from "./components/TextComponent";
 
 export interface OwnProps {
     game: Game;
