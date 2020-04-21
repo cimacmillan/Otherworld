@@ -7,7 +7,7 @@ import {
     ZNEAR,
 } from "../../../Config";
 import { InteractionType } from "../../../services/interaction/InteractionType";
-import { Audios } from "../../../services/resources/manifests/DefaultManifest";
+import { Audios } from "../../../services/resources/manifests/Types";
 import { Vector2D } from "../../../types";
 import { vec_add, vec_rotate } from "../../../util/math";
 import { ActionDelay } from "../../../util/time/ActionDelay";

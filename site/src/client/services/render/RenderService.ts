@@ -1,6 +1,6 @@
 import { mat4 } from "gl-matrix";
 import { Camera } from "../../types";
-import { SpriteSheets } from "../resources/manifests/DefaultManifest";
+import { SpriteSheets } from "../resources/manifests/Types";
 import { ResourceManager } from "../resources/ResourceManager";
 import { FloorRenderService } from "./services/FloorRenderService";
 import { SpriteRenderService } from "./services/SpriteRenderService";

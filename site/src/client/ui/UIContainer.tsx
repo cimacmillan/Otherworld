@@ -9,9 +9,20 @@ import { WeaponComponent } from "./components/WeaponComponent";
 import { State } from "./State";
 import { HealthBarComponent } from "./components/HealthBarComponent";
 import { GamePanelComponent } from "./components/GamePanelComponent";
-import { TextComponent } from "./components/TextComponent";
-import { DARK_PANEL } from "../services/resources/manifests/DefaultManifest";
+import {
+    TextComponent,
+    TextFont,
+    TextSize,
+    TextColour,
+} from "./components/TextComponent";
 import { GameButtonContainer } from "./containers/GameButtonContainer";
+import { DARK_PANEL } from "../services/resources/manifests/DarkPanel";
+import { BUTTON_DEFAULT } from "../services/resources/manifests/ButtonDefault";
+import { BUTTON_HOVER } from "../services/resources/manifests/ButtonHover";
+import {
+    BUTTON_PRESS,
+    BUTTON_PRESS_SPRITES,
+} from "../services/resources/manifests/ButtonPress";
 
 export interface OwnProps {
     game: Game;
@@ -67,19 +78,85 @@ class UIContainer extends React.Component<UIContainerProps> {
                                     textAlign: "center",
                                     marginTop: 10,
                                 }}
+                                font={TextFont.REGULAR}
+                                size={TextSize.BIG}
+                                colour={TextColour.LIGHT}
                             />
 
                             <GameButtonContainer
                                 serviceLocator={this.props.game.getServiceLocator()}
-                                width={300}
-                                height={100}
+                                width={256}
+                                height={46}
                                 style={{}}
-                                childStyle={{}}
-                                panelMapDefault={DARK_PANEL}
-                                panelMapHover={DARK_PANEL}
-                                panelMapPress={DARK_PANEL}
+                                childStyle={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                                panelMapDefault={BUTTON_DEFAULT}
+                                panelMapHover={BUTTON_HOVER}
+                                panelMapPress={BUTTON_PRESS}
                                 onSelect={() => console.log("Button select")}
-                            />
+                            >
+                                <TextComponent
+                                    text={"New Game"}
+                                    style={{}}
+                                    font={TextFont.REGULAR}
+                                    size={TextSize.SMALL}
+                                    colour={TextColour.LIGHT}
+                                />
+                            </GameButtonContainer>
+
+                            <GameButtonContainer
+                                serviceLocator={this.props.game.getServiceLocator()}
+                                width={256}
+                                height={46}
+                                style={{}}
+                                childStyle={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                                panelMapDefault={BUTTON_DEFAULT}
+                                panelMapHover={BUTTON_HOVER}
+                                panelMapPress={BUTTON_PRESS}
+                                onSelect={() => console.log("Button select")}
+                            >
+                                <TextComponent
+                                    text={"Load Game"}
+                                    style={{}}
+                                    font={TextFont.REGULAR}
+                                    size={TextSize.SMALL}
+                                    colour={TextColour.LIGHT}
+                                />
+                            </GameButtonContainer>
+
+                            <GameButtonContainer
+                                serviceLocator={this.props.game.getServiceLocator()}
+                                width={256}
+                                height={46}
+                                style={{}}
+                                childStyle={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                                panelMapDefault={BUTTON_DEFAULT}
+                                panelMapHover={BUTTON_HOVER}
+                                panelMapPress={BUTTON_PRESS}
+                                onSelect={() => console.log("Button select")}
+                            >
+                                <TextComponent
+                                    text={"Exit"}
+                                    style={{}}
+                                    font={TextFont.REGULAR}
+                                    size={TextSize.SMALL}
+                                    colour={TextColour.LIGHT}
+                                />
+                            </GameButtonContainer>
                         </GamePanelComponent>
                     </>
                 ) : undefined}

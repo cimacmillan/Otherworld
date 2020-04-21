@@ -1,57 +1,15 @@
-import { PanelImageMap, ResourceManifest } from "../Types";
-
-export enum SpriteSheets {
-    SPRITE,
-    UI,
-}
-
-export enum UIANIMATIONS {
-    HEALTH_BAR,
-}
-
-export enum UISPRITES {
-    PANEL_CENTER,
-    PANEL_TL,
-    PANEL_TM,
-    PANEL_TR,
-    PANEL_ML,
-    PANEL_MR,
-    PANEL_BL,
-    PANEL_BM,
-    PANEL_BR,
-    PANEL_SL,
-    PANEL_SM,
-    PANEL_SR,
-    PANEL_SS,
-}
-
-export enum Animations {
-    CRABLET_BROWN,
-    CRABLET_GREEN,
-    CRABLET_BLUE,
-    CRABLET_BROWN_ATTACK,
-    CRABLET_GREEN_ATTACK,
-    CRABLET_BLUE_ATTACK,
-}
-
-export enum Sprites {
-    SWORD,
-    MACATOR_DAMAGED,
-    MACATOR_DEAD_BROWN,
-    MACATOR_DEAD_GREEN,
-    MACATOR_DEAD_BLUE,
-}
-
-export enum Audios {
-    INTRO,
-    BOING,
-    POINT,
-    SLAM,
-    WHOOSH,
-    PLAYER_HIT,
-    END,
-    HISS,
-}
+import { ResourceManifest } from "../Types";
+import { BUTTON_DEFAULT_SPRITES } from "./ButtonDefault";
+import { BUTTON_HOVER_SPRITES } from "./ButtonHover";
+import { BUTTON_PRESS_SPRITES } from "./ButtonPress";
+import { DARK_PANEL_SPRITES } from "./DarkPanel";
+import {
+    Animations,
+    Audios,
+    Sprites,
+    SpriteSheets,
+    UIANIMATIONS,
+} from "./Types";
 
 export const defaultManifest: ResourceManifest = {
     spritesheets: {
@@ -147,84 +105,10 @@ export const defaultManifest: ResourceManifest = {
                 },
             },
             sprites: {
-                [UISPRITES.PANEL_TL]: {
-                    width: 16,
-                    height: 16,
-                    x: 240,
-                    y: 0,
-                },
-                [UISPRITES.PANEL_TM]: {
-                    width: 16,
-                    height: 16,
-                    x: 256,
-                    y: 0,
-                },
-                [UISPRITES.PANEL_TR]: {
-                    width: 16,
-                    height: 16,
-                    x: 272,
-                    y: 0,
-                },
-                [UISPRITES.PANEL_ML]: {
-                    width: 16,
-                    height: 16,
-                    x: 240,
-                    y: 16,
-                },
-                [UISPRITES.PANEL_CENTER]: {
-                    width: 16,
-                    height: 16,
-                    x: 256,
-                    y: 16,
-                },
-                [UISPRITES.PANEL_MR]: {
-                    width: 16,
-                    height: 16,
-                    x: 272,
-                    y: 16,
-                },
-                [UISPRITES.PANEL_BL]: {
-                    width: 16,
-                    height: 16,
-                    x: 240,
-                    y: 32,
-                },
-                [UISPRITES.PANEL_BM]: {
-                    width: 16,
-                    height: 16,
-                    x: 256,
-                    y: 32,
-                },
-                [UISPRITES.PANEL_BR]: {
-                    width: 16,
-                    height: 16,
-                    x: 272,
-                    y: 32,
-                },
-                [UISPRITES.PANEL_SL]: {
-                    width: 16,
-                    height: 16,
-                    x: 96,
-                    y: 32,
-                },
-                [UISPRITES.PANEL_SM]: {
-                    width: 16,
-                    height: 16,
-                    x: 112,
-                    y: 32,
-                },
-                [UISPRITES.PANEL_SR]: {
-                    width: 16,
-                    height: 16,
-                    x: 128,
-                    y: 32,
-                },
-                [UISPRITES.PANEL_SS]: {
-                    width: 16,
-                    height: 16,
-                    x: 128,
-                    y: 64,
-                },
+                ...DARK_PANEL_SPRITES,
+                ...BUTTON_DEFAULT_SPRITES,
+                ...BUTTON_HOVER_SPRITES,
+                ...BUTTON_PRESS_SPRITES,
             },
         },
     },
@@ -238,100 +122,4 @@ export const defaultManifest: ResourceManifest = {
         [Audios.END]: "audio/end.mp3",
         [Audios.HISS]: "audio/hiss.mp3",
     },
-};
-
-export const DARK_PANEL: PanelImageMap = {
-    spritesheet: SpriteSheets.UI,
-
-    topLeft: UISPRITES.PANEL_TL,
-    topMiddle: UISPRITES.PANEL_TM,
-    topRight: UISPRITES.PANEL_TR,
-    middleLeft: UISPRITES.PANEL_ML,
-    middleMiddle: UISPRITES.PANEL_CENTER,
-    middleRight: UISPRITES.PANEL_MR,
-    bottomLeft: UISPRITES.PANEL_BL,
-    bottomMiddle: UISPRITES.PANEL_BM,
-    bottomRight: UISPRITES.PANEL_BR,
-
-    wideLeft: UISPRITES.PANEL_SL,
-    wideMiddle: UISPRITES.PANEL_SM,
-    wideRight: UISPRITES.PANEL_SR,
-
-    thinLeft: UISPRITES.PANEL_SL,
-    thinMiddle: UISPRITES.PANEL_SM,
-    thinight: UISPRITES.PANEL_SR,
-
-    tiny: UISPRITES.PANEL_SS,
-};
-
-export const BUTTON_DEFAULT: PanelImageMap = {
-    spritesheet: SpriteSheets.UI,
-
-    topLeft: UISPRITES.PANEL_TL,
-    topMiddle: UISPRITES.PANEL_TM,
-    topRight: UISPRITES.PANEL_TR,
-    middleLeft: UISPRITES.PANEL_ML,
-    middleMiddle: UISPRITES.PANEL_CENTER,
-    middleRight: UISPRITES.PANEL_MR,
-    bottomLeft: UISPRITES.PANEL_BL,
-    bottomMiddle: UISPRITES.PANEL_BM,
-    bottomRight: UISPRITES.PANEL_BR,
-
-    wideLeft: UISPRITES.PANEL_SL,
-    wideMiddle: UISPRITES.PANEL_SM,
-    wideRight: UISPRITES.PANEL_SR,
-
-    thinLeft: UISPRITES.PANEL_SL,
-    thinMiddle: UISPRITES.PANEL_SM,
-    thinight: UISPRITES.PANEL_SR,
-
-    tiny: UISPRITES.PANEL_SS,
-};
-
-export const BUTTON_HOVER: PanelImageMap = {
-    spritesheet: SpriteSheets.UI,
-
-    topLeft: UISPRITES.PANEL_TL,
-    topMiddle: UISPRITES.PANEL_TM,
-    topRight: UISPRITES.PANEL_TR,
-    middleLeft: UISPRITES.PANEL_ML,
-    middleMiddle: UISPRITES.PANEL_CENTER,
-    middleRight: UISPRITES.PANEL_MR,
-    bottomLeft: UISPRITES.PANEL_BL,
-    bottomMiddle: UISPRITES.PANEL_BM,
-    bottomRight: UISPRITES.PANEL_BR,
-
-    wideLeft: UISPRITES.PANEL_SL,
-    wideMiddle: UISPRITES.PANEL_SM,
-    wideRight: UISPRITES.PANEL_SR,
-
-    thinLeft: UISPRITES.PANEL_SL,
-    thinMiddle: UISPRITES.PANEL_SM,
-    thinight: UISPRITES.PANEL_SR,
-
-    tiny: UISPRITES.PANEL_SS,
-};
-
-export const BUTTON_PRESS: PanelImageMap = {
-    spritesheet: SpriteSheets.UI,
-
-    topLeft: UISPRITES.PANEL_TL,
-    topMiddle: UISPRITES.PANEL_TM,
-    topRight: UISPRITES.PANEL_TR,
-    middleLeft: UISPRITES.PANEL_ML,
-    middleMiddle: UISPRITES.PANEL_CENTER,
-    middleRight: UISPRITES.PANEL_MR,
-    bottomLeft: UISPRITES.PANEL_BL,
-    bottomMiddle: UISPRITES.PANEL_BM,
-    bottomRight: UISPRITES.PANEL_BR,
-
-    wideLeft: UISPRITES.PANEL_SL,
-    wideMiddle: UISPRITES.PANEL_SM,
-    wideRight: UISPRITES.PANEL_SR,
-
-    thinLeft: UISPRITES.PANEL_SL,
-    thinMiddle: UISPRITES.PANEL_SM,
-    thinight: UISPRITES.PANEL_SR,
-
-    tiny: UISPRITES.PANEL_SS,
 };

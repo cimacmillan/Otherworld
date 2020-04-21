@@ -5,7 +5,7 @@ import { SpriteImageComponent } from "./SpriteImageComponent";
 import {
     SpriteSheets,
     UISPRITES,
-} from "../../services/resources/manifests/DefaultManifest";
+} from "../../services/resources/manifests/Types";
 import { Sprite } from "../../services/resources/SpriteSheet";
 import { ViewportComponent } from "./ViewportComponent";
 import { PanelImageMap } from "../../services/resources/Types";

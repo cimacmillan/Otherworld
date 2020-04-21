@@ -18,15 +18,28 @@ export enum TextColour {
 export interface TextComponentProps {
     text: string;
     style: React.CSSProperties;
+
+    font: TextFont;
+    size: TextSize;
+    colour: TextColour;
 }
+
+const selectNone =
+    "-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;";
 
 export function TextComponent(props: TextComponentProps) {
     return (
         <div
             style={{
-                fontFamily: TextFont.REGULAR,
-                fontSize: TextSize.BIG,
-                color: TextColour.LIGHT,
+                fontFamily: props.font,
+                fontSize: props.size,
+                color: props.colour,
+
+                MozUserSelect: "none",
+                WebkitUserSelect: "none",
+                msUserSelect: "none",
+                userSelect: "none",
+
                 ...props.style,
             }}
         >

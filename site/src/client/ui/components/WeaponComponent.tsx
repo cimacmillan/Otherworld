@@ -14,7 +14,7 @@ import { ViewportComponent } from "./ViewportComponent";
 import {
     SpriteSheets,
     Sprites,
-} from "../../services/resources/manifests/DefaultManifest";
+} from "../../services/resources/manifests/Types";
 import { GameEventSubject } from "../reducers/UIReducer";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { SpriteImageComponent } from "./SpriteImageComponent";

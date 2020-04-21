@@ -4,7 +4,7 @@ import {
     Audios,
     Sprites,
     SpriteSheets,
-} from "../../services/resources/manifests/DefaultManifest";
+} from "../../services/resources/manifests/Types";
 import { TextureCoordinate } from "../../services/resources/SpriteSheet";
 import { GameAnimation } from "../../util/animation/Animation";
 import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
