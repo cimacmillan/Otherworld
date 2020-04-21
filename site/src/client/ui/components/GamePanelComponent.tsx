@@ -17,9 +17,8 @@ export interface GamePanelComponentProps {
     serviceLocator: ServiceLocator;
     width: number;
     height: number;
-    x: number;
-    y: number;
     style: React.CSSProperties;
+    childStyle: React.CSSProperties;
 }
 
 export class GamePanelComponent extends React.PureComponent<
@@ -66,8 +65,6 @@ export class GamePanelComponent extends React.PureComponent<
         return (
             <div
                 style={{
-                    marginLeft: this.props.x,
-                    marginTop: this.props.y,
                     width: resultingWidth,
                     height: resultingHeight,
                     ...this.props.style,
@@ -79,6 +76,7 @@ export class GamePanelComponent extends React.PureComponent<
                     y={viewportY}
                     width={viewportWidth}
                     height={viewportHeight}
+                    style={this.props.childStyle}
                 >
                     {this.props.children}
                 </Viewport>

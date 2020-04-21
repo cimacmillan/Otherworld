@@ -5,6 +5,7 @@ export interface ViewportProps {
     y: number;
     width: number;
     height: number;
+    style: React.CSSProperties;
 }
 
 export class Viewport extends React.Component<ViewportProps> {
@@ -19,18 +20,11 @@ export class Viewport extends React.Component<ViewportProps> {
                     overflow: "hidden",
                     marginLeft: this.props.x,
                     marginTop: this.props.y,
-                    // borderStyle: "solid",
-                    // borderColor: "#3e2731",
                     position: "absolute",
+                    ...this.props.style,
                 }}
             >
-                <div
-                    style={{
-                        transform: `translate(-${this.props.x}px, -${this.props.y}px)`,
-                    }}
-                >
-                    {this.props.children}
-                </div>
+                {this.props.children}
             </div>
         );
     }

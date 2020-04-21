@@ -45,20 +45,33 @@ class UIContainer extends React.Component<UIContainerProps> {
                             serviceLocator={this.props.game.getServiceLocator()}
                             width={500}
                             height={300}
-                            x={400}
-                            y={200}
                             style={{
+                                marginLeft: 400,
+                                marginTop: 200,
                                 position: "absolute",
+                            }}
+                            childStyle={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
                             }}
                         >
                             <TextComponent
                                 text={"Otherworld"}
                                 style={{
-                                    position: "absolute",
+                                    // position: "absolute",
                                     width: "100%",
                                     textAlign: "center",
                                     marginTop: 10,
                                 }}
+                            />
+
+                            <GamePanelComponent
+                                serviceLocator={this.props.game.getServiceLocator()}
+                                width={300}
+                                height={100}
+                                style={{}}
+                                childStyle={{}}
                             />
                         </GamePanelComponent>
                     </>
