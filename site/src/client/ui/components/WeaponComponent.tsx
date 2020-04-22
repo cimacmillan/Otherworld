@@ -15,13 +15,24 @@ import {
     SpriteSheets,
     Sprites,
 } from "../../services/resources/manifests/Types";
-import { GameEventSubject } from "../reducers/UIReducer";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { SpriteImageComponent } from "./SpriteImageComponent";
+import { GameEventSubject, State } from "../State";
+import { connect } from "react-redux";
 
-export interface WeaponComponentProps {
+interface OwnProps {
     serviceLocator: ServiceLocator;
 }
+
+interface StateProps {
+    showing: boolean;
+}
+
+const mapStateToProps = (state: State) => {
+    return {
+        showing: state.weaponState.showing,
+    };
+};
 
 const WEAPON_HEIGHT = 1;
 const WEAPON_WIDTH = WEAPON_HEIGHT / 2;
@@ -29,7 +40,9 @@ const POS_X = 1;
 const POS_Y = 0.55;
 const DEFAULT_ROTATION = 10;
 
-export class WeaponComponent extends React.Component<WeaponComponentProps> {
+export type WeaponComponentProps = OwnProps & StateProps;
+
+class WeaponComponent extends React.Component<WeaponComponentProps> {
     private composite: CompositeAnimation;
     private headBob: GameAnimation;
     private posY = POS_Y;
@@ -80,8 +93,10 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
 
     public componentDidMount() {
         this.subscription = GameEventSubject.subscribe((event) => {
-            if (event.type === PlayerEventType.PLAYER_ATTACK) {
-                this.composite.start({});
+            if (this.props.showing) {
+                if (event.type === PlayerEventType.PLAYER_ATTACK) {
+                    this.composite.start({});
+                }
             }
         });
 
@@ -109,6 +124,10 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
         const marginLeft = DOM_WIDTH * POS_X;
         const marginTop = DOM_HEIGHT * this.posY;
 
+        if (!this.props.showing) {
+            return <></>;
+        }
+
         return (
             <ViewportComponent
                 x={0}
@@ -135,3 +154,5 @@ export class WeaponComponent extends React.Component<WeaponComponentProps> {
         );
     }
 }
+
+export default connect(mapStateToProps)(WeaponComponent);

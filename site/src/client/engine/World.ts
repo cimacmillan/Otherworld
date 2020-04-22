@@ -17,7 +17,6 @@ export class World {
     }
 
     public update() {
-        this.performSync();
         const array = this.entityArray.getArray();
         for (let i = 0; i < array.length; i++) {
             array[i].update();
@@ -49,7 +48,7 @@ export class World {
         return this.entityArray;
     }
 
-    private performSync() {
+    public performSync() {
         const toAdd = this.entityArray.getToAdd();
         const toRemove = this.entityArray.getToRemove();
         for (let i = 0; i < toAdd.length; i++) {

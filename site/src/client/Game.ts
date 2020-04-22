@@ -17,7 +17,7 @@ export class Game {
     private serviceLocator: ServiceLocator;
 
     private initialised: boolean = false;
-    private updateWorld: boolean = true;
+    private updateWorld: boolean = false;
 
     public async init(
         openGL: WebGLRenderingContext,
@@ -85,9 +85,10 @@ export class Game {
     }
 
     private update = () => {
-        this.serviceLocator.getInputService().update();
         this.serviceLocator.getScriptingService().update();
+        this.serviceLocator.getWorld().performSync();
         if (this.updateWorld) {
+            this.serviceLocator.getInputService().update();
             this.serviceLocator.getWorld().update();
             this.serviceLocator.getPhysicsService().update();
             this.serviceLocator.getInteractionService().update();

@@ -1,7 +1,6 @@
 import React = require("react");
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Subscription } from "rxjs";
-import { GameEventSubject } from "../reducers/UIReducer";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { DOM_HEIGHT, DOM_WIDTH } from "../../Config";
 import { getImagePropsFromSprite } from "../../util/math/UI";
@@ -13,19 +12,31 @@ import {
 import { GameAnimation } from "../../util/animation/Animation";
 import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
 import { AnimationImageComponent } from "./AnimationImageComponent";
+import { GameEventSubject, State } from "../State";
+import { connect } from "react-redux";
 
 const HEALTH_BAR_WIDTH = 0.5;
 const HEALTH_BAR_HEIGHT = HEALTH_BAR_WIDTH / 3;
 
 const HEALTH_BAR_BUMP_SPEED = 100;
 
-export interface HealthBarComponentProps {
+interface OwnProps {
     serviceLocator: ServiceLocator;
 }
 
-export class HealthBarComponent extends React.Component<
-    HealthBarComponentProps
-> {
+interface StateProps {
+    showing: boolean;
+}
+
+const mapStateToProps = (state: State) => {
+    return {
+        showing: state.weaponState.showing,
+    };
+};
+
+export type HealthBarComponentProps = OwnProps & StateProps;
+
+class HealthBarComponent extends React.Component<HealthBarComponentProps> {
     private subscription: Subscription;
     private knockAnimation: GameAnimation;
     private healthBarYOffset = 0;
@@ -70,6 +81,11 @@ export class HealthBarComponent extends React.Component<
         const marginTop = 10;
 
         const translate = Math.floor(this.healthBarYOffset * 10);
+
+        if (!this.props.showing) {
+            return <></>;
+        }
+
         return (
             <div style={{ position: "absolute" }}>
                 <AnimationImageComponent
@@ -89,3 +105,5 @@ export class HealthBarComponent extends React.Component<
         );
     }
 }
+
+export default connect(mapStateToProps)(HealthBarComponent);

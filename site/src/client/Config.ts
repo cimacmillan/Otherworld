@@ -12,5 +12,5 @@ export const ZFAR = 10000;
 export const TARGET_FPS = 60;
 export const TARGET_MILLIS = Math.floor(1000 / TARGET_FPS);
 
-export const DEFAULT_PLAYER_HEIGHT = 0.8;
+export const DEFAULT_PLAYER_HEIGHT = 0.5;
 export const DEFAULT_PLAYER_RADIUS = 0.5;

@@ -5,7 +5,8 @@ import { Game } from "./Game";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import { GameEvent } from "./engine/events/Event";
-import { reducers } from "./ui/State";
+import { reducers, GameEventSubject } from "./ui/State";
+import { Subject } from "rxjs";
 
 const game = new Game();
 const store = createStore(
@@ -14,9 +15,11 @@ const store = createStore(
         (window as any).__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-const uiListener = (event: GameEvent) => {
+GameEventSubject.subscribe((event: GameEvent) => {
     store.dispatch(event);
-};
+});
+
+const uiListener = (event: GameEvent) => GameEventSubject.next(event);
 
 const render = () => {
     ReactDOM.render(

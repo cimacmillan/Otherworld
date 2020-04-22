@@ -1,3 +1,4 @@
+import { GameEventSource } from "../../services/EventRouter";
 import { InteractionType } from "../../services/interaction/InteractionType";
 import {
     Animations,
@@ -18,6 +19,7 @@ import {
 import { ActionDelay } from "../../util/time/ActionDelay";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
+import { EnemyEventType } from "../events/EnemyEvents";
 import { GameEvent } from "../events/Event";
 import { InteractionEventType } from "../events/InteractionEvents";
 import { BaseState, HealthState, SurfacePositionState } from "../State";
@@ -412,6 +414,13 @@ export class CrabletLogicComponent<
                     entity.getServiceLocator().getResourceManager().manifest
                         .audio[Audios.POINT]
                 );
+
+            entity
+                .getServiceLocator()
+                .getEventRouter()
+                .routeEvent(GameEventSource.WORLD, {
+                    type: EnemyEventType.ENEMY_KILLED,
+                });
         }
     }
 }

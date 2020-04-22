@@ -1,4 +1,5 @@
 import { BallEvents } from "./BallEvents";
+import { EnemyEvents } from "./EnemyEvents";
 import { EntityEvents } from "./EntityEvents";
 import { InteractionEvents } from "./InteractionEvents";
 import { PhysicsEvents } from "./PhysicsEvents";
@@ -20,4 +21,5 @@ export type GameEvent =
     | TravelEvents
     | PhysicsEvents
     | InteractionEvents
-    | PlayerEvents;
+    | PlayerEvents
+    | EnemyEvents;
