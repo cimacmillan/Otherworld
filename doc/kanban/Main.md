@@ -35,6 +35,7 @@ Main TODO Taskboard
 - [ ] Particles  
 - [ ] Chickens n foods n eggs  
 - [ ] Oriented sprites  
+- [ ] Refactor bulky redux and component classes with effects  
 
 ### In Progress
 
