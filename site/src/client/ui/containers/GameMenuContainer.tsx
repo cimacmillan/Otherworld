@@ -22,8 +22,9 @@ interface GameMenuContainerProps {
     serviceLocator: ServiceLocator;
 }
 
-export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> = props => {
-
+export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> = (
+    props
+) => {
     const [state, dispatch] = useGlobalState();
 
     const onStartPress = () => {
@@ -32,7 +33,7 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
     };
 
     const showBestScore = state.gameStart.bestScore !== undefined;
-    
+
     return (
         <FadeComponent
             shouldShow={state.gameStart.showing}
@@ -40,44 +41,43 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
             fadeOutSpeed={150}
         >
             <GamePanelComponent
-            serviceLocator={props.serviceLocator}
-            width={500}
-            height={showBestScore ? 300 : 200}
-            style={{
-                marginLeft: 400,
-                marginTop: 200,
-                position: "absolute",
-            }}
-            childStyle={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-            }}
-            panelMap={DARK_PANEL}
-        >
-            <TextComponent
-                text={"Otherworld"}
+                serviceLocator={props.serviceLocator}
+                width={500}
+                height={showBestScore ? 300 : 200}
                 style={{
-                    // position: "absolute",
-                    width: "100%",
-                    textAlign: "center",
-                    marginTop: 10,
+                    marginLeft: 400,
+                    marginTop: 200,
+                    position: "absolute",
                 }}
-                font={TextFont.REGULAR}
-                size={TextSize.BIG}
-                colour={TextColour.LIGHT}
-            />
-            <>
+                childStyle={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                }}
+                panelMap={DARK_PANEL}
+            >
                 <TextComponent
-                    text={`Score: ${state.gameStart.currentScore}`}
-                    style={{}}
+                    text={"Otherworld"}
+                    style={{
+                        // position: "absolute",
+                        width: "100%",
+                        textAlign: "center",
+                        marginTop: 10,
+                    }}
                     font={TextFont.REGULAR}
-                    size={TextSize.SMALL}
+                    size={TextSize.BIG}
                     colour={TextColour.LIGHT}
                 />
+                <>
+                    <TextComponent
+                        text={`Score: ${state.gameStart.currentScore}`}
+                        style={{}}
+                        font={TextFont.REGULAR}
+                        size={TextSize.SMALL}
+                        colour={TextColour.LIGHT}
+                    />
 
-                { 
-                    showBestScore ? (
+                    {showBestScore ? (
                         <TextComponent
                             text={`Best: ${state.gameStart.bestScore}`}
                             style={{}}
@@ -85,38 +85,36 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
                             size={TextSize.SMALL}
                             colour={TextColour.LIGHT}
                         />
-                    ) : undefined
-                }
-            </>
+                    ) : undefined}
+                </>
 
-            <GameButtonContainer
-                serviceLocator={props.serviceLocator}
-                width={256}
-                height={46}
-                style={{
-                    marginTop: 30,
-                }}
-                childStyle={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}
-                panelMapDefault={BUTTON_DEFAULT}
-                panelMapHover={BUTTON_HOVER}
-                panelMapPress={BUTTON_PRESS}
-                onSelect={onStartPress}
-            >
-                <TextComponent
-                    text={"New Game"}
-                    style={{}}
-                    font={TextFont.REGULAR}
-                    size={TextSize.SMALL}
-                    colour={TextColour.LIGHT}
-                />
-            </GameButtonContainer>
-        </GamePanelComponent>
+                <GameButtonContainer
+                    serviceLocator={props.serviceLocator}
+                    width={256}
+                    height={46}
+                    style={{
+                        marginTop: 30,
+                    }}
+                    childStyle={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                    panelMapDefault={BUTTON_DEFAULT}
+                    panelMapHover={BUTTON_HOVER}
+                    panelMapPress={BUTTON_PRESS}
+                    onSelect={onStartPress}
+                >
+                    <TextComponent
+                        text={"New Game"}
+                        style={{}}
+                        font={TextFont.REGULAR}
+                        size={TextSize.SMALL}
+                        colour={TextColour.LIGHT}
+                    />
+                </GameButtonContainer>
+            </GamePanelComponent>
         </FadeComponent>
     );
-}
-
+};

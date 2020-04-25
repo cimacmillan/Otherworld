@@ -22,8 +22,9 @@ export interface GameButtonContainerState {
     isDown: boolean;
 }
 
-export const GameButtonContainer: React.FunctionComponent<GameButtonContainerProps> = props => {
-
+export const GameButtonContainer: React.FunctionComponent<GameButtonContainerProps> = (
+    props
+) => {
     const [isHovered, setHovered] = React.useState(false);
     const [isDown, setDown] = React.useState(false);
 
@@ -36,11 +37,7 @@ export const GameButtonContainer: React.FunctionComponent<GameButtonContainerPro
     }
 
     return (
-        <GamePanelComponent
-            {...props}
-            childStyle={{}}
-            panelMap={panelMap}
-        >
+        <GamePanelComponent {...props} childStyle={{}} panelMap={panelMap}>
             <div
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
@@ -59,4 +56,4 @@ export const GameButtonContainer: React.FunctionComponent<GameButtonContainerPro
             </div>
         </GamePanelComponent>
     );
-}
+};

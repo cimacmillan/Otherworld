@@ -9,7 +9,10 @@ const game = new Game();
 
 const render = () => {
     ReactDOM.render(
-        <GameComponent game={game} uiListener={(action: Actions) => dispatch.next(action)} />,
+        <GameComponent
+            game={game}
+            uiListener={(action: Actions) => dispatch.next(action)}
+        />,
         document.getElementById("root")
     );
 };

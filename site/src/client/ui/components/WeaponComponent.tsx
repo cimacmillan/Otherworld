@@ -17,23 +17,14 @@ import {
 } from "../../services/resources/manifests/Types";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { SpriteImageComponent } from "./SpriteImageComponent";
-import { GameEventSubject, State } from "../State";
 import { connect } from "react-redux";
-import { sequence, animation } from "../../util/animation/Animations";
+import { sequence, animation, parallel } from "../../util/animation/Animations";
+import { useGlobalState, useDispatchListener } from "../State";
+import { Actions } from "../actions/Actions";
 
-interface OwnProps {
+interface WeaponComponentProps {
     serviceLocator: ServiceLocator;
 }
-
-interface StateProps {
-    showing: boolean;
-}
-
-const mapStateToProps = (state: State) => {
-    return {
-        showing: state.weaponState.showing,
-    };
-};
 
 const WEAPON_HEIGHT = 1;
 const WEAPON_WIDTH = WEAPON_HEIGHT / 2;
@@ -41,117 +32,83 @@ const POS_X = 1;
 const POS_Y = 0.55;
 const DEFAULT_ROTATION = 10;
 
-export type WeaponComponentProps = OwnProps & StateProps;
+export const WeaponComponent: React.FunctionComponent<WeaponComponentProps> = (
+    props
+) => {
+    const [state, dispatch] = useGlobalState();
 
-class WeaponComponent extends React.Component<WeaponComponentProps> {
-    private composite: CompositeAnimation;
-    private headBob: GameAnimation;
-    private posY = POS_Y;
-    private rotate = 0;
+    const [posY, setPosY] = React.useState(POS_Y);
+    const [rotate, setRotate] = React.useState(0);
 
-    private subscription: Subscription;
+    let composite: CompositeAnimation;
+    let headBob: GameAnimation;
 
-    public constructor(props: WeaponComponentProps) {
-        super(props);
-        const swingDown = new CompositeAnimation({
-            animations: [
-                new GameAnimation((x: number) => {
-                    this.posY = POS_Y + x / 4;
-                    this.forceUpdate();
-                }).speed(100),
-                new GameAnimation((x: number) => {
-                    this.rotate = x * 180;
-                    this.forceUpdate();
-                }).speed(100),
-            ],
-            type: CompositeAnimationType.PARALLEL,
-        });
-        const swingUp = new CompositeAnimation({
-            animations: [
-                new GameAnimation((x: number) => {
-                    this.posY = POS_Y + 1 / 4 - x / 4;
-                    this.forceUpdate();
-                }).speed(200),
-                new GameAnimation((x: number) => {
-                    this.rotate = (1 - x) * 180;
-                    this.forceUpdate();
-                }).speed(200),
-                ,
-            ],
-            type: CompositeAnimationType.PARALLEL,
-        });
-        this.composite = sequence(swingDown, swingUp).driven();
+    React.useEffect(() => {
+        const swingDown = parallel(
+            animation((x: number) => setPosY(POS_Y + x / 4)).speed(100),
+            animation((x: number) => setRotate(x * 180)).speed(100)
+        );
+        const swingUp = parallel(
+            animation((x: number) => setPosY(POS_Y + 1 / 4 - x / 4)).speed(100),
+            animation((x: number) => setRotate((1 - x) * 180)).speed(100)
+        );
+        composite = sequence(swingDown, swingUp).driven();
 
-        this.headBob = animation((x: number) => {
-            this.onHeadBobAnimation(x);
-            this.forceUpdate();
+        headBob = animation((x: number) => {
+            const velocity = props.serviceLocator
+                .getScriptingService()
+                .getPlayer()
+                .getState().velocity;
+            const speed = vec_distance(velocity);
+            setPosY(POS_Y + Math.sin(x * Math.PI * 2) * speed);
         })
             .driven()
-            .speed(400);
-    }
+            .speed(400)
+            .start({ loop: true });
 
-    public componentDidMount() {
-        this.subscription = GameEventSubject.subscribe((event) => {
-            if (this.props.showing) {
-                if (event.type === PlayerEventType.PLAYER_ATTACK) {
-                    this.composite.start({});
-                }
-            }
-        });
+        return () => {
+            composite.stop();
+            headBob.stop();
+        };
+    }, []);
 
-        this.headBob.start({
-            loop: true,
-        });
-    }
-
-    private onHeadBobAnimation = (x: number) => {
-        const velocity = this.props.serviceLocator
-            .getScriptingService()
-            .getPlayer()
-            .getState().velocity;
-        const speed = vec_distance(velocity);
-        this.posY = POS_Y + Math.sin(x * Math.PI * 2) * speed;
-    };
-
-    public componentWillUnmount() {
-        this.subscription.unsubscribe();
-    }
-
-    public render() {
-        const width = DOM_HEIGHT * WEAPON_WIDTH;
-        const height = DOM_HEIGHT * WEAPON_HEIGHT;
-        const marginLeft = DOM_WIDTH * POS_X;
-        const marginTop = DOM_HEIGHT * this.posY;
-
-        if (!this.props.showing) {
-            return <></>;
+    useDispatchListener((event: Actions) => {
+        if (event.type === PlayerEventType.PLAYER_ATTACK) {
+            composite.start({});
         }
+    });
 
-        return (
-            <ViewportComponent
-                x={0}
-                y={0}
-                width={DOM_WIDTH}
-                height={DOM_HEIGHT}
-                style={{}}
-            >
-                <SpriteImageComponent
-                    serviceLocator={this.props.serviceLocator}
-                    spriteSheet={SpriteSheets.SPRITE}
-                    sprite={Sprites.SWORD}
-                    style={{
-                        marginLeft,
-                        marginTop,
-                        width,
-                        height,
-                        transform: `rotate(-${
-                            Math.floor(this.rotate) + DEFAULT_ROTATION
-                        }deg) translate(-50%, -50%)`,
-                    }}
-                />
-            </ViewportComponent>
-        );
+    const width = DOM_HEIGHT * WEAPON_WIDTH;
+    const height = DOM_HEIGHT * WEAPON_HEIGHT;
+    const marginLeft = DOM_WIDTH * POS_X;
+    const marginTop = DOM_HEIGHT * posY;
+
+    if (!state.weaponState.showing) {
+        return <></>;
     }
-}
 
-export default connect(mapStateToProps)(WeaponComponent);
+    return (
+        <ViewportComponent
+            x={0}
+            y={0}
+            width={DOM_WIDTH}
+            height={DOM_HEIGHT}
+            style={{}}
+        >
+            <SpriteImageComponent
+                serviceLocator={props.serviceLocator}
+                spriteSheet={SpriteSheets.SPRITE}
+                sprite={Sprites.SWORD}
+                style={{
+                    marginLeft,
+                    marginTop,
+                    width,
+                    height,
+                    transform: `rotate(-${
+                        Math.floor(rotate) + DEFAULT_ROTATION
+                    }deg) translate(-50%, -50%)`,
+                }}
+            />
+        </ViewportComponent>
+    );
+};
