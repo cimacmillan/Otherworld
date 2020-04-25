@@ -36,6 +36,7 @@ export const FadeComponent: React.FunctionComponent<FadeComponentProps> = (
     if (opacity === 0) {
         return <></>;
     }
+
     return (
         <div
             style={{
