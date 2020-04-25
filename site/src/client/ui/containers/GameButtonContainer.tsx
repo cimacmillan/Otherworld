@@ -22,73 +22,41 @@ export interface GameButtonContainerState {
     isDown: boolean;
 }
 
-export class GameButtonContainer extends React.PureComponent<
-    GameButtonContainerProps,
-    GameButtonContainerState
-> {
-    state = {
-        isHovered: false,
-        isDown: false,
-    };
+export const GameButtonContainer: React.FunctionComponent<GameButtonContainerProps> = props => {
 
-    constructor(props: GameButtonContainerProps) {
-        super(props);
+    const [isHovered, setHovered] = React.useState(false);
+    const [isDown, setDown] = React.useState(false);
+
+    let panelMap = props.panelMapDefault;
+    if (isHovered) {
+        panelMap = props.panelMapHover;
+    }
+    if (isDown) {
+        panelMap = props.panelMapPress;
     }
 
-    public render() {
-        let panelMap = this.props.panelMapDefault;
-        if (this.state.isHovered) {
-            panelMap = this.props.panelMapHover;
-        }
-        if (this.state.isDown) {
-            panelMap = this.props.panelMapPress;
-        }
-
-        return (
-            <GamePanelComponent
-                {...this.props}
-                childStyle={{}}
-                panelMap={panelMap}
+    return (
+        <GamePanelComponent
+            {...props}
+            childStyle={{}}
+            panelMap={panelMap}
+        >
+            <div
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={() => setHovered(false)}
+                onMouseDown={() => setDown(true)}
+                onMouseUp={() => {
+                    setDown(false);
+                    props.onSelect();
+                }}
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    ...props.childStyle,
+                }}
             >
-                <div
-                    onMouseEnter={this.onMouseEnter}
-                    onMouseLeave={this.onMouseLeave}
-                    onMouseDown={this.onMouseDown}
-                    onMouseUp={this.onMouseUp}
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        ...this.props.childStyle,
-                    }}
-                >
-                    {this.props.children}
-                </div>
-            </GamePanelComponent>
-        );
-    }
-
-    private onMouseEnter = () => {
-        this.setState({
-            isHovered: true,
-        });
-    };
-
-    private onMouseLeave = () => {
-        this.setState({
-            isHovered: false,
-        });
-    };
-
-    private onMouseDown = () => {
-        this.setState({
-            isDown: true,
-        });
-    };
-
-    private onMouseUp = () => {
-        this.setState({
-            isDown: false,
-        });
-        this.props.onSelect();
-    };
+                {props.children}
+            </div>
+        </GamePanelComponent>
+    );
 }

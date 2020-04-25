@@ -35,7 +35,7 @@ export const GamePanelComponent: React.FunctionComponent<GamePanelComponentProps
     const resultingWidth = panelsWidth * panelDomWidth;
     const resultingHeight = panelsHeight * panelDomHeight;
 
-    const panelSprites = createPanelSprites(
+    const panelSprites = unMemoCreatePanelSprites(
         props.serviceLocator,
         props.panelMap,
         panelsWidth,
@@ -98,20 +98,6 @@ const unMemoCreatePanelSprites = (
     }
     return panelSprites;
 };
-
-const createPanelSprites = memoize(
-    unMemoCreatePanelSprites,
-    (
-        panelMap: PanelImageMap,
-        panelsWidth: number,
-        panelsHeight: number,
-        panelDomWidth: number,
-        panelDomHeight: number
-    ) => {
-        const images = Object.values(panelMap).join("-");
-        return `${images}-${panelsWidth}-${panelsHeight}-${panelDomWidth}-${panelDomHeight}`;
-    }
-);
 
 const createPanelSprite = (
     serviceLocator: ServiceLocator,

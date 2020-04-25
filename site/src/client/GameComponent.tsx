@@ -1,7 +1,7 @@
 import React = require("react");
 import { CanvasComponent } from "./services/render";
 import { Game } from "./Game";
-import UIContainer from "./ui/UIContainer";
+import { UIContainer } from "./ui/UIContainer";
 import { GameEvent } from "./engine/events/Event";
 import { DOM_WIDTH, DOM_HEIGHT, WIDTH, HEIGHT, RES_DIV } from "./Config";
 
