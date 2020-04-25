@@ -36,6 +36,7 @@ Main TODO Taskboard
 - [ ] Chickens n foods n eggs  
 - [ ] Oriented sprites  
 - [ ] Refactor bulky redux and component classes with effects  
+- [ ] Convert reducers to pure actions  
 
 ### In Progress
 

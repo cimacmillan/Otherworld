@@ -5,6 +5,7 @@ import { HealthBarComponent } from "./components/HealthBarComponent";
 import { GameMenuContainer } from "./containers/GameMenuContainer";
 import { GameFadeContainer } from "./containers/GameFadeContainer";
 import { WeaponComponent } from "./components/WeaponComponent";
+import { PlayModeContainer } from "./containers/PlayModeContainer";
 
 export interface UIContainerProps {
     game: Game;
@@ -19,10 +20,7 @@ export const UIContainer: React.FunctionComponent<UIContainerProps> = (
         <div style={{ position: "absolute" }}>
             {state.uiState.canAccessGame ? (
                 <>
-                    <HealthBarComponent
-                        serviceLocator={props.game.getServiceLocator()}
-                    />
-                    <WeaponComponent
+                    <PlayModeContainer
                         serviceLocator={props.game.getServiceLocator()}
                     />
                     <GameFadeContainer
