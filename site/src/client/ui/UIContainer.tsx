@@ -1,29 +1,11 @@
 import { Game } from "../Game";
 import React = require("react");
 import { connect } from "react-redux";
-import { Entity } from "../engine/Entity";
-import { SpriteRenderComponent } from "../engine/components/SpriteRenderComponent";
-import { BallEventType } from "../engine/events/BallEvents";
-import { GameEventSource } from "../services/EventRouter";
 import { State } from "./State";
 import HealthBarComponent from "./components/HealthBarComponent";
-import { GamePanelComponent } from "./components/GamePanelComponent";
-import {
-    TextComponent,
-    TextFont,
-    TextSize,
-    TextColour,
-} from "./components/TextComponent";
-import { GameButtonContainer } from "./containers/GameButtonContainer";
-import { DARK_PANEL } from "../services/resources/manifests/DarkPanel";
-import { BUTTON_DEFAULT } from "../services/resources/manifests/ButtonDefault";
-import { BUTTON_HOVER } from "../services/resources/manifests/ButtonHover";
-import {
-    BUTTON_PRESS,
-    BUTTON_PRESS_SPRITES,
-} from "../services/resources/manifests/ButtonPress";
 import GameStartContainer from "./containers/GameStartContainer";
 import WeaponComponent from "./components/WeaponComponent";
+import GameFadeContainer from "./containers/GameFadeContainer";
 
 export interface OwnProps {
     game: Game;
@@ -53,7 +35,12 @@ class UIContainer extends React.Component<UIContainerProps> {
                         <WeaponComponent
                             serviceLocator={this.props.game.getServiceLocator()}
                         />
-                        <GameStartContainer game={this.props.game} />
+                        <GameFadeContainer
+                            serviceLocator={this.props.game.getServiceLocator()}
+                        />
+                        <GameStartContainer
+                            serviceLocator={this.props.game.getServiceLocator()}
+                        />
                     </>
                 ) : undefined}
             </div>

@@ -39,7 +39,7 @@ export class Game {
             world.emitIntoWorld(event)
         );
 
-        const scriptingService = new ScriptingService();
+        const scriptingService = new ScriptingService(this);
 
         const inputService = new InputService();
 

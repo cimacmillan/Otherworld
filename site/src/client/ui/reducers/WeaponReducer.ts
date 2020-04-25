@@ -1,4 +1,5 @@
 import { GameEvent } from "../../engine/events/Event";
+import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import {
     GameStartActions,
     GameStartActionType,
@@ -24,7 +25,7 @@ export function weaponReducer(
                 ...state,
                 showing: true,
             };
-        case GameStartActionType.END_GAME:
+        case PlayerEventType.PLAYER_KILLED:
             return {
                 ...state,
                 showing: false,

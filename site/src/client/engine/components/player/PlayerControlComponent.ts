@@ -134,18 +134,9 @@ export class PlayerControlComponent<
     private onDamaged(entity: Entity<PlayerState>, amount: number) {
         entity.setState({ health: entity.getState().health - amount });
         if (entity.getState().health <= 0 && !this.killed) {
-            entity.emitGlobally({
-                type: PlayerEventType.PLAYER_KILLED,
-            });
-            this.onKilled(entity);
+            entity.emitGlobally({ type: PlayerEventType.PLAYER_KILLED });
+            entity.getServiceLocator().getScriptingService().endGame();
             this.killed = true;
-            entity
-                .getServiceLocator()
-                .getAudioService()
-                .play(
-                    entity.getServiceLocator().getResourceManager().manifest
-                        .audio[Audios.END]
-                );
         } else if (!this.killed) {
             entity.emitGlobally({
                 type: PlayerEventType.PLAYER_DAMAGED,
@@ -158,10 +149,6 @@ export class PlayerControlComponent<
                         .audio[Audios.PLAYER_HIT]
                 );
         }
-    }
-
-    private onKilled(entity: Entity<PlayerState>) {
-        entity.getServiceLocator().getScriptingService().resetContent();
     }
 
     private onAttack(entity: Entity<PlayerState>) {

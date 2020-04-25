@@ -15,23 +15,18 @@ import { GameButtonContainer } from "./GameButtonContainer";
 import { BUTTON_DEFAULT } from "../../services/resources/manifests/ButtonDefault";
 import { BUTTON_HOVER } from "../../services/resources/manifests/ButtonHover";
 import { BUTTON_PRESS } from "../../services/resources/manifests/ButtonPress";
-import { startGame, endGame } from "../actions/GameStartActions";
+import { startGame } from "../actions/GameStartActions";
 import { Subscription } from "rxjs";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
 
 interface OwnProps {
-    game: Game;
+    serviceLocator: ServiceLocator;
 }
 
 interface StateProps {
     showing: boolean;
     currentScore: number;
     bestScore?: number;
-}
-
-interface DispatchProps {
-    gameStart: () => void;
-    gameEnd: () => void;
 }
 
 function mapStateToProps(state: State) {
@@ -42,9 +37,12 @@ function mapStateToProps(state: State) {
     };
 }
 
+interface DispatchProps {
+    gameStart: () => void;
+}
+
 const mapDispatchToProps = {
     gameStart: startGame,
-    gameEnd: endGame,
 };
 
 type GameStartContainerProps = OwnProps & StateProps & DispatchProps;
@@ -53,14 +51,7 @@ class GameStartContainer extends React.Component<GameStartContainerProps> {
     private subscription: Subscription;
 
     public componentDidMount() {
-        this.subscription = GameEventSubject.subscribe((event) => {
-            switch (event.type) {
-                case PlayerEventType.PLAYER_KILLED:
-                    this.props.game.setUpdateWorld(false);
-                    this.props.gameEnd();
-                    break;
-            }
-        });
+        this.subscription = GameEventSubject.subscribe((event) => {});
     }
 
     public componentWillUnmount() {
@@ -74,7 +65,7 @@ class GameStartContainer extends React.Component<GameStartContainerProps> {
 
         return (
             <GamePanelComponent
-                serviceLocator={this.props.game.getServiceLocator()}
+                serviceLocator={this.props.serviceLocator}
                 width={500}
                 height={300}
                 style={{
@@ -105,7 +96,7 @@ class GameStartContainer extends React.Component<GameStartContainerProps> {
                 {this.getScoreComponent()}
 
                 <GameButtonContainer
-                    serviceLocator={this.props.game.getServiceLocator()}
+                    serviceLocator={this.props.serviceLocator}
                     width={256}
                     height={46}
                     style={{}}
@@ -158,8 +149,8 @@ class GameStartContainer extends React.Component<GameStartContainerProps> {
     };
 
     private onStartPress = () => {
-        this.props.game.setUpdateWorld(true);
         this.props.gameStart();
+        this.props.serviceLocator.getScriptingService().startGame();
     };
 }
 

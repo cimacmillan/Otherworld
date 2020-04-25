@@ -1,6 +1,8 @@
 import { PlayerState } from "../../engine/components/player/PlayerControlComponent";
 import { Entity } from "../../engine/Entity";
+import { Game } from "../../Game";
 import { getTextureCoordinate } from "../../util/math";
+import { Audios } from "../resources/manifests/Types";
 import { ServiceLocator } from "../ServiceLocator";
 import { createMacator } from "./factory/EntityFactory";
 import { createPlayer } from "./factory/PlayerFactory";
@@ -12,9 +14,14 @@ import { createWall } from "./factory/WallFactory";
  * GameScriptingService.getPlayer().damage();
  */
 export class ScriptingService {
+    private game: Game;
     private serviceLocator: ServiceLocator;
     private player: Entity<PlayerState>;
     private shouldReset: boolean = false;
+
+    public constructor(game: Game) {
+        this.game = game;
+    }
 
     public init(serviceLocator: ServiceLocator) {
         this.serviceLocator = serviceLocator;
@@ -39,6 +46,22 @@ export class ScriptingService {
             }
             this.bootstrapContent();
         }
+    }
+
+    public endGame() {
+        this.serviceLocator
+            .getAudioService()
+            .play(
+                this.serviceLocator.getResourceManager().manifest.audio[
+                    Audios.END
+                ]
+            );
+        this.game.setUpdateWorld(false);
+    }
+
+    public startGame() {
+        this.resetContent();
+        this.game.setUpdateWorld(true);
     }
 
     private bootstrapContent() {

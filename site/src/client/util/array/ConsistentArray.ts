@@ -33,6 +33,9 @@ export class ConsistentArray<T> {
         this.array.push(...this.toAdd);
         this.toRemove.forEach((element: T) => {
             const index = this.array.indexOf(element);
+            if (index < 0) {
+                return;
+            }
             this.array.splice(index, 1);
         });
         this.toAdd = [];

@@ -1,5 +1,6 @@
 import { EnemyEventType } from "../../engine/events/EnemyEvents";
 import { GameEvent } from "../../engine/events/Event";
+import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import {
     GameStartActions,
     GameStartActionType,
@@ -29,7 +30,7 @@ export function gameStartReducer(
                 showing: false,
                 currentScore: 0,
             };
-        case GameStartActionType.END_GAME:
+        case PlayerEventType.PLAYER_KILLED:
             let bestScore = state.currentScore;
             if (state.bestScore && state.bestScore > state.currentScore) {
                 bestScore = state.bestScore;
