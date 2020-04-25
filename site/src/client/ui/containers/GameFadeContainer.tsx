@@ -4,7 +4,8 @@ import { State, GameEventSubject } from "../State";
 import { Subscription } from "rxjs";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { startGame } from "../actions/GameStartActions";
-import { GameFadeComponent } from "../components/GameFadeComponent";
+import { FadeComponent } from "../components/FadeComponent";
+import { DOM_WIDTH, DOM_HEIGHT } from "../../Config";
 
 interface StateProps {
     showing: boolean;
@@ -58,10 +59,20 @@ class GameFadeContainer extends React.Component<
 
     public render() {
         return (
-            <GameFadeComponent
+            <FadeComponent
                 shouldShow={this.props.showing}
-                colour={"#000000"}
+                fadeInSpeed={1000}
+                fadeOutSpeed={300}
+            >
+            <div
+                style={{
+                    width: DOM_WIDTH,
+                    height: DOM_HEIGHT,
+                    position: "absolute",
+                    backgroundColor: "#000000"
+                }}
             />
+            </FadeComponent>
         );
     }
 }

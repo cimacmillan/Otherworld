@@ -3,42 +3,49 @@ import { Subscription } from "rxjs";
 import { DOM_WIDTH, DOM_HEIGHT } from "../../Config";
 import { GameAnimation } from "../../util/animation/Animation";
 import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
+import { easeInOutCirc, sin } from "../../util/animation/TweenFunction";
 
-interface GameFadeContainerState {
+interface FadeContainerState {
     opacity: number;
 }
 
-interface GameFadeComponentProps {
+interface FadeComponentProps {
     shouldShow: boolean;
-    colour: string;
+    fadeInSpeed?: number;
+    fadeOutSpeed?: number;
 }
 
-const overlayColour = "#000000";
-
-export class GameFadeComponent extends React.Component<
-    GameFadeComponentProps,
-    GameFadeContainerState
+export class FadeComponent extends React.Component<
+    FadeComponentProps,
+    FadeContainerState
 > {
-    state: GameFadeContainerState = {
+    state: FadeContainerState = {
         opacity: 0,
     };
 
     private fadeOut: GameAnimation;
     private fadeIn: GameAnimation;
 
-    public constructor(props: GameFadeComponentProps) {
+    public constructor(props: FadeComponentProps) {
         super(props);
+
+        console.log(props.fadeInSpeed, props.fadeOutSpeed);
+
         this.fadeOut = new GameAnimation((x: number) => {
             this.setState({
                 opacity: 1 - x,
             });
-        }, new IntervalDriver());
+        }, new IntervalDriver()).speed(
+            props.fadeOutSpeed
+        ).tween(sin);
 
         this.fadeIn = new GameAnimation((x: number) => {
             this.setState({
                 opacity: x,
             });
-        }, new IntervalDriver());
+        }, new IntervalDriver()).speed(
+            props.fadeInSpeed
+        ).tween(sin);
     }
 
     public componentDidMount() {
@@ -47,7 +54,7 @@ export class GameFadeComponent extends React.Component<
         });
     }
 
-    public componentWillUpdate(nextProps: GameFadeComponentProps) {
+    public componentWillUpdate(nextProps: FadeComponentProps) {
         if (nextProps.shouldShow && !this.props.shouldShow) {
             this.fadeOut.stop();
             this.fadeIn.start({});
@@ -60,16 +67,14 @@ export class GameFadeComponent extends React.Component<
     }
 
     public render() {
+        if (this.state.opacity === 0) {
+            return <></>;
+        }
+
         return (
-            <div
-                style={{
-                    width: DOM_WIDTH,
-                    height: DOM_HEIGHT,
-                    position: "absolute",
-                    backgroundColor: overlayColour,
-                    opacity: this.state.opacity,
-                }}
-            />
+            <div style={{opacity: this.state.opacity, width: "100%", height: "100%", position: "absolute"}}>
+                {this.props.children}
+            </div>
         );
     }
 }

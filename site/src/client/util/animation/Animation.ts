@@ -28,8 +28,8 @@ export class GameAnimation {
         return this;
     }
 
-    public speed(milliseconds: number): GameAnimation {
-        this.speedMilliseconds = milliseconds;
+    public speed(milliseconds?: number): GameAnimation {
+        this.speedMilliseconds = milliseconds ? milliseconds : 1000;
         return this;
     }
 

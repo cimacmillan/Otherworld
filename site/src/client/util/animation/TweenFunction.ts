@@ -12,3 +12,14 @@ export const floorStepper: (steps: number) => TweenFunction = (
         return Math.floor(x * steps);
     };
 };
+
+export function sin(x: number): number {
+    return Math.sin(x * Math.PI / 2);
+}
+
+// https://easings.net/#easeInOutCirc
+export function easeInOutCirc(x: number): number {
+    return x < 0.5
+      ? (1 - Math.sqrt(1 - Math.pow(2 * x, 2))) / 2
+      : (Math.sqrt(1 - Math.pow(-2 * x + 2, 2)) + 1) / 2;
+    }
