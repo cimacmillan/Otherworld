@@ -1,11 +1,10 @@
-import React = require("react");
 import { BehaviorSubject, Subject } from "rxjs";
-import { skip } from "rxjs/operators";
 import { Actions } from "./actions/Actions";
 import { gameStartReducer, GameStartState } from "./reducers/GameStartReducer";
 import { healthBarReducer, HealthBarState } from "./reducers/HealthBarReducer";
 import { uiReducer, UIState } from "./reducers/UIReducer";
 import { weaponReducer, WeaponState } from "./reducers/WeaponReducer";
+import { Sagas } from "./saga/Saga";
 
 export interface State {
     uiState: UIState;
@@ -42,18 +41,6 @@ dispatch.subscribe((gameEvent: Actions) => {
     store.next(newState);
 });
 
-export const useGlobalState: () => [State, (action: Actions) => void] = () => {
-    const [state, setState] = React.useState(store.getValue());
-    React.useEffect(() => {
-        const sub = store.pipe(skip(1)).subscribe(setState);
-        return () => sub.unsubscribe();
-    }, []);
-    return [state, (action: Actions) => dispatch.next(action)];
-};
-
-export const useDispatchListener = (callback: (action: Actions) => void) => {
-    React.useEffect(() => {
-        const sub = dispatch.subscribe(callback);
-        return () => sub.unsubscribe();
-    }, []);
-};
+for (const listener of Sagas) {
+    dispatch.subscribe((event: Actions) => listener.next(event));
+}

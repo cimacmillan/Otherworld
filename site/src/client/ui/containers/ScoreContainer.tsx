@@ -4,7 +4,7 @@ import {
     TextSize,
     TextColour,
 } from "../components/TextComponent";
-import { useGlobalState, useDispatchListener } from "../State";
+import { useGlobalState, useDispatchListener } from "../effects/GlobalState";
 import React = require("react");
 import { DOM_WIDTH, DOM_HEIGHT } from "../../Config";
 import { GameAnimation } from "../../util/animation/GameAnimation";

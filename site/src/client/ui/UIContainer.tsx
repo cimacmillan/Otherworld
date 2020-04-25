@@ -1,6 +1,6 @@
 import { Game } from "../Game";
 import React = require("react");
-import { useGlobalState } from "./State";
+import { useGlobalState } from "./effects/GlobalState";
 import { HealthBarComponent } from "./components/HealthBarComponent";
 import { GameMenuContainer } from "./containers/GameMenuContainer";
 import { GameFadeContainer } from "./containers/GameFadeContainer";

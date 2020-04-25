@@ -19,7 +19,7 @@ import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { connect } from "react-redux";
 import { sequence, animation, parallel } from "../../util/animation/Animations";
-import { useGlobalState, useDispatchListener } from "../State";
+import { useGlobalState, useDispatchListener } from "../effects/GlobalState";
 import { Actions } from "../actions/Actions";
 
 interface WeaponComponentProps {

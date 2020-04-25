@@ -1,6 +1,7 @@
 import React = require("react");
 import { connect } from "react-redux";
-import { State, useGlobalState } from "../State";
+import { State } from "../State";
+import { useGlobalState } from "../effects/GlobalState";
 import { Subscription } from "rxjs";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { startGame } from "../actions/GameStartActions";
@@ -17,7 +18,7 @@ export const GameFadeContainer: React.FunctionComponent<GameFadeContainerProps> 
     const [state, dispatch] = useGlobalState();
     return (
         <FadeComponent
-            shouldShow={state.gameStart.showing}
+            shouldShow={state.gameStart.showingFade}
             fadeInSpeed={1000}
             fadeOutSpeed={300}
         >

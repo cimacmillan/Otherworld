@@ -14,7 +14,7 @@ import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
 import { AnimationImageComponent } from "./AnimationImageComponent";
 import { connect } from "react-redux";
 import { animation } from "../../util/animation/Animations";
-import { useGlobalState, useDispatchListener } from "../State";
+import { useGlobalState, useDispatchListener } from "../effects/GlobalState";
 import { Actions } from "../actions/Actions";
 
 const HEALTH_BAR_WIDTH = 0.5;

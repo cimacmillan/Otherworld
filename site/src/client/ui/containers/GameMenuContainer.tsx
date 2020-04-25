@@ -15,7 +15,7 @@ import { BUTTON_HOVER } from "../../services/resources/manifests/ButtonHover";
 import { BUTTON_PRESS } from "../../services/resources/manifests/ButtonPress";
 import { Subscription } from "rxjs";
 import { FadeComponent } from "../components/FadeComponent";
-import { useGlobalState } from "../State";
+import { useGlobalState } from "../effects/GlobalState";
 import { startGame } from "../actions/GameStartActions";
 
 interface GameMenuContainerProps {
@@ -36,7 +36,7 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
 
     return (
         <FadeComponent
-            shouldShow={state.gameStart.showing}
+            shouldShow={state.gameStart.showingMenu}
             fadeInSpeed={1000}
             fadeOutSpeed={150}
         >
