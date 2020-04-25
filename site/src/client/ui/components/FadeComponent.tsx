@@ -1,13 +1,14 @@
 import React = require("react");
 import { Subscription } from "rxjs";
 import { DOM_WIDTH, DOM_HEIGHT } from "../../Config";
-import { GameAnimation } from "../../util/animation/Animation";
+import { GameAnimation } from "../../util/animation/GameAnimation";
 import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
-import { easeInOutCirc, sin } from "../../util/animation/TweenFunction";
-
-interface FadeContainerState {
-    opacity: number;
-}
+import {
+    easeInOutCirc,
+    sin,
+    interpolate,
+    animation,
+} from "../../util/animation/Animations";
 
 interface FadeComponentProps {
     shouldShow: boolean;
@@ -15,66 +16,36 @@ interface FadeComponentProps {
     fadeOutSpeed?: number;
 }
 
-export class FadeComponent extends React.Component<
-    FadeComponentProps,
-    FadeContainerState
-> {
-    state: FadeContainerState = {
-        opacity: 0,
-    };
+export const FadeComponent: React.FunctionComponent<FadeComponentProps> = (
+    props
+) => {
+    const [opacity, setOpacity] = React.useState(props.shouldShow ? 1 : 0);
 
-    private fadeOut: GameAnimation;
-    private fadeIn: GameAnimation;
+    React.useEffect(() => {
+        const fade = animation(setOpacity)
+            .speed(props.shouldShow ? props.fadeInSpeed : props.fadeOutSpeed)
+            .tween(interpolate(opacity, props.shouldShow ? 1 : 0))
+            .driven()
+            .start({});
 
-    public constructor(props: FadeComponentProps) {
-        super(props);
+        return () => {
+            fade.stop();
+        };
+    }, [props.shouldShow]);
 
-        console.log(props.fadeInSpeed, props.fadeOutSpeed);
-
-        this.fadeOut = new GameAnimation((x: number) => {
-            this.setState({
-                opacity: 1 - x,
-            });
-        }, new IntervalDriver()).speed(
-            props.fadeOutSpeed
-        ).tween(sin);
-
-        this.fadeIn = new GameAnimation((x: number) => {
-            this.setState({
-                opacity: x,
-            });
-        }, new IntervalDriver()).speed(
-            props.fadeInSpeed
-        ).tween(sin);
+    if (opacity === 0) {
+        return <></>;
     }
-
-    public componentDidMount() {
-        this.setState({
-            opacity: this.props.shouldShow ? 1 : 0,
-        });
-    }
-
-    public componentWillUpdate(nextProps: FadeComponentProps) {
-        if (nextProps.shouldShow && !this.props.shouldShow) {
-            this.fadeOut.stop();
-            this.fadeIn.start({});
-        }
-
-        if (!nextProps.shouldShow && this.props.shouldShow) {
-            this.fadeIn.stop();
-            this.fadeOut.start({});
-        }
-    }
-
-    public render() {
-        if (this.state.opacity === 0) {
-            return <></>;
-        }
-
-        return (
-            <div style={{opacity: this.state.opacity, width: "100%", height: "100%", position: "absolute"}}>
-                {this.props.children}
-            </div>
-        );
-    }
-}
+    return (
+        <div
+            style={{
+                opacity: opacity,
+                width: "100%",
+                height: "100%",
+                position: "absolute",
+            }}
+        >
+            {props.children}
+        </div>
+    );
+};

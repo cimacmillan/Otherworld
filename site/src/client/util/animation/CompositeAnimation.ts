@@ -1,5 +1,5 @@
-import { GameAnimation, StartParameters } from "./Animation";
 import { IntervalDriver } from "./AnimationIntervalDriver";
+import { GameAnimation, StartParameters } from "./GameAnimation";
 
 export enum CompositeAnimationType {
     SERIAL = "SERIAL",
@@ -9,7 +9,6 @@ export enum CompositeAnimationType {
 export interface CompositeAnimationParams {
     animations: Array<GameAnimation | CompositeAnimation>;
     type: CompositeAnimationType;
-    driver?: IntervalDriver;
 }
 
 export class CompositeAnimation {
@@ -25,7 +24,11 @@ export class CompositeAnimation {
     public constructor(params: CompositeAnimationParams) {
         this.animations = params.animations;
         this.type = params.type;
-        this.driver = params.driver;
+    }
+
+    public driven(): CompositeAnimation {
+        this.driver = new IntervalDriver();
+        return this;
     }
 
     public start(params: StartParameters) {

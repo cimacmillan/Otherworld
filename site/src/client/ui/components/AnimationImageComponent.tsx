@@ -10,7 +10,9 @@ export interface AnimationImageComponentProps {
     interp: number;
 }
 
-export function AnimationImageComponent(props: AnimationImageComponentProps) {
+export const AnimationImageComponent: React.FunctionComponent<AnimationImageComponentProps> = (
+    props: AnimationImageComponentProps
+) => {
     const sheet = props.serviceLocator.getResourceManager().manifest
         .spritesheets[props.spriteSheet];
     return (
@@ -25,4 +27,4 @@ export function AnimationImageComponent(props: AnimationImageComponentProps) {
             }}
         />
     );
-}
+};

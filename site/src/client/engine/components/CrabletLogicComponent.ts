@@ -7,8 +7,8 @@ import {
     SpriteSheets,
 } from "../../services/resources/manifests/Types";
 import { TextureCoordinate } from "../../services/resources/SpriteSheet";
-import { GameAnimation } from "../../util/animation/Animation";
-import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
+import { animation } from "../../util/animation/Animations";
+import { GameAnimation } from "../../util/animation/GameAnimation";
 import {
     vec_add,
     vec_distance,
@@ -329,10 +329,11 @@ export class CrabletLogicComponent<
             toRender.textureWidth = texture.textureCoordinate.textureWidth;
             toRender.textureHeight = texture.textureCoordinate.textureHeight;
 
-            new GameAnimation((x: number) => {
+            animation((x: number) => {
                 toRender.size[0] = 0.5 + x;
                 toRender.size[1] = 0.5 + x;
-            }, new IntervalDriver())
+            })
+                .driven()
                 .tween((x: number) => Math.sin(x * Math.PI))
                 .speed(200)
                 .start({

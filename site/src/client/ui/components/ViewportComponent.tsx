@@ -8,24 +8,24 @@ export interface ViewportProps {
     style: React.CSSProperties;
 }
 
-export class ViewportComponent extends React.Component<ViewportProps> {
-    public render() {
-        return (
-            <div
-                style={{
-                    maxWidth: this.props.width,
-                    maxHeight: this.props.height,
-                    width: this.props.width,
-                    height: this.props.height,
-                    overflow: "hidden",
-                    marginLeft: this.props.x,
-                    marginTop: this.props.y,
-                    position: "absolute",
-                    ...this.props.style,
-                }}
-            >
-                {this.props.children}
-            </div>
-        );
-    }
-}
+export const ViewportComponent: React.FunctionComponent<ViewportProps> = (
+    props
+) => {
+    return (
+        <div
+            style={{
+                maxWidth: props.width,
+                maxHeight: props.height,
+                width: props.width,
+                height: props.height,
+                overflow: "hidden",
+                marginLeft: props.x,
+                marginTop: props.y,
+                position: "absolute",
+                ...props.style,
+            }}
+        >
+            {props.children}
+        </div>
+    );
+};

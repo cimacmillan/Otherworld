@@ -1,4 +1,4 @@
-import { ANIMATION_RESOLUTION } from "./Animation";
+import { ANIMATION_RESOLUTION } from "./GameAnimation";
 
 export class IntervalDriver {
     private intervalId?: NodeJS.Timeout;

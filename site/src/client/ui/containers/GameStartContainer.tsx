@@ -65,79 +65,79 @@ class GameStartContainer extends React.Component<GameStartContainerProps> {
         // }
 
         return (
-            <FadeComponent 
+            <FadeComponent
                 shouldShow={this.props.showing}
                 fadeInSpeed={1000}
                 fadeOutSpeed={150}
             >
-                { this.getPanel() }
+                {this.getPanel()}
             </FadeComponent>
-           
         );
     }
 
     private getPanel = () => {
-
         const showBestScore = this.props.bestScore !== undefined;
 
-        return <GamePanelComponent
-            serviceLocator={this.props.serviceLocator}
-            width={500}
-            height={showBestScore ? 300 : 200}
-            style={{
-                marginLeft: 400,
-                marginTop: 200,
-                position: "absolute",
-            }}
-            childStyle={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-            }}
-            panelMap={DARK_PANEL}
-        >
-            <TextComponent
-                text={"Otherworld"}
-                style={{
-                    // position: "absolute",
-                    width: "100%",
-                    textAlign: "center",
-                    marginTop: 10,
-                }}
-                font={TextFont.REGULAR}
-                size={TextSize.BIG}
-                colour={TextColour.LIGHT}
-            />
-
-            {this.getScoreComponent()}
-
-            <GameButtonContainer
+        return (
+            <GamePanelComponent
                 serviceLocator={this.props.serviceLocator}
-                width={256}
-                height={46}
+                width={500}
+                height={showBestScore ? 300 : 200}
                 style={{
-                    marginTop: 30
+                    marginLeft: 400,
+                    marginTop: 200,
+                    position: "absolute",
                 }}
                 childStyle={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    justifyContent: "center",
                 }}
-                panelMapDefault={BUTTON_DEFAULT}
-                panelMapHover={BUTTON_HOVER}
-                panelMapPress={BUTTON_PRESS}
-                onSelect={this.onStartPress}
+                panelMap={DARK_PANEL}
             >
                 <TextComponent
-                    text={"New Game"}
-                    style={{}}
+                    text={"Otherworld"}
+                    style={{
+                        // position: "absolute",
+                        width: "100%",
+                        textAlign: "center",
+                        marginTop: 10,
+                    }}
                     font={TextFont.REGULAR}
-                    size={TextSize.SMALL}
+                    size={TextSize.BIG}
                     colour={TextColour.LIGHT}
                 />
-            </GameButtonContainer>
-        </GamePanelComponent>
+
+                {this.getScoreComponent()}
+
+                <GameButtonContainer
+                    serviceLocator={this.props.serviceLocator}
+                    width={256}
+                    height={46}
+                    style={{
+                        marginTop: 30,
+                    }}
+                    childStyle={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                    panelMapDefault={BUTTON_DEFAULT}
+                    panelMapHover={BUTTON_HOVER}
+                    panelMapPress={BUTTON_PRESS}
+                    onSelect={this.onStartPress}
+                >
+                    <TextComponent
+                        text={"New Game"}
+                        style={{}}
+                        font={TextFont.REGULAR}
+                        size={TextSize.SMALL}
+                        colour={TextColour.LIGHT}
+                    />
+                </GameButtonContainer>
+            </GamePanelComponent>
+        );
     };
 
     private getScoreComponent = () => {

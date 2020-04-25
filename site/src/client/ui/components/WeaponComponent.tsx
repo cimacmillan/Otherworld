@@ -1,7 +1,7 @@
 import React = require("react");
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { DOM_WIDTH, DOM_HEIGHT } from "../../Config";
-import { GameAnimation } from "../../util/animation/Animation";
+import { GameAnimation } from "../../util/animation/GameAnimation";
 import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
 import {
     CompositeAnimation,
@@ -19,6 +19,7 @@ import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { GameEventSubject, State } from "../State";
 import { connect } from "react-redux";
+import { sequence, animation } from "../../util/animation/Animations";
 
 interface OwnProps {
     serviceLocator: ServiceLocator;
@@ -79,16 +80,14 @@ class WeaponComponent extends React.Component<WeaponComponentProps> {
             ],
             type: CompositeAnimationType.PARALLEL,
         });
-        this.composite = new CompositeAnimation({
-            animations: [swingDown, swingUp],
-            type: CompositeAnimationType.SERIAL,
-            driver: new IntervalDriver(),
-        });
+        this.composite = sequence(swingDown, swingUp).driven();
 
-        this.headBob = new GameAnimation((x: number) => {
+        this.headBob = animation((x: number) => {
             this.onHeadBobAnimation(x);
             this.forceUpdate();
-        }, new IntervalDriver()).speed(400);
+        })
+            .driven()
+            .speed(400);
     }
 
     public componentDidMount() {

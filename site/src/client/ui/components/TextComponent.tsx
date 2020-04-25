@@ -24,10 +24,9 @@ export interface TextComponentProps {
     colour: TextColour;
 }
 
-const selectNone =
-    "-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;";
-
-export function TextComponent(props: TextComponentProps) {
+export const TextComponent: React.FunctionComponent<TextComponentProps> = (
+    props
+) => {
     return (
         <div
             style={{
@@ -46,4 +45,4 @@ export function TextComponent(props: TextComponentProps) {
             {props.text}
         </div>
     );
-}
+};

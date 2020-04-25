@@ -9,11 +9,12 @@ import {
     UISPRITES,
     UIANIMATIONS,
 } from "../../services/resources/manifests/Types";
-import { GameAnimation } from "../../util/animation/Animation";
+import { GameAnimation } from "../../util/animation/GameAnimation";
 import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
 import { AnimationImageComponent } from "./AnimationImageComponent";
 import { GameEventSubject, State } from "../State";
 import { connect } from "react-redux";
+import { animation } from "../../util/animation/Animations";
 
 const HEALTH_BAR_WIDTH = 0.5;
 const HEALTH_BAR_HEIGHT = HEALTH_BAR_WIDTH / 3;
@@ -42,10 +43,12 @@ class HealthBarComponent extends React.Component<HealthBarComponentProps> {
     private healthBarYOffset = 0;
     constructor(props: HealthBarComponentProps) {
         super(props);
-        this.knockAnimation = new GameAnimation((x: number) => {
+        this.knockAnimation = animation((x: number) => {
             this.healthBarYOffset = Math.sin(x * Math.PI);
             this.forceUpdate();
-        }, new IntervalDriver()).speed(HEALTH_BAR_BUMP_SPEED);
+        })
+            .driven()
+            .speed(HEALTH_BAR_BUMP_SPEED);
     }
 
     public componentDidMount() {

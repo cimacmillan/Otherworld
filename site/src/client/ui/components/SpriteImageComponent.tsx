@@ -9,7 +9,9 @@ export interface SpriteImageComponentProps {
     style: React.CSSProperties;
 }
 
-export function SpriteImageComponent(props: SpriteImageComponentProps) {
+export const SpriteImageComponent: React.FunctionComponent<SpriteImageComponentProps> = (
+    props
+) => {
     const sheet = props.serviceLocator.getResourceManager().manifest
         .spritesheets[props.spriteSheet];
     return (
@@ -24,4 +26,4 @@ export function SpriteImageComponent(props: SpriteImageComponentProps) {
             }}
         />
     );
-}
+};

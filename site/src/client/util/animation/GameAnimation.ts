@@ -1,6 +1,6 @@
 import { TARGET_FPS } from "../../Config";
 import { IntervalDriver } from "./AnimationIntervalDriver";
-import { identity, TweenFunction } from "./TweenFunction";
+import { TweenFunction } from "./Animations";
 
 export type AnimationDriverCallback = (x: number) => void;
 
@@ -13,18 +13,20 @@ export interface StartParameters {
 export const ANIMATION_RESOLUTION = Math.floor(1000 / TARGET_FPS);
 
 export class GameAnimation {
-    private tweenFunction = identity;
     private speedMilliseconds: number = 1000;
     private loop: boolean = false;
     private currentPosition: number = 0;
     private playCount = 0;
     private onFinish: () => void;
     private playing: boolean = false;
+    private driver?: IntervalDriver;
 
-    public constructor(
-        private callback: AnimationDriverCallback,
-        private driver?: IntervalDriver
-    ) {
+    public constructor(private callback: AnimationDriverCallback) {
+        return this;
+    }
+
+    public driven(): GameAnimation {
+        this.driver = new IntervalDriver();
         return this;
     }
 
@@ -34,8 +36,8 @@ export class GameAnimation {
     }
 
     public tween(tween: TweenFunction): GameAnimation {
-        // this.tweenFunction = (x: number) => tween(this.tweenFunction(x));
-        this.tweenFunction = tween;
+        const currentTweenCopy = this.tweenFunction;
+        this.tweenFunction = (x: number) => tween(currentTweenCopy(x));
         return this;
     }
 
@@ -97,4 +99,5 @@ export class GameAnimation {
     public isPlaying() {
         return this.isPlaying;
     }
+    private tweenFunction = (x: number) => x;
 }

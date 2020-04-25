@@ -64,14 +64,14 @@ class GameFadeContainer extends React.Component<
                 fadeInSpeed={1000}
                 fadeOutSpeed={300}
             >
-            <div
-                style={{
-                    width: DOM_WIDTH,
-                    height: DOM_HEIGHT,
-                    position: "absolute",
-                    backgroundColor: "#000000"
-                }}
-            />
+                <div
+                    style={{
+                        width: DOM_WIDTH,
+                        height: DOM_HEIGHT,
+                        position: "absolute",
+                        backgroundColor: "#000000",
+                    }}
+                />
             </FadeComponent>
         );
     }
