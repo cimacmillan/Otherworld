@@ -26,7 +26,7 @@ export const FadeComponent: React.FunctionComponent<FadeComponentProps> = (
             .speed(props.shouldShow ? props.fadeInSpeed : props.fadeOutSpeed)
             .tween(interpolate(opacity, props.shouldShow ? 1 : 0))
             .driven()
-            .start({});
+            .start();
 
         return () => {
             fade.stop();

@@ -64,7 +64,8 @@ export const WeaponComponent: React.FunctionComponent<WeaponComponentProps> = (
         })
             .driven()
             .speed(400)
-            .start({ loop: true });
+            .looping()
+            .start();
 
         return () => {
             composite.stop();
@@ -74,7 +75,7 @@ export const WeaponComponent: React.FunctionComponent<WeaponComponentProps> = (
 
     useDispatchListener((event: Actions) => {
         if (event.type === PlayerEventType.PLAYER_ATTACK) {
-            composite.start({});
+            composite.start();
         }
     });
 

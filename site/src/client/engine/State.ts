@@ -16,6 +16,10 @@ export interface CameraState {
     cameraShouldSync: boolean;
 }
 
+export interface LogicState {
+    logicState: string
+}
+
 export interface HealthState {
     health: number;
 }

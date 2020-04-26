@@ -93,6 +93,9 @@ export class Entity<State extends BaseState> {
 
     public emitGlobally(event: GameEvent) {
         this.serviceLocator.getWorld().emitOutOfWorld(event);
+        for (let x = 0; x < this.listeners.length; x++) {
+            this.listeners[x].onObservedEvent(event);
+        }
     }
 
     public getServiceLocator() {

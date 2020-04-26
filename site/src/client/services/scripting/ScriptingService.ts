@@ -4,7 +4,7 @@ import { Game } from "../../Game";
 import { getTextureCoordinate } from "../../util/math";
 import { Audios } from "../resources/manifests/Types";
 import { ServiceLocator } from "../ServiceLocator";
-import { createMacator } from "./factory/EntityFactory";
+import { createMacator, createEgg } from "./factory/EntityFactory";
 import { createPlayer } from "./factory/PlayerFactory";
 import { createWall } from "./factory/WallFactory";
 
@@ -74,9 +74,11 @@ export class ScriptingService {
         this.serviceLocator.getAudioService().attachCamera(camera);
         this.serviceLocator.getRenderService().attachCamera(camera);
 
-        for (let i = 0; i < 100; i++) {
-            world.addEntity(createMacator(this.serviceLocator));
-        }
+        // for (let i = 0; i < 100; i++) {
+        //     world.addEntity(createMacator(this.serviceLocator));
+        // }
+
+        world.addEntity(createEgg(this.serviceLocator));
 
         // Walls and floors not getting deleted
         const floorTexture = getTextureCoordinate(32, 64, 32, 32, 0, 32);

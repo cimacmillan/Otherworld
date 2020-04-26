@@ -37,6 +37,7 @@ Main TODO Taskboard
 - [ ] Oriented sprites  
 - [ ] Refactor bulky redux and component classes with effects  
 - [ ] Convert reducers to pure actions  
+- [ ] Jumping  
 
 ### In Progress
 

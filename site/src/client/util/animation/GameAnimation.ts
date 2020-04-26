@@ -41,15 +41,22 @@ export class GameAnimation {
         return this;
     }
 
-    public start(params: StartParameters): GameAnimation {
-        const { offset, loop, onFinish } = params;
-        if (offset) {
-            this.currentPosition = offset;
-        } else {
-            this.currentPosition = 0;
-        }
+    public looping(): GameAnimation {
+        this.loop = true;
+        return this;
+    }
+
+    public whenDone(onFinish: () => void): GameAnimation {
         this.onFinish = onFinish;
-        this.loop = loop;
+        return this;
+    }
+
+    public withOffset(offset: number): GameAnimation {
+        this.currentPosition = offset;
+        return this;
+    }
+
+    public start(): GameAnimation {
         this.playing = true;
         if (this.driver) {
             this.driver.drive(() => this.tick());
@@ -90,6 +97,10 @@ export class GameAnimation {
             const increment = ANIMATION_RESOLUTION / this.speedMilliseconds;
             this.currentPosition += increment;
         }
+    }
+
+    public getCurrentPosition() {
+        return this.currentPosition;
     }
 
     public getPlayCount() {

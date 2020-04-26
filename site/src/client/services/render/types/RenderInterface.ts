@@ -1,14 +1,12 @@
 import * as glm from "gl-matrix";
+import { TextureCoordinate } from "../../resources/SpriteSheet";
 
 export interface Sprite {
     position: glm.vec2;
     size: glm.vec2;
     height: number;
 
-    textureX: number;
-    textureY: number;
-    textureWidth: number;
-    textureHeight: number;
+    texture: TextureCoordinate;
 }
 
 export interface Wall {

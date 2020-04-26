@@ -45,14 +45,10 @@ export const HealthBarComponent: React.FunctionComponent<HealthBarComponentProps
     useDispatchListener((event: Actions) => {
         switch (event.type) {
             case PlayerEventType.PLAYER_DAMAGED:
-                knockAnimation.start({
-                    onFinish: () => setHealthBarOffset(0),
-                });
+                knockAnimation.start().whenDone(() => setHealthBarOffset(0))
                 break;
             case PlayerEventType.PLAYER_KILLED:
-                knockAnimation.start({
-                    onFinish: () => setHealthBarOffset(0),
-                });
+                knockAnimation.start().whenDone(() => setHealthBarOffset(0))
                 break;
         }
     });

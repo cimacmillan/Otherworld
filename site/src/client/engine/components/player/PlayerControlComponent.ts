@@ -175,7 +175,7 @@ export class PlayerControlComponent<
                 InteractionType.ATTACK,
                 state.position,
                 state.angle,
-                1
+                1.5
             );
 
         if (attacks.length > 0) {

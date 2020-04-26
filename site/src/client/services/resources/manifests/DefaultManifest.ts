@@ -58,6 +58,13 @@ export const defaultManifest: ResourceManifest = {
                     y: 96,
                     frames: 8,
                 },
+                [Animations.EGG_CHARGE]: {
+                    width: 32,
+                    height: 32,
+                    x: 0,
+                    y: 128,
+                    frames: 8
+                }
             },
             sprites: {
                 [Sprites.SWORD]: {

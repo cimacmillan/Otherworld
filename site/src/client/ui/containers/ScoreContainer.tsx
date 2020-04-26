@@ -29,9 +29,7 @@ export const ScoreContainer: React.FunctionComponent = (props) => {
 
     useDispatchListener((action: Actions) => {
         if (action.type === EnemyEventType.ENEMY_KILLED) {
-            bounce.start({
-                onFinish: () => setScale(1),
-            });
+            bounce.start().whenDone(() => setScale(1));
         }
     });
 

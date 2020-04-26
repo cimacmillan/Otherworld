@@ -31,15 +31,24 @@ export class CompositeAnimation {
         return this;
     }
 
-    public start(params: StartParameters) {
-        const { loop, onFinish } = params;
+
+    public looping(): CompositeAnimation {
+        this.loop = true;
+        return this;
+    }
+
+    public whenDone(onFinish: () => void): CompositeAnimation {
         this.onFinish = onFinish;
-        this.loop = loop;
+        return this;
+    }
+
+    public start(): CompositeAnimation {
         this.playing = true;
         this.startAnimations();
         if (this.driver) {
             this.driver.drive(() => this.tick());
         }
+        return this;
     }
 
     public startAnimations() {
@@ -48,15 +57,11 @@ export class CompositeAnimation {
             case CompositeAnimationType.PARALLEL:
                 this.animations.forEach((animation, index) => {
                     this.animationMap[index] = false;
-                    animation.start({
-                        onFinish: () => this.onAnimationComplete(index),
-                    });
+                    animation.start().whenDone(() => this.onAnimationComplete(index));
                 });
                 break;
             case CompositeAnimationType.SERIAL:
-                this.animations[0].start({
-                    onFinish: () => this.onAnimationComplete(0),
-                });
+                this.animations[0].start().whenDone(() => this.onAnimationComplete(0));
                 break;
         }
     }
@@ -71,9 +76,8 @@ export class CompositeAnimation {
                 if (finishedCount >= this.animations.length) {
                     if (this.loop) {
                         this.startAnimations();
-                    } else {
-                        this.onFinish && this.onFinish();
                     }
+                    this.onFinish && this.onFinish();
                 }
                 break;
 
@@ -81,14 +85,12 @@ export class CompositeAnimation {
                 if (animationId === this.animations.length - 1) {
                     if (this.loop) {
                         this.startAnimations();
-                    } else {
-                        this.onFinish && this.onFinish();
                     }
+                    this.onFinish && this.onFinish();
                 } else {
-                    this.animations[animationId + 1].start({
-                        onFinish: () =>
-                            this.onAnimationComplete(animationId + 1),
-                    });
+                    this.animations[animationId + 1].start().whenDone(
+                        () => this.onAnimationComplete(animationId + 1)
+                    );
                 }
                 break;
         }
