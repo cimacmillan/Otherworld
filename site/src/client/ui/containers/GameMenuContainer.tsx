@@ -17,6 +17,7 @@ import { Subscription } from "rxjs";
 import { FadeComponent } from "../components/FadeComponent";
 import { useGlobalState } from "../effects/GlobalState";
 import { startGame } from "../actions/GameStartActions";
+import { KeyComponent } from "../components/KeyComponent";
 
 interface GameMenuContainerProps {
     serviceLocator: ServiceLocator;
@@ -36,10 +37,13 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
 
     return (
         <FadeComponent
+            startingShown={false}
             shouldShow={state.gameStart.showingMenu}
             fadeInSpeed={1000}
             fadeOutSpeed={150}
         >
+            <KeyComponent keyCode={"W"} />
+
             <GamePanelComponent
                 serviceLocator={props.serviceLocator}
                 width={500}

@@ -7,6 +7,7 @@ import { InputService } from "./services/input/InputService";
 import { InteractionService } from "./services/interaction/InteractionService";
 import { PhysicsService } from "./services/physics/PhysicsService";
 import { RenderService, ScreenBuffer } from "./services/render";
+import { Audios } from "./services/resources/manifests/Types";
 import { ResourceManager } from "./services/resources/ResourceManager";
 import { ScriptingService } from "./services/scripting/ScriptingService";
 import { ServiceLocator } from "./services/ServiceLocator";
@@ -68,6 +69,15 @@ export class Game {
         this.serviceLocator.getEventRouter().routeEvent(GameEventSource.ROOT, {
             type: RootEventType.GAME_INITIALISED,
         });
+
+        // Move this
+        this.serviceLocator
+            .getAudioService()
+            .play(
+                this.serviceLocator.getResourceManager().manifest.audio[
+                    Audios.INCOMING
+                ]
+            );
 
         loop.start();
     }

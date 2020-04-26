@@ -128,5 +128,6 @@ export const defaultManifest: ResourceManifest = {
         [Audios.PLAYER_HIT]: "audio/player_hit.mp3",
         [Audios.END]: "audio/end.mp3",
         [Audios.HISS]: "audio/hiss.mp3",
+        [Audios.INCOMING]: "audio/incoming.mp3",
     },
 };

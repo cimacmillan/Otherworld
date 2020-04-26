@@ -6,6 +6,7 @@ import { GameMenuContainer } from "./containers/GameMenuContainer";
 import { GameFadeContainer } from "./containers/GameFadeContainer";
 import { WeaponComponent } from "./components/WeaponComponent";
 import { PlayModeContainer } from "./containers/PlayModeContainer";
+import { KeyComponent } from "./components/KeyComponent";
 
 export interface UIContainerProps {
     game: Game;

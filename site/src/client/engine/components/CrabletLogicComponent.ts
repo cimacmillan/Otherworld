@@ -46,7 +46,7 @@ export type MacatorStateType = BaseState &
 
 const WALK_SPEED = 0.008;
 const ATTACK_SPEED = 0.03;
-const SPY_RADIUS = 6;
+const SPY_RADIUS = 20;
 const ATTACK_DELAY = 2000;
 const ATTACK_DISTANCE = 0.6;
 const DEFAULT_HEIGHT = 0.5;

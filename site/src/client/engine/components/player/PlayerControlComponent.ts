@@ -129,7 +129,11 @@ export class PlayerControlComponent<
         );
     }
 
-    public onStateTransition(entity: Entity<T>, from: T, to: T): void {}
+    public onStateTransition(entity: Entity<T>, from: T, to: T): void {
+        entity.emitGlobally({
+            type: PlayerEventType.PLAYER_INFO_CHANGE,
+        });
+    }
 
     private onDamaged(entity: Entity<PlayerState>, amount: number) {
         entity.setState({ health: entity.getState().health - amount });

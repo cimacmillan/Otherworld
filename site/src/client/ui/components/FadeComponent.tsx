@@ -12,6 +12,7 @@ import {
 
 interface FadeComponentProps {
     shouldShow: boolean;
+    startingShown?: boolean;
     fadeInSpeed?: number;
     fadeOutSpeed?: number;
 }
@@ -19,7 +20,11 @@ interface FadeComponentProps {
 export const FadeComponent: React.FunctionComponent<FadeComponentProps> = (
     props
 ) => {
-    const [opacity, setOpacity] = React.useState(props.shouldShow ? 1 : 0);
+    let initialOpacity = props.shouldShow ? 1 : 0;
+    if (props.startingShown !== undefined) {
+        initialOpacity = props.startingShown ? 1 : 0;
+    }
+    const [opacity, setOpacity] = React.useState(initialOpacity);
 
     React.useEffect(() => {
         const fade = animation(setOpacity)

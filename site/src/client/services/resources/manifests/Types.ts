@@ -87,4 +87,5 @@ export enum Audios {
     PLAYER_HIT,
     END,
     HISS,
+    INCOMING,
 }

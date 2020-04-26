@@ -8,13 +8,8 @@ import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { EnemyEventType } from "../../events/EnemyEvents";
 import { GameEvent } from "../../events/Event";
-import {
-    BaseState,
-    LogicState,
-} from "../../State";
-import {
-    AnimationStateType,
-} from "../AnimationStateComponent";
+import { BaseState, LogicState } from "../../State";
+import { AnimationStateType } from "../AnimationStateComponent";
 import { PhysicsStateType } from "../PhysicsComponent";
 import { SpriteStateType } from "../SpriteRenderComponent";
 

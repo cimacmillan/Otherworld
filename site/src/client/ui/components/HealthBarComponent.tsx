@@ -29,6 +29,9 @@ interface HealthBarComponentProps {
 export const HealthBarComponent: React.FunctionComponent<HealthBarComponentProps> = (
     props
 ) => {
+    const [health, setHealth] = React.useState(
+        props.serviceLocator.getScriptingService().getPlayer().getState().health
+    );
     const [healthBarYOffset, setHealthBarOffset] = React.useState(0);
     const [state, dispatch] = useGlobalState();
 
@@ -50,13 +53,17 @@ export const HealthBarComponent: React.FunctionComponent<HealthBarComponentProps
             case PlayerEventType.PLAYER_KILLED:
                 knockAnimation.start().whenDone(() => setHealthBarOffset(0));
                 break;
+            case PlayerEventType.PLAYER_INFO_CHANGE:
+                setHealth(
+                    props.serviceLocator
+                        .getScriptingService()
+                        .getPlayer()
+                        .getState().health
+                );
+
+                break;
         }
     });
-
-    const health = props.serviceLocator
-        .getScriptingService()
-        .getPlayer()
-        .getState().health;
 
     const width = DOM_HEIGHT * HEALTH_BAR_WIDTH;
     const height = DOM_HEIGHT * HEALTH_BAR_HEIGHT;
