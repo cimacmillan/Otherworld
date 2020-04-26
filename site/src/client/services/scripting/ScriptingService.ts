@@ -4,7 +4,7 @@ import { Game } from "../../Game";
 import { getTextureCoordinate } from "../../util/math";
 import { Audios } from "../resources/manifests/Types";
 import { ServiceLocator } from "../ServiceLocator";
-import { createMacator, createEgg } from "./factory/EntityFactory";
+import { createEgg } from "./factory/EntityFactory";
 import { createPlayer } from "./factory/PlayerFactory";
 import { createWall } from "./factory/WallFactory";
 

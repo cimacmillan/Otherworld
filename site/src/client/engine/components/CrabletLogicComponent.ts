@@ -1,4 +1,3 @@
-import { GameEventSource } from "../../services/EventRouter";
 import { InteractionType } from "../../services/interaction/InteractionType";
 import {
     Animations,
@@ -60,6 +59,10 @@ export class CrabletLogicComponent<
     private attackAnimation: GameAnimation;
     private deadTexture: TextureCoordinate;
     private attackDelay: ActionDelay;
+
+    public constructor(private initialX: number, private initialY: number) {
+        super();
+    }
 
     public init(entity: Entity<MacatorStateType>) {
         this.attackDelay = new ActionDelay(ATTACK_DELAY);
@@ -157,8 +160,8 @@ export class CrabletLogicComponent<
 
     public onCreate(entity: Entity<MacatorStateType>) {
         const angle = Math.random() * Math.PI * 2;
-        const x = Math.sin(angle) * 1;
-        const y = Math.cos(angle) * 1;
+        const x = Math.sin(angle) * 1 + this.initialX;
+        const y = Math.cos(angle) * 1 + this.initialY;
         const xtex = Math.random();
 
         let crabType = Animations.CRABLET_BROWN;
@@ -209,8 +212,9 @@ export class CrabletLogicComponent<
                             .getResourceManager()
                             .manifest.spritesheets[
                                 SpriteSheets.SPRITE
-                            ].getAnimationInterp(crabType, xtex).textureCoordinate,
-                        }
+                            ].getAnimationInterp(crabType, xtex)
+                            .textureCoordinate,
+                    },
                 },
                 position: { x, y },
                 height: DEFAULT_HEIGHT,
@@ -235,7 +239,10 @@ export class CrabletLogicComponent<
 
         this.animation = new GameAnimation((x: number) => {
             const toRender = entity.getState().spriteState.sprite;
-            toRender.texture = getAnimationTexture(crabType, x).textureCoordinate;
+            toRender.texture = getAnimationTexture(
+                crabType,
+                x
+            ).textureCoordinate;
         })
             .speed(400)
             .withOffset(Math.random())
@@ -244,8 +251,10 @@ export class CrabletLogicComponent<
 
         this.attackAnimation = new GameAnimation((x: number) => {
             const toRender = entity.getState().spriteState.sprite;
-            toRender.texture = getAnimationTexture(crabAttackAnimation, x)
-                .textureCoordinate;
+            toRender.texture = getAnimationTexture(
+                crabAttackAnimation,
+                x
+            ).textureCoordinate;
             toRender.height =
                 DEFAULT_HEIGHT + Math.sin(x * Math.PI) * JUMP_HEIGHT;
         }).speed(400);
@@ -269,7 +278,10 @@ export class CrabletLogicComponent<
 
     private syncSprite(entity: Entity<MacatorStateType>) {
         const state = entity.getState();
-        state.spriteState.sprite.position = [state.position.x, state.position.y];
+        state.spriteState.sprite.position = [
+            state.position.x,
+            state.position.y,
+        ];
     }
 
     private onDamaged(
@@ -336,10 +348,9 @@ export class CrabletLogicComponent<
                 .speed(200)
                 .start()
                 .whenDone(() => {
-                        toRender.size[0] = 1;
-                        toRender.size[1] = 1;
-                    },
-                );
+                    toRender.size[0] = 1;
+                    toRender.size[1] = 1;
+                });
 
             setTimeout(
                 () =>
@@ -360,12 +371,11 @@ export class CrabletLogicComponent<
             entity.getState().spriteState.sprite.height = DEFAULT_HEIGHT;
             this.animation.stop();
             this.attackAnimation.start().whenDone(() => {
-                    entity.setState({
-                        macatorState: MacatorState.WALKING,
-                    });
-                    this.attackDelay.onAction();
-                },
-            );
+                entity.setState({
+                    macatorState: MacatorState.WALKING,
+                });
+                this.attackDelay.onAction();
+            });
             entity
                 .getServiceLocator()
                 .getAudioService()
@@ -406,7 +416,7 @@ export class CrabletLogicComponent<
                     entity.getServiceLocator().getResourceManager().manifest
                         .audio[Audios.POINT]
                 );
-                
+
             entity.emitGlobally({
                 type: EnemyEventType.ENEMY_KILLED,
             });

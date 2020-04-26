@@ -1,42 +1,40 @@
-import { BaseState, LogicState } from "../State";
-import { SpriteStateType } from "./SpriteRenderComponent";
-import { EntityComponent } from "../EntityComponent";
-import { Entity } from "../Entity";
-import { GameEvent } from "../events/Event";
-import { GameAnimation } from "../../util/animation/GameAnimation";
 import { CompositeAnimation } from "../../util/animation/CompositeAnimation";
+import { GameAnimation } from "../../util/animation/GameAnimation";
+import { Entity } from "../Entity";
+import { EntityComponent } from "../EntityComponent";
+import { GameEvent } from "../events/Event";
+import { BaseState, LogicState } from "../State";
 
 interface AnimationStateMap {
-    [key: string]: GameAnimation | CompositeAnimation
+    [key: string]: GameAnimation | CompositeAnimation;
 }
 
 interface AnimationState {
     animationState: {
-        map: AnimationStateMap
-    }
+        map: AnimationStateMap;
+    };
 }
 
 export type AnimationStateType = BaseState & AnimationState & LogicState;
 
-
 export class AnimationStateComponent<
     T extends AnimationStateType
 > extends EntityComponent<T> {
-
     public init(entity: Entity<AnimationStateType>) {
         return {};
     }
 
     public update(entity: Entity<AnimationStateType>): void {
         const { map } = entity.getState().animationState;
-        for (let key in map) {
+        for (const key in map) {
             map[key].tick();
         }
     }
 
-    public onEvent(entity: Entity<AnimationStateType>, event: GameEvent): void {
-
-    }
+    public onEvent(
+        entity: Entity<AnimationStateType>,
+        event: GameEvent
+    ): void {}
 
     public onObservedEvent(
         entity: Entity<AnimationStateType>,
@@ -62,9 +60,8 @@ export class AnimationStateComponent<
     }
 
     private stopAll(map: AnimationStateMap) {
-        for (let key in map) {
+        for (const key in map) {
             map[key].stop();
         }
     }
-
 }

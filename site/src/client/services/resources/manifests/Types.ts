@@ -69,7 +69,7 @@ export enum Animations {
     CRABLET_BROWN_ATTACK,
     CRABLET_GREEN_ATTACK,
     CRABLET_BLUE_ATTACK,
-    EGG_CHARGE
+    EGG_CHARGE,
 }
 export enum Sprites {
     SWORD,

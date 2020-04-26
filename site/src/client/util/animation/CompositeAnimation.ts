@@ -1,5 +1,5 @@
 import { IntervalDriver } from "./AnimationIntervalDriver";
-import { GameAnimation, StartParameters } from "./GameAnimation";
+import { GameAnimation } from "./GameAnimation";
 
 export enum CompositeAnimationType {
     SERIAL = "SERIAL",
@@ -31,7 +31,6 @@ export class CompositeAnimation {
         return this;
     }
 
-
     public looping(): CompositeAnimation {
         this.loop = true;
         return this;
@@ -57,11 +56,15 @@ export class CompositeAnimation {
             case CompositeAnimationType.PARALLEL:
                 this.animations.forEach((animation, index) => {
                     this.animationMap[index] = false;
-                    animation.start().whenDone(() => this.onAnimationComplete(index));
+                    animation
+                        .start()
+                        .whenDone(() => this.onAnimationComplete(index));
                 });
                 break;
             case CompositeAnimationType.SERIAL:
-                this.animations[0].start().whenDone(() => this.onAnimationComplete(0));
+                this.animations[0]
+                    .start()
+                    .whenDone(() => this.onAnimationComplete(0));
                 break;
         }
     }
@@ -88,9 +91,11 @@ export class CompositeAnimation {
                     }
                     this.onFinish && this.onFinish();
                 } else {
-                    this.animations[animationId + 1].start().whenDone(
-                        () => this.onAnimationComplete(animationId + 1)
-                    );
+                    this.animations[animationId + 1]
+                        .start()
+                        .whenDone(() =>
+                            this.onAnimationComplete(animationId + 1)
+                        );
                 }
                 break;
         }

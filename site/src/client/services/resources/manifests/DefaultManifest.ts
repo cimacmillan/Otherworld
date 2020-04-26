@@ -63,8 +63,8 @@ export const defaultManifest: ResourceManifest = {
                     height: 32,
                     x: 0,
                     y: 128,
-                    frames: 8
-                }
+                    frames: 8,
+                },
             },
             sprites: {
                 [Sprites.SWORD]: {

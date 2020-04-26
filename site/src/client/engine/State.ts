@@ -17,7 +17,7 @@ export interface CameraState {
 }
 
 export interface LogicState {
-    logicState: string
+    logicState: string;
 }
 
 export interface HealthState {

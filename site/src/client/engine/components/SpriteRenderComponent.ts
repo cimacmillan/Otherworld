@@ -9,7 +9,7 @@ import { BaseState } from "../State";
 
 export interface SpriteState {
     spriteState: {
-        sprite?: Sprite
+        sprite?: Sprite;
     };
 }
 
@@ -21,7 +21,7 @@ export class SpriteRenderComponent<
     private toRenderRef?: RenderItem;
 
     public init(entity: Entity<SpriteStateType>) {
-        return { spriteState: {}};
+        return { spriteState: {} };
     }
 
     public update(entity: Entity<SpriteStateType>): void {
@@ -46,12 +46,16 @@ export class SpriteRenderComponent<
         from: SpriteState,
         to: SpriteState
     ) {
-        if (!from.spriteState.sprite && to.spriteState.sprite ) {
+        if (!from.spriteState.sprite && to.spriteState.sprite) {
             this.toRenderRef = entity
                 .getServiceLocator()
                 .getRenderService()
                 .spriteRenderService.createItem(to.spriteState.sprite);
-        } else if (from.spriteState.sprite && !to.spriteState.sprite && this.toRenderRef) {
+        } else if (
+            from.spriteState.sprite &&
+            !to.spriteState.sprite &&
+            this.toRenderRef
+        ) {
             entity
                 .getServiceLocator()
                 .getRenderService()
