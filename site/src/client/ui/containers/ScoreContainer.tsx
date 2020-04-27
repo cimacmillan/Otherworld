@@ -40,7 +40,7 @@ export const ScoreContainer: React.FunctionComponent = (props) => {
                 width: DOM_WIDTH,
                 height: DOM_HEIGHT,
                 display: "flex",
-                justifyContent: "flex-end",
+                justifyContent: "center",
                 position: "absolute",
             }}
         >
@@ -51,7 +51,7 @@ export const ScoreContainer: React.FunctionComponent = (props) => {
                 colour={TextColour.LIGHT}
                 style={{
                     transform,
-                    transformOrigin: "top right",
+                    transformOrigin: "top center",
                 }}
             />
         </div>

@@ -6,52 +6,39 @@ import {
     SpriteSheets,
     UISPRITES,
 } from "../../services/resources/manifests/Types";
+import { KeyComponent, SELECTED_TEXT_OFFSET } from "./KeyComponent";
 
-interface KeyComponentProps {
+interface KeyHintComponent {
     serviceLocator: ServiceLocator;
     keyCode: string;
     selected: boolean;
+    text: string;
     style: React.CSSProperties;
 }
 
-const KEY_WIDTH = 64;
-const KEY_HEIGHT = 64;
-export const SELECTED_TEXT_OFFSET = 4;
-
-export const KeyComponent: React.FunctionComponent<KeyComponentProps> = (
+export const KeyHintComponent: React.FunctionComponent<KeyHintComponent> = (
     props
 ) => {
-    const sprite = props.selected ? UISPRITES.KEY_DOWN : UISPRITES.KEY_UP;
     const offset = props.selected ? SELECTED_TEXT_OFFSET : 0;
 
     return (
         <div
             style={{
-                ...props.style,
-                width: KEY_WIDTH,
-                height: KEY_HEIGHT,
+                display: "flex",
             }}
         >
-            <SpriteImageComponent
+            <KeyComponent
                 serviceLocator={props.serviceLocator}
-                spriteSheet={SpriteSheets.UI}
-                sprite={sprite}
-                style={{
-                    position: "absolute",
-                    width: KEY_WIDTH,
-                    height: KEY_HEIGHT,
-                }}
+                keyCode={props.keyCode}
+                selected={props.selected}
+                style={{}}
             />
             <TextComponent
-                text={props.keyCode}
+                text={props.text}
                 font={TextFont.REGULAR}
                 size={TextSize.MED}
                 colour={TextColour.LIGHT}
                 style={{
-                    textAlign: "center",
-                    position: "absolute",
-                    width: KEY_WIDTH,
-                    height: KEY_HEIGHT,
                     transform: `translate(0px, ${offset}px)`,
                 }}
             />

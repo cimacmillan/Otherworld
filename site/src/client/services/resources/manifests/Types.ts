@@ -6,6 +6,9 @@ export enum UIANIMATIONS {
     HEALTH_BAR,
 }
 export enum UISPRITES {
+    KEY_UP,
+    KEY_DOWN,
+
     PANEL_CENTER,
     PANEL_TL,
     PANEL_TM,

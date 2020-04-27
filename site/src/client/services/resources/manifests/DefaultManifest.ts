@@ -9,6 +9,7 @@ import {
     Sprites,
     SpriteSheets,
     UIANIMATIONS,
+    UISPRITES,
 } from "./Types";
 
 export const defaultManifest: ResourceManifest = {
@@ -112,6 +113,18 @@ export const defaultManifest: ResourceManifest = {
                 },
             },
             sprites: {
+                [UISPRITES.KEY_UP]: {
+                    x: 96,
+                    y: 80,
+                    width: 16,
+                    height: 16,
+                },
+                [UISPRITES.KEY_DOWN]: {
+                    x: 112,
+                    y: 80,
+                    width: 16,
+                    height: 16,
+                },
                 ...DARK_PANEL_SPRITES,
                 ...BUTTON_DEFAULT_SPRITES,
                 ...BUTTON_HOVER_SPRITES,
