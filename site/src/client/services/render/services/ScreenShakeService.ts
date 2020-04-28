@@ -1,8 +1,8 @@
 import { mat4 } from "gl-matrix";
 
 const MIN_MAGNITUDE = 0.0001;
-const MAGNITUDE_DECAY = 0.5;
-const MAGNITUDE_MULTIPLIER = 0.3;
+const MAGNITUDE_DECAY = 0.75;
+const MAGNITUDE_MULTIPLIER = 0.2;
 
 export class ScreenShakeService {
     private currentMagnitude = 0;
