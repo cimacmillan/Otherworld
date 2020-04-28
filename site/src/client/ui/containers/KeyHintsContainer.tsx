@@ -15,65 +15,75 @@ interface KeyHint {
     fade: boolean;
 }
 
-const initialState = [
-    {
-        keycode: "KeyW",
-        key: "W",
-        hint: "Walk forwards",
-        fade: false,
-    },
-    {
-        keycode: "KeyS",
-        key: "S",
-        hint: "Walk backwards",
-        fade: false,
-    },
-    {
-        keycode: "KeyA",
-        key: "A",
-        hint: "Walk left",
-        fade: false,
-    },
-    {
-        keycode: "KeyD",
-        key: "D",
-        hint: "Walk right",
-        fade: false,
-    },
-    {
-        keycode: "KeyE",
-        key: "E",
-        hint: "Attack",
-        fade: false,
-    },
-    {
-        keycode: "ArrowLeft",
-        key: "←",
-        hint: "Turn Left",
-        fade: false,
-    },
-    {
-        keycode: "ArrowRight",
-        key: "→",
-        hint: "Turn Right",
-        fade: false,
-    },
+const keyStages = [
+    [
+        {
+            keycode: "KeyW",
+            key: "W",
+            hint: "Walk forwards",
+            fade: false,
+        },
+        {
+            keycode: "KeyS",
+            key: "S",
+            hint: "Walk backwards",
+            fade: false,
+        },
+        {
+            keycode: "KeyA",
+            key: "A",
+            hint: "Walk left",
+            fade: false,
+        },
+        {
+            keycode: "KeyD",
+            key: "D",
+            hint: "Walk right",
+            fade: false,
+        },
+    ],
+    [
+        {
+            keycode: "ArrowLeft",
+            key: "←",
+            hint: "Turn Left",
+            fade: false,
+        },
+        {
+            keycode: "ArrowRight",
+            key: "→",
+            hint: "Turn Right",
+            fade: false,
+        },
+    ],
+    [
+        {
+            keycode: "KeyE",
+            key: "E",
+            hint: "Attack",
+            fade: false,
+        },
+    ],
 ];
 
 export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> = (
     props
 ) => {
-    const [keyHints, setKeyHints] = React.useState(initialState as KeyHint[]);
+    const [keyHints, setKeyHints] = React.useState([] as KeyHint[]);
+    const [keyStage, setKeyStage] = React.useState(0);
 
     const addKeyHint = (keyHint: KeyHint) => {
         setKeyHints([...keyHints, keyHint]);
     };
 
     const removeKeyHint = (keyHint: KeyHint) => {
-        console.log(`removeHint ${keyHint.keycode}`);
-        setKeyHints(
-            keyHints.filter((hint) => keyHint.keycode !== hint.keycode)
+        const newKeyHints = keyHints.filter(
+            (hint) => keyHint.keycode !== hint.keycode
         );
+        setKeyHints(newKeyHints);
+        if (newKeyHints.length === 0) {
+            setKeyStage(keyStage + 1);
+        }
     };
 
     const onKeyDown = (keyboardEvent: KeyboardEvent) => {
@@ -89,12 +99,16 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
         );
     };
 
-    console.log(keyHints);
-
     React.useEffect(() => {
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
     });
+
+    React.useEffect(() => {
+        if (keyStage < keyStages.length) {
+            setKeyHints([...keyHints, ...keyStages[keyStage]]);
+        }
+    }, [keyStage]);
 
     return (
         <ViewportComponent

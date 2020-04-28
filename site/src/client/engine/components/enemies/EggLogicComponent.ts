@@ -101,8 +101,6 @@ export class EggLogicComponent<T extends EggStateType> extends EntityComponent<
         entity: Entity<EggStateType>,
         event: GameEvent
     ): void {
-        console.log("Egg observed ", event);
-
         if (event.type === EnemyEventType.ENEMY_KILLED) {
             entity.setState(
                 {

@@ -29,11 +29,12 @@ export const KeyHintComponent: React.FunctionComponent<KeyHintComponent> = (
     props
 ) => {
     const offset = props.selected ? SELECTED_TEXT_OFFSET : 0;
-    const [fadeOffset, setFadeOffset] = React.useState(0);
-    const [fadeAnimation, setFadeAnimation] = React.useState(initialFade);
+    const [fadeOffset, setFadeOffset] = React.useState(1);
+    const [fadeOutAnimation, setFadeOutAnimation] = React.useState(initialFade);
+    const [fadeInAnimation, setFadeInAnimation] = React.useState(initialFade);
 
     React.useEffect(() => {
-        setFadeAnimation(
+        setFadeOutAnimation(
             animation((x: number) => setFadeOffset(x))
                 .tween(sin)
                 .speed(fadeSpeed)
@@ -43,14 +44,26 @@ export const KeyHintComponent: React.FunctionComponent<KeyHintComponent> = (
     }, []);
 
     React.useEffect(() => {
-        if (fadeAnimation) {
-            setFadeAnimation(fadeAnimation.whenDone(props.onFadeComplete));
+        const fadeIn = animation((x: number) => setFadeOffset(1 - x))
+            .tween(sin)
+            .speed(fadeSpeed)
+            .driven()
+            .start();
+        setFadeInAnimation(fadeIn);
+    }, []);
+
+    React.useEffect(() => {
+        if (fadeOutAnimation) {
+            setFadeOutAnimation(
+                fadeOutAnimation.whenDone(props.onFadeComplete)
+            );
         }
     }, [props.onFadeComplete]);
 
     React.useEffect(() => {
-        if (props.fade && fadeAnimation) {
-            fadeAnimation.start();
+        if (props.fade && fadeOutAnimation) {
+            fadeInAnimation.stop();
+            fadeOutAnimation.start();
         }
     }, [props.fade]);
 
