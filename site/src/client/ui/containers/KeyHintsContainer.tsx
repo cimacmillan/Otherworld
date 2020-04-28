@@ -2,31 +2,121 @@ import React = require("react");
 import { DOM_HEIGHT, DOM_WIDTH } from "../../Config";
 import { KeyHintComponent } from "../components/KeyHintComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
+import { ViewportComponent } from "../components/ViewportComponent";
 
 export interface KeyHintsContainerProps {
     serviceLocator: ServiceLocator;
 }
 
+interface KeyHint {
+    keycode: string;
+    key: string;
+    hint: string;
+    fade: boolean;
+}
+
+const initialState = [
+    {
+        keycode: "KeyW",
+        key: "W",
+        hint: "Walk forwards",
+        fade: false,
+    },
+    {
+        keycode: "KeyS",
+        key: "S",
+        hint: "Walk backwards",
+        fade: false,
+    },
+    {
+        keycode: "KeyA",
+        key: "A",
+        hint: "Walk left",
+        fade: false,
+    },
+    {
+        keycode: "KeyD",
+        key: "D",
+        hint: "Walk right",
+        fade: false,
+    },
+    {
+        keycode: "KeyE",
+        key: "E",
+        hint: "Attack",
+        fade: false,
+    },
+    {
+        keycode: "ArrowLeft",
+        key: "E",
+        hint: "Turn Left",
+        fade: false,
+    },
+];
+
 export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> = (
     props
 ) => {
+    const [keyHints, setKeyHints] = React.useState(initialState as KeyHint[]);
+
+    const addKeyHint = (keyHint: KeyHint) => {
+        setKeyHints([...keyHints, keyHint]);
+    };
+
+    const removeKeyHint = (keyHint: KeyHint) => {
+        setKeyHints(
+            keyHints.filter((hint) => keyHint.keycode !== hint.keycode)
+        );
+    };
+
+    const onKeyDown = (keyboardEvent: KeyboardEvent) => {
+        setKeyHints(
+            keyHints.map((keyHint) => {
+                return {
+                    ...keyHint,
+                    fade: keyHint.fade
+                        ? true
+                        : keyboardEvent.code === keyHint.keycode,
+                };
+            })
+        );
+    };
+
+    React.useEffect(() => {
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    });
+
     return (
-        <div
+        <ViewportComponent
+            x={0}
+            y={0}
+            width={DOM_WIDTH}
+            height={DOM_HEIGHT}
             style={{
-                position: "absolute",
-                width: DOM_WIDTH,
-                height: DOM_HEIGHT,
                 display: "flex",
                 justifyContent: "flex-end",
             }}
         >
-            <KeyHintComponent
-                serviceLocator={props.serviceLocator}
-                keyCode={"W"}
-                selected={false}
-                text={"walk forwards"}
-                style={{}}
-            />
-        </div>
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                }}
+            >
+                {keyHints.map((keyHint) => (
+                    <KeyHintComponent
+                        serviceLocator={props.serviceLocator}
+                        keyCode={keyHint.key}
+                        selected={false}
+                        text={keyHint.hint}
+                        style={{}}
+                        fade={keyHint.fade}
+                        onFadeComplete={() => removeKeyHint(keyHint)}
+                    />
+                ))}
+            </div>
+        </ViewportComponent>
     );
 };
