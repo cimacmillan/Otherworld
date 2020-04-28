@@ -70,6 +70,7 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
     };
 
     const removeKeyHint = (keyHint: KeyHint) => {
+        console.log(`removeHint ${keyHint.keycode}`);
         setKeyHints(
             keyHints.filter((hint) => keyHint.keycode !== hint.keycode)
         );
@@ -87,6 +88,8 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
             })
         );
     };
+
+    console.log(keyHints);
 
     React.useEffect(() => {
         window.addEventListener("keydown", onKeyDown);

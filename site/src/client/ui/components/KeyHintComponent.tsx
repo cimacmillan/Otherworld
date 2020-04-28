@@ -23,25 +23,34 @@ interface KeyHintComponent {
 
 const yFade = 64;
 const fadeSpeed = 300;
+const initialFade: GameAnimation | undefined = undefined;
 
 export const KeyHintComponent: React.FunctionComponent<KeyHintComponent> = (
     props
 ) => {
     const offset = props.selected ? SELECTED_TEXT_OFFSET : 0;
     const [fadeOffset, setFadeOffset] = React.useState(0);
+    const [fadeAnimation, setFadeAnimation] = React.useState(initialFade);
 
     React.useEffect(() => {
-        if (props.fade) {
-            const fadeAnimation = animation((x: number) => setFadeOffset(x))
+        setFadeAnimation(
+            animation((x: number) => setFadeOffset(x))
                 .tween(sin)
                 .speed(fadeSpeed)
+                .whenDone(props.onFadeComplete)
                 .driven()
-                .start()
-                .whenDone(() => {
-                    props.onFadeComplete();
-                    setFadeOffset(0);
-                });
-            return () => fadeAnimation.stop();
+        );
+    }, []);
+
+    React.useEffect(() => {
+        if (fadeAnimation) {
+            setFadeAnimation(fadeAnimation.whenDone(props.onFadeComplete));
+        }
+    }, [props.onFadeComplete]);
+
+    React.useEffect(() => {
+        if (props.fade && fadeAnimation) {
+            fadeAnimation.start();
         }
     }, [props.fade]);
 
