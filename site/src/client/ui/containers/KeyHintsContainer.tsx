@@ -48,8 +48,14 @@ const initialState = [
     },
     {
         keycode: "ArrowLeft",
-        key: "E",
+        key: "←",
         hint: "Turn Left",
+        fade: false,
+    },
+    {
+        keycode: "ArrowRight",
+        key: "→",
+        hint: "Turn Right",
         fade: false,
     },
 ];
@@ -107,6 +113,7 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
             >
                 {keyHints.map((keyHint) => (
                     <KeyHintComponent
+                        key={keyHint.key}
                         serviceLocator={props.serviceLocator}
                         keyCode={keyHint.key}
                         selected={false}

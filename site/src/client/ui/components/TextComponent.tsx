@@ -24,13 +24,22 @@ export interface TextComponentProps {
     colour: TextColour;
 }
 
+const ignoreFont = ["←", "→"];
+
 export const TextComponent: React.FunctionComponent<TextComponentProps> = (
     props
 ) => {
+    const shouldBeIgnored = ignoreFont.find((ignore) => ignore === props.text);
+    const fontFamily = shouldBeIgnored
+        ? {}
+        : {
+              fontFamily: props.font,
+          };
+
     return (
         <div
             style={{
-                fontFamily: props.font,
+                ...fontFamily,
                 fontSize: props.size,
                 color: props.colour,
 
