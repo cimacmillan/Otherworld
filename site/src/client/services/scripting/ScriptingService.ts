@@ -74,8 +74,8 @@ export class ScriptingService {
         this.serviceLocator.getAudioService().attachCamera(camera);
         this.serviceLocator.getRenderService().attachCamera(camera);
 
-        // for (let i = 0; i < 100; i++) {
-        //     world.addEntity(createMacator(this.serviceLocator));
+        // for (let i = 0; i < 50; i++) {
+        //     world.addEntity(createMacator(this.serviceLocator, Math.random(), Math.random()));
         // }
 
         world.addEntity(createEgg(this.serviceLocator));

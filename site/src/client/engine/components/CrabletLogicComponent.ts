@@ -160,8 +160,8 @@ export class CrabletLogicComponent<
 
     public onCreate(entity: Entity<MacatorStateType>) {
         const angle = Math.random() * Math.PI * 2;
-        const x = Math.sin(angle) * 1 + this.initialX;
-        const y = Math.cos(angle) * 1 + this.initialY;
+        const x = this.initialX;
+        const y = this.initialY;
         const xtex = Math.random();
 
         let crabType = Animations.CRABLET_BROWN;

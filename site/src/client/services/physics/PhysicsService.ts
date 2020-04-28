@@ -11,6 +11,8 @@ export interface PhysicsBoundary {
     end: Vector2D;
 }
 
+const FORCE_CONSTANT = 0.2;
+
 export class PhysicsService {
     private entities: ConsistentArray<PhysicsEntity>;
     private boundaries: ConsistentArray<PhysicsBoundary>;
@@ -129,7 +131,10 @@ export class PhysicsService {
             const diffX = posB.x - posA.x;
             const diffY = posB.y - posA.y;
 
+            // Distance that the entities should be at ^2
             const boundarySquared = (radiusA + radiusB) * (radiusA * radiusB);
+
+            // Distance the entities are at ^2
             const distanceSquared = diffX * diffX + diffY * diffY;
 
             if (distanceSquared > boundarySquared) {
@@ -139,11 +144,11 @@ export class PhysicsService {
             const force =
                 (1.0 - distanceSquared / boundarySquared) *
                 (bState.mass / state.mass);
-            const directionXSquared = diffX / distanceSquared;
-            const directionYSquared = diffY / distanceSquared;
+            const directionXSquared = diffX;
+            const directionYSquared = diffY;
 
-            finalImpulse.x += directionXSquared * (-force * 0.02);
-            finalImpulse.y += directionYSquared * (-force * 0.02);
+            finalImpulse.x += directionXSquared * (-force * FORCE_CONSTANT);
+            finalImpulse.y += directionYSquared * (-force * FORCE_CONSTANT);
         }
 
         if (finalImpulse.x !== 0 || finalImpulse.y !== 0) {
