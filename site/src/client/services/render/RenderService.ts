@@ -3,6 +3,7 @@ import { Camera } from "../../types";
 import { SpriteSheets } from "../resources/manifests/Types";
 import { ResourceManager } from "../resources/ResourceManager";
 import { FloorRenderService } from "./services/FloorRenderService";
+import { ScreenShakeService } from "./services/ScreenShakeService";
 import { SpriteRenderService } from "./services/SpriteRenderService";
 import { WallRenderService } from "./services/WallRenderService";
 import { RenderInterface } from "./types/RenderInterface";
@@ -11,6 +12,7 @@ export class RenderService implements RenderInterface {
     public spriteRenderService: SpriteRenderService;
     public wallRenderService: WallRenderService;
     public floorRenderService: FloorRenderService;
+    public screenShakeService: ScreenShakeService;
     private gl: WebGLRenderingContext;
 
     private camera: Camera;
@@ -19,6 +21,7 @@ export class RenderService implements RenderInterface {
         this.spriteRenderService = new SpriteRenderService();
         this.wallRenderService = new WallRenderService();
         this.floorRenderService = new FloorRenderService();
+        this.screenShakeService = new ScreenShakeService();
     }
 
     public init(gl: WebGLRenderingContext) {
@@ -58,6 +61,7 @@ export class RenderService implements RenderInterface {
         );
 
         this.clearScreen();
+        this.screenShakeService.update();
         this.spriteRenderService.draw();
         this.wallRenderService.draw();
         this.floorRenderService.draw();
@@ -91,21 +95,15 @@ export class RenderService implements RenderInterface {
             this.camera.zFar
         );
 
-        mat4.rotateY(
-            modelViewMatrix, // destination matrix
-            modelViewMatrix, // matrix to translate
-            this.camera.angle
-        ); // amount to translate
+        mat4.rotateY(modelViewMatrix, modelViewMatrix, this.camera.angle);
 
-        mat4.translate(
-            modelViewMatrix, // destination matrix
-            modelViewMatrix, // matrix to translate
-            [
-                -this.camera.position.x,
-                -this.camera.height,
-                -this.camera.position.y,
-            ]
-        ); // amount to translate
+        mat4.translate(modelViewMatrix, modelViewMatrix, [
+            -this.camera.position.x,
+            -this.camera.height,
+            -this.camera.position.y,
+        ]);
+
+        this.screenShakeService.applyToMatrices(modelViewMatrix);
 
         return { modelViewMatrix, projectionMatrix };
     }

@@ -145,6 +145,10 @@ export class PlayerControlComponent<
                     Audios.PLAYER_HIT
                 ]
             );
+        entity
+            .getServiceLocator()
+            .getRenderService()
+            .screenShakeService.shake(1);
         if (entity.getState().health <= 0 && !this.killed) {
             entity.emitGlobally({ type: PlayerEventType.PLAYER_KILLED });
             entity.getServiceLocator().getScriptingService().endGame();

@@ -38,6 +38,8 @@ Main TODO Taskboard
 - [ ] Refactor bulky redux and component classes with effects  
 - [ ] Convert reducers to pure actions  
 - [ ] Jumping  
+- [ ] seperate Contextual key component  
+- [ ] proper global state  
 
 ### In Progress
 
