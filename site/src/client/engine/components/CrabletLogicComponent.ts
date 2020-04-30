@@ -24,7 +24,7 @@ import { InteractionEventType } from "../events/InteractionEvents";
 import { BaseState, HealthState, SurfacePositionState } from "../State";
 import { InteractionStateType } from "./InteractionComponent";
 import { PhysicsStateType } from "./PhysicsComponent";
-import { SpriteStateType } from "./SpriteRenderComponent";
+import { SpriteStateType } from "./rendering/SpriteRenderComponent";
 
 enum MacatorState {
     WALKING = "WALKING",

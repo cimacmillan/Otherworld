@@ -6,7 +6,7 @@ import { Audios } from "../resources/manifests/Types";
 import { ServiceLocator } from "../ServiceLocator";
 import { createEgg } from "./factory/EntityFactory";
 import { createPlayer } from "./factory/PlayerFactory";
-import { createWall } from "./factory/WallFactory";
+import { createWall } from "./factory/SceneryFactory";
 
 /**
  * Service for quick commands that usually take more lines, eg
