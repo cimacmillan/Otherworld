@@ -19,6 +19,7 @@ import { ServiceLocator } from "../../ServiceLocator";
 export function createStaticFloor(
     serviceLocator: ServiceLocator,
     spriteString: number,
+    height: number,
     start: Vector2D,
     end: Vector2D
 ) {
@@ -30,11 +31,11 @@ export function createStaticFloor(
     const floor: Floor = {
         startPos: [start.x, start.y],
         endPos: [end.x, end.y],
-        height: 0,
+        height,
         textureX: sprite.textureX,
         textureY: sprite.textureY,
-        textureWidth: Math.abs(end.x - start.x),
-        textureHeight: Math.abs(end.y - start.y),
+        textureWidth: Math.abs(end.x - start.x) * sprite.textureWidth,
+        textureHeight: Math.abs(end.y - start.y) * sprite.textureHeight,
         repeatWidth: sprite.textureWidth,
         repeatHeight: sprite.textureHeight,
     };
@@ -61,16 +62,17 @@ export function createStaticWall(
     const wall: Wall = {
         startPos: [start.x, start.y],
         endPos: [end.x, end.y],
-        startHeight: 1,
-        endHeight: 1,
+        startHeight: 2,
+        endHeight: 2,
         startOffset: 0,
         endOffset: 0,
         textureX: sprite.textureCoordinate.textureX,
         textureY: sprite.textureCoordinate.textureY,
-        textureWidth: Math.sqrt(
-            Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2)
-        ),
-        textureHeight: sprite.textureCoordinate.textureHeight,
+        textureWidth:
+            Math.sqrt(
+                Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2)
+            ) * sprite.textureCoordinate.textureWidth,
+        textureHeight: sprite.textureCoordinate.textureHeight * 2,
         repeatWidth: sprite.textureCoordinate.textureWidth,
         repeatHeight: sprite.textureCoordinate.textureHeight,
     };

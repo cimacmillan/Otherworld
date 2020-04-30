@@ -26,11 +26,14 @@ export const source = `
     varying lowp vec2 textureModStart;
     varying lowp vec2 textureModSize;
 
+    varying lowp float distance;
+
     void main() {
       gl_Position = ${v.projectionMatrix} * ${v.modelMatrix} * ${v.vertexPosition};
       vTextureCoord = ${v.texturePosition};
       textureModStart = ${v.textureStart};
       textureModSize = ${v.textureSize};
+      distance = gl_Position.z;
     }
   `;
 

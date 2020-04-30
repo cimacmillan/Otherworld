@@ -83,6 +83,17 @@ export class ScriptingService {
             createStaticFloor(
                 this.serviceLocator,
                 SCENERYSPRITES.FLOOR,
+                0,
+                { x: -50, y: -50 },
+                { x: 50, y: 50 }
+            )
+        );
+
+        world.addEntity(
+            createStaticFloor(
+                this.serviceLocator,
+                SCENERYSPRITES.FLOOR,
+                2,
                 { x: -50, y: -50 },
                 { x: 50, y: 50 }
             )

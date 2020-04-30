@@ -21,6 +21,7 @@ const source = `
     uniform mat4 ${v.projectionMatrix};
 
     varying lowp vec2 vTextureCoord;
+    varying lowp float distance;
 
     void main() {
       mat4 billboardMatrix = mat4(
@@ -33,6 +34,7 @@ const source = `
 
       gl_Position = ${v.projectionMatrix} * ${v.modelMatrix} * rotatedPosition;
       vTextureCoord = ${v.texturePosition};
+      distance = (${v.projectionMatrix} * ${v.modelMatrix} * ${v.vertexTranslation}).z;
     }
   `;
 

@@ -137,13 +137,13 @@ export const defaultManifest: ResourceManifest = {
             animations: {},
             sprites: {
                 [SCENERYSPRITES.WALL]: {
-                    x: 0,
+                    x: 32,
                     y: 0,
                     width: 32,
                     height: 32,
                 },
                 [SCENERYSPRITES.FLOOR]: {
-                    x: 0,
+                    x: 32,
                     y: 32,
                     width: 32,
                     height: 32,
