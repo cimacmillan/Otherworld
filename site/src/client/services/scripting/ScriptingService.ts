@@ -1,12 +1,11 @@
 import { PlayerState } from "../../engine/components/player/PlayerControlComponent";
 import { Entity } from "../../engine/Entity";
 import { Game } from "../../Game";
-import { getTextureCoordinate } from "../../util/math";
 import { Audios, SCENERYSPRITES } from "../resources/manifests/Types";
 import { ServiceLocator } from "../ServiceLocator";
 import { createEgg } from "./factory/EntityFactory";
 import { createPlayer } from "./factory/PlayerFactory";
-import { createStaticWall } from "./factory/SceneryFactory";
+import { createStaticFloor, createStaticWall } from "./factory/SceneryFactory";
 
 /**
  * Service for quick commands that usually take more lines, eg
@@ -80,19 +79,14 @@ export class ScriptingService {
 
         world.addEntity(createEgg(this.serviceLocator));
 
-        // Walls and floors not getting deleted
-        const floorTexture = getTextureCoordinate(32, 64, 32, 32, 0, 32);
-        this.serviceLocator.getRenderService().floorRenderService.createItem({
-            startPos: [-50, -50],
-            endPos: [50, 50],
-            height: 0,
-            textureX: floorTexture.textureX,
-            textureY: floorTexture.textureY,
-            textureWidth: 100,
-            textureHeight: 100,
-            repeatWidth: floorTexture.textureWidth,
-            repeatHeight: floorTexture.textureHeight,
-        });
+        world.addEntity(
+            createStaticFloor(
+                this.serviceLocator,
+                SCENERYSPRITES.FLOOR,
+                { x: -50, y: -50 },
+                { x: 50, y: 50 }
+            )
+        );
 
         world.addEntity(
             createStaticWall(

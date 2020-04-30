@@ -31,21 +31,21 @@ export class DefaultControlScheme implements ControlScheme {
             Attack(this.serviceLocator)();
         }
 
-        // TODO Remove and add godmode
-        if (keysDown.ShiftLeft) {
-            const player = this.serviceLocator
-                .getScriptingService()
-                .getPlayer()
-                .getState();
-            player.height -= 0.03;
-        }
-        if (keysDown.Space) {
-            const player = this.serviceLocator
-                .getScriptingService()
-                .getPlayer()
-                .getState();
-            player.height += 0.03;
-        }
+        // TODO Add godmode
+        // if (keysDown.ShiftLeft) {
+        //     const player = this.serviceLocator
+        //         .getScriptingService()
+        //         .getPlayer()
+        //         .getState();
+        //     player.height -= 0.03;
+        // }
+        // if (keysDown.Space) {
+        //     const player = this.serviceLocator
+        //         .getScriptingService()
+        //         .getPlayer()
+        //         .getState();
+        //     player.height += 0.03;
+        // }
     }
 
     public onKeyDown(key: string, keysDown: { [key: string]: boolean }) {

@@ -1,77 +1,90 @@
 import {
+    Floor,
     RenderItem,
-    Sprite,
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
 import { BaseState } from "../../State";
 
-export interface SpriteState {
-    spriteState: {
-        sprite?: Sprite;
+export interface FloorState {
+    floorState: {
+        floor?: Floor;
     };
 }
 
-export type SpriteStateType = BaseState & SpriteState;
+export type FloorStateType = BaseState & FloorState;
 
-export class SpriteRenderComponent<
-    T extends SpriteStateType
+export class FloorRenderComponent<
+    T extends FloorStateType
 > extends EntityComponent<T> {
     private toRenderRef?: RenderItem;
 
-    public init(entity: Entity<SpriteStateType>) {
-        return { spriteState: {} };
+    constructor(private initialState?: FloorState) {
+        super();
     }
 
-    public update(entity: Entity<SpriteStateType>): void {
-        const { sprite } = entity.getState().spriteState;
-        if (sprite) {
+    public init(entity: Entity<FloorStateType>) {
+        return this.initialState || {};
+    }
+
+    public update(entity: Entity<FloorStateType>): void {
+        const { floor } = entity.getState().floorState;
+        if (floor) {
             entity
                 .getServiceLocator()
                 .getRenderService()
-                .spriteRenderService.updateItem(this.toRenderRef, sprite);
+                .floorRenderService.updateItem(this.toRenderRef, floor);
         }
     }
 
-    public onEvent(entity: Entity<SpriteStateType>, event: GameEvent): void {}
+    public onEvent(entity: Entity<FloorStateType>, event: GameEvent): void {}
 
     public onObservedEvent(
-        entity: Entity<SpriteStateType>,
+        entity: Entity<FloorStateType>,
         event: GameEvent
     ): void {}
 
     public onStateTransition(
-        entity: Entity<SpriteStateType>,
-        from: SpriteState,
-        to: SpriteState
+        entity: Entity<FloorStateType>,
+        from: FloorStateType,
+        to: FloorStateType
     ) {
-        if (!from.spriteState.sprite && to.spriteState.sprite) {
+        if (!from.floorState.floor && to.floorState.floor) {
             this.toRenderRef = entity
                 .getServiceLocator()
                 .getRenderService()
-                .spriteRenderService.createItem(to.spriteState.sprite);
+                .floorRenderService.createItem(to.floorState.floor);
         } else if (
-            from.spriteState.sprite &&
-            !to.spriteState.sprite &&
+            from.floorState.floor &&
+            !to.floorState.floor &&
             this.toRenderRef
         ) {
             entity
                 .getServiceLocator()
                 .getRenderService()
-                .spriteRenderService.freeItem(this.toRenderRef);
+                .floorRenderService.freeItem(this.toRenderRef);
             this.toRenderRef = undefined;
         }
     }
 
-    public onCreate(entity: Entity<SpriteStateType>): void {}
+    public onCreate(entity: Entity<FloorStateType>): void {
+        if (this.initialState && !this.toRenderRef) {
+            this.toRenderRef = entity
+                .getServiceLocator()
+                .getRenderService()
+                .floorRenderService.createItem(
+                    entity.getState().floorState.floor
+                );
+        }
+    }
 
-    public onDestroy(entity: Entity<SpriteStateType>) {
+    public onDestroy(entity: Entity<FloorStateType>) {
         if (this.toRenderRef) {
             entity
                 .getServiceLocator()
                 .getRenderService()
-                .spriteRenderService.freeItem(this.toRenderRef);
+                .floorRenderService.freeItem(this.toRenderRef);
             this.toRenderRef = undefined;
         }
     }

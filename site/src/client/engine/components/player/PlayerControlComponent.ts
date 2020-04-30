@@ -9,7 +9,9 @@ import {
 import { InteractionType } from "../../../services/interaction/InteractionType";
 import { Audios } from "../../../services/resources/manifests/Types";
 import { Vector2D } from "../../../types";
-import { vec_add, vec_rotate } from "../../../util/math";
+import { animation } from "../../../util/animation/Animations";
+import { GameAnimation } from "../../../util/animation/GameAnimation";
+import { vec_add, vec_distance, vec_rotate } from "../../../util/math";
 import { ActionDelay } from "../../../util/time/ActionDelay";
 import { fpsNorm } from "../../../util/time/GlobalFPSController";
 import { Entity } from "../../Entity";
@@ -32,6 +34,7 @@ export type PlayerState = BaseState &
 
 const WALK_SPEED = 0.02;
 const TURN_SPEED = 0.1;
+const HEAD_BOB_NERF = 0.6;
 
 export class PlayerControlComponent<
     T extends PlayerState
@@ -40,6 +43,8 @@ export class PlayerControlComponent<
     private accumulatedAngle: number = 0;
     private attackDelay: ActionDelay;
     private killed = false;
+    private headbob: GameAnimation;
+    private headbobOffset = 0;
 
     public constructor(
         private initialPosition: Vector2D,
@@ -50,6 +55,16 @@ export class PlayerControlComponent<
     }
 
     public init(entity: Entity<PlayerState>) {
+        this.headbob = animation((x: number) => {
+            const velocity = entity.getState().velocity;
+            const speed = vec_distance(velocity);
+            this.headbobOffset =
+                Math.abs(Math.sin(x * Math.PI)) * speed * HEAD_BOB_NERF;
+        })
+            .speed(400)
+            .looping()
+            .start();
+
         return {
             camera: {
                 position: this.initialPosition,
@@ -75,6 +90,8 @@ export class PlayerControlComponent<
 
     public update(entity: Entity<PlayerState>): void {
         const state = entity.getState();
+
+        this.headbob.tick();
 
         if (state.cameraShouldSync) {
             this.syncCamera(entity);
@@ -243,7 +260,8 @@ export class PlayerControlComponent<
     private syncCamera(entity: Entity<PlayerState>) {
         const { position, height, angle, camera } = entity.getState();
         camera.position = position;
-        camera.height = height;
         camera.angle = angle;
+
+        camera.height = height + this.headbobOffset;
     }
 }

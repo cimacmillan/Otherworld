@@ -1,8 +1,6 @@
 import { loadSound } from "../audio/AudioService";
 import { defaultManifest } from "./manifests/DefaultManifest";
-import {
-    loadSpriteSheet,
-} from "./TextureLoader";
+import { loadSpriteSheet } from "./TextureLoader";
 import { LoadedManifest, ResourceManifest } from "./Types";
 
 export class ResourceManager {
