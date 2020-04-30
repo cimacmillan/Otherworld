@@ -6,6 +6,7 @@ import { DARK_PANEL_SPRITES } from "./DarkPanel";
 import {
     Animations,
     Audios,
+    SCENERYSPRITES,
     Sprites,
     SpriteSheets,
     UIANIMATIONS,
@@ -129,6 +130,24 @@ export const defaultManifest: ResourceManifest = {
                 ...BUTTON_DEFAULT_SPRITES,
                 ...BUTTON_HOVER_SPRITES,
                 ...BUTTON_PRESS_SPRITES,
+            },
+        },
+        [SpriteSheets.SCENERY]: {
+            url: "img/scenery.png",
+            animations: {},
+            sprites: {
+                [SCENERYSPRITES.WALL]: {
+                    x: 0,
+                    y: 0,
+                    width: 32,
+                    height: 32,
+                },
+                [SCENERYSPRITES.FLOOR]: {
+                    x: 0,
+                    y: 32,
+                    width: 32,
+                    height: 32,
+                },
             },
         },
     },

@@ -2,11 +2,11 @@ import { PlayerState } from "../../engine/components/player/PlayerControlCompone
 import { Entity } from "../../engine/Entity";
 import { Game } from "../../Game";
 import { getTextureCoordinate } from "../../util/math";
-import { Audios } from "../resources/manifests/Types";
+import { Audios, SCENERYSPRITES } from "../resources/manifests/Types";
 import { ServiceLocator } from "../ServiceLocator";
 import { createEgg } from "./factory/EntityFactory";
 import { createPlayer } from "./factory/PlayerFactory";
-import { createWall } from "./factory/SceneryFactory";
+import { createStaticWall } from "./factory/SceneryFactory";
 
 /**
  * Service for quick commands that usually take more lines, eg
@@ -94,14 +94,63 @@ export class ScriptingService {
             repeatHeight: floorTexture.textureHeight,
         });
 
-        createWall(this.serviceLocator, { x: -10, y: -10 }, { x: 10, y: -10 });
-        createWall(this.serviceLocator, { x: -10, y: -10 }, { x: -10, y: 10 });
-        createWall(this.serviceLocator, { x: 10, y: -10 }, { x: 10, y: 10 });
+        world.addEntity(
+            createStaticWall(
+                this.serviceLocator,
+                SCENERYSPRITES.WALL,
+                { x: -10, y: -10 },
+                { x: 10, y: -10 }
+            )
+        );
+        world.addEntity(
+            createStaticWall(
+                this.serviceLocator,
+                SCENERYSPRITES.WALL,
+                { x: -10, y: -10 },
+                { x: -10, y: 10 }
+            )
+        );
+        world.addEntity(
+            createStaticWall(
+                this.serviceLocator,
+                SCENERYSPRITES.WALL,
+                { x: 10, y: -10 },
+                { x: 10, y: 10 }
+            )
+        );
 
-        createWall(this.serviceLocator, { x: -10, y: 10 }, { x: -0.5, y: 20 });
-        createWall(this.serviceLocator, { x: 10, y: 10 }, { x: 0.5, y: 20 });
+        world.addEntity(
+            createStaticWall(
+                this.serviceLocator,
+                SCENERYSPRITES.WALL,
+                { x: -10, y: 10 },
+                { x: -0.5, y: 20 }
+            )
+        );
+        world.addEntity(
+            createStaticWall(
+                this.serviceLocator,
+                SCENERYSPRITES.WALL,
+                { x: 10, y: 10 },
+                { x: 0.5, y: 20 }
+            )
+        );
 
-        createWall(this.serviceLocator, { x: -0.5, y: 20 }, { x: -0.5, y: 30 });
-        createWall(this.serviceLocator, { x: 0.5, y: 20 }, { x: 0.5, y: 30 });
+        world.addEntity(
+            createStaticWall(
+                this.serviceLocator,
+                SCENERYSPRITES.WALL,
+                { x: -0.5, y: 20 },
+                { x: -0.5, y: 30 }
+            )
+        );
+        world.addEntity(
+            createStaticWall(
+                this.serviceLocator,
+                SCENERYSPRITES.WALL,
+                { x: 0.5, y: 20 },
+                { x: 0.5, y: 30 }
+            )
+        );
     }
 }

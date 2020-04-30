@@ -1,4 +1,4 @@
-import { PhysicsComponent } from "../../../engine/components/PhysicsComponent";
+import { PhysicsComponent } from "../../../engine/components/physics/PhysicsComponent";
 import {
     PlayerControlComponent,
     PlayerState,

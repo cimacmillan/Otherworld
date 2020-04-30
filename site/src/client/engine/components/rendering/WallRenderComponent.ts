@@ -90,7 +90,7 @@ export class WallRenderComponent<
             entity
                 .getServiceLocator()
                 .getRenderService()
-                .spriteRenderService.freeItem(this.toRenderRef);
+                .wallRenderService.freeItem(this.toRenderRef);
             this.toRenderRef = undefined;
         }
     }

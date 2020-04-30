@@ -8,7 +8,7 @@ import {
     EggStateType,
 } from "../../../engine/components/enemies/EggLogicComponent";
 import { InteractionComponent } from "../../../engine/components/InteractionComponent";
-import { PhysicsComponent } from "../../../engine/components/PhysicsComponent";
+import { PhysicsComponent } from "../../../engine/components/physics/PhysicsComponent";
 import { SpriteRenderComponent } from "../../../engine/components/rendering/SpriteRenderComponent";
 import { Entity } from "../../../engine/Entity";
 import { ServiceLocator } from "../../ServiceLocator";

@@ -33,9 +33,17 @@ export class RenderService implements RenderInterface {
             ].getTexture()
         );
         this.wallRenderService.init(gl);
-        this.wallRenderService.attachSpritesheet(this.resourceManager.floor);
+        this.wallRenderService.attachSpritesheet(
+            this.resourceManager.manifest.spritesheets[
+                SpriteSheets.SCENERY
+            ].getTexture()
+        );
         this.floorRenderService.init(gl);
-        this.floorRenderService.attachSpritesheet(this.resourceManager.floor);
+        this.floorRenderService.attachSpritesheet(
+            this.resourceManager.manifest.spritesheets[
+                SpriteSheets.SCENERY
+            ].getTexture()
+        );
     }
 
     public draw() {

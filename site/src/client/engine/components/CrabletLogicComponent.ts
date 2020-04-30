@@ -23,7 +23,7 @@ import { GameEvent } from "../events/Event";
 import { InteractionEventType } from "../events/InteractionEvents";
 import { BaseState, HealthState, SurfacePositionState } from "../State";
 import { InteractionStateType } from "./InteractionComponent";
-import { PhysicsStateType } from "./PhysicsComponent";
+import { PhysicsStateType } from "./physics/PhysicsComponent";
 import { SpriteStateType } from "./rendering/SpriteRenderComponent";
 
 enum MacatorState {

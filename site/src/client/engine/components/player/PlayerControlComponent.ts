@@ -23,7 +23,7 @@ import {
     WalkDirection,
 } from "../../events/TravelEvents";
 import { BaseState, CameraState, HealthState } from "../../State";
-import { PhysicsStateType } from "../PhysicsComponent";
+import { PhysicsStateType } from "../physics/PhysicsComponent";
 
 export type PlayerState = BaseState &
     PhysicsStateType &

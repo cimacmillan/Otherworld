@@ -1,8 +1,8 @@
-import { Vector2D } from "../../types";
-import { Entity } from "../Entity";
-import { EntityComponent } from "../EntityComponent";
-import { GameEvent } from "../events/Event";
-import { BaseState, SurfacePositionState } from "../State";
+import { Vector2D } from "../../../types";
+import { Entity } from "../../Entity";
+import { EntityComponent } from "../../EntityComponent";
+import { GameEvent } from "../../events/Event";
+import { BaseState, SurfacePositionState } from "../../State";
 
 export interface PhysicsState {
     velocity: Vector2D;

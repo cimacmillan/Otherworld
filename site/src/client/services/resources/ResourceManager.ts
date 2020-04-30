@@ -1,26 +1,15 @@
 import { loadSound } from "../audio/AudioService";
 import { defaultManifest } from "./manifests/DefaultManifest";
 import {
-    loadImage,
     loadSpriteSheet,
-    loadTextureFromURL,
 } from "./TextureLoader";
 import { LoadedManifest, ResourceManifest } from "./Types";
 
 export class ResourceManager {
     public manifest: LoadedManifest;
 
-    // Legacy
-    public wall: WebGLTexture;
-    public floor: WebGLTexture;
-    public uiImage: HTMLImageElement;
-
     public async load(gl: WebGLRenderingContext, audio: AudioContext) {
         this.manifest = await this.loadManifest(gl, audio, defaultManifest);
-
-        this.wall = await loadTextureFromURL(gl, "img/wall.png");
-        this.floor = await loadTextureFromURL(gl, "img/floor.png");
-        this.uiImage = await loadImage("img/floor.png");
     }
 
     public async loadManifest(

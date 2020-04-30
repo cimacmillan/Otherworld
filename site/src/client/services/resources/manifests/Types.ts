@@ -1,6 +1,7 @@
 export enum SpriteSheets {
     SPRITE,
     UI,
+    SCENERY,
 }
 export enum UIANIMATIONS {
     HEALTH_BAR,
@@ -91,4 +92,9 @@ export enum Audios {
     END,
     HISS,
     INCOMING,
+}
+
+export enum SCENERYSPRITES {
+    WALL,
+    FLOOR,
 }
