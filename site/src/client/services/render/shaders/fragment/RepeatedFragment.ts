@@ -1,4 +1,4 @@
-import { fadeFunction } from "./Fade";
+import { fadeFunction, fadePixelAccuracy } from "./Fade";
 
 export const rfsSource = `
     varying lowp vec2 vTextureCoord;
@@ -16,7 +16,8 @@ export const rfsSource = `
         discard;
       }
 
-      lowp float distance = length(position);
+      lowp float fadeAccuracy = ${fadePixelAccuracy}.0;
+      lowp float distance = length(floor(position * fadeAccuracy) / fadeAccuracy);
       lowp float multiplier = fade(distance);
 
       gl_FragColor =  vec4(texColor.rgb * multiplier, 1);

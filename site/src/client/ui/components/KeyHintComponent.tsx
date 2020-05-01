@@ -70,6 +70,7 @@ export const KeyHintComponent: React.FunctionComponent<KeyHintComponent> = (
     return (
         <div
             style={{
+                ...props.style,
                 display: "flex",
                 marginTop: -fadeOffset * yFade,
                 opacity: 1 - fadeOffset,

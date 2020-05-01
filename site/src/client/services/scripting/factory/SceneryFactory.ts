@@ -16,6 +16,8 @@ import { Floor, Wall } from "../../render/types/RenderInterface";
 import { SpriteSheets } from "../../resources/manifests/Types";
 import { ServiceLocator } from "../../ServiceLocator";
 
+const SCENERY_PIXEL_DENSITY = 32;
+
 export function createStaticFloor(
     serviceLocator: ServiceLocator,
     spriteString: number,
@@ -23,21 +25,31 @@ export function createStaticFloor(
     start: Vector2D,
     end: Vector2D
 ) {
-    const sprite = serviceLocator
+    const {
+        textureCoordinate,
+        pixelCoordinate,
+    } = serviceLocator
         .getResourceManager()
-        .manifest.spritesheets[SpriteSheets.SCENERY].getSprite(spriteString)
-        .textureCoordinate;
+        .manifest.spritesheets[SpriteSheets.SCENERY].getSprite(spriteString);
 
     const floor: Floor = {
         startPos: [start.x, start.y],
         endPos: [end.x, end.y],
         height,
-        textureX: sprite.textureX,
-        textureY: sprite.textureY,
-        textureWidth: Math.abs(end.x - start.x) * sprite.textureWidth,
-        textureHeight: Math.abs(end.y - start.y) * sprite.textureHeight,
-        repeatWidth: sprite.textureWidth,
-        repeatHeight: sprite.textureHeight,
+        textureX: textureCoordinate.textureX,
+        textureY: textureCoordinate.textureY,
+        textureWidth:
+            (Math.abs(end.x - start.x) *
+                textureCoordinate.textureWidth *
+                SCENERY_PIXEL_DENSITY) /
+            pixelCoordinate.textureWidth,
+        textureHeight:
+            (Math.abs(end.y - start.y) *
+                textureCoordinate.textureHeight *
+                SCENERY_PIXEL_DENSITY) /
+            pixelCoordinate.textureWidth,
+        repeatWidth: textureCoordinate.textureWidth,
+        repeatHeight: textureCoordinate.textureHeight,
     };
 
     return new Entity<FloorStateType>(
@@ -59,20 +71,33 @@ export function createStaticWall(
     const sprite = serviceLocator
         .getResourceManager()
         .manifest.spritesheets[SpriteSheets.SCENERY].getSprite(spriteString);
+
+    const height = 2;
+
+    const textureWidth =
+        (Math.sqrt(
+            Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2)
+        ) *
+            sprite.textureCoordinate.textureWidth *
+            SCENERY_PIXEL_DENSITY) /
+        sprite.pixelCoordinate.textureWidth;
+    const textureHeight =
+        (sprite.textureCoordinate.textureHeight *
+            height *
+            SCENERY_PIXEL_DENSITY) /
+        sprite.pixelCoordinate.textureHeight;
+
     const wall: Wall = {
         startPos: [start.x, start.y],
         endPos: [end.x, end.y],
-        startHeight: 2,
-        endHeight: 2,
+        startHeight: height,
+        endHeight: height,
         startOffset: 0,
         endOffset: 0,
         textureX: sprite.textureCoordinate.textureX,
         textureY: sprite.textureCoordinate.textureY,
-        textureWidth:
-            Math.sqrt(
-                Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2)
-            ) * sprite.textureCoordinate.textureWidth,
-        textureHeight: sprite.textureCoordinate.textureHeight * 2,
+        textureWidth,
+        textureHeight,
         repeatWidth: sprite.textureCoordinate.textureWidth,
         repeatHeight: sprite.textureCoordinate.textureHeight,
     };

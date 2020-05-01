@@ -1,12 +1,13 @@
 const maxViewDistance = 20;
 const minDistance = 6;
 
-const accuracy = 8;
+export const fadeAccuracy = 8;
+export const fadePixelAccuracy = 4;
 
 export const fadeFunction = `
     lowp float fade(lowp float distance) {
 
-        lowp float accuracy = ${accuracy}.0;
+        lowp float accuracy = ${fadeAccuracy}.0;
         lowp float minDistance = ${minDistance}.0;
         lowp float maxDistance = ${maxViewDistance}.0;
 
