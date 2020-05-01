@@ -34,7 +34,7 @@ const source = `
 
       gl_Position = ${v.projectionMatrix} * ${v.modelMatrix} * rotatedPosition;
       vTextureCoord = ${v.texturePosition};
-      position = gl_Position;
+      position = gl_Position / 2.0;
     }
   `;
 

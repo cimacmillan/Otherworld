@@ -1,4 +1,4 @@
-const maxViewDistance = 12;
+const maxViewDistance = 20;
 const minDistance = 6;
 
 const accuracy = 8;
