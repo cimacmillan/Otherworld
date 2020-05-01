@@ -19,10 +19,12 @@ export const source = `
     uniform mat4 ${v.projectionMatrix};
 
     varying lowp vec2 vTextureCoord;
+    
 
     void main() {
       gl_Position = ${v.projectionMatrix} * ${v.modelMatrix} * ${v.vertexPosition};
       vTextureCoord = ${v.texturePosition};
+
     }
   `;
 

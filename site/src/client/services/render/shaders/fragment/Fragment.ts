@@ -4,7 +4,7 @@ export const fsSource = `
     varying lowp vec2 vTextureCoord;
     uniform sampler2D uSampler;
 
-    varying lowp float distance;
+    varying lowp vec4 position;
 
     ${fadeFunction}
 
@@ -14,6 +14,7 @@ export const fsSource = `
         discard;
       }
 
+      lowp float distance = length(position);
       lowp float multiplier = fade(distance);
 
       gl_FragColor = vec4(texColor.rgb * multiplier, 1);

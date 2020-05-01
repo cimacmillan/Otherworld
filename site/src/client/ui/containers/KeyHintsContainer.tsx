@@ -66,11 +66,14 @@ const keyStages = [
     ],
 ];
 
+const clickSpeed = 500;
+
 export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> = (
     props
 ) => {
     const [keyHints, setKeyHints] = React.useState([] as KeyHint[]);
     const [keyStage, setKeyStage] = React.useState(0);
+    const [keyDown, setKeyDown] = React.useState(false);
 
     const addKeyHint = (keyHint: KeyHint) => {
         setKeyHints([...keyHints, keyHint]);
@@ -98,6 +101,11 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
             })
         );
     };
+
+    React.useEffect(() => {
+        const timeout = setTimeout(() => setKeyDown(!keyDown), clickSpeed);
+        return () => clearTimeout(timeout);
+    }, [keyDown]);
 
     React.useEffect(() => {
         window.addEventListener("keydown", onKeyDown);
@@ -133,7 +141,7 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
                         key={keyHint.key}
                         serviceLocator={props.serviceLocator}
                         keyCode={keyHint.key}
-                        selected={false}
+                        selected={keyDown}
                         text={keyHint.hint}
                         style={{}}
                         fade={keyHint.fade}

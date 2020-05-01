@@ -6,7 +6,7 @@ export const rfsSource = `
     varying lowp vec2 textureModSize;
     uniform sampler2D uSampler;
 
-    varying lowp float distance;
+    varying lowp vec4 position;
 
     ${fadeFunction}
 
@@ -16,6 +16,7 @@ export const rfsSource = `
         discard;
       }
 
+      lowp float distance = length(position);
       lowp float multiplier = fade(distance);
 
       gl_FragColor =  vec4(texColor.rgb * multiplier, 1);
