@@ -21,6 +21,6 @@
 
 # npm run start 
 
-sudo npx tsc
-sudo npm run ppack
+sudo ./chron.sh
+sudo echo "59 * * * * sh ~/repo/Otherworld/chron.sh" >> /var/spool/cron/root
 sudo pm2 start site/build/server/Run.js --name otherworld 
