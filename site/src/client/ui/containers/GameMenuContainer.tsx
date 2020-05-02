@@ -60,7 +60,7 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
                 panelMap={DARK_PANEL}
             >
                 <TextComponent
-                    text={"Otherworld"}
+                    text={"Test"}
                     style={{
                         // position: "absolute",
                         width: "100%",
