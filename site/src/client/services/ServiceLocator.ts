@@ -1,11 +1,11 @@
 import { World } from "../engine/World";
+import { ResourceManager } from "../resources/ResourceManager";
 import { AudioService } from "./audio/AudioService";
 import { EventRouter } from "./EventRouter";
 import { InputService } from "./input/InputService";
 import { InteractionService } from "./interaction/InteractionService";
 import { PhysicsService } from "./physics/PhysicsService";
 import { RenderService } from "./render";
-import { ResourceManager } from "./resources/ResourceManager";
 import { ScriptingService } from "./scripting/ScriptingService";
 
 export class ServiceLocator {

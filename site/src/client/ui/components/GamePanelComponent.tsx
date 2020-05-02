@@ -2,9 +2,9 @@ import React = require("react");
 import { TextComponent } from "./TextComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { SpriteImageComponent } from "./SpriteImageComponent";
-import { SpriteSheets } from "../../services/resources/manifests/Types";
+import { SpriteSheets } from "../../resources/manifests/Types";
 import { ViewportComponent } from "./ViewportComponent";
-import { PanelImageMap } from "../../services/resources/Types";
+import { PanelImageMap } from "../../resources/Types";
 import { memoize } from "lodash";
 
 const GAME_PANEL_RESOLUTION = 4;

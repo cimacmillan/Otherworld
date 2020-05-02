@@ -1,4 +1,5 @@
-import { AudioObject } from "../audio/AudioObject";
+import { AudioObject } from "../services/audio/AudioObject";
+import { MapSchema } from "./MapShema";
 import { SpriteSheet } from "./SpriteSheet";
 
 export interface LoadedManifest {
@@ -8,11 +9,17 @@ export interface LoadedManifest {
     audio: {
         [key: string]: AudioObject;
     };
+    maps: MapManifest;
 }
 
 export interface ResourceManifest {
     spritesheets: SpriteSheetManifest;
     audio: AudioManifest;
+    maps: MapManifest;
+}
+
+export interface MapManifest {
+    [key: string]: MapSchema;
 }
 
 export interface SpriteSheetManifest {

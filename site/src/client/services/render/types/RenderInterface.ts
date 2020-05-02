@@ -1,5 +1,5 @@
 import * as glm from "gl-matrix";
-import { TextureCoordinate } from "../../resources/SpriteSheet";
+import { TextureCoordinate } from "../../../resources/SpriteSheet";
 
 export interface Sprite {
     position: glm.vec2;

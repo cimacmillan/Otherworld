@@ -1,11 +1,11 @@
-import { InteractionType } from "../../services/interaction/InteractionType";
 import {
     Animations,
     Audios,
     Sprites,
     SpriteSheets,
-} from "../../services/resources/manifests/Types";
-import { TextureCoordinate } from "../../services/resources/SpriteSheet";
+} from "../../resources/manifests/Types";
+import { TextureCoordinate } from "../../resources/SpriteSheet";
+import { InteractionType } from "../../services/interaction/InteractionType";
 import { animation } from "../../util/animation/Animations";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import {

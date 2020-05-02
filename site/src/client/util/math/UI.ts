@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { Sprite } from "../../services/resources/SpriteSheet";
+import { Sprite } from "../../resources/SpriteSheet";
 
 export function getImagePropsFromSprite(
     sprite: Sprite,

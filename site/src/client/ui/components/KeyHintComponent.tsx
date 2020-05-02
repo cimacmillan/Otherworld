@@ -2,10 +2,7 @@ import React = require("react");
 import { TextComponent, TextFont, TextSize, TextColour } from "./TextComponent";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import {
-    SpriteSheets,
-    UISPRITES,
-} from "../../services/resources/manifests/Types";
+import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
 import { KeyComponent, SELECTED_TEXT_OFFSET } from "./KeyComponent";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { CompositeAnimation } from "../../util/animation/CompositeAnimation";

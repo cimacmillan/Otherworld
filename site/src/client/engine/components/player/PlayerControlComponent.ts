@@ -6,8 +6,8 @@ import {
     ZFAR,
     ZNEAR,
 } from "../../../Config";
+import { Audios } from "../../../resources/manifests/Types";
 import { InteractionType } from "../../../services/interaction/InteractionType";
-import { Audios } from "../../../services/resources/manifests/Types";
 import { Vector2D } from "../../../types";
 import { animation } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";

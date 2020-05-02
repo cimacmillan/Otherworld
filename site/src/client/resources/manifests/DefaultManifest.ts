@@ -3,9 +3,11 @@ import { BUTTON_DEFAULT_SPRITES } from "./ButtonDefault";
 import { BUTTON_HOVER_SPRITES } from "./ButtonHover";
 import { BUTTON_PRESS_SPRITES } from "./ButtonPress";
 import { DARK_PANEL_SPRITES } from "./DarkPanel";
+import Map from "./maps/map";
 import {
     Animations,
     Audios,
+    MAPS,
     SCENERYSPRITES,
     Sprites,
     SpriteSheets,
@@ -14,6 +16,9 @@ import {
 } from "./Types";
 
 export const defaultManifest: ResourceManifest = {
+    maps: {
+        [MAPS.DEFAULT]: Map,
+    },
     spritesheets: {
         [SpriteSheets.SPRITE]: {
             url: "img/sprite.png",

@@ -1,7 +1,4 @@
-import {
-    Animations,
-    SpriteSheets,
-} from "../../../services/resources/manifests/Types";
+import { Animations, SpriteSheets } from "../../../resources/manifests/Types";
 import { createMacator } from "../../../services/scripting/factory/EntityFactory";
 import { animation, sin } from "../../../util/animation/Animations";
 import { Entity } from "../../Entity";

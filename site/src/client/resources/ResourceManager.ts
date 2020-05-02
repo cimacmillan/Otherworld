@@ -1,4 +1,4 @@
-import { loadSound } from "../audio/AudioService";
+import { loadSound } from "../services/audio/AudioService";
 import { defaultManifest } from "./manifests/DefaultManifest";
 import { loadSpriteSheet } from "./TextureLoader";
 import { LoadedManifest, ResourceManifest } from "./Types";
@@ -18,6 +18,7 @@ export class ResourceManager {
         const loadedManifest: LoadedManifest = {
             spritesheets: {},
             audio: {},
+            maps: manifest.maps,
         };
 
         for (const key in manifest.audio) {

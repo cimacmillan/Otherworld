@@ -2,7 +2,7 @@ import React = require("react");
 import { connect } from "react-redux";
 import { GamePanelComponent } from "../components/GamePanelComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { DARK_PANEL } from "../../services/resources/manifests/DarkPanel";
+import { DARK_PANEL } from "../../resources/manifests/DarkPanel";
 import {
     TextComponent,
     TextFont,
@@ -10,9 +10,9 @@ import {
     TextColour,
 } from "../components/TextComponent";
 import { GameButtonContainer } from "./GameButtonContainer";
-import { BUTTON_DEFAULT } from "../../services/resources/manifests/ButtonDefault";
-import { BUTTON_HOVER } from "../../services/resources/manifests/ButtonHover";
-import { BUTTON_PRESS } from "../../services/resources/manifests/ButtonPress";
+import { BUTTON_DEFAULT } from "../../resources/manifests/ButtonDefault";
+import { BUTTON_HOVER } from "../../resources/manifests/ButtonHover";
+import { BUTTON_PRESS } from "../../resources/manifests/ButtonPress";
 import { Subscription } from "rxjs";
 import { FadeComponent } from "../components/FadeComponent";
 import { useGlobalState } from "../effects/GlobalState";

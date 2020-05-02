@@ -1,5 +1,5 @@
 import React = require("react");
-import { PanelImageMap } from "../../services/resources/Types";
+import { PanelImageMap } from "../../resources/Types";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { GamePanelComponent } from "../components/GamePanelComponent";
 

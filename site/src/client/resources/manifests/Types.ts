@@ -6,6 +6,11 @@ export enum SpriteSheets {
 export enum UIANIMATIONS {
     HEALTH_BAR,
 }
+
+export enum MAPS {
+    DEFAULT,
+}
+
 export enum UISPRITES {
     KEY_UP,
     KEY_DOWN,

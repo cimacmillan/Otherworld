@@ -8,7 +8,7 @@ import {
     SpriteSheets,
     UISPRITES,
     UIANIMATIONS,
-} from "../../services/resources/manifests/Types";
+} from "../../resources/manifests/Types";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
 import { AnimationImageComponent } from "./AnimationImageComponent";

@@ -12,9 +12,9 @@ import {
     WallStateType,
 } from "../../../engine/components/rendering/WallRenderComponent";
 import { Entity } from "../../../engine/Entity";
+import { SpriteSheets } from "../../../resources/manifests/Types";
 import { Vector2D } from "../../../types";
 import { Floor, Wall } from "../../render/types/RenderInterface";
-import { SpriteSheets } from "../../resources/manifests/Types";
 import { ServiceLocator } from "../../ServiceLocator";
 
 export function createStaticFloor(

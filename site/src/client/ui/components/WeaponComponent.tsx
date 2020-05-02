@@ -11,10 +11,7 @@ import { Subscription } from "rxjs";
 import { vec_distance } from "../../util/math";
 import { getImagePropsFromSprite } from "../../util/math/UI";
 import { ViewportComponent } from "./ViewportComponent";
-import {
-    SpriteSheets,
-    Sprites,
-} from "../../services/resources/manifests/Types";
+import { SpriteSheets, Sprites } from "../../resources/manifests/Types";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { connect } from "react-redux";
