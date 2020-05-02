@@ -23,4 +23,4 @@
 
 sudo npx tsc
 sudo npm run ppack
-sudo npm run server
+sudo pm2 start site/build/server/Run.js --name otherworld 
