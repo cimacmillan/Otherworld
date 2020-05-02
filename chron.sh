@@ -1,3 +1,4 @@
+cd /home/ec2-user/repo/Otherworld
 git stash
 git pull
 sudo npx tsc
