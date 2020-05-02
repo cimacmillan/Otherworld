@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./site/build/client/index.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./site/build/client/Index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -2786,6 +2786,18 @@ eval("\nvar __awaiter = (this && this.__awaiter) || function (thisArg, _argument
 
 /***/ }),
 
+/***/ "./site/build/client/Index.js":
+/*!************************************!*\
+  !*** ./site/build/client/Index.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\nconst ReactDOM = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\nconst GameComponent_1 = __webpack_require__(/*! ./GameComponent */ \"./site/build/client/GameComponent.js\");\nconst Game_1 = __webpack_require__(/*! ./Game */ \"./site/build/client/Game.js\");\nconst State_1 = __webpack_require__(/*! ./ui/State */ \"./site/build/client/ui/State.js\");\nconst game = new Game_1.Game();\nconst render = () => {\n    ReactDOM.render(React.createElement(GameComponent_1.GameComponent, { game: game, uiListener: (action) => State_1.dispatch.next(action) }), document.getElementById(\"root\"));\n};\nrender();\n//# sourceMappingURL=Index.js.map\n\n//# sourceURL=webpack:///./site/build/client/Index.js?");
+
+/***/ }),
+
 /***/ "./site/build/client/engine/Entity.js":
 /*!********************************************!*\
   !*** ./site/build/client/engine/Entity.js ***!
@@ -3023,18 +3035,6 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar Pl
 
 "use strict";
 eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar WalkDirection;\n(function (WalkDirection) {\n    WalkDirection[\"FORWARD\"] = \"FORWARD\";\n    WalkDirection[\"BACK\"] = \"BACK\";\n    WalkDirection[\"LEFT\"] = \"LEFT\";\n    WalkDirection[\"RIGHT\"] = \"RIGHT\";\n})(WalkDirection = exports.WalkDirection || (exports.WalkDirection = {}));\nvar TurnDirection;\n(function (TurnDirection) {\n    TurnDirection[\"CLOCKWISE\"] = \"CLOCKWISE\";\n    TurnDirection[\"ANTICLOCKWISE\"] = \"ANTICLOCKWISE\";\n})(TurnDirection = exports.TurnDirection || (exports.TurnDirection = {}));\nvar TravelEventType;\n(function (TravelEventType) {\n    TravelEventType[\"WALK\"] = \"WALK\";\n    TravelEventType[\"TURN\"] = \"TURN\";\n})(TravelEventType = exports.TravelEventType || (exports.TravelEventType = {}));\n//# sourceMappingURL=TravelEvents.js.map\n\n//# sourceURL=webpack:///./site/build/client/engine/events/TravelEvents.js?");
-
-/***/ }),
-
-/***/ "./site/build/client/index.js":
-/*!************************************!*\
-  !*** ./site/build/client/index.js ***!
-  \************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\nconst ReactDOM = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\nconst GameComponent_1 = __webpack_require__(/*! ./GameComponent */ \"./site/build/client/GameComponent.js\");\nconst Game_1 = __webpack_require__(/*! ./Game */ \"./site/build/client/Game.js\");\nconst State_1 = __webpack_require__(/*! ./ui/State */ \"./site/build/client/ui/State.js\");\nconst game = new Game_1.Game();\nconst render = () => {\n    ReactDOM.render(React.createElement(GameComponent_1.GameComponent, { game: game, uiListener: (action) => State_1.dispatch.next(action) }), document.getElementById(\"root\"));\n};\nrender();\n//# sourceMappingURL=Index.js.map\n\n//# sourceURL=webpack:///./site/build/client/index.js?");
 
 /***/ }),
 

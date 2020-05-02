@@ -42,4 +42,4 @@ app.get("*", function (req, res) {
 });
 
 const port = 80;
-app.listen(port, "localhost", () => console.log(`Listening on port ${port}!`));
+app.listen(port, () => console.log(`Listening on port ${port}!`));
