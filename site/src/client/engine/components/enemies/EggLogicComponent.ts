@@ -1,6 +1,7 @@
 import { Animations, SpriteSheets } from "../../../resources/manifests/Types";
 import { createMacator } from "../../../services/scripting/factory/EntityFactory";
 import { animation, sin } from "../../../util/animation/Animations";
+import { GameAnimation } from "../../../util/animation/GameAnimation";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { EnemyEventType } from "../../events/EnemyEvents";
@@ -32,6 +33,8 @@ const SIZE = 3;
 export class EggLogicComponent<T extends EggStateType> extends EntityComponent<
     T
 > {
+    private hatchingAnimation: GameAnimation;
+
     public init(entity: Entity<EggStateType>): Partial<EggStateType> {
         const initialState = EggState.IDLE;
 
@@ -48,7 +51,7 @@ export class EggLogicComponent<T extends EggStateType> extends EntityComponent<
             .speed(2000)
             .looping();
 
-        const hatchingAnimation = animation((x) => {
+        this.hatchingAnimation = animation((x) => {
             const frame = spritesheet.getAnimationInterp(
                 Animations.EGG_CHARGE,
                 x
@@ -62,7 +65,9 @@ export class EggLogicComponent<T extends EggStateType> extends EntityComponent<
             .whenDone(() => this.hatch(entity));
 
         setTimeout(() => {
-            hatchingAnimation.withOffset(idleAnimation.getCurrentPosition());
+            this.hatchingAnimation.withOffset(
+                idleAnimation.getCurrentPosition()
+            );
             this.setLogicState(entity, EggState.HATCHING);
         }, 5000);
 
@@ -71,7 +76,7 @@ export class EggLogicComponent<T extends EggStateType> extends EntityComponent<
             animationState: {
                 map: {
                     [EggState.IDLE]: idleAnimation,
-                    [EggState.HATCHING]: hatchingAnimation,
+                    [EggState.HATCHING]: this.hatchingAnimation,
                 },
             },
             targetCount: 1,
@@ -149,10 +154,12 @@ export class EggLogicComponent<T extends EggStateType> extends EntityComponent<
     }
 
     private increaseDifficulty(entity: Entity<EggStateType>) {
+        const targetCount = entity.getState().targetCount * 2;
         entity.setState({
-            targetCount: entity.getState().targetCount * 2,
+            targetCount,
             logicState: EggState.HATCHING,
         });
+        this.hatchingAnimation.speed(100 / targetCount + 300);
     }
 
     private hatch(entity: Entity<EggStateType>) {

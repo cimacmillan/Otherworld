@@ -33,7 +33,7 @@ export type PlayerState = BaseState &
     HealthState;
 
 const WALK_SPEED = 0.02;
-const TURN_SPEED = 0.1;
+const TURN_SPEED = 0.15;
 const HEAD_BOB_NERF = 0.6;
 
 export class PlayerControlComponent<
