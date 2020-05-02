@@ -1,4 +1,5 @@
 import { fadeFunction, fadePixelAccuracy } from "./Fade";
+import { hazeFunction } from "./Haze";
 
 export const fsSource = `
     varying lowp vec2 vTextureCoord;
@@ -7,6 +8,7 @@ export const fsSource = `
     varying lowp vec4 position;
 
     ${fadeFunction}
+    ${hazeFunction}
 
     void main() {
       lowp vec4 texColor = texture2D(uSampler, vTextureCoord);
@@ -18,6 +20,6 @@ export const fsSource = `
       lowp float distance = length(floor(position * fadeAccuracy) / fadeAccuracy);
       lowp float multiplier = fade(distance);
 
-      gl_FragColor = vec4(texColor.rgb * multiplier, 1);
+      gl_FragColor = vec4(haze(texColor.rgb * multiplier), 1);
     }
   `;

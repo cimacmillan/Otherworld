@@ -104,7 +104,8 @@ export class ScriptingService {
                 this.serviceLocator,
                 SCENERYSPRITES.WALL,
                 { x: -10, y: -10 },
-                { x: 10, y: -10 }
+                { x: 10, y: -10 },
+                2
             )
         );
         world.addEntity(
@@ -112,7 +113,8 @@ export class ScriptingService {
                 this.serviceLocator,
                 SCENERYSPRITES.WALL,
                 { x: -10, y: -10 },
-                { x: -10, y: 10 }
+                { x: -10, y: 10 },
+                2
             )
         );
         world.addEntity(
@@ -120,7 +122,8 @@ export class ScriptingService {
                 this.serviceLocator,
                 SCENERYSPRITES.WALL,
                 { x: 10, y: -10 },
-                { x: 10, y: 10 }
+                { x: 10, y: 10 },
+                2
             )
         );
 
@@ -129,7 +132,8 @@ export class ScriptingService {
                 this.serviceLocator,
                 SCENERYSPRITES.WALL,
                 { x: -10, y: 10 },
-                { x: -0.5, y: 20 }
+                { x: -0.5, y: 20 },
+                2
             )
         );
         world.addEntity(
@@ -137,7 +141,8 @@ export class ScriptingService {
                 this.serviceLocator,
                 SCENERYSPRITES.WALL,
                 { x: 10, y: 10 },
-                { x: 0.5, y: 20 }
+                { x: 0.5, y: 20 },
+                2
             )
         );
 
@@ -146,7 +151,8 @@ export class ScriptingService {
                 this.serviceLocator,
                 SCENERYSPRITES.WALL,
                 { x: -0.5, y: 20 },
-                { x: -0.5, y: 30 }
+                { x: -0.5, y: 30 },
+                2
             )
         );
         world.addEntity(
@@ -154,7 +160,8 @@ export class ScriptingService {
                 this.serviceLocator,
                 SCENERYSPRITES.WALL,
                 { x: 0.5, y: 20 },
-                { x: 0.5, y: 30 }
+                { x: 0.5, y: 30 },
+                2
             )
         );
     }

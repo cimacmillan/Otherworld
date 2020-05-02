@@ -1,3 +1,4 @@
+import { SCENERY_PIXEL_DENSITY } from "../../../Config";
 import {
     BoundaryComponent,
     BoundaryStateType,
@@ -15,8 +16,6 @@ import { Vector2D } from "../../../types";
 import { Floor, Wall } from "../../render/types/RenderInterface";
 import { SpriteSheets } from "../../resources/manifests/Types";
 import { ServiceLocator } from "../../ServiceLocator";
-
-const SCENERY_PIXEL_DENSITY = 32;
 
 export function createStaticFloor(
     serviceLocator: ServiceLocator,
@@ -66,13 +65,13 @@ export function createStaticWall(
     serviceLocator: ServiceLocator,
     spriteString: number,
     start: Vector2D,
-    end: Vector2D
+    end: Vector2D,
+    height: number = 1,
+    offset: number = 0
 ) {
     const sprite = serviceLocator
         .getResourceManager()
         .manifest.spritesheets[SpriteSheets.SCENERY].getSprite(spriteString);
-
-    const height = 2;
 
     const textureWidth =
         (Math.sqrt(
@@ -92,8 +91,8 @@ export function createStaticWall(
         endPos: [end.x, end.y],
         startHeight: height,
         endHeight: height,
-        startOffset: 0,
-        endOffset: 0,
+        startOffset: offset,
+        endOffset: offset,
         textureX: sprite.textureCoordinate.textureX,
         textureY: sprite.textureCoordinate.textureY,
         textureWidth,

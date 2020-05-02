@@ -14,3 +14,5 @@ export const TARGET_MILLIS = Math.floor(1000 / TARGET_FPS);
 
 export const DEFAULT_PLAYER_HEIGHT = 0.5;
 export const DEFAULT_PLAYER_RADIUS = 0.5;
+
+export const SCENERY_PIXEL_DENSITY = 16;
