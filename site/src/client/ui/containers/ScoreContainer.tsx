@@ -11,6 +11,7 @@ import { GameAnimation } from "../../util/animation/GameAnimation";
 import { animation, sin } from "../../util/animation/Animations";
 import { Actions } from "../actions/Actions";
 import { EnemyEventType } from "../../engine/events/EnemyEvents";
+import { ShadowComponentStyle } from "../components/ShadowComponent";
 
 export const ScoreContainer: React.FunctionComponent = (props) => {
     const [state, dispatch] = useGlobalState();
@@ -42,6 +43,7 @@ export const ScoreContainer: React.FunctionComponent = (props) => {
                 display: "flex",
                 justifyContent: "center",
                 position: "absolute",
+                alignItems: "flex-start",
             }}
         >
             <TextComponent
@@ -52,6 +54,7 @@ export const ScoreContainer: React.FunctionComponent = (props) => {
                 style={{
                     transform,
                     transformOrigin: "top center",
+                    ...ShadowComponentStyle(),
                 }}
             />
         </div>

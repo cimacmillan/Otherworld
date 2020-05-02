@@ -3,6 +3,7 @@ import { DOM_HEIGHT, DOM_WIDTH } from "../../Config";
 import { KeyHintComponent } from "../components/KeyHintComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { ViewportComponent } from "../components/ViewportComponent";
+import { ShadowComponentStyle } from "../components/ShadowComponent";
 
 export interface KeyHintsContainerProps {
     serviceLocator: ServiceLocator;
@@ -143,7 +144,7 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
                         keyCode={keyHint.key}
                         selected={keyDown}
                         text={keyHint.hint}
-                        style={{}}
+                        style={ShadowComponentStyle()}
                         fade={keyHint.fade}
                         onFadeComplete={() => removeKeyHint(keyHint)}
                     />
