@@ -15,7 +15,7 @@ export function loadWall(serviceLocator: ServiceLocator, wall: WallSchema) {
     serviceLocator.getWorld().addEntity(
         createStaticWall(
             serviceLocator,
-            SCENERYSPRITES.WALL,
+            wall.texture === undefined ? SCENERYSPRITES.WALL : wall.texture,
             {
                 x: wall.startx,
                 y: wall.starty,
@@ -25,7 +25,8 @@ export function loadWall(serviceLocator: ServiceLocator, wall: WallSchema) {
                 y: wall.endy,
             },
             wall.height,
-            wall.offset
+            wall.offset,
+            wall.collides
         )
     );
 }
@@ -34,7 +35,7 @@ export function loadFloor(serviceLocator: ServiceLocator, floor: FloorSchema) {
     serviceLocator.getWorld().addEntity(
         createStaticFloor(
             serviceLocator,
-            SCENERYSPRITES.FLOOR,
+            floor.texture === undefined ? SCENERYSPRITES.FLOOR : floor.texture,
             floor.height ? floor.height : 0,
             {
                 x: floor.startx,

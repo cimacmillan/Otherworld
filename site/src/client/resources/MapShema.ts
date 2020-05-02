@@ -10,6 +10,8 @@ export interface WallSchema {
     endy: number;
     height?: number;
     offset?: number;
+    texture?: number;
+    collides?: boolean;
 }
 
 export interface FloorSchema {
@@ -18,4 +20,5 @@ export interface FloorSchema {
     endx: number;
     endy: number;
     height?: number;
+    texture?: number;
 }

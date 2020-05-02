@@ -67,7 +67,8 @@ export function createStaticWall(
     start: Vector2D,
     end: Vector2D,
     height: number = 1,
-    offset: number = 0
+    offset: number = 0,
+    collides: boolean = true
 ) {
     const sprite = serviceLocator
         .getResourceManager()
@@ -110,7 +111,7 @@ export function createStaticWall(
                     start,
                     end,
                 },
-                collides: true,
+                collides,
             },
         })
     );
