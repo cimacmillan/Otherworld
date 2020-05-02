@@ -1,9 +1,5 @@
 import * as Express from "express";
-import * as Chalk from "./Chalk";
-import * as Database from "./Database";
 import HttpException from "./errors/HttpException";
-
-Chalk.bigLog();
 
 const PROCESS_DIRECTORY: string = process.cwd();
 const INDEX_DIRECTORY: string = `${PROCESS_DIRECTORY}/site/public/`;
