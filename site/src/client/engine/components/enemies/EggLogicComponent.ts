@@ -2,42 +2,31 @@ import { Animations, SpriteSheets } from "../../../resources/manifests/Types";
 import { createMacator } from "../../../services/scripting/factory/EntityFactory";
 import { animation, sin } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
+import { effectFromAnimation } from "../../../util/engine/AnimationEffect";
+import { StateEffect } from "../../../util/engine/StateEffect";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { EnemyEventType } from "../../events/EnemyEvents";
 import { GameEvent } from "../../events/Event";
-import { BaseState, LogicState } from "../../State";
-import { AnimationStateType } from "../AnimationStateComponent";
+import { EggLogicState, EggState } from "../../state/Macator";
+import { BaseState, LogicState } from "../../state/State";
 import { PhysicsStateType } from "../physics/PhysicsComponent";
 import { SpriteStateType } from "../rendering/SpriteRenderComponent";
 
-enum EggState {
-    IDLE = "IDLE",
-    HATCHING = "HATCHING",
-}
-
-interface EggLogicState {
-    targetCount: number;
-    currentLiving: number;
-}
-
 export type EggStateType = BaseState &
     SpriteStateType &
-    AnimationStateType &
     LogicState &
     PhysicsStateType &
     EggLogicState;
 
 const SIZE = 3;
 
-export class EggLogicComponent<T extends EggStateType> extends EntityComponent<
-    T
-> {
+export class EggLogicComponent<T extends EggStateType>
+    implements EntityComponent<T> {
     private hatchingAnimation: GameAnimation;
+    private animations: StateEffect;
 
-    public init(entity: Entity<EggStateType>): Partial<EggStateType> {
-        const initialState = EggState.IDLE;
-
+    public init(entity: Entity<EggStateType>) {
         const spritesheet = entity.getServiceLocator().getResourceManager()
             .manifest.spritesheets[SpriteSheets.SPRITE];
         const idleAnimation = animation((x) => {
@@ -68,25 +57,20 @@ export class EggLogicComponent<T extends EggStateType> extends EntityComponent<
             this.hatchingAnimation.withOffset(
                 idleAnimation.getCurrentPosition()
             );
-            this.setLogicState(entity, EggState.HATCHING);
+            entity.setState({
+                logicState: EggState.HATCHING,
+            });
         }, 5000);
 
-        return {
-            logicState: initialState,
-            animationState: {
-                map: {
-                    [EggState.IDLE]: idleAnimation,
-                    [EggState.HATCHING]: this.hatchingAnimation,
-                },
+        this.animations = new StateEffect(
+            {
+                [EggState.IDLE]: effectFromAnimation(idleAnimation),
+                [EggState.HATCHING]: effectFromAnimation(
+                    this.hatchingAnimation
+                ),
             },
-            targetCount: 1,
-            currentLiving: 0,
-            velocity: { x: 0, y: 0 },
-            friction: 0.5,
-            mass: 1,
-            elastic: 0,
-            radius: SIZE / 2,
-        };
+            EggState.IDLE
+        );
     }
 
     public update(entity: Entity<EggStateType>): void {
@@ -95,9 +79,9 @@ export class EggLogicComponent<T extends EggStateType> extends EntityComponent<
             state.position.x,
             state.position.y,
         ];
-    }
 
-    public onEvent(entity: Entity<EggStateType>, event: GameEvent): void {}
+        this.animations.update();
+    }
 
     public onObservedEvent(
         entity: Entity<EggStateType>,
@@ -118,39 +102,17 @@ export class EggLogicComponent<T extends EggStateType> extends EntityComponent<
     }
 
     public onCreate(entity: Entity<EggStateType>) {
-        const spritesheet = entity.getServiceLocator().getResourceManager()
-            .manifest.spritesheets[SpriteSheets.SPRITE];
-        const firstFrame = spritesheet.getAnimationFrame(
-            Animations.EGG_CHARGE,
-            0
-        );
-
-        entity.setState({
-            spriteState: {
-                sprite: {
-                    position: [0, 0],
-                    size: [SIZE, SIZE],
-                    height: SIZE / 2,
-                    texture: firstFrame.textureCoordinate,
-                },
-            },
-            position: { x: 0, y: 0 },
-            collides: true,
-        });
+        this.animations.load();
     }
-
-    public onDestroy(entity: Entity<EggStateType>) {}
 
     public onStateTransition(
         entity: Entity<EggStateType>,
         from: EggStateType,
         to: EggStateType
-    ) {}
-
-    private setLogicState(entity: Entity<EggStateType>, state: EggState) {
-        entity.setState({
-            logicState: state,
-        });
+    ) {
+        if (from.logicState !== to.logicState) {
+            this.animations.setState(to.logicState);
+        }
     }
 
     private increaseDifficulty(entity: Entity<EggStateType>) {
@@ -173,7 +135,9 @@ export class EggLogicComponent<T extends EggStateType> extends EntityComponent<
         );
 
         if (newCount >= targetCount) {
-            this.setLogicState(entity, EggState.IDLE);
+            entity.setState({
+                logicState: EggState.IDLE,
+            });
         }
 
         const macator = createMacator(

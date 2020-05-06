@@ -4,8 +4,7 @@ import {
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import { GameEvent } from "../../events/Event";
-import { BaseState } from "../../State";
+import { BaseState } from "../../state/State";
 
 export interface WallState {
     wallState: {
@@ -15,26 +14,9 @@ export interface WallState {
 
 export type WallStateType = BaseState & WallState;
 
-export class WallRenderComponent<
-    T extends WallStateType
-> extends EntityComponent<T> {
+export class WallRenderComponent<T extends WallStateType>
+    implements EntityComponent<T> {
     private toRenderRef?: RenderItem;
-
-    public constructor(private initialWall?: Wall) {
-        super();
-    }
-
-    public init(entity: Entity<WallStateType>): WallState {
-        return this.initialWall
-            ? {
-                  wallState: {
-                      wall: this.initialWall,
-                  },
-              }
-            : {
-                  wallState: {},
-              };
-    }
 
     public update(entity: Entity<WallStateType>): void {
         const { wall } = entity.getState().wallState;
@@ -45,13 +27,6 @@ export class WallRenderComponent<
                 .wallRenderService.updateItem(this.toRenderRef, wall);
         }
     }
-
-    public onEvent(entity: Entity<WallStateType>, event: GameEvent): void {}
-
-    public onObservedEvent(
-        entity: Entity<WallStateType>,
-        event: GameEvent
-    ): void {}
 
     public onStateTransition(
         entity: Entity<WallStateType>,
@@ -77,7 +52,7 @@ export class WallRenderComponent<
     }
 
     public onCreate(entity: Entity<WallStateType>): void {
-        if (this.initialWall && !this.toRenderRef) {
+        if (entity.getState().wallState.wall) {
             this.toRenderRef = entity
                 .getServiceLocator()
                 .getRenderService()

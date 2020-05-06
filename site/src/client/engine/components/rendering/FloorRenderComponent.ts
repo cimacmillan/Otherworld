@@ -5,7 +5,7 @@ import {
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
-import { BaseState } from "../../State";
+import { BaseState } from "../../state/State";
 
 export interface FloorState {
     floorState: {
@@ -15,18 +15,9 @@ export interface FloorState {
 
 export type FloorStateType = BaseState & FloorState;
 
-export class FloorRenderComponent<
-    T extends FloorStateType
-> extends EntityComponent<T> {
+export class FloorRenderComponent<T extends FloorStateType>
+    implements EntityComponent<T> {
     private toRenderRef?: RenderItem;
-
-    constructor(private initialState?: FloorState) {
-        super();
-    }
-
-    public init(entity: Entity<FloorStateType>) {
-        return this.initialState || {};
-    }
 
     public update(entity: Entity<FloorStateType>): void {
         const { floor } = entity.getState().floorState;
@@ -69,7 +60,7 @@ export class FloorRenderComponent<
     }
 
     public onCreate(entity: Entity<FloorStateType>): void {
-        if (this.initialState && !this.toRenderRef) {
+        if (entity.getState().floorState.floor) {
             this.toRenderRef = entity
                 .getServiceLocator()
                 .getRenderService()

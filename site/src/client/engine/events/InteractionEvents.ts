@@ -1,4 +1,4 @@
-import { SurfacePositionState } from "../State";
+import { SurfacePositionState } from "../state/State";
 
 interface Attack {
     type: InteractionEventType.ATTACK;

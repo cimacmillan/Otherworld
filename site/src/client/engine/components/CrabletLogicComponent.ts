@@ -21,7 +21,7 @@ import { EntityComponent } from "../EntityComponent";
 import { EnemyEventType } from "../events/EnemyEvents";
 import { GameEvent } from "../events/Event";
 import { InteractionEventType } from "../events/InteractionEvents";
-import { BaseState, HealthState, SurfacePositionState } from "../State";
+import { BaseState, HealthState, SurfacePositionState } from "../state/State";
 import { InteractionStateType } from "./InteractionComponent";
 import { PhysicsStateType } from "./physics/PhysicsComponent";
 import { SpriteStateType } from "./rendering/SpriteRenderComponent";
@@ -52,28 +52,15 @@ const ATTACK_DISTANCE = 0.6;
 const DEFAULT_HEIGHT = 0.5;
 const JUMP_HEIGHT = 0.25;
 
-export class CrabletLogicComponent<
-    T extends MacatorStateType
-> extends EntityComponent<T> {
+export class CrabletLogicComponent<T extends MacatorStateType>
+    implements EntityComponent<T> {
     private animation: GameAnimation;
     private attackAnimation: GameAnimation;
     private deadTexture: TextureCoordinate;
     private attackDelay: ActionDelay;
 
     public constructor(private initialX: number, private initialY: number) {
-        super();
-    }
-
-    public init(entity: Entity<MacatorStateType>) {
         this.attackDelay = new ActionDelay(ATTACK_DELAY);
-        return {
-            macatorState: MacatorState.WALKING,
-            velocity: { x: 0, y: 0 },
-            friction: 0.8,
-            mass: 0.4,
-            elastic: 0,
-            health: 1,
-        };
     }
 
     public update(entity: Entity<MacatorStateType>): void {
@@ -215,14 +202,6 @@ export class CrabletLogicComponent<
                             ].getAnimationInterp(crabType, xtex)
                             .textureCoordinate,
                     },
-                },
-                position: { x, y },
-                height: DEFAULT_HEIGHT,
-                radius: 0.5,
-                angle: 0,
-                collides: true,
-                interactable: {
-                    ATTACK: true,
                 },
             },
             true

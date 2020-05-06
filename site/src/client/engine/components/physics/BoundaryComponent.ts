@@ -2,7 +2,7 @@ import { PhysicsBoundary } from "../../../services/physics/PhysicsService";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
-import { BaseState } from "../../State";
+import { BaseState } from "../../state/State";
 
 export interface BoundaryState {
     boundaryState: {
@@ -13,17 +13,8 @@ export interface BoundaryState {
 
 export type BoundaryStateType = BaseState & BoundaryState;
 
-export class BoundaryComponent<
-    T extends BoundaryStateType
-> extends EntityComponent<T> {
-    public constructor(private initialState?: BoundaryState) {
-        super();
-    }
-
-    public init(entity: Entity<BoundaryStateType>) {
-        return this.initialState || {};
-    }
-
+export class BoundaryComponent<T extends BoundaryStateType>
+    implements EntityComponent<T> {
     public update(entity: Entity<BoundaryStateType>): void {}
 
     public onEvent(entity: Entity<BoundaryStateType>, event: GameEvent): void {}

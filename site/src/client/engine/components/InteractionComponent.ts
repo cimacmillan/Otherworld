@@ -1,8 +1,7 @@
 import { InteractionType } from "../../services/interaction/InteractionType";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
-import { GameEvent } from "../events/Event";
-import { BaseState, SurfacePositionState } from "../State";
+import { BaseState, SurfacePositionState } from "../state/State";
 
 type InteractableMap = { [key in InteractionType]?: boolean };
 
@@ -14,27 +13,8 @@ export type InteractionStateType = BaseState &
     SurfacePositionState &
     InteractionState;
 
-export class InteractionComponent<
-    T extends InteractionStateType
-> extends EntityComponent<T> {
-    public init(entity: Entity<InteractionStateType>) {
-        return {
-            interactable: {},
-        };
-    }
-
-    public update(entity: Entity<InteractionStateType>): void {}
-
-    public onEvent(
-        entity: Entity<InteractionStateType>,
-        event: GameEvent
-    ): void {}
-
-    public onObservedEvent(
-        entity: Entity<InteractionStateType>,
-        event: GameEvent
-    ): void {}
-
+export class InteractionComponent<T extends InteractionStateType>
+    implements EntityComponent<T> {
     public onStateTransition(
         entity: Entity<InteractionStateType>,
         from: InteractionStateType,
@@ -59,8 +39,6 @@ export class InteractionComponent<
         }
     }
 
-    public onCreate(entity: Entity<T>): void {}
-
     public onDestroy(entity: Entity<InteractionStateType>) {
         for (const type in InteractionType) {
             const interactionType = type as InteractionType;
@@ -69,6 +47,18 @@ export class InteractionComponent<
                     .getServiceLocator()
                     .getInteractionService()
                     .unregisterEntity(entity, interactionType);
+            }
+        }
+    }
+
+    public onCreate(entity: Entity<InteractionStateType>) {
+        for (const type in InteractionType) {
+            const interactionType = type as InteractionType;
+            if (entity.getState().interactable[interactionType]) {
+                entity
+                    .getServiceLocator()
+                    .getInteractionService()
+                    .registerEntity(entity, interactionType);
             }
         }
     }

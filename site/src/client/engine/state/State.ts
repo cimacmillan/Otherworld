@@ -1,4 +1,4 @@
-import { Camera, Vector2D } from "../types";
+import { Camera, Vector2D } from "../../types";
 
 export interface BaseState {
     exists: boolean;

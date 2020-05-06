@@ -1,8 +1,7 @@
 import { Vector2D } from "../../../types";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import { GameEvent } from "../../events/Event";
-import { BaseState, SurfacePositionState } from "../../State";
+import { BaseState, SurfacePositionState } from "../../state/State";
 
 export interface PhysicsState {
     velocity: Vector2D;
@@ -14,23 +13,16 @@ export interface PhysicsState {
 
 export type PhysicsStateType = BaseState & SurfacePositionState & PhysicsState;
 
-export class PhysicsComponent<
-    T extends PhysicsStateType
-> extends EntityComponent<T> {
-    public init(entity: Entity<PhysicsStateType>) {
-        return {};
+export class PhysicsComponent<T extends PhysicsStateType>
+    implements EntityComponent<T> {
+    public onCreate(entity: Entity<PhysicsStateType>) {
+        if (entity.getState().collides) {
+            entity
+                .getServiceLocator()
+                .getPhysicsService()
+                .registerPhysicsEntity(entity);
+        }
     }
-
-    public update(entity: Entity<PhysicsStateType>): void {}
-
-    public onEvent(entity: Entity<PhysicsStateType>, event: GameEvent): void {}
-
-    public onObservedEvent(
-        entity: Entity<PhysicsStateType>,
-        event: GameEvent
-    ): void {}
-
-    public onCreate(entity: Entity<PhysicsStateType>) {}
 
     public onStateTransition(
         entity: Entity<PhysicsStateType>,

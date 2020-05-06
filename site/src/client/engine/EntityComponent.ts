@@ -1,25 +1,18 @@
 import { Entity } from "./Entity";
 import { GameEvent } from "./events/Event";
-import { BaseState } from "./State";
+import { BaseState } from "./state/State";
 
-export abstract class EntityComponent<State extends BaseState> {
-    // Should intialise this components part of the state
-    public abstract init(entity: Entity<State>): object;
-    // Update component
-    public abstract update(entity: Entity<State>): void;
+export interface EntityComponent<State extends BaseState> {
+    init?: (entity: Entity<State>) => void;
+    update?: (entity: Entity<State>) => void;
+
     // On event from other components in this entitiy
-    public abstract onEvent(entity: Entity<State>, event: GameEvent): void;
-    // On event from other entities / sources
-    public abstract onObservedEvent(
-        entity: Entity<State>,
-        event: GameEvent
-    ): void;
+    onEvent?: (entity: Entity<State>, event: GameEvent) => void;
 
-    public abstract onStateTransition(
-        entity: Entity<State>,
-        from: State,
-        to: State
-    ): void;
-    public abstract onCreate(entity: Entity<State>): void;
-    public abstract onDestroy(entity: Entity<State>): void;
+    // On event from other entities / sources
+    onObservedEvent?: (entity: Entity<State>, event: GameEvent) => void;
+
+    onStateTransition?: (entity: Entity<State>, from: State, to: State) => void;
+    onCreate?: (entity: Entity<State>) => void;
+    onDestroy?: (entity: Entity<State>) => void;
 }

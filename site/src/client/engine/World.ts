@@ -2,7 +2,7 @@ import { ConsistentArray } from "../util/array/ConsistentArray";
 import { Entity } from "./Entity";
 import { EntityEventType } from "./events/EntityEvents";
 import { GameEvent } from "./events/Event";
-import { BaseState } from "./State";
+import { BaseState } from "./state/State";
 
 export class World {
     private entityArray: ConsistentArray<Entity<BaseState>>;

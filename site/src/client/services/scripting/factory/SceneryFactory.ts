@@ -51,13 +51,17 @@ export function createStaticFloor(
         repeatHeight: textureCoordinate.textureHeight,
     };
 
+    const initialState: FloorStateType = {
+        floorState: {
+            floor,
+        },
+        exists: false,
+    };
+
     return new Entity<FloorStateType>(
         serviceLocator,
-        new FloorRenderComponent({
-            floorState: {
-                floor,
-            },
-        })
+        initialState,
+        new FloorRenderComponent()
     );
 }
 
@@ -102,17 +106,24 @@ export function createStaticWall(
         repeatHeight: sprite.textureCoordinate.textureHeight,
     };
 
+    const initialState: WallStateType & BoundaryStateType = {
+        exists: false,
+        boundaryState: {
+            boundary: {
+                start,
+                end,
+            },
+            collides,
+        },
+        wallState: {
+            wall,
+        },
+    };
+
     return new Entity<WallStateType & BoundaryStateType>(
         serviceLocator,
-        new WallRenderComponent(wall),
-        new BoundaryComponent({
-            boundaryState: {
-                boundary: {
-                    start,
-                    end,
-                },
-                collides,
-            },
-        })
+        initialState,
+        new WallRenderComponent(),
+        new BoundaryComponent()
     );
 }

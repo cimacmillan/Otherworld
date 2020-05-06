@@ -2,10 +2,9 @@ import { ServiceLocator } from "../services/ServiceLocator";
 import { EntityComponent } from "./EntityComponent";
 import { EntityEventType } from "./events/EntityEvents";
 import { GameEvent } from "./events/Event";
-import { BaseState } from "./State";
+import { BaseState } from "./state/State";
 
 export class Entity<State extends BaseState> {
-    private state: State;
     private components: Array<EntityComponent<State>>;
 
     private initialised: boolean = false;
@@ -13,17 +12,13 @@ export class Entity<State extends BaseState> {
 
     constructor(
         private serviceLocator: ServiceLocator,
+        private state: State,
         ...components: Array<EntityComponent<State>>
     ) {
         this.components = components;
-        let initialState = {};
         for (let i = 0; i < this.components.length; i++) {
-            initialState = {
-                ...initialState,
-                ...this.components[i].init(this),
-            };
+            this.components[i].init && this.components[i].init(this);
         }
-        this.state = initialState as State;
         this.initialised = true;
     }
 
@@ -41,7 +36,7 @@ export class Entity<State extends BaseState> {
 
     public update() {
         for (let i = 0; i < this.components.length; i++) {
-            this.components[i].update(this);
+            this.components[i].update && this.components[i].update(this);
         }
     }
 
@@ -61,40 +56,47 @@ export class Entity<State extends BaseState> {
 
     public emit(event: GameEvent) {
         for (let x = 0; x < this.components.length; x++) {
-            this.components[x].onEvent(this, event);
+            this.components[x].onEvent &&
+                this.components[x].onEvent(this, event);
 
             // Helper so I don't repeat the same code
             switch (event.type) {
                 case EntityEventType.STATE_TRANSITION:
-                    this.components[x].onStateTransition(
-                        this,
-                        event.payload.from as State,
-                        event.payload.to as State
-                    );
+                    this.components[x].onStateTransition &&
+                        this.components[x].onStateTransition(
+                            this,
+                            event.payload.from as State,
+                            event.payload.to as State
+                        );
                     break;
                 case EntityEventType.ENTITY_CREATED:
-                    this.components[x].onCreate(this);
+                    this.components[x].onCreate &&
+                        this.components[x].onCreate(this);
                     break;
                 case EntityEventType.ENTITY_DELETED:
-                    this.components[x].onDestroy(this);
+                    this.components[x].onDestroy &&
+                        this.components[x].onDestroy(this);
                     break;
             }
         }
         for (let x = 0; x < this.listeners.length; x++) {
-            this.listeners[x].onObservedEvent(event);
+            this.listeners[x].onObservedEvent &&
+                this.listeners[x].onObservedEvent(event);
         }
     }
 
     public onObservedEvent(event: GameEvent) {
         for (let x = 0; x < this.components.length; x++) {
-            this.components[x].onObservedEvent(this, event);
+            this.components[x].onObservedEvent &&
+                this.components[x].onObservedEvent(this, event);
         }
     }
 
     public emitGlobally(event: GameEvent) {
         this.serviceLocator.getWorld().emitOutOfWorld(event);
         for (let x = 0; x < this.listeners.length; x++) {
-            this.listeners[x].onObservedEvent(event);
+            this.listeners[x].onObservedEvent &&
+                this.listeners[x].onObservedEvent(event);
         }
     }
 

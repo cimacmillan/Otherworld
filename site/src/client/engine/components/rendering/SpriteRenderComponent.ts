@@ -5,7 +5,7 @@ import {
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
-import { BaseState } from "../../State";
+import { BaseState } from "../../state/State";
 
 export interface SpriteState {
     spriteState: {
@@ -15,14 +15,9 @@ export interface SpriteState {
 
 export type SpriteStateType = BaseState & SpriteState;
 
-export class SpriteRenderComponent<
-    T extends SpriteStateType
-> extends EntityComponent<T> {
+export class SpriteRenderComponent<T extends SpriteStateType>
+    implements EntityComponent<T> {
     private toRenderRef?: RenderItem;
-
-    public init(entity: Entity<SpriteStateType>) {
-        return { spriteState: {} };
-    }
 
     public update(entity: Entity<SpriteStateType>): void {
         const { sprite } = entity.getState().spriteState;
@@ -33,8 +28,6 @@ export class SpriteRenderComponent<
                 .spriteRenderService.updateItem(this.toRenderRef, sprite);
         }
     }
-
-    public onEvent(entity: Entity<SpriteStateType>, event: GameEvent): void {}
 
     public onObservedEvent(
         entity: Entity<SpriteStateType>,
@@ -64,7 +57,16 @@ export class SpriteRenderComponent<
         }
     }
 
-    public onCreate(entity: Entity<SpriteStateType>): void {}
+    public onCreate(entity: Entity<SpriteStateType>): void {
+        if (entity.getState().spriteState.sprite) {
+            this.toRenderRef = entity
+                .getServiceLocator()
+                .getRenderService()
+                .spriteRenderService.createItem(
+                    entity.getState().spriteState.sprite
+                );
+        }
+    }
 
     public onDestroy(entity: Entity<SpriteStateType>) {
         if (this.toRenderRef) {

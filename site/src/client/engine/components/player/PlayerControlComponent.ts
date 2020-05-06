@@ -1,11 +1,3 @@
-import {
-    ASPECT_RATIO,
-    DEFAULT_PLAYER_HEIGHT,
-    DEFAULT_PLAYER_RADIUS,
-    FOV,
-    ZFAR,
-    ZNEAR,
-} from "../../../Config";
 import { Audios } from "../../../resources/manifests/Types";
 import { InteractionType } from "../../../services/interaction/InteractionType";
 import { Vector2D } from "../../../types";
@@ -24,7 +16,7 @@ import {
     TurnDirection,
     WalkDirection,
 } from "../../events/TravelEvents";
-import { BaseState, CameraState, HealthState } from "../../State";
+import { BaseState, CameraState, HealthState } from "../../state/State";
 import { PhysicsStateType } from "../physics/PhysicsComponent";
 
 export type PlayerState = BaseState &
@@ -36,9 +28,8 @@ const WALK_SPEED = 0.02;
 const TURN_SPEED = 0.15;
 const HEAD_BOB_NERF = 0.6;
 
-export class PlayerControlComponent<
-    T extends PlayerState
-> extends EntityComponent<T> {
+export class PlayerControlComponent<T extends PlayerState>
+    implements EntityComponent<T> {
     private accumulatedWalk: Vector2D = { x: 0, y: 0 };
     private accumulatedAngle: number = 0;
     private attackDelay: ActionDelay;
@@ -46,15 +37,8 @@ export class PlayerControlComponent<
     private headbob: GameAnimation;
     private headbobOffset = 0;
 
-    public constructor(
-        private initialPosition: Vector2D,
-        private initialAngle: number
-    ) {
-        super();
-        this.attackDelay = new ActionDelay(300);
-    }
-
     public init(entity: Entity<PlayerState>) {
+        this.attackDelay = new ActionDelay(300);
         this.headbob = animation((x: number) => {
             const velocity = entity.getState().velocity;
             const speed = vec_distance(velocity);
@@ -64,28 +48,6 @@ export class PlayerControlComponent<
             .speed(400)
             .looping()
             .start();
-
-        return {
-            camera: {
-                position: this.initialPosition,
-                height: DEFAULT_PLAYER_HEIGHT,
-                angle: this.initialAngle,
-                fov: FOV,
-                aspectRatio: ASPECT_RATIO,
-                zNear: ZNEAR,
-                zFar: ZFAR,
-            },
-            cameraShouldSync: true,
-            position: this.initialPosition,
-            height: DEFAULT_PLAYER_HEIGHT,
-            radius: DEFAULT_PLAYER_RADIUS,
-            angle: this.initialAngle,
-            velocity: { x: 0, y: 0 },
-            friction: 0.8,
-            mass: 1,
-            elastic: 0,
-            health: 1,
-        };
     }
 
     public update(entity: Entity<PlayerState>): void {
