@@ -4,7 +4,9 @@ export interface StateEffectCallback {
     onUpdate?: () => void;
 }
 
-interface StateEffectParameters { [key: string]: StateEffectCallback }
+interface StateEffectParameters {
+    [key: string]: StateEffectCallback;
+}
 
 export class StateEffect {
     constructor(

@@ -4,6 +4,10 @@ import { GameComponent } from "./GameComponent";
 import { Game } from "./Game";
 import { dispatch } from "./ui/State";
 import { Actions } from "./ui/actions/Actions";
+import { VERSION } from "./Config";
+
+// For viewing deployed version
+console.log(VERSION);
 
 const game = new Game();
 
