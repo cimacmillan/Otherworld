@@ -8,7 +8,7 @@ import {
     CompositeAnimationType,
 } from "../../util/animation/CompositeAnimation";
 import { Subscription } from "rxjs";
-import { vec_distance } from "../../util/math";
+import { vec } from "../../util/math";
 import { getImagePropsFromSprite } from "../../util/math/UI";
 import { ViewportComponent } from "./ViewportComponent";
 import { SpriteSheets, Sprites } from "../../resources/manifests/Types";
@@ -56,7 +56,7 @@ export const WeaponComponent: React.FunctionComponent<WeaponComponentProps> = (
                 .getScriptingService()
                 .getPlayer()
                 .getState().velocity;
-            const speed = vec_distance(velocity);
+            const speed = vec.vec_distance(velocity);
             setPosY(POS_Y + Math.sin(x * Math.PI * 2) * speed);
         })
             .driven()

@@ -1,3 +1,4 @@
+import { TextureCoordinate } from "../../resources/SpriteSheet";
 import { Camera, Vector2D } from "../../types";
 
 export interface BaseState {
@@ -22,4 +23,11 @@ export interface LogicState {
 
 export interface HealthState {
     health: number;
+}
+
+export interface SpriteRenderState extends SurfacePositionState {
+    shouldRender: boolean;
+    textureCoordinate: TextureCoordinate;
+    spriteHeight: number;
+    spriteWidth: number;
 }

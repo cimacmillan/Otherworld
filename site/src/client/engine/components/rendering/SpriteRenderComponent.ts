@@ -5,27 +5,30 @@ import {
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
-import { BaseState } from "../../state/State";
+import {
+    BaseState,
+    SpriteRenderState,
+    SurfacePositionState,
+} from "../../state/State";
 
-export interface SpriteState {
-    spriteState: {
-        sprite?: Sprite;
-    };
-}
-
-export type SpriteStateType = BaseState & SpriteState;
+export type SpriteStateType = BaseState &
+    SurfacePositionState &
+    SpriteRenderState;
 
 export class SpriteRenderComponent<T extends SpriteStateType>
     implements EntityComponent<T> {
     private toRenderRef?: RenderItem;
+    private sprite: Sprite;
 
     public update(entity: Entity<SpriteStateType>): void {
-        const { sprite } = entity.getState().spriteState;
-        if (sprite) {
+        const state = entity.getState();
+        this.sprite = this.getSpriteFromState(state);
+
+        if (state.shouldRender) {
             entity
                 .getServiceLocator()
                 .getRenderService()
-                .spriteRenderService.updateItem(this.toRenderRef, sprite);
+                .spriteRenderService.updateItem(this.toRenderRef, this.sprite);
         }
     }
 
@@ -36,19 +39,17 @@ export class SpriteRenderComponent<T extends SpriteStateType>
 
     public onStateTransition(
         entity: Entity<SpriteStateType>,
-        from: SpriteState,
-        to: SpriteState
+        from: SpriteStateType,
+        to: SpriteStateType
     ) {
-        if (!from.spriteState.sprite && to.spriteState.sprite) {
+        if (!from.shouldRender && to.shouldRender) {
             this.toRenderRef = entity
                 .getServiceLocator()
                 .getRenderService()
-                .spriteRenderService.createItem(to.spriteState.sprite);
-        } else if (
-            from.spriteState.sprite &&
-            !to.spriteState.sprite &&
-            this.toRenderRef
-        ) {
+                .spriteRenderService.createItem(
+                    this.getSpriteFromState(entity.getState())
+                );
+        } else if (from.shouldRender && !to.shouldRender && this.toRenderRef) {
             entity
                 .getServiceLocator()
                 .getRenderService()
@@ -58,12 +59,12 @@ export class SpriteRenderComponent<T extends SpriteStateType>
     }
 
     public onCreate(entity: Entity<SpriteStateType>): void {
-        if (entity.getState().spriteState.sprite) {
+        if (entity.getState().shouldRender) {
             this.toRenderRef = entity
                 .getServiceLocator()
                 .getRenderService()
                 .spriteRenderService.createItem(
-                    entity.getState().spriteState.sprite
+                    this.getSpriteFromState(entity.getState())
                 );
         }
     }
@@ -76,5 +77,14 @@ export class SpriteRenderComponent<T extends SpriteStateType>
                 .spriteRenderService.freeItem(this.toRenderRef);
             this.toRenderRef = undefined;
         }
+    }
+
+    private getSpriteFromState(state: SpriteStateType): Sprite {
+        return {
+            position: [state.position.x, state.position.y],
+            size: [state.spriteWidth, state.spriteHeight],
+            height: state.height,
+            texture: state.textureCoordinate,
+        };
     }
 }

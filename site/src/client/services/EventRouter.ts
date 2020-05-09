@@ -12,12 +12,14 @@ export enum GameEventSource {
     INPUT = "INPUT",
 }
 
+const noop: () => void = () => undefined;
+
 export class EventRouter {
     private listeners: { [key in GameEventSource]: GameEventListener } = {
-        [GameEventSource.ROOT]: () => {},
-        [GameEventSource.WORLD]: () => {},
-        [GameEventSource.UI]: () => {},
-        [GameEventSource.INPUT]: () => {},
+        [GameEventSource.ROOT]: noop,
+        [GameEventSource.WORLD]: noop,
+        [GameEventSource.UI]: noop,
+        [GameEventSource.INPUT]: noop,
     };
 
     public attachEventListener(

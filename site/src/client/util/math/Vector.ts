@@ -1,46 +1,46 @@
 import { Vector2D } from "../../types/TypesVector";
 
-export const ROTATE_RESOLUTION = 100;
+const ROTATE_RESOLUTION = 100;
 
-export function vec_cross(a: Vector2D, b: Vector2D) {
+function vec_cross(a: Vector2D, b: Vector2D) {
     return a.x * b.y - a.y * b.x;
 }
 
-export function vec_sub(a: Vector2D, b: Vector2D) {
+function vec_sub(a: Vector2D, b: Vector2D) {
     return {
         x: a.x - b.x,
         y: a.y - b.y,
     };
 }
 
-export function vec_add(a: Vector2D, b: Vector2D) {
+function vec_add(a: Vector2D, b: Vector2D) {
     return {
         x: a.x + b.x,
         y: a.y + b.y,
     };
 }
 
-export function vec_add_mutable(a: Vector2D, b: Vector2D) {
+function vec_add_mutable(a: Vector2D, b: Vector2D) {
     a.x += b.x;
     a.y += b.y;
     return a;
 }
 
-export function vec_divide(a: Vector2D, b: Vector2D) {
+function vec_divide(a: Vector2D, b: Vector2D) {
     return {
         x: a.x / b.x,
         y: a.y / b.y,
     };
 }
 
-export function vec_mult_scalar(a: Vector2D, b: number) {
+function vec_mult_scalar(a: Vector2D, b: number) {
     return {
         x: a.x * b,
         y: a.y * b,
     };
 }
 
-export function vec_rotate(a: Vector2D, theta: number) {
+function vec_rotate(a: Vector2D, theta: number) {
     const mathCos = ~~(Math.cos(theta) * ROTATE_RESOLUTION) / ROTATE_RESOLUTION;
     const mathsin = ~~(Math.sin(theta) * ROTATE_RESOLUTION) / ROTATE_RESOLUTION;
 
@@ -50,15 +50,15 @@ export function vec_rotate(a: Vector2D, theta: number) {
     };
 }
 
-export function vec_distance(a: Vector2D) {
+function vec_distance(a: Vector2D) {
     return Math.sqrt(a.x * a.x + a.y * a.y);
 }
 
-export function vec_scale(a: Vector2D, b: number) {
+function vec_scale(a: Vector2D, b: number) {
     return { x: a.x * b, y: a.y * b };
 }
 
-export function vec_sum(vecs: Vector2D[]) {
+function vec_sum(vecs: Vector2D[]) {
     const sum = { x: 0, y: 0 };
     vecs.forEach((vec) => {
         vec_add_mutable(sum, vec);
@@ -66,7 +66,7 @@ export function vec_sum(vecs: Vector2D[]) {
     return sum;
 }
 
-export function vec_sum_immutable(vecs: Vector2D[]) {
+function vec_sum_immutable(vecs: Vector2D[]) {
     let sum = { x: 0, y: 0 };
     vecs.forEach((vec) => {
         sum = vec_add(sum, vec);
@@ -74,7 +74,7 @@ export function vec_sum_immutable(vecs: Vector2D[]) {
     return sum;
 }
 
-export function vec_interpolate(vecs: Vector2D[], alphas: number[]) {
+function vec_interpolate(vecs: Vector2D[], alphas: number[]) {
     const sum = { x: 0, y: 0 };
     vecs.forEach((vec, index) => {
         sum.x += vec.x * alphas[index];
@@ -83,7 +83,7 @@ export function vec_interpolate(vecs: Vector2D[], alphas: number[]) {
     return sum;
 }
 
-export function vec_normalize(vec: Vector2D) {
+function vec_normalize(vec: Vector2D) {
     const distance = Math.sqrt(vec.x * vec.x + vec.y * vec.y);
 
     if (distance === 0) {
@@ -98,3 +98,18 @@ export function vec_normalize(vec: Vector2D) {
         y: vec.y / distance,
     };
 }
+
+export const vec = {
+    vec_normalize,
+    vec_interpolate,
+    vec_sum_immutable,
+    vec_sum,
+    vec_scale,
+    vec_distance,
+    vec_rotate,
+    vec_mult_scalar,
+    vec_divide,
+    vec_sub,
+    vec_cross,
+    vec_add,
+};

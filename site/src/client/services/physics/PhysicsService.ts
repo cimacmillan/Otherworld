@@ -2,7 +2,7 @@ import { PhysicsStateType } from "../../engine/components/physics/PhysicsCompone
 import { Entity } from "../../engine/Entity";
 import { Vector2D } from "../../types";
 import { ConsistentArray } from "../../util/array/ConsistentArray";
-import { vec_normalize } from "../../util/math";
+import { vec } from "../../util/math";
 
 type PhysicsEntity = Entity<PhysicsStateType>;
 
@@ -93,7 +93,7 @@ export class PhysicsService {
                 continue;
             }
 
-            const normal = vec_normalize({ x: diffX, y: diffY });
+            const normal = vec.vec_normalize({ x: diffX, y: diffY });
 
             const velocityAlongNormal =
                 normal.x * state.velocity.x + normal.y * state.velocity.y;
@@ -152,8 +152,15 @@ export class PhysicsService {
         }
 
         if (finalImpulse.x !== 0 || finalImpulse.y !== 0) {
-            state.velocity.x += finalImpulse.x;
-            state.velocity.y += finalImpulse.y;
+            entity.setState(
+                {
+                    velocity: {
+                        x: state.velocity.x + finalImpulse.x,
+                        y: state.velocity.y + finalImpulse.y,
+                    },
+                },
+                false
+            );
         }
     }
 
@@ -161,11 +168,25 @@ export class PhysicsService {
         for (const entity of entities) {
             const state = entity.getState();
 
-            state.position.x += state.velocity.x;
-            state.position.y += state.velocity.y;
+            const newPosX = state.position.x + state.velocity.x;
+            const newPosY = state.position.y + state.velocity.y;
 
-            state.velocity.x *= state.friction;
-            state.velocity.y *= state.friction;
+            const newVelocityX = state.velocity.x * state.friction;
+            const newVelocityY = state.velocity.y * state.friction;
+
+            entity.setState(
+                {
+                    position: {
+                        x: newPosX,
+                        y: newPosY,
+                    },
+                    velocity: {
+                        x: newVelocityX,
+                        y: newVelocityY,
+                    },
+                },
+                false
+            );
         }
     }
 }

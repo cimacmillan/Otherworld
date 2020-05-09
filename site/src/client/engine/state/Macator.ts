@@ -1,8 +1,14 @@
 export enum MacatorState {
     WALKING = "WALKING",
     DAMAGED = "DAMAGED",
-    DYING = "DYING",
+    DEAD = "DEAD",
     ATTACKING = "ATTACKING",
+}
+
+export enum MacatorType {
+    BROWN,
+    BLUE,
+    GREEN,
 }
 
 export enum EggState {
@@ -13,4 +19,9 @@ export enum EggState {
 export interface EggLogicState {
     targetCount: number;
     currentLiving: number;
+}
+
+export interface MacatorLogicState {
+    macatorState: MacatorState;
+    macatorType: MacatorType;
 }

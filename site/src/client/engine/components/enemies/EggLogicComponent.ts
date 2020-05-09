@@ -34,8 +34,12 @@ export class EggLogicComponent<T extends EggStateType>
                 Animations.EGG_CHARGE,
                 x
             );
-            entity.getState().spriteState.sprite.texture =
-                frame.textureCoordinate;
+            entity.setState(
+                {
+                    textureCoordinate: frame.textureCoordinate,
+                },
+                false
+            );
         })
             .speed(2000)
             .looping();
@@ -45,8 +49,12 @@ export class EggLogicComponent<T extends EggStateType>
                 Animations.EGG_CHARGE,
                 x
             );
-            entity.getState().spriteState.sprite.texture =
-                frame.textureCoordinate;
+            entity.setState(
+                {
+                    textureCoordinate: frame.textureCoordinate,
+                },
+                false
+            );
         })
             .speed(400)
             .tween(sin)
@@ -74,12 +82,6 @@ export class EggLogicComponent<T extends EggStateType>
     }
 
     public update(entity: Entity<EggStateType>): void {
-        const state = entity.getState();
-        state.spriteState.sprite.position = [
-            state.position.x,
-            state.position.y,
-        ];
-
         this.animations.update();
     }
 

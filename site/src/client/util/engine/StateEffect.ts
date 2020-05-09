@@ -4,38 +4,46 @@ export interface StateEffectCallback {
     onUpdate?: () => void;
 }
 
-interface StateEffectParameters {
+export interface StateEffectParameters {
     [key: string]: StateEffectCallback;
 }
 
 export class StateEffect {
+    private newState: string;
+
     constructor(
         private effects: StateEffectParameters,
-        private state: string
-    ) {}
+        private currentState: string
+    ) {
+        this.newState = currentState;
+    }
 
     public setState(state: string) {
-        const currentState = this.effects[this.state];
-        const newState = this.effects[state];
-
-        currentState && currentState.onLeave();
-        newState && newState.onEnter();
-
-        this.state = state;
+        this.newState = state;
     }
 
     public update() {
-        const currentState = this.effects[this.state];
-        currentState.onUpdate();
+        if (this.newState !== this.currentState) {
+            const currentStateCallback = this.effects[this.currentState];
+            const newStateCallback = this.effects[this.newState];
+
+            currentStateCallback.onLeave && currentStateCallback.onLeave();
+            newStateCallback.onEnter && newStateCallback.onEnter();
+
+            this.currentState = this.newState;
+        }
+        const currentStateCallback = this.effects[this.currentState];
+
+        currentStateCallback.onUpdate && currentStateCallback.onUpdate();
     }
 
     public unload() {
-        const currentState = this.effects[this.state];
-        currentState.onLeave();
+        const currentState = this.effects[this.currentState];
+        currentState.onLeave && currentState.onLeave();
     }
 
     public load() {
-        const currentState = this.effects[this.state];
-        currentState.onEnter();
+        const currentState = this.effects[this.currentState];
+        currentState.onEnter && currentState.onEnter();
     }
 }

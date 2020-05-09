@@ -3,7 +3,7 @@ import { InteractionType } from "../../../services/interaction/InteractionType";
 import { Vector2D } from "../../../types";
 import { animation } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
-import { vec_add, vec_distance, vec_rotate } from "../../../util/math";
+import { vec } from "../../../util/math";
 import { ActionDelay } from "../../../util/time/ActionDelay";
 import { fpsNorm } from "../../../util/time/GlobalFPSController";
 import { Entity } from "../../Entity";
@@ -41,7 +41,7 @@ export class PlayerControlComponent<T extends PlayerState>
         this.attackDelay = new ActionDelay(300);
         this.headbob = animation((x: number) => {
             const velocity = entity.getState().velocity;
-            const speed = vec_distance(velocity);
+            const speed = vec.vec_distance(velocity);
             this.headbobOffset =
                 Math.abs(Math.sin(x * Math.PI)) * speed * HEAD_BOB_NERF;
         })
@@ -59,7 +59,7 @@ export class PlayerControlComponent<T extends PlayerState>
             this.syncCamera(entity);
         }
 
-        state.velocity = vec_add(state.velocity, this.accumulatedWalk);
+        state.velocity = vec.vec_add(state.velocity, this.accumulatedWalk);
         state.angle = state.angle + this.accumulatedAngle;
 
         this.accumulatedAngle = 0;
@@ -191,19 +191,19 @@ export class PlayerControlComponent<T extends PlayerState>
         let camera_add = { x: 0, y: 0 };
         switch (direction) {
             case WalkDirection.FORWARD:
-                camera_add = vec_rotate({ x: 0, y: -speed }, state.angle);
+                camera_add = vec.vec_rotate({ x: 0, y: -speed }, state.angle);
                 break;
             case WalkDirection.BACK:
-                camera_add = vec_rotate({ x: 0, y: speed }, state.angle);
+                camera_add = vec.vec_rotate({ x: 0, y: speed }, state.angle);
                 break;
             case WalkDirection.LEFT:
-                camera_add = vec_rotate({ x: -speed, y: 0 }, state.angle);
+                camera_add = vec.vec_rotate({ x: -speed, y: 0 }, state.angle);
                 break;
             case WalkDirection.RIGHT:
-                camera_add = vec_rotate({ x: speed, y: 0 }, state.angle);
+                camera_add = vec.vec_rotate({ x: speed, y: 0 }, state.angle);
                 break;
         }
-        this.accumulatedWalk = vec_add(this.accumulatedWalk, camera_add);
+        this.accumulatedWalk = vec.vec_add(this.accumulatedWalk, camera_add);
     }
 
     private onTurn(entity: Entity<PlayerState>, direction: TurnDirection) {

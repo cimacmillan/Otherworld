@@ -6,6 +6,8 @@ import { BaseState } from "./state/State";
 
 export class Entity<State extends BaseState> {
     private components: Array<EntityComponent<State>>;
+    private newState: State;
+    private shouldEmit: boolean = false;
 
     private initialised: boolean = false;
     private listeners: Array<Entity<BaseState>> = [];
@@ -16,6 +18,7 @@ export class Entity<State extends BaseState> {
         ...components: Array<EntityComponent<State>>
     ) {
         this.components = components;
+        this.newState = state;
         for (let i = 0; i < this.components.length; i++) {
             this.components[i].init && this.components[i].init(this);
         }
@@ -23,7 +26,7 @@ export class Entity<State extends BaseState> {
     }
 
     public getState() {
-        return this.state;
+        return this.newState;
     }
 
     public attachListener(entity: Entity<BaseState>) {
@@ -35,23 +38,26 @@ export class Entity<State extends BaseState> {
     }
 
     public update() {
+        if (this.shouldEmit) {
+            this.shouldEmit = false;
+            this.emit({
+                type: EntityEventType.STATE_TRANSITION,
+                payload: {
+                    from: this.state,
+                    to: this.newState,
+                },
+            });
+        }
+        this.state = this.newState;
         for (let i = 0; i < this.components.length; i++) {
             this.components[i].update && this.components[i].update(this);
         }
     }
 
     public setState(state: Partial<State>, withEvent: boolean = true) {
-        const newState = { ...this.state, ...state };
-        if (this.initialised && withEvent) {
-            this.emit({
-                type: EntityEventType.STATE_TRANSITION,
-                payload: {
-                    from: this.state,
-                    to: newState,
-                },
-            });
-        }
-        this.state = newState;
+        this.newState = { ...this.newState, ...state };
+        this.shouldEmit = this.shouldEmit || withEvent;
+        // withEvent && console.log(this.newState, state);
     }
 
     public emit(event: GameEvent) {

@@ -29,6 +29,7 @@
         "deep-freeze": "0.0.1",
         "express": "^4.17.1",
         "gl-matrix": "^3.2.1",
+        "jest-extended": "^0.11.5",
         "lodash": "^4.17.15",
         "nodemon": "^1.19.3",
         "npm-watch": "^0.6.0",
@@ -48,8 +49,7 @@
         "server": "nodemon site/build/server/Run.js",
         "watch": "npm-watch",
         "full-rebuild": "npm run-script clean && npm run-script build && npm run-script pack && npm run-script server",
-        "test-unit": "npx jest site/src/test/unit/",
-        "test-profile": "npx jest site/src/test/profile/ -u",
+        "test-unit": "npx jest site/src/",
         "test": "npm run-script test-unit",
         "lint": "npx prettier --write site/src && tslint --project tsconfig.json --fix -c tslint.json 'site/src/**/*.ts' && git add ."
     },
