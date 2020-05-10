@@ -1,7 +1,6 @@
 import { HEIGHT, TARGET_MILLIS, WIDTH } from "./Config";
 import { GameEvent, RootEventType } from "./engine/events/Event";
 import { World } from "./engine/World";
-import { Audios } from "./resources/manifests/Types";
 import { ResourceManager } from "./resources/ResourceManager";
 import { AudioService } from "./services/audio/AudioService";
 import { EventRouter, GameEventSource } from "./services/EventRouter";
@@ -11,6 +10,7 @@ import { PhysicsService } from "./services/physics/PhysicsService";
 import { RenderService, ScreenBuffer } from "./services/render";
 import { ScriptingService } from "./services/scripting/ScriptingService";
 import { ServiceLocator } from "./services/ServiceLocator";
+import { Actions } from "./ui/actions/Actions";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
 
@@ -22,13 +22,13 @@ export class Game {
 
     public async init(
         openGL: WebGLRenderingContext,
-        uiListener: (event: GameEvent) => void
+        uiListener: (event: Actions) => void
     ) {
         const audioContext = new AudioContext();
         const screen = new ScreenBuffer(openGL, WIDTH, HEIGHT);
 
         const resourceManager = new ResourceManager();
-        await resourceManager.load(openGL, audioContext);
+        await resourceManager.load(openGL, audioContext, uiListener);
 
         const router = new EventRouter();
         router.attachEventListener(GameEventSource.UI, uiListener);
@@ -69,15 +69,6 @@ export class Game {
         this.serviceLocator.getEventRouter().routeEvent(GameEventSource.ROOT, {
             type: RootEventType.GAME_INITIALISED,
         });
-
-        // Move this
-        this.serviceLocator
-            .getAudioService()
-            .play(
-                this.serviceLocator.getResourceManager().manifest.audio[
-                    Audios.INCOMING
-                ]
-            );
 
         loop.start();
     }

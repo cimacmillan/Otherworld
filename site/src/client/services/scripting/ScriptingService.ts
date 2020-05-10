@@ -59,6 +59,14 @@ export class ScriptingService {
     }
 
     public startGame() {
+        this.serviceLocator
+            .getAudioService()
+            .play(
+                this.serviceLocator.getResourceManager().manifest.audio[
+                    Audios.INCOMING
+                ]
+            );
+
         this.resetContent();
         this.game.setUpdateWorld(true);
     }
@@ -72,10 +80,6 @@ export class ScriptingService {
         const camera = this.player.getState().camera;
         this.serviceLocator.getAudioService().attachCamera(camera);
         this.serviceLocator.getRenderService().attachCamera(camera);
-
-        // for (let i = 0; i < 50; i++) {
-        //     world.addEntity(createMacator(this.serviceLocator, Math.random(), Math.random()));
-        // }
 
         world.addEntity(createEgg(this.serviceLocator));
 

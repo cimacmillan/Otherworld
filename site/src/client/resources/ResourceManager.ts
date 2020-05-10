@@ -1,4 +1,6 @@
 import { loadSound } from "../services/audio/AudioService";
+import { Actions } from "../ui/actions/Actions";
+import { setLoadPercentage } from "../ui/actions/GameStartActions";
 import { defaultManifest } from "./manifests/DefaultManifest";
 import { loadSpriteSheet } from "./TextureLoader";
 import { LoadedManifest, ResourceManifest } from "./Types";
@@ -6,15 +8,45 @@ import { LoadedManifest, ResourceManifest } from "./Types";
 export class ResourceManager {
     public manifest: LoadedManifest;
 
-    public async load(gl: WebGLRenderingContext, audio: AudioContext) {
-        this.manifest = await this.loadManifest(gl, audio, defaultManifest);
+    public async load(
+        gl: WebGLRenderingContext,
+        audio: AudioContext,
+        uiListener: (actions: Actions) => void
+    ) {
+        this.manifest = await this.loadManifest(
+            gl,
+            audio,
+            defaultManifest,
+            (percentage: number) => uiListener(setLoadPercentage(percentage))
+        );
     }
 
     public async loadManifest(
         gl: WebGLRenderingContext,
         audio: AudioContext,
-        manifest: ResourceManifest
+        manifest: ResourceManifest,
+        setPercentage: (percentage: number) => void
     ) {
+        setPercentage(0);
+        const total =
+            Object.keys(manifest.audio).length +
+            Object.keys(manifest.spritesheets).reduce(
+                (prevValue: number, next: string) => {
+                    return (
+                        prevValue +
+                        Object.keys(manifest.spritesheets[next].animations)
+                            .length +
+                        Object.keys(manifest.spritesheets[next].sprites).length
+                    );
+                },
+                0
+            );
+        let current = 0;
+        const increment = () => {
+            current++;
+            setPercentage(current / total);
+        };
+
         const loadedManifest: LoadedManifest = {
             spritesheets: {},
             audio: {},
@@ -26,6 +58,7 @@ export class ResourceManager {
                 manifest.audio[key],
                 audio
             );
+            increment();
         }
 
         for (const key in manifest.spritesheets) {
@@ -44,6 +77,7 @@ export class ResourceManager {
                     sprite.x,
                     sprite.y
                 );
+                increment();
             }
 
             for (const animationKey in spritesheetManifest.animations) {
@@ -57,6 +91,7 @@ export class ResourceManager {
                     animation.frames,
                     animation.vertical
                 );
+                increment();
             }
         }
 

@@ -7,6 +7,7 @@ import { GameFadeContainer } from "./containers/GameFadeContainer";
 import { WeaponComponent } from "./components/WeaponComponent";
 import { PlayModeContainer } from "./containers/PlayModeContainer";
 import { KeyComponent } from "./components/KeyComponent";
+import { LoadingScreenContainer } from "./containers/LoadingScreenContainer";
 
 export interface UIContainerProps {
     game: Game;
@@ -31,7 +32,11 @@ export const UIContainer: React.FunctionComponent<UIContainerProps> = (
                         serviceLocator={props.game.getServiceLocator()}
                     />
                 </>
-            ) : undefined}
+            ) : (
+                <>
+                    <LoadingScreenContainer />
+                </>
+            )}
         </div>
     );
 };

@@ -223,7 +223,6 @@ export class PlayerControlComponent<T extends PlayerState>
         const { position, height, angle, camera } = entity.getState();
         camera.position = position;
         camera.angle = angle;
-
         camera.height = height + this.headbobOffset;
     }
 }

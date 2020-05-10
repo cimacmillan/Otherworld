@@ -4,10 +4,11 @@ import { Game } from "./Game";
 import { UIContainer } from "./ui/UIContainer";
 import { GameEvent } from "./engine/events/Event";
 import { DOM_WIDTH, DOM_HEIGHT, WIDTH, HEIGHT, RES_DIV } from "./Config";
+import { Actions } from "./ui/actions/Actions";
 
 export interface GameComponentProps {
     game: Game;
-    uiListener: (event: GameEvent) => void;
+    uiListener: (event: Actions) => void;
 }
 
 export class GameComponent extends React.Component<GameComponentProps> {

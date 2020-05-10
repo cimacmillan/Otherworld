@@ -10,12 +10,14 @@ export interface GameStartState {
     showingFade: boolean;
     currentScore: number;
     bestScore?: number;
+    gameLoadPercentage: number;
 }
 
 const initialGameStartState = {
     showingMenu: true,
     showingFade: true,
     currentScore: 0,
+    gameLoadPercentage: 0,
 };
 
 type GameStartEvents = GameEvent | GameStartActions;
@@ -51,6 +53,11 @@ export function gameStartReducer(
             return {
                 ...state,
                 currentScore: state.currentScore + 1,
+            };
+        case GameStartActionType.SET_GAME_LOAD_PERCENTAGE:
+            return {
+                ...state,
+                gameLoadPercentage: action.payload.percentage,
             };
     }
     return state;
