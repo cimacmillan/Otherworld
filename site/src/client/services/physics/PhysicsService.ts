@@ -4,7 +4,11 @@ import { Vector2D } from "../../types";
 import { ConsistentArray } from "../../util/array/ConsistentArray";
 import { vec } from "../../util/math";
 
-type PhysicsEntity = Entity<PhysicsStateType>;
+export type PhysicsEntity = {
+    entity: Entity<PhysicsStateType>;
+    collidesEntities: boolean;
+    collidesWalls: boolean;
+}
 
 export interface PhysicsBoundary {
     start: Vector2D;
@@ -60,7 +64,9 @@ export class PhysicsService {
         entity: PhysicsEntity,
         boundaries: PhysicsBoundary[]
     ) {
-        const state = entity.getState();
+        if (!entity.collidesWalls) return;
+
+        const state = entity.entity.getState();
         for (const boundary of boundaries) {
             const x1 = boundary.start.x;
             const y1 = boundary.start.y;
@@ -112,7 +118,7 @@ export class PhysicsService {
         entity: PhysicsEntity,
         entities: PhysicsEntity[]
     ) {
-        const state = entity.getState();
+        const state = entity.entity.getState();
         const posA = state.position;
         const radiusA = state.radius;
 
@@ -122,10 +128,10 @@ export class PhysicsService {
         };
 
         for (const b of entities) {
-            if (entity === b) {
+            if (entity === b || (b.collidesEntities && entity.collidesEntities) === false) {
                 continue;
             }
-            const bState = b.getState();
+            const bState = b.entity.getState();
             const posB = bState.position;
             const radiusB = bState.radius;
             const diffX = posB.x - posA.x;
@@ -152,7 +158,7 @@ export class PhysicsService {
         }
 
         if (finalImpulse.x !== 0 || finalImpulse.y !== 0) {
-            entity.setState(
+            entity.entity.setState(
                 {
                     velocity: {
                         x: state.velocity.x + finalImpulse.x,
@@ -166,7 +172,7 @@ export class PhysicsService {
 
     private moveEntities(entities: PhysicsEntity[]) {
         for (const entity of entities) {
-            const state = entity.getState();
+            const state = entity.entity.getState();
 
             const newPosX = state.position.x + state.velocity.x;
             const newPosY = state.position.y + state.velocity.y;
@@ -174,7 +180,7 @@ export class PhysicsService {
             const newVelocityX = state.velocity.x * state.friction;
             const newVelocityY = state.velocity.y * state.friction;
 
-            entity.setState(
+            entity.entity.setState(
                 {
                     position: {
                         x: newPosX,

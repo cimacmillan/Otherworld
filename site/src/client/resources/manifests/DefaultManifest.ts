@@ -104,6 +104,12 @@ export const defaultManifest: ResourceManifest = {
                     x: 48,
                     y: 112,
                 },
+                [Sprites.ITEM_SHELL_FRAGMENT]: {
+                    width: 8,
+                    height: 8,
+                    x: 40,
+                    y: 0,
+                },
             },
         },
         [SpriteSheets.UI]: {

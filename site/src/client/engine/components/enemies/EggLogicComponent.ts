@@ -1,5 +1,5 @@
 import { Animations, SpriteSheets } from "../../../resources/manifests/Types";
-import { createMacator } from "../../../services/scripting/factory/EntityFactory";
+import { createMacator } from "../../../services/scripting/factory/EnemyFactory";
 import { animation, sin } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
 import { effectFromAnimation } from "../../../util/engine/AnimationEffect";

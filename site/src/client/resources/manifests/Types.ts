@@ -86,6 +86,7 @@ export enum Sprites {
     MACATOR_DEAD_BROWN,
     MACATOR_DEAD_GREEN,
     MACATOR_DEAD_BLUE,
+    ITEM_SHELL_FRAGMENT
 }
 export enum Audios {
     INTRO,

@@ -22,6 +22,7 @@ import {
 import { InteractionStateType } from "../../InteractionComponent";
 import { PhysicsStateType } from "../../physics/PhysicsComponent";
 import { SpriteStateType } from "../../rendering/SpriteRenderComponent";
+import { GameItems } from "../../../../resources/manifests/Items";
 
 export type MacatorStateType = BaseState &
     SpriteStateType &
@@ -192,7 +193,13 @@ export class MacatorLogicComponent<T extends MacatorStateType>
     private damagedEffect(
         entity: Entity<MacatorStateType>
     ): StateEffectCallback {
-        return {};
+        return {
+            onEnter: () => {
+                if (entity.getState().health < 0) {
+                    this.dropItems(entity);
+                }
+            }
+        };
     }
 
     private deadEffect(entity: Entity<MacatorStateType>): StateEffectCallback {
@@ -289,5 +296,12 @@ export class MacatorLogicComponent<T extends MacatorStateType>
                 false
             );
         }
+    }
+
+    private dropItems(entity: Entity<MacatorStateType>) {
+        entity.getServiceLocator().getScriptingService().inventoryService.dropItems({
+            item: GameItems.ITEM_SHELL_FRAGMENT,
+            position: entity.getState().position
+        }, 10);
     }
 }

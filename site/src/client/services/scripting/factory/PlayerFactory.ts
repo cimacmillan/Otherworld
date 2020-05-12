@@ -39,7 +39,8 @@ export function createPlayer(serviceLocator: ServiceLocator) {
         elastic: 0,
         health: 1,
         exists: false,
-        collides: true,
+        collidesWalls: true,
+        collidesEntities: true,
     };
 
     return new Entity<PlayerState>(

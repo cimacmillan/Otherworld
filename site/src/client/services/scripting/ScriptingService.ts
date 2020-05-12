@@ -4,8 +4,9 @@ import { Game } from "../../Game";
 import { Audios, MAPS } from "../../resources/manifests/Types";
 import { loadMap } from "../../resources/MapLoader";
 import { ServiceLocator } from "../ServiceLocator";
-import { createEgg } from "./factory/EntityFactory";
+import { createEgg } from "./factory/EnemyFactory";
 import { createPlayer } from "./factory/PlayerFactory";
+import { InventoryService } from "./inventory/InventoryService";
 
 /**
  * Service for quick commands that usually take more lines, eg
@@ -15,6 +16,9 @@ import { createPlayer } from "./factory/PlayerFactory";
 export class ScriptingService {
     private game: Game;
     private serviceLocator: ServiceLocator;
+
+    public inventoryService: InventoryService;
+
     private player: Entity<PlayerState>;
     private shouldReset: boolean = false;
 
@@ -24,6 +28,7 @@ export class ScriptingService {
 
     public init(serviceLocator: ServiceLocator) {
         this.serviceLocator = serviceLocator;
+        this.inventoryService = new InventoryService(serviceLocator);
         this.bootstrapContent();
     }
 
