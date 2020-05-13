@@ -18,6 +18,7 @@ const ITEM_ELASTIC = 1;
 export interface ItemDropArguments {
     item: Item;
     position: Vector2D;
+    force?: Vector2D;
 }
 
 type ItemStateType = SpriteStateType & PhysicsStateType;
@@ -27,10 +28,13 @@ export function createItemDrop(serviceLocator: ServiceLocator, arg: ItemDropArgu
 
     const angle = Math.random() * 2 * Math.PI;
     const posDiff = {x: Math.sin(angle), y: Math.cos(angle)};
-    const velocity = vec.vec_mult_scalar(
+    let velocity = vec.vec_mult_scalar(
         posDiff,
         ITEM_SPEED
-    )
+    );
+
+    velocity = arg.force ? vec.vec_add(velocity, arg.force) : velocity;
+
     const newPosition = vec.vec_add(position, vec.vec_mult_scalar(posDiff, ITEM_SPAWN_RADIUS));
 
     const initialState: ItemStateType = {

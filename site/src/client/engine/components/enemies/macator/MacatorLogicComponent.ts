@@ -23,6 +23,7 @@ import { InteractionStateType } from "../../InteractionComponent";
 import { PhysicsStateType } from "../../physics/PhysicsComponent";
 import { SpriteStateType } from "../../rendering/SpriteRenderComponent";
 import { GameItems } from "../../../../resources/manifests/Items";
+import { Vector2D } from "../../../../types";
 
 export type MacatorStateType = BaseState &
     SpriteStateType &
@@ -195,9 +196,9 @@ export class MacatorLogicComponent<T extends MacatorStateType>
     ): StateEffectCallback {
         return {
             onEnter: () => {
-                if (entity.getState().health < 0) {
-                    this.dropItems(entity);
-                }
+                // if (entity.getState().health < 0) {
+                //     this.dropItems(entity);
+                // }
             }
         };
     }
@@ -266,16 +267,21 @@ export class MacatorLogicComponent<T extends MacatorStateType>
         });
 
         if (newHealth <= 0) {
+
+            const force = {
+                x: Math.sin(source.angle) * 0.5,
+                y: -Math.cos(source.angle) * 0.5,
+            };
+
             entity.setState(
                 {
-                    velocity: vec.vec_add(entity.getState().velocity, {
-                        x: Math.sin(source.angle) * 0.5,
-                        y: -Math.cos(source.angle) * 0.5,
-                    }),
+                    velocity: vec.vec_add(entity.getState().velocity, force),
                     macatorState: MacatorState.DAMAGED,
                 },
                 false
             );
+
+            this.dropItems(entity, force);
 
             entity
                 .getServiceLocator()
@@ -298,10 +304,11 @@ export class MacatorLogicComponent<T extends MacatorStateType>
         }
     }
 
-    private dropItems(entity: Entity<MacatorStateType>) {
+    private dropItems(entity: Entity<MacatorStateType>, force: Vector2D) {
         entity.getServiceLocator().getScriptingService().inventoryService.dropItems({
             item: GameItems.ITEM_SHELL_FRAGMENT,
-            position: entity.getState().position
+            position: entity.getState().position,
+            force
         }, 10);
     }
 }
