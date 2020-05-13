@@ -1,11 +1,21 @@
-import { ServiceLocator } from "../../ServiceLocator"
-import { Item } from "../../../types/TypesItem"
+import {
+    ItemDropComponent,
+    ItemDropComponentState,
+} from "../../../engine/components/items/ItemDropComponent";
+import {
+    PhysicsComponent,
+    PhysicsStateType,
+} from "../../../engine/components/physics/PhysicsComponent";
+import {
+    SpriteRenderComponent,
+    SpriteStateType,
+} from "../../../engine/components/rendering/SpriteRenderComponent";
 import { Entity } from "../../../engine/Entity";
-import { SpriteRenderComponent, SpriteStateType } from "../../../engine/components/rendering/SpriteRenderComponent";
-import { Vector2D } from "../../../types";
 import { SpriteSheets } from "../../../resources/manifests/Types";
-import { PhysicsComponent, PhysicsStateType } from "../../../engine/components/physics/PhysicsComponent";
+import { Vector2D } from "../../../types";
+import { Item } from "../../../types/TypesItem";
 import { vec } from "../../../util/math";
+import { ServiceLocator } from "../../ServiceLocator";
 
 const ITEM_SIZE = 0.4;
 const ITEM_SPEED = 0.1;
@@ -21,21 +31,26 @@ export interface ItemDropArguments {
     force?: Vector2D;
 }
 
-type ItemStateType = SpriteStateType & PhysicsStateType;
+type ItemStateType = SpriteStateType &
+    PhysicsStateType &
+    ItemDropComponentState;
 
-export function createItemDrop(serviceLocator: ServiceLocator, arg: ItemDropArguments) {
+export function createItemDrop(
+    serviceLocator: ServiceLocator,
+    arg: ItemDropArguments
+) {
     const { item, position } = arg;
 
     const angle = Math.random() * 2 * Math.PI;
-    const posDiff = {x: Math.sin(angle), y: Math.cos(angle)};
-    let velocity = vec.vec_mult_scalar(
-        posDiff,
-        ITEM_SPEED
-    );
+    const posDiff = { x: Math.sin(angle), y: Math.cos(angle) };
+    let velocity = vec.vec_mult_scalar(posDiff, ITEM_SPEED);
 
     velocity = arg.force ? vec.vec_add(velocity, arg.force) : velocity;
 
-    const newPosition = vec.vec_add(position, vec.vec_mult_scalar(posDiff, ITEM_SPAWN_RADIUS));
+    const newPosition = vec.vec_add(
+        position,
+        vec.vec_mult_scalar(posDiff, ITEM_SPAWN_RADIUS)
+    );
 
     const initialState: ItemStateType = {
         exists: false,
@@ -46,21 +61,24 @@ export function createItemDrop(serviceLocator: ServiceLocator, arg: ItemDropArgu
         shouldRender: true,
         spriteWidth: ITEM_SIZE,
         spriteHeight: ITEM_SIZE,
-        textureCoordinate: serviceLocator.getResourceManager().manifest.spritesheets[SpriteSheets.SPRITE].getSprite(item.spriteIcon).textureCoordinate,
+        textureCoordinate: serviceLocator
+            .getResourceManager()
+            .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(
+                item.spriteIcon
+            ).textureCoordinate,
         velocity,
         friction: ITEM_FRICTION,
         mass: ITEM_MASS,
         elastic: ITEM_ELASTIC,
         collidesEntities: false,
-        collidesWalls: true
+        collidesWalls: true,
     };
 
     return new Entity<ItemStateType>(
         serviceLocator,
         initialState,
         new SpriteRenderComponent(),
-        new PhysicsComponent()
+        new PhysicsComponent(),
+        new ItemDropComponent()
     );
 }
-
-

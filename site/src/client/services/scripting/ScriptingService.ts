@@ -14,10 +14,10 @@ import { InventoryService } from "./inventory/InventoryService";
  * GameScriptingService.getPlayer().damage();
  */
 export class ScriptingService {
-    private game: Game;
-    private serviceLocator: ServiceLocator;
 
     public inventoryService: InventoryService;
+    private game: Game;
+    private serviceLocator: ServiceLocator;
 
     private player: Entity<PlayerState>;
     private shouldReset: boolean = false;

@@ -4,7 +4,7 @@ import { Vector2D } from "../../types";
 import { ConsistentArray } from "../../util/array/ConsistentArray";
 import { vec } from "../../util/math";
 
-export type PhysicsEntity = {
+export interface PhysicsEntity {
     entity: Entity<PhysicsStateType>;
     collidesEntities: boolean;
     collidesWalls: boolean;
@@ -64,7 +64,7 @@ export class PhysicsService {
         entity: PhysicsEntity,
         boundaries: PhysicsBoundary[]
     ) {
-        if (!entity.collidesWalls) return;
+        if (!entity.collidesWalls) { return; }
 
         const state = entity.entity.getState();
         for (const boundary of boundaries) {
@@ -128,7 +128,10 @@ export class PhysicsService {
         };
 
         for (const b of entities) {
-            if (entity === b || (b.collidesEntities && entity.collidesEntities) === false) {
+            if (
+                entity === b ||
+                (b.collidesEntities && entity.collidesEntities) === false
+            ) {
                 continue;
             }
             const bState = b.entity.getState();

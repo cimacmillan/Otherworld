@@ -1,8 +1,8 @@
+import { PhysicsEntity } from "../../../services/physics/PhysicsService";
 import { Vector2D } from "../../../types";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { BaseState, SurfacePositionState } from "../../state/State";
-import { PhysicsEntity } from "../../../services/physics/PhysicsService";
 
 export interface PhysicsState {
     velocity: Vector2D;
@@ -18,7 +18,6 @@ export type PhysicsStateType = BaseState & SurfacePositionState & PhysicsState;
 
 export class PhysicsComponent<T extends PhysicsStateType>
     implements EntityComponent<T> {
-
     private physicsEntity: PhysicsEntity;
 
     public onCreate(entity: Entity<PhysicsStateType>) {
@@ -26,7 +25,7 @@ export class PhysicsComponent<T extends PhysicsStateType>
         this.physicsEntity = {
             entity,
             collidesEntities,
-            collidesWalls
+            collidesWalls,
         };
         entity
             .getServiceLocator()

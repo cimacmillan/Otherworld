@@ -1,5 +1,7 @@
+import { GameItems } from "../../../../resources/manifests/Items";
 import { Audios } from "../../../../resources/manifests/Types";
 import { InteractionType } from "../../../../services/interaction/InteractionType";
+import { Vector2D } from "../../../../types";
 import { joinEffect } from "../../../../util/engine/JoinEffect";
 import {
     StateEffect,
@@ -22,8 +24,6 @@ import {
 import { InteractionStateType } from "../../InteractionComponent";
 import { PhysicsStateType } from "../../physics/PhysicsComponent";
 import { SpriteStateType } from "../../rendering/SpriteRenderComponent";
-import { GameItems } from "../../../../resources/manifests/Items";
-import { Vector2D } from "../../../../types";
 
 export type MacatorStateType = BaseState &
     SpriteStateType &
@@ -199,7 +199,7 @@ export class MacatorLogicComponent<T extends MacatorStateType>
                 // if (entity.getState().health < 0) {
                 //     this.dropItems(entity);
                 // }
-            }
+            },
         };
     }
 
@@ -267,7 +267,6 @@ export class MacatorLogicComponent<T extends MacatorStateType>
         });
 
         if (newHealth <= 0) {
-
             const force = {
                 x: Math.sin(source.angle) * 0.5,
                 y: -Math.cos(source.angle) * 0.5,
@@ -305,10 +304,16 @@ export class MacatorLogicComponent<T extends MacatorStateType>
     }
 
     private dropItems(entity: Entity<MacatorStateType>, force: Vector2D) {
-        entity.getServiceLocator().getScriptingService().inventoryService.dropItems({
-            item: GameItems.ITEM_SHELL_FRAGMENT,
-            position: entity.getState().position,
-            force
-        }, 10);
+        entity
+            .getServiceLocator()
+            .getScriptingService()
+            .inventoryService.dropItems(
+                {
+                    item: GameItems.ITEM_SHELL_FRAGMENT,
+                    position: entity.getState().position,
+                    force,
+                },
+                10
+            );
     }
 }
