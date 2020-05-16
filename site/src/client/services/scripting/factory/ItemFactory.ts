@@ -72,7 +72,7 @@ export function createItemDrop(
         elastic: ITEM_ELASTIC,
         collidesEntities: false,
         collidesWalls: true,
-        item: arg.item
+        item: arg.item,
     };
 
     return new Entity<ItemStateType>(

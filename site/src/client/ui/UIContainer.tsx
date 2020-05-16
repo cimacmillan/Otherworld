@@ -8,6 +8,7 @@ import { WeaponComponent } from "./components/WeaponComponent";
 import { PlayModeContainer } from "./containers/PlayModeContainer";
 import { KeyComponent } from "./components/KeyComponent";
 import { LoadingScreenContainer } from "./containers/LoadingScreenContainer";
+import { ItemCollectionContainer } from "./containers/ItemCollectionContainer";
 
 export interface UIContainerProps {
     game: Game;
@@ -26,6 +27,9 @@ export const UIContainer: React.FunctionComponent<UIContainerProps> = (
                         serviceLocator={props.game.getServiceLocator()}
                     />
                     <GameFadeContainer
+                        serviceLocator={props.game.getServiceLocator()}
+                    />
+                    <ItemCollectionContainer
                         serviceLocator={props.game.getServiceLocator()}
                     />
                     <GameMenuContainer

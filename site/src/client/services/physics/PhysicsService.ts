@@ -64,7 +64,9 @@ export class PhysicsService {
         entity: PhysicsEntity,
         boundaries: PhysicsBoundary[]
     ) {
-        if (!entity.collidesWalls) { return; }
+        if (!entity.collidesWalls) {
+            return;
+        }
 
         const state = entity.entity.getState();
         for (const boundary of boundaries) {

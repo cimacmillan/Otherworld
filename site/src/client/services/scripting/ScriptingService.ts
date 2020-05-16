@@ -14,7 +14,6 @@ import { InventoryService } from "./inventory/InventoryService";
  * GameScriptingService.getPlayer().damage();
  */
 export class ScriptingService {
-
     public inventoryService: InventoryService;
     private game: Game;
     private serviceLocator: ServiceLocator;

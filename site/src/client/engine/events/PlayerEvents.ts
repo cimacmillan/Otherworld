@@ -19,8 +19,8 @@ interface PlayerInfoChange {
 interface PlayerItemDropCollected {
     type: PlayerEventType.PLAYER_ITEM_DROP_COLLECTED;
     payload: {
-        item: Item
-    }
+        item: Item;
+    };
 }
 
 export enum PlayerEventType {
