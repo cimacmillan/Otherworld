@@ -19,15 +19,22 @@ import {
 import { ItemCollectionComponent } from "../components/ItemCollectionComponent";
 import { Item } from "../../types/TypesItem";
 import { GameItems } from "../../resources/manifests/Items";
+import { useGlobalState, useDispatchListener } from "../effects/GlobalState";
+import { Actions } from "../actions/Actions";
+import { PlayerEventType } from "../../engine/events/PlayerEvents";
 
 export interface ItemCollectionContainerProps {
     serviceLocator: ServiceLocator;
 }
 
 interface ItemListMetadata {
+    key: number;
     item: Item;
     amount: number;
 }
+
+let key = 0;
+const keyLimit = 10000;
 
 export const ItemCollectionContainer: React.FunctionComponent<ItemCollectionContainerProps> = (
     props
@@ -35,23 +42,28 @@ export const ItemCollectionContainer: React.FunctionComponent<ItemCollectionCont
     const { serviceLocator } = props;
     const [itemList, setItemList] = React.useState([] as ItemListMetadata[]);
 
-    React.useEffect(() => {
-        setItemList([
-            {
-                amount: 1,
-                item: GameItems.ITEM_SHELL_FRAGMENT
-            },
-            {
-                amount: 2,
-                item: GameItems.ITEM_SHELL_FRAGMENT
-            },
-        ]);
-    }, []);
-
     const removeItem = (metadata: ItemListMetadata) => {
-        const newList = itemList.splice(itemList.indexOf(metadata));
+        const removeElement = itemList.indexOf(metadata); // remove number 3
+        var newList = [
+          ...itemList.slice(0, removeElement),
+          ...itemList.slice(removeElement+1)
+        ];
         setItemList(newList);
     }
+
+    useDispatchListener((action: Actions) => {
+        switch(action.type) {
+            case PlayerEventType.PLAYER_ITEM_DROP_COLLECTED:
+                setItemList([...itemList, {
+                    key: key,
+                    amount: 1,
+                    item: action.payload.item
+                }]);
+                key++;
+                key = key % keyLimit;
+                break;
+        }
+    }, [itemList]);
 
     return (
         <ViewportComponent
@@ -68,6 +80,7 @@ export const ItemCollectionContainer: React.FunctionComponent<ItemCollectionCont
             {
                 itemList.map(itemMetadata => (
                     <ItemCollectionComponent
+                        key={itemMetadata.key}
                         serviceLocator={serviceLocator}
                         sprite={itemMetadata.item.spriteIcon}
                         name={itemMetadata.item.name}

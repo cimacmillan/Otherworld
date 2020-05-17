@@ -5,11 +5,12 @@ import { SpriteImageComponent } from "./SpriteImageComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { SpriteSheets, Sprites } from "../../resources/manifests/Types";
 import { animation } from "../../util/animation/Animations";
+import { GameAnimation } from "../../util/animation/GameAnimation";
 
 const Y_FADE = 32;
 const DING = 500;
 const PERSISTANCE = 3000;
-const FADE_IN = 1000;
+const FADE_IN = 400;
 
 export interface ItemCollectionComponentProps {
     serviceLocator: ServiceLocator;
@@ -24,9 +25,11 @@ export const ItemCollectionComponent: React.FunctionComponent<ItemCollectionComp
     const { serviceLocator, amount, sprite, name } = props;
     const [fade, setFade] = React.useState(0);
     const [numberDing, setNumberDing] = React.useState(0);
+    const [fadeOutAnimation, setFadeOutAnimation] = React.useState(undefined as GameAnimation);
 
     React.useEffect(() => {
         const anim = animation(setFade).speed(FADE_IN).driven().start();
+        setFadeOutAnimation(animation(x => setFade(1 - x)).speed(FADE_IN).driven().whenDone(props.onRemove));
         return () => anim.stop();
     }, []);
 
@@ -36,7 +39,7 @@ export const ItemCollectionComponent: React.FunctionComponent<ItemCollectionComp
             dingAnimation.start();
         }
         const timeout = setTimeout(
-            () => animation(x => setFade(1 - x)).speed(FADE_IN).driven().whenDone(props.onRemove).start(), 
+            () => fadeOutAnimation.start(), 
             PERSISTANCE
             );
         return () => {
@@ -44,7 +47,13 @@ export const ItemCollectionComponent: React.FunctionComponent<ItemCollectionComp
             dingAnimation.stop();
             clearTimeout(timeout);
         };
-    }, [amount]);
+    }, [amount, fadeOutAnimation]);
+
+    React.useEffect(() => {
+        if (fadeOutAnimation) {
+            setFadeOutAnimation(fadeOutAnimation.whenDone(props.onRemove));
+        }
+    }, [props.onRemove]);
 
     return (
         <div
