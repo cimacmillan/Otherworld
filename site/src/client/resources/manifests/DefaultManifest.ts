@@ -104,10 +104,28 @@ export const defaultManifest: ResourceManifest = {
                     x: 48,
                     y: 112,
                 },
-                [Sprites.ITEM_SHELL_FRAGMENT]: {
+                [Sprites.ITEM_BROWN_SHELL_FRAGMENT]: {
                     width: 8,
                     height: 8,
                     x: 40,
+                    y: 0,
+                },
+                [Sprites.ITEM_GREEN_SHELL_FRAGMENT]: {
+                    width: 8,
+                    height: 8,
+                    x: 32,
+                    y: 0,
+                },
+                [Sprites.ITEM_BLUE_SHELL_FRAGMENT]: {
+                    width: 8,
+                    height: 8,
+                    x: 24,
+                    y: 0,
+                },
+                [Sprites.ITEM_MACATOR_INNARDS]: {
+                    width: 8,
+                    height: 8,
+                    x: 16,
                     y: 0,
                 },
             },

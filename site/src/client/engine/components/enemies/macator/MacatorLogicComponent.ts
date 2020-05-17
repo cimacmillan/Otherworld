@@ -15,7 +15,7 @@ import { EntityComponent } from "../../../EntityComponent";
 import { EnemyEventType } from "../../../events/EnemyEvents";
 import { GameEvent } from "../../../events/Event";
 import { InteractionEventType } from "../../../events/InteractionEvents";
-import { MacatorLogicState, MacatorState } from "../../../state/Macator";
+import { MacatorLogicState, MacatorState, MacatorType } from "../../../state/Macator";
 import {
     BaseState,
     HealthState,
@@ -196,9 +196,6 @@ export class MacatorLogicComponent<T extends MacatorStateType>
     ): StateEffectCallback {
         return {
             onEnter: () => {
-                // if (entity.getState().health < 0) {
-                //     this.dropItems(entity);
-                // }
             },
         };
     }
@@ -304,16 +301,41 @@ export class MacatorLogicComponent<T extends MacatorStateType>
     }
 
     private dropItems(entity: Entity<MacatorStateType>, force: Vector2D) {
+        let item;
+        switch (entity.getState().macatorType) {
+            case MacatorType.BROWN:
+                item = GameItems.ITEM_BROWN_SHELL_FRAGMENT;
+                break;
+            case MacatorType.GREEN:
+                item = GameItems.ITEM_GREEN_SHELL_FRAGMENT;
+                break;
+            case MacatorType.BLUE:
+                item = GameItems.ITEM_BLUE_SHELL_FRAGMENT;
+                break;
+        }
         entity
             .getServiceLocator()
             .getScriptingService()
             .inventoryService.dropItems(
                 {
-                    item: GameItems.ITEM_SHELL_FRAGMENT,
+                    item,
                     position: entity.getState().position,
                     force,
                 },
-                10
+                Math.floor(Math.random() * 3) + 1
             );
+
+        if (Math.random() < 0.2) {
+            entity
+            .getServiceLocator()
+            .getScriptingService()
+            .inventoryService.dropItem(
+                {
+                    item: GameItems.ITEM_MACATOR_INNARDS,
+                    position: entity.getState().position,
+                    force,
+                }
+            );
+        }
     }
 }
