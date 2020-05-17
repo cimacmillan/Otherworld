@@ -16,6 +16,7 @@ import {
     TextSize,
     TextColour,
 } from "../components/TextComponent";
+import { ItemCollectionComponent } from "../components/ItemCollectionComponent";
 
 export interface ItemCollectionContainerProps {
     serviceLocator: ServiceLocator;
@@ -38,48 +39,18 @@ export const ItemCollectionContainer: React.FunctionComponent<ItemCollectionCont
                 justifyContent: "flex-end",
             }}
         >
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                }}
-            >
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        margin: 16,
-                        ...ShadowComponentStyle(),
-                    }}
-                >
-                    <TextComponent
-                        text={"x1"}
-                        font={TextFont.REGULAR}
-                        size={TextSize.SMALL}
-                        colour={TextColour.LIGHT}
-                        style={{}}
-                    />
-                    <SpriteImageComponent
-                        serviceLocator={props.serviceLocator}
-                        spriteSheet={SpriteSheets.SPRITE}
-                        sprite={Sprites.ITEM_SHELL_FRAGMENT}
-                        style={{
-                            width: 32,
-                            height: 32,
-                            marginRight: 4,
-                            marginLeft: 4,
-                        }}
-                    />
-                    <TextComponent
-                        text={"Shell fragment"}
-                        font={TextFont.REGULAR}
-                        size={TextSize.SMALL}
-                        colour={TextColour.LIGHT}
-                        style={{}}
-                    />
-                </div>
-            </div>
+            <ItemCollectionComponent
+                serviceLocator={serviceLocator}
+                sprite={Sprites.ITEM_SHELL_FRAGMENT}
+                name={"Shell fragment"}
+                amount={2}
+            />
+            <ItemCollectionComponent
+                serviceLocator={serviceLocator}
+                sprite={Sprites.ITEM_SHELL_FRAGMENT}
+                name={"Another Shell fragment"}
+                amount={2}
+            />
         </ViewportComponent>
     );
 };
