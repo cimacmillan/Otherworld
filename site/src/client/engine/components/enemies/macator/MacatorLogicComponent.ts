@@ -15,7 +15,11 @@ import { EntityComponent } from "../../../EntityComponent";
 import { EnemyEventType } from "../../../events/EnemyEvents";
 import { GameEvent } from "../../../events/Event";
 import { InteractionEventType } from "../../../events/InteractionEvents";
-import { MacatorLogicState, MacatorState, MacatorType } from "../../../state/Macator";
+import {
+    MacatorLogicState,
+    MacatorState,
+    MacatorType,
+} from "../../../state/Macator";
 import {
     BaseState,
     HealthState,
@@ -195,8 +199,7 @@ export class MacatorLogicComponent<T extends MacatorStateType>
         entity: Entity<MacatorStateType>
     ): StateEffectCallback {
         return {
-            onEnter: () => {
-            },
+            onEnter: () => {},
         };
     }
 
@@ -327,15 +330,13 @@ export class MacatorLogicComponent<T extends MacatorStateType>
 
         if (Math.random() < 0.2) {
             entity
-            .getServiceLocator()
-            .getScriptingService()
-            .inventoryService.dropItem(
-                {
+                .getServiceLocator()
+                .getScriptingService()
+                .inventoryService.dropItem({
                     item: GameItems.ITEM_MACATOR_INNARDS,
                     position: entity.getState().position,
                     force,
-                }
-            );
+                });
         }
     }
 }
