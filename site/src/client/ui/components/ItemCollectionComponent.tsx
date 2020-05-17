@@ -1,4 +1,7 @@
-import { ShadowComponentStyle, ShadowComponentStyleSmall } from "./ShadowComponent";
+import {
+    ShadowComponentStyle,
+    ShadowComponentStyleSmall,
+} from "./ShadowComponent";
 import React = require("react");
 import { TextComponent, TextFont, TextSize, TextColour } from "./TextComponent";
 import { SpriteImageComponent } from "./SpriteImageComponent";
@@ -8,9 +11,11 @@ import { animation } from "../../util/animation/Animations";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 
 const Y_FADE = 32;
-const DING = 500;
-const PERSISTANCE = 3000;
-const FADE_IN = 400;
+const DING = 200;
+const PERSISTANCE = 2000;
+const FADE_IN = 300;
+const FADE_OUT = 100;
+const SCALE = 0.5;
 
 export interface ItemCollectionComponentProps {
     serviceLocator: ServiceLocator;
@@ -21,29 +26,38 @@ export interface ItemCollectionComponentProps {
     onRemove: () => void;
 }
 
-export const ItemCollectionComponent: React.FunctionComponent<ItemCollectionComponentProps> = props => {
+export const ItemCollectionComponent: React.FunctionComponent<ItemCollectionComponentProps> = (
+    props
+) => {
     const { serviceLocator, amount, sprite, name } = props;
     const [fade, setFade] = React.useState(0);
     const [numberDing, setNumberDing] = React.useState(0);
-    const [fadeOutAnimation, setFadeOutAnimation] = React.useState(undefined as GameAnimation);
+    const [fadeOutAnimation, setFadeOutAnimation] = React.useState(
+        undefined as GameAnimation
+    );
 
     React.useEffect(() => {
         const anim = animation(setFade).speed(FADE_IN).driven().start();
-        setFadeOutAnimation(animation(x => setFade(1 - x)).speed(FADE_IN).driven().whenDone(props.onRemove));
+        setFadeOutAnimation(
+            animation((x) => setFade(1 - x))
+                .speed(FADE_OUT)
+                .driven()
+                .whenDone(props.onRemove)
+        );
         return () => anim.stop();
     }, []);
 
     React.useEffect(() => {
-        const dingAnimation = animation(x => setNumberDing(1 - x)).speed(DING).whenDone(() => setNumberDing(0)).driven();
+        const dingAnimation = animation((x) => setNumberDing(1 - x))
+            .speed(DING)
+            .whenDone(() => setNumberDing(0))
+            .driven();
         if (amount > 1) {
             dingAnimation.start();
         }
-        const timeout = setTimeout(
-            () => fadeOutAnimation.start(), 
-            PERSISTANCE
-            );
+        const timeout = setTimeout(() => fadeOutAnimation.start(), PERSISTANCE);
         return () => {
-            setNumberDing(0)
+            setNumberDing(0);
             dingAnimation.stop();
             clearTimeout(timeout);
         };
@@ -62,7 +76,7 @@ export const ItemCollectionComponent: React.FunctionComponent<ItemCollectionComp
                 flexDirection: "row",
                 alignItems: "center",
                 opacity: fade,
-                marginBottom: -Y_FADE * (1 - fade)
+                marginBottom: -Y_FADE * (1 - fade),
             }}
         >
             <div
@@ -74,7 +88,11 @@ export const ItemCollectionComponent: React.FunctionComponent<ItemCollectionComp
                     ...ShadowComponentStyleSmall(),
                 }}
             >
-                {amount > 1 ? AmountComponent(amount, numberDing + 1) : <></>}
+                {amount > 1 ? (
+                    AmountComponent(amount, numberDing * SCALE + 1)
+                ) : (
+                    <></>
+                )}
                 <SpriteImageComponent
                     serviceLocator={serviceLocator}
                     spriteSheet={SpriteSheets.SPRITE}
@@ -96,7 +114,7 @@ export const ItemCollectionComponent: React.FunctionComponent<ItemCollectionComp
             </div>
         </div>
     );
-}
+};
 
 const AmountComponent = (amount: number, ding: number) => (
     <TextComponent
@@ -106,9 +124,7 @@ const AmountComponent = (amount: number, ding: number) => (
         colour={TextColour.LIGHT}
         style={{
             transformOrigin: "center",
-            transform: `scale(${ding})`
+            transform: `scale(${ding})`,
         }}
     />
 );
-
-

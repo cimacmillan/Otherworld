@@ -12,7 +12,10 @@ export const useGlobalState: () => [State, (action: Actions) => void] = () => {
     return [state, (action: Actions) => dispatch.next(action)];
 };
 
-export const useDispatchListener = (callback: (action: Actions) => void, deps: React.DependencyList = []) => {
+export const useDispatchListener = (
+    callback: (action: Actions) => void,
+    deps: React.DependencyList = []
+) => {
     React.useEffect(() => {
         const sub = dispatch.subscribe(callback);
         return () => sub.unsubscribe();

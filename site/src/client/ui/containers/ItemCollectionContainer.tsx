@@ -42,28 +42,49 @@ export const ItemCollectionContainer: React.FunctionComponent<ItemCollectionCont
     const { serviceLocator } = props;
     const [itemList, setItemList] = React.useState([] as ItemListMetadata[]);
 
+    const addItem = (item: Item) => {
+        if (item.stackable) {
+            const itemInList = itemList.find(
+                (itemInList) =>
+                    itemInList.item.stackable && itemInList.item.id === item.id
+            );
+            if (itemInList) {
+                itemInList.amount++;
+                setItemList(itemList);
+                return;
+            }
+        }
+        setItemList([
+            ...itemList,
+            {
+                key: key,
+                amount: 1,
+                item: item,
+            },
+        ]);
+        key++;
+        key = key % keyLimit;
+    };
+
     const removeItem = (metadata: ItemListMetadata) => {
         const removeElement = itemList.indexOf(metadata); // remove number 3
         var newList = [
-          ...itemList.slice(0, removeElement),
-          ...itemList.slice(removeElement+1)
+            ...itemList.slice(0, removeElement),
+            ...itemList.slice(removeElement + 1),
         ];
         setItemList(newList);
-    }
+    };
 
-    useDispatchListener((action: Actions) => {
-        switch(action.type) {
-            case PlayerEventType.PLAYER_ITEM_DROP_COLLECTED:
-                setItemList([...itemList, {
-                    key: key,
-                    amount: 1,
-                    item: action.payload.item
-                }]);
-                key++;
-                key = key % keyLimit;
-                break;
-        }
-    }, [itemList]);
+    useDispatchListener(
+        (action: Actions) => {
+            switch (action.type) {
+                case PlayerEventType.PLAYER_ITEM_DROP_COLLECTED:
+                    addItem(action.payload.item);
+                    break;
+            }
+        },
+        [itemList]
+    );
 
     return (
         <ViewportComponent
@@ -77,19 +98,16 @@ export const ItemCollectionContainer: React.FunctionComponent<ItemCollectionCont
                 justifyContent: "flex-end",
             }}
         >
-            {
-                itemList.map(itemMetadata => (
-                    <ItemCollectionComponent
-                        key={itemMetadata.key}
-                        serviceLocator={serviceLocator}
-                        sprite={itemMetadata.item.spriteIcon}
-                        name={itemMetadata.item.name}
-                        amount={itemMetadata.amount}
-
-                        onRemove={() => removeItem(itemMetadata)}
-                    />
-                ))
-            }
+            {itemList.map((itemMetadata) => (
+                <ItemCollectionComponent
+                    key={itemMetadata.key}
+                    serviceLocator={serviceLocator}
+                    sprite={itemMetadata.item.spriteIcon}
+                    name={itemMetadata.item.name}
+                    amount={itemMetadata.amount}
+                    onRemove={() => removeItem(itemMetadata)}
+                />
+            ))}
         </ViewportComponent>
     );
 };
