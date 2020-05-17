@@ -17,15 +17,41 @@ import {
     TextColour,
 } from "../components/TextComponent";
 import { ItemCollectionComponent } from "../components/ItemCollectionComponent";
+import { Item } from "../../types/TypesItem";
+import { GameItems } from "../../resources/manifests/Items";
 
 export interface ItemCollectionContainerProps {
     serviceLocator: ServiceLocator;
+}
+
+interface ItemListMetadata {
+    item: Item;
+    amount: number;
 }
 
 export const ItemCollectionContainer: React.FunctionComponent<ItemCollectionContainerProps> = (
     props
 ) => {
     const { serviceLocator } = props;
+    const [itemList, setItemList] = React.useState([] as ItemListMetadata[]);
+
+    React.useEffect(() => {
+        setItemList([
+            {
+                amount: 1,
+                item: GameItems.ITEM_SHELL_FRAGMENT
+            },
+            {
+                amount: 2,
+                item: GameItems.ITEM_SHELL_FRAGMENT
+            },
+        ]);
+    }, []);
+
+    const removeItem = (metadata: ItemListMetadata) => {
+        const newList = itemList.splice(itemList.indexOf(metadata));
+        setItemList(newList);
+    }
 
     return (
         <ViewportComponent
@@ -39,18 +65,18 @@ export const ItemCollectionContainer: React.FunctionComponent<ItemCollectionCont
                 justifyContent: "flex-end",
             }}
         >
-            <ItemCollectionComponent
-                serviceLocator={serviceLocator}
-                sprite={Sprites.ITEM_SHELL_FRAGMENT}
-                name={"Shell fragment"}
-                amount={2}
-            />
-            <ItemCollectionComponent
-                serviceLocator={serviceLocator}
-                sprite={Sprites.ITEM_SHELL_FRAGMENT}
-                name={"Another Shell fragment"}
-                amount={2}
-            />
+            {
+                itemList.map(itemMetadata => (
+                    <ItemCollectionComponent
+                        serviceLocator={serviceLocator}
+                        sprite={itemMetadata.item.spriteIcon}
+                        name={itemMetadata.item.name}
+                        amount={itemMetadata.amount}
+
+                        onRemove={() => removeItem(itemMetadata)}
+                    />
+                ))
+            }
         </ViewportComponent>
     );
 };
