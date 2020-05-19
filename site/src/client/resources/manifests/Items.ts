@@ -1,4 +1,4 @@
-import { Item } from "../../types/TypesItem";
+import { Item, ItemType } from "../../types/TypesItem";
 import { Sprites } from "./Types";
 
 const ITEM_BROWN_SHELL_FRAGMENT: Item = {
@@ -6,6 +6,12 @@ const ITEM_BROWN_SHELL_FRAGMENT: Item = {
     id: 1,
     stackable: true,
     name: "Brown Shell fragment",
+    behaviours: [
+        {
+            type: ItemType.CAN_BE_TRADED,
+            price: 10,
+        },
+    ],
 };
 
 const ITEM_GREEN_SHELL_FRAGMENT: Item = {
@@ -13,6 +19,12 @@ const ITEM_GREEN_SHELL_FRAGMENT: Item = {
     id: 2,
     stackable: true,
     name: "Green Shell fragment",
+    behaviours: [
+        {
+            type: ItemType.CAN_BE_TRADED,
+            price: 50,
+        },
+    ],
 };
 
 const ITEM_BLUE_SHELL_FRAGMENT: Item = {
@@ -20,6 +32,12 @@ const ITEM_BLUE_SHELL_FRAGMENT: Item = {
     id: 3,
     stackable: true,
     name: "Blue Shell fragment",
+    behaviours: [
+        {
+            type: ItemType.CAN_BE_TRADED,
+            price: 200,
+        },
+    ],
 };
 
 const ITEM_MACATOR_INNARDS: Item = {
@@ -27,6 +45,7 @@ const ITEM_MACATOR_INNARDS: Item = {
     id: 4,
     stackable: true,
     name: "Macator Innards",
+    behaviours: [],
 };
 
 export const GameItems = {
