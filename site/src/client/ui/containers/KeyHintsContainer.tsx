@@ -73,7 +73,6 @@ const keyStages = [
             fade: false,
         },
     ],
-
     [
         {
             keycode: "KeyI",

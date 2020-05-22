@@ -5,6 +5,7 @@ import { WeaponComponent } from "../components/WeaponComponent";
 import { ScoreContainer } from "./ScoreContainer";
 import { KeyHintsContainer } from "./KeyHintsContainer";
 import { useGlobalState } from "../effects/GlobalState";
+import { InventoryContainer } from "./InventoryContainer";
 
 interface PlayModeContainerProps {
     serviceLocator: ServiceLocator;
@@ -25,6 +26,7 @@ export const PlayModeContainer: React.FunctionComponent<PlayModeContainerProps> 
             <WeaponComponent serviceLocator={props.serviceLocator} />
             <ScoreContainer />
             <KeyHintsContainer serviceLocator={props.serviceLocator} />
+            <InventoryContainer serviceLocator={props.serviceLocator} />
         </>
     );
 };
