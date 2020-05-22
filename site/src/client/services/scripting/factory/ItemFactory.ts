@@ -13,9 +13,9 @@ import {
 import { Entity } from "../../../engine/Entity";
 import { SpriteSheets } from "../../../resources/manifests/Types";
 import { Vector2D } from "../../../types";
-import { Item } from "../../../types/TypesItem";
 import { vec } from "../../../util/math";
 import { ServiceLocator } from "../../ServiceLocator";
+import { Item } from "../items/types";
 
 const ITEM_SIZE = 0.4;
 const ITEM_SPEED = 0.1;

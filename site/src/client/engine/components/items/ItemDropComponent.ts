@@ -1,4 +1,4 @@
-import { Item } from "../../../types/TypesItem";
+import { Item } from "../../../services/scripting/items/types";
 import { animation } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
 import { vec } from "../../../util/math";

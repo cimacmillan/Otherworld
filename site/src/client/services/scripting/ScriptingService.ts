@@ -6,7 +6,7 @@ import { loadMap } from "../../resources/MapLoader";
 import { ServiceLocator } from "../ServiceLocator";
 import { createEgg } from "./factory/EnemyFactory";
 import { createPlayer } from "./factory/PlayerFactory";
-import { InventoryService } from "./inventory/InventoryService";
+import { InventoryService } from "./items/InventoryService";
 
 /**
  * Service for quick commands that usually take more lines, eg
