@@ -23,12 +23,24 @@ interface PlayerItemDropCollected {
     };
 }
 
+interface PlayerInventoryOpened {
+    type: PlayerEventType.PLAYER_INVENTORY_OPENED;
+}
+
+interface PlayerInventoryClosed {
+    type: PlayerEventType.PLAYER_INVENTORY_CLOSED;
+}
+
 export enum PlayerEventType {
     PLAYER_ATTACK = "PLAYER_ATTACK",
     PLAYER_DAMAGED = "PLAYER_DAMAGED",
     PLAYER_KILLED = "PLAYER_KILLED",
     PLAYER_INFO_CHANGE = "PLAYER_INFO_CHANGE",
+
     PLAYER_ITEM_DROP_COLLECTED = "PLAYER_ITEM_DROP_COLLECTED",
+
+    PLAYER_INVENTORY_OPENED = "PLAYER_INVENTORY_OPENED",
+    PLAYER_INVENTORY_CLOSED = "PLAYER_INVENTORY_CLOSED",
 }
 
 export type PlayerEvents =
@@ -36,4 +48,6 @@ export type PlayerEvents =
     | PlayerDamaged
     | PlayerKilled
     | PlayerInfoChange
-    | PlayerItemDropCollected;
+    | PlayerItemDropCollected
+    | PlayerInventoryOpened
+    | PlayerInventoryClosed;

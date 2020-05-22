@@ -1,5 +1,6 @@
 import { TextureCoordinate } from "../../resources/SpriteSheet";
 import { Camera, Vector2D } from "../../types";
+import { Inventory } from "../../services/scripting/items/types";
 
 export interface BaseState {
     exists: boolean;
@@ -30,4 +31,8 @@ export interface SpriteRenderState extends SurfacePositionState {
     textureCoordinate: TextureCoordinate;
     spriteHeight: number;
     spriteWidth: number;
+}
+
+export interface InventoryState {
+    inventory: Inventory;
 }

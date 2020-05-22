@@ -1,4 +1,4 @@
-import { Attack, Turn, Walk } from "../../engine/commands/PlayerCommands";
+import { Attack, Turn, Walk, OpenInventory } from "../../engine/commands/PlayerCommands";
 import { TurnDirection, WalkDirection } from "../../engine/events/TravelEvents";
 import { ServiceLocator } from "../ServiceLocator";
 import { ControlScheme } from "./ControlScheme";
@@ -30,26 +30,12 @@ export class DefaultControlScheme implements ControlScheme {
         if (keysDown.KeyE) {
             Attack(this.serviceLocator)();
         }
-
-        // TODO Add godmode
-        // if (keysDown.ShiftLeft) {
-        //     const player = this.serviceLocator
-        //         .getScriptingService()
-        //         .getPlayer()
-        //         .getState();
-        //     player.height -= 0.03;
-        // }
-        // if (keysDown.Space) {
-        //     const player = this.serviceLocator
-        //         .getScriptingService()
-        //         .getPlayer()
-        //         .getState();
-        //     player.height += 0.03;
-        // }
     }
 
     public onKeyDown(key: string, keysDown: { [key: string]: boolean }) {
-        console.log(key);
+        if (key == "KeyI") {
+            OpenInventory(this.serviceLocator)();
+        }
     }
 
     public onKeyUp(key: string, keysDown: { [key: string]: boolean }) {}

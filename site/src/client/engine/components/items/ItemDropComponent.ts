@@ -74,6 +74,12 @@ export class ItemDropComponent
                     item: entity.getState().item,
                 },
             });
+            entity.getServiceLocator().getScriptingService().getPlayer().onObservedEvent({
+                type: PlayerEventType.PLAYER_ITEM_DROP_COLLECTED,
+                payload: {
+                    item: entity.getState().item,
+                },
+            })
             entity.getServiceLocator().getWorld().removeEntity(entity);
         }
     }

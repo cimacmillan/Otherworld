@@ -65,6 +65,23 @@ const keyStages = [
             fade: false,
         },
     ],
+    [
+        {
+            keycode: "KeyI",
+            key: "I",
+            hint: "Inventory",
+            fade: false,
+        },
+    ],
+
+    [
+        {
+            keycode: "KeyI",
+            key: "I",
+            hint: "Close Inventory",
+            fade: false,
+        },
+    ],
 ];
 
 const clickSpeed = 500;
@@ -111,7 +128,7 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
     React.useEffect(() => {
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
-    });
+    }, [keyHints]);
 
     React.useEffect(() => {
         if (keyStage < keyStages.length) {

@@ -7,9 +7,11 @@ import { InteractionService } from "./interaction/InteractionService";
 import { PhysicsService } from "./physics/PhysicsService";
 import { RenderService } from "./render";
 import { ScriptingService } from "./scripting/ScriptingService";
+import { Game } from "../Game";
 
 export class ServiceLocator {
     public constructor(
+        private game: Game,
         private resourceManager: ResourceManager,
         private world: World,
         private renderService: RenderService,
@@ -20,6 +22,10 @@ export class ServiceLocator {
         private physicsService: PhysicsService,
         private interactionService: InteractionService
     ) {}
+
+    public getGame() {
+        return this.game;
+    }
 
     public getResourceManager() {
         return this.resourceManager;

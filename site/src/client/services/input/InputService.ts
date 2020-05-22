@@ -3,9 +3,11 @@ import { GameEventSource } from "../EventRouter";
 import { ServiceLocator } from "../ServiceLocator";
 import { ControlScheme } from "./ControlScheme";
 import { DefaultControlScheme } from "./DefaultControlScheme";
+import { InventoryControlScheme } from "./InventoryControlScheme";
 
 export enum InputState {
     DEFAULT = "DEFAULT",
+    INVENTORY = "INVENTORY",
 }
 
 /**
@@ -53,13 +55,21 @@ export class InputService {
 
     private onGameEvent = (event: GameEvent, source: GameEventSource) => {};
 
-    private setInputState = (inputState: InputState) => {
+    public setInputState = (inputState: InputState) => {
         this.inputState = inputState;
         switch (inputState) {
             case InputState.DEFAULT:
                 this.controlScheme = new DefaultControlScheme(
                     this.serviceLocator
                 );
+                break;
+            case InputState.INVENTORY:
+                this.controlScheme = new InventoryControlScheme(
+                    this.serviceLocator
+                );
+                break;
         }
     };
+
+    public getInputState = () => this.inputState;
 }

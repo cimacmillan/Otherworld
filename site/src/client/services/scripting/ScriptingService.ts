@@ -1,11 +1,10 @@
-import { PlayerState } from "../../engine/components/player/PlayerControlComponent";
 import { Entity } from "../../engine/Entity";
 import { Game } from "../../Game";
 import { Audios, MAPS } from "../../resources/manifests/Types";
 import { loadMap } from "../../resources/MapLoader";
 import { ServiceLocator } from "../ServiceLocator";
 import { createEgg } from "./factory/EnemyFactory";
-import { createPlayer } from "./factory/PlayerFactory";
+import { createPlayer, PlayerState } from "./factory/PlayerFactory";
 import { InventoryService } from "./items/InventoryService";
 
 /**

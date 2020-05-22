@@ -7,8 +7,13 @@ export interface Item {
     behaviours: ItemComponent[];
 }
 
+export interface ItemMetadata {
+    item: Item;
+    count: number;
+}
+
 export interface Inventory {
-    items: Item[];
+    items: ItemMetadata[];
 }
 
 export type ItemComponent = ItemHealsPlayer;

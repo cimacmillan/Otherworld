@@ -16,13 +16,7 @@ import {
     TurnDirection,
     WalkDirection,
 } from "../../events/TravelEvents";
-import { BaseState, CameraState, HealthState } from "../../state/State";
-import { PhysicsStateType } from "../physics/PhysicsComponent";
-
-export type PlayerState = BaseState &
-    PhysicsStateType &
-    CameraState &
-    HealthState;
+import { PlayerState } from "../../../services/scripting/factory/PlayerFactory";
 
 const WALK_SPEED = 0.02;
 const TURN_SPEED = 0.15;
@@ -89,24 +83,6 @@ export class PlayerControlComponent<T extends PlayerState>
         entity: Entity<PlayerState>,
         event: GameEvent
     ): void {}
-
-    public onCreate(entity: Entity<PlayerState>) {
-        entity.setState(
-            {
-                collides: true,
-            },
-            true
-        );
-    }
-
-    public onDestroy(entity: Entity<PlayerState>) {
-        entity.setState(
-            {
-                collides: false,
-            },
-            true
-        );
-    }
 
     public onStateTransition(entity: Entity<T>, from: T, to: T): void {
         entity.emitGlobally({

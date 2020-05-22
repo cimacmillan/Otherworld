@@ -47,6 +47,7 @@ export class Game {
         const interactionService = new InteractionService();
 
         this.serviceLocator = new ServiceLocator(
+            this,
             resourceManager,
             world,
             new RenderService(resourceManager),
