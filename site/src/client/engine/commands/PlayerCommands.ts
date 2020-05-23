@@ -1,14 +1,14 @@
+import { GameEventSource } from "../../services/EventRouter";
+import { InputState } from "../../services/input/InputService";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { InteractionEventType } from "../events/InteractionEvents";
+import { PlayerEventType } from "../events/PlayerEvents";
 import {
     TravelEventType,
     TurnDirection,
     WalkDirection,
 } from "../events/TravelEvents";
 import { CommandCreator } from "./Command";
-import { PlayerEventType } from "../events/PlayerEvents";
-import { GameEventSource } from "../../services/EventRouter";
-import { InputState } from "../../services/input/InputService";
 
 export const Walk: CommandCreator = (serviceLocator: ServiceLocator) => (
     walkDirection: WalkDirection
@@ -31,18 +31,22 @@ export const Attack: CommandCreator = (serviceLocator: ServiceLocator) => () =>
         type: InteractionEventType.ATTACK,
     });
 
-export const OpenInventory: CommandCreator = (serviceLocator: ServiceLocator) => () => {
+export const OpenInventory: CommandCreator = (
+    serviceLocator: ServiceLocator
+) => () => {
     serviceLocator.getGame().setUpdateWorld(false);
     serviceLocator.getInputService().setInputState(InputState.INVENTORY);
     serviceLocator.getEventRouter().routeEvent(GameEventSource.INPUT, {
         type: PlayerEventType.PLAYER_INVENTORY_OPENED,
     });
-}
+};
 
-export const CloseInventory: CommandCreator = (serviceLocator: ServiceLocator) => () => {
+export const CloseInventory: CommandCreator = (
+    serviceLocator: ServiceLocator
+) => () => {
     serviceLocator.getGame().setUpdateWorld(true);
     serviceLocator.getInputService().setInputState(InputState.DEFAULT);
     serviceLocator.getEventRouter().routeEvent(GameEventSource.INPUT, {
         type: PlayerEventType.PLAYER_INVENTORY_CLOSED,
     });
-}
+};

@@ -4,10 +4,12 @@ import { ServiceLocator } from "../ServiceLocator";
 import { ControlScheme } from "./ControlScheme";
 import { DefaultControlScheme } from "./DefaultControlScheme";
 import { InventoryControlScheme } from "./InventoryControlScheme";
+import { MenuControlScheme } from "./MenuControlScheme";
 
 export enum InputState {
     DEFAULT = "DEFAULT",
     INVENTORY = "INVENTORY",
+    MENU = "MENU",
 }
 
 /**
@@ -30,13 +32,34 @@ export class InputService {
         this.serviceLocator
             .getEventRouter()
             .attachEventListener(GameEventSource.INPUT, this.onGameEvent);
-        this.setInputState(InputState.DEFAULT);
+        this.setInputState(InputState.MENU);
         this.attachWindowHooks();
     }
 
     public update() {
         this.controlScheme.poll(this.keydown);
     }
+
+    public setInputState = (inputState: InputState) => {
+        this.inputState = inputState;
+        switch (inputState) {
+            case InputState.DEFAULT:
+                this.controlScheme = new DefaultControlScheme(
+                    this.serviceLocator
+                );
+                break;
+            case InputState.MENU:
+                this.controlScheme = new MenuControlScheme(this.serviceLocator);
+                break;
+            case InputState.INVENTORY:
+                this.controlScheme = new InventoryControlScheme(
+                    this.serviceLocator
+                );
+                break;
+        }
+    };
+
+    public getInputState = () => this.inputState;
 
     private attachWindowHooks() {
         window.addEventListener("keydown", this.onKeyDown);
@@ -54,22 +77,4 @@ export class InputService {
     };
 
     private onGameEvent = (event: GameEvent, source: GameEventSource) => {};
-
-    public setInputState = (inputState: InputState) => {
-        this.inputState = inputState;
-        switch (inputState) {
-            case InputState.DEFAULT:
-                this.controlScheme = new DefaultControlScheme(
-                    this.serviceLocator
-                );
-                break;
-            case InputState.INVENTORY:
-                this.controlScheme = new InventoryControlScheme(
-                    this.serviceLocator
-                );
-                break;
-        }
-    };
-
-    public getInputState = () => this.inputState;
 }

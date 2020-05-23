@@ -1,4 +1,9 @@
-import { Attack, Turn, Walk, OpenInventory } from "../../engine/commands/PlayerCommands";
+import {
+    Attack,
+    OpenInventory,
+    Turn,
+    Walk,
+} from "../../engine/commands/PlayerCommands";
 import { TurnDirection, WalkDirection } from "../../engine/events/TravelEvents";
 import { ServiceLocator } from "../ServiceLocator";
 import { ControlScheme } from "./ControlScheme";

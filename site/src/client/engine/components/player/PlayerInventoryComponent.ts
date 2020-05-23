@@ -1,18 +1,17 @@
+import { PlayerState } from "../../../services/scripting/factory/PlayerFactory";
+import { Item } from "../../../services/scripting/items/types";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
-import { PlayerState } from "../../../services/scripting/factory/PlayerFactory";
 import { PlayerEventType } from "../../events/PlayerEvents";
-import { Item } from "../../../services/scripting/items/types";
 
 export class PlayerInventoryComponent<T extends PlayerState>
     implements EntityComponent<T> {
-
     public onObservedEvent(
         entity: Entity<PlayerState>,
         event: GameEvent
     ): void {
-        switch(event.type) {
+        switch (event.type) {
             case PlayerEventType.PLAYER_ITEM_DROP_COLLECTED:
                 this.onPickedUp(entity, event.payload.item);
                 break;
@@ -21,11 +20,15 @@ export class PlayerInventoryComponent<T extends PlayerState>
 
     private onPickedUp(entity: Entity<PlayerState>, item: Item) {
         const { inventory } = entity.getState();
-        
+
         let countIncreased = false;
-        for (let x = 0; x < inventory.items.length; x ++) {
+        for (let x = 0; x < inventory.items.length; x++) {
             const itemMetadata = inventory.items[x];
-            if (itemMetadata.item.id === item.id && itemMetadata.item.stackable && item.behaviours) {
+            if (
+                itemMetadata.item.id === item.id &&
+                itemMetadata.item.stackable &&
+                item.behaviours
+            ) {
                 itemMetadata.count++;
                 countIncreased = true;
                 break;
@@ -35,10 +38,10 @@ export class PlayerInventoryComponent<T extends PlayerState>
         if (!countIncreased) {
             inventory.items.push({
                 item,
-                count: 1
-            })
-        };
+                count: 1,
+            });
+        }
 
-        entity.setState({inventory});
+        entity.setState({ inventory });
     }
 }

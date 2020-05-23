@@ -2,6 +2,7 @@ import { Entity } from "../../engine/Entity";
 import { Game } from "../../Game";
 import { Audios, MAPS } from "../../resources/manifests/Types";
 import { loadMap } from "../../resources/MapLoader";
+import { InputState } from "../input/InputService";
 import { ServiceLocator } from "../ServiceLocator";
 import { createEgg } from "./factory/EnemyFactory";
 import { createPlayer, PlayerState } from "./factory/PlayerFactory";
@@ -59,6 +60,7 @@ export class ScriptingService {
                 ]
             );
         this.game.setUpdateWorld(false);
+        this.serviceLocator.getInputService().setInputState(InputState.MENU);
     }
 
     public startGame() {
@@ -69,6 +71,7 @@ export class ScriptingService {
                     Audios.INCOMING
                 ]
             );
+        this.serviceLocator.getInputService().setInputState(InputState.DEFAULT);
 
         this.resetContent();
         this.game.setUpdateWorld(true);

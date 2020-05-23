@@ -6,19 +6,25 @@ import {
     ZFAR,
     ZNEAR,
 } from "../../../Config";
-import { PhysicsComponent, PhysicsStateType } from "../../../engine/components/physics/PhysicsComponent";
 import {
-    PlayerControlComponent
-} from "../../../engine/components/player/PlayerControlComponent";
-import { Entity } from "../../../engine/Entity";
-import { ServiceLocator } from "../../ServiceLocator";
-import { CameraState, HealthState, InventoryState, BaseState } from "../../../engine/state/State";
+    PhysicsComponent,
+    PhysicsStateType,
+} from "../../../engine/components/physics/PhysicsComponent";
+import { PlayerControlComponent } from "../../../engine/components/player/PlayerControlComponent";
 import { PlayerInventoryComponent } from "../../../engine/components/player/PlayerInventoryComponent";
+import { Entity } from "../../../engine/Entity";
+import {
+    BaseState,
+    CameraState,
+    HealthState,
+    InventoryState,
+} from "../../../engine/state/State";
+import { ServiceLocator } from "../../ServiceLocator";
 
 export type PlayerState = BaseState &
     PhysicsStateType &
     CameraState &
-    HealthState & 
+    HealthState &
     InventoryState;
 
 export function createPlayer(serviceLocator: ServiceLocator) {
@@ -49,8 +55,8 @@ export function createPlayer(serviceLocator: ServiceLocator) {
         collidesWalls: true,
         collidesEntities: true,
         inventory: {
-            items: []
-        }
+            items: [],
+        },
     };
 
     return new Entity<PlayerState>(
@@ -58,6 +64,6 @@ export function createPlayer(serviceLocator: ServiceLocator) {
         initialState,
         new PhysicsComponent(),
         new PlayerControlComponent(),
-        new PlayerInventoryComponent(),
+        new PlayerInventoryComponent()
     );
 }

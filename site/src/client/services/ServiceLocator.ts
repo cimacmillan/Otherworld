@@ -1,4 +1,5 @@
 import { World } from "../engine/World";
+import { Game } from "../Game";
 import { ResourceManager } from "../resources/ResourceManager";
 import { AudioService } from "./audio/AudioService";
 import { EventRouter } from "./EventRouter";
@@ -7,7 +8,6 @@ import { InteractionService } from "./interaction/InteractionService";
 import { PhysicsService } from "./physics/PhysicsService";
 import { RenderService } from "./render";
 import { ScriptingService } from "./scripting/ScriptingService";
-import { Game } from "../Game";
 
 export class ServiceLocator {
     public constructor(
