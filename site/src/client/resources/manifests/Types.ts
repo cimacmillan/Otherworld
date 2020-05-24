@@ -15,6 +15,9 @@ export enum UISPRITES {
     KEY_UP,
     KEY_DOWN,
 
+    ITEM_PANEL,
+    ITEM_PANEL_HOVER,
+
     PANEL_CENTER,
     PANEL_TL,
     PANEL_TM,

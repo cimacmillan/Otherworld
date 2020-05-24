@@ -24,7 +24,7 @@ interface SetGameLoadPercentage {
 
 export const startGame = () => ({
     type: GameStartActionType.START_GAME,
-});
+}) as GameStartActionStart;
 
 export const setLoadPercentage: (
     percentage: number

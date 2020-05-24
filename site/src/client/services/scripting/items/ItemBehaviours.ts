@@ -2,7 +2,7 @@ import { Entity } from "../../../engine/Entity";
 import { BaseState } from "../../../engine/state/State";
 import { HealsPlayerBehaviour } from "./behaviours/HealsPlayer";
 import { join } from "./helper";
-import { Item, ItemComponent, ItemType } from "./types";
+import { Item, ItemComponent, ItemComponentType } from "./types";
 
 interface ItemBehaviour {
     onConsume: (entity: Entity<BaseState>) => void;
@@ -13,11 +13,11 @@ export type ItemBehaviourImplementation<T> = (
 ) => Partial<ItemBehaviour>;
 
 type ItemBehaviourMap = {
-    [key in ItemType]: (component: ItemComponent) => Partial<ItemBehaviour>;
+    [key in ItemComponentType]: (component: ItemComponent) => Partial<ItemBehaviour>;
 };
 
 const itemBehaviours: ItemBehaviourMap = {
-    [ItemType.HEALS_PLAYER]: HealsPlayerBehaviour,
+    [ItemComponentType.HEALS_PLAYER]: HealsPlayerBehaviour,
 };
 
 const defaultBehaviour: ItemBehaviour = {

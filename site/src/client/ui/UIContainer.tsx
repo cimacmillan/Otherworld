@@ -29,9 +29,6 @@ export const UIContainer: React.FunctionComponent<UIContainerProps> = (
                     <GameFadeContainer
                         serviceLocator={props.game.getServiceLocator()}
                     />
-                    <ItemCollectionContainer
-                        serviceLocator={props.game.getServiceLocator()}
-                    />
                     <GameMenuContainer
                         serviceLocator={props.game.getServiceLocator()}
                     />

@@ -5,6 +5,12 @@ export interface Item {
     name: string;
     tradePrice?: number;
     behaviours: ItemComponent[];
+    category: ItemCategory;
+}
+
+export enum ItemCategory {
+    CONSUMABLE = "CONSUMABLE",
+    CRAFTING = "CRAFTING"
 }
 
 export interface ItemMetadata {
@@ -19,10 +25,10 @@ export interface Inventory {
 export type ItemComponent = ItemHealsPlayer;
 
 export interface ItemHealsPlayer {
-    type: ItemType.HEALS_PLAYER;
+    type: ItemComponentType.HEALS_PLAYER;
     amount: number;
 }
 
-export enum ItemType {
+export enum ItemComponentType {
     HEALS_PLAYER = "HEALS_PLAYER",
 }
