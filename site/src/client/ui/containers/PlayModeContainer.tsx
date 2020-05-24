@@ -27,7 +27,7 @@ export const PlayModeContainer: React.FunctionComponent<PlayModeContainerProps> 
             <WeaponComponent serviceLocator={props.serviceLocator} />
             <ScoreContainer />
             <KeyHintsContainer serviceLocator={props.serviceLocator} />
-            <ItemCollectionContainer serviceLocator={props.serviceLocator}/>
+            <ItemCollectionContainer serviceLocator={props.serviceLocator} />
             <InventoryContainer serviceLocator={props.serviceLocator} />
         </>
     );

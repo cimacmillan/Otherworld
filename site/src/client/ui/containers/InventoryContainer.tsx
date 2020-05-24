@@ -20,10 +20,12 @@ import { ItemMetadata } from "../../services/scripting/items/types";
 import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
 import { GameItems } from "../../resources/manifests/Items";
 import { GameAnimation } from "../../util/animation/GameAnimation";
+import { chunk } from "lodash";
 
 const FADE_IN = 200;
-const WIDTH = 600;
+const WIDTH = 580;
 const HEIGHT = 400;
+const ITEM_GRID_WIDTH = 7;
 
 export interface InventoryContainerProps {
     serviceLocator: ServiceLocator;
@@ -52,6 +54,24 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
         }
     });
 
+    const inventoryItems = serviceLocator
+        .getScriptingService()
+        .getPlayer()
+        .getState().inventory.items;
+    const itemGrid = chunk(inventoryItems, ITEM_GRID_WIDTH);
+
+    const inventoryItemComponents = inventoryItems.map((metadata) => {
+        return (
+            <InventoryItemComponent
+                serviceLocator={serviceLocator}
+                itemMetadata={metadata}
+                style={{
+                    margin: 8,
+                }}
+            />
+        );
+    });
+
     return (
         <ViewportComponent
             x={0}
@@ -65,26 +85,22 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
             }}
         >
             {inventoryShowing && (
-                <GamePanelComponent 
+                <GamePanelComponent
                     serviceLocator={props.serviceLocator}
                     width={WIDTH}
                     height={HEIGHT}
                     style={{
                         opacity: fade,
-                        ...ShadowComponentStyle()
+                        ...ShadowComponentStyle(),
                     }}
-                    childStyle={{}}
+                    childStyle={{
+                        display: "flex",
+                        flexDirection: "row",
+                    }}
                     panelMap={DARK_PANEL}
-                > 
-                    <InventoryItemComponent
-                        serviceLocator={serviceLocator}
-                        itemMetadata={{
-                            item: GameItems.ITEM_MACATOR_INNARDS,
-                            count: 100
-                        }}
-                    />
+                >
+                    {inventoryItemComponents}
                 </GamePanelComponent>
-
             )}
         </ViewportComponent>
     );
@@ -98,22 +114,30 @@ const INVENTORY_ITEM_SIZE_SPEED = 200;
 interface InventoryItemComponentProps {
     serviceLocator: ServiceLocator;
     itemMetadata: ItemMetadata;
+    style: React.CSSProperties;
 }
 
-export const InventoryItemComponent: React.FunctionComponent<InventoryItemComponentProps> = props => {
-    const { serviceLocator, itemMetadata } = props;
+export const InventoryItemComponent: React.FunctionComponent<InventoryItemComponentProps> = (
+    props
+) => {
+    const { serviceLocator, itemMetadata, style } = props;
     const { item, count } = itemMetadata;
 
     const [hover, setHover] = React.useState(false);
     const [size, setSize] = React.useState(0);
-    const [sizeAnimation, setSizeAnimation] = React.useState<GameAnimation | undefined>(undefined);
+    const [sizeAnimation, setSizeAnimation] = React.useState<
+        GameAnimation | undefined
+    >(undefined);
 
     const onMouseEnter = () => {
         setHover(true);
         if (sizeAnimation) {
             sizeAnimation.stop();
         }
-        const anim = animation(setSize).driven().speed(INVENTORY_ITEM_SIZE_SPEED).start();
+        const anim = animation(setSize)
+            .driven()
+            .speed(INVENTORY_ITEM_SIZE_SPEED)
+            .start();
         setSizeAnimation(anim);
     };
     const onMouseLeave = () => {
@@ -121,15 +145,26 @@ export const InventoryItemComponent: React.FunctionComponent<InventoryItemCompon
         if (sizeAnimation) {
             sizeAnimation.stop();
         }
-        const anim = animation(x => setSize(1 - x)).driven().speed(INVENTORY_ITEM_SIZE_SPEED).start();
+        const anim = animation((x) => setSize(1 - x))
+            .driven()
+            .speed(INVENTORY_ITEM_SIZE_SPEED)
+            .start();
         setSizeAnimation(anim);
-    }
+    };
 
     const sizeOffset = size * INVENTORY_ITEM_SIZE_INCREASE;
     const numberOffset = INVENTORY_PANEL_SIZE / 8;
 
     return (
-        <>
+        <div
+            style={{
+                width: INVENTORY_PANEL_SIZE,
+                height: INVENTORY_PANEL_SIZE,
+                ...style,
+            }}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+        >
             <div
                 style={{
                     position: "absolute",
@@ -139,19 +174,21 @@ export const InventoryItemComponent: React.FunctionComponent<InventoryItemCompon
                     alignItems: "center",
                     justifyContent: "center",
                 }}
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
             >
                 <SpriteImageComponent
                     serviceLocator={serviceLocator}
-                    sprite={hover ? UISPRITES.ITEM_PANEL_HOVER : UISPRITES.ITEM_PANEL}
+                    sprite={
+                        hover
+                            ? UISPRITES.ITEM_PANEL_HOVER
+                            : UISPRITES.ITEM_PANEL
+                    }
                     spriteSheet={SpriteSheets.UI}
                     style={{
                         position: "absolute",
                         width: INVENTORY_PANEL_SIZE,
-                        height: INVENTORY_PANEL_SIZE
+                        height: INVENTORY_PANEL_SIZE,
                     }}
-                /> 
+                />
                 <SpriteImageComponent
                     serviceLocator={serviceLocator}
                     sprite={item.spriteIcon}
@@ -159,29 +196,31 @@ export const InventoryItemComponent: React.FunctionComponent<InventoryItemCompon
                     style={{
                         position: "absolute",
                         width: INVENTORY_ITEM_SIZE + sizeOffset,
-                        height: INVENTORY_ITEM_SIZE + sizeOffset
+                        height: INVENTORY_ITEM_SIZE + sizeOffset,
                     }}
-                />  
+                />
             </div>
-            <div style={{
-                position: "absolute",
-                display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-                width: INVENTORY_PANEL_SIZE,
-                height: INVENTORY_PANEL_SIZE,
-                pointerEvents: "none"
-            }}>
+            <div
+                style={{
+                    position: "absolute",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    alignItems: "flex-end",
+                    width: INVENTORY_PANEL_SIZE,
+                    height: INVENTORY_PANEL_SIZE,
+                    pointerEvents: "none",
+                }}
+            >
                 <TextComponent
-                        text={`${count}`}
-                        font={TextFont.REGULAR}
-                        size={TextSize.SMALL}
-                        colour={TextColour.LIGHT}
-                        style={{
-                            transform: `translate(${numberOffset}px, ${numberOffset}px)`
-                        }}
-                    />
+                    text={`${count}`}
+                    font={TextFont.REGULAR}
+                    size={TextSize.SMALL}
+                    colour={TextColour.LIGHT}
+                    style={{
+                        transform: `translate(${numberOffset}px, ${numberOffset}px)`,
+                    }}
+                />
             </div>
-        </>
+        </div>
     );
-}
+};

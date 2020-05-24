@@ -10,7 +10,7 @@ export interface Item {
 
 export enum ItemCategory {
     CONSUMABLE = "CONSUMABLE",
-    CRAFTING = "CRAFTING"
+    CRAFTING = "CRAFTING",
 }
 
 export interface ItemMetadata {

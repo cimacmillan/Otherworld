@@ -159,13 +159,13 @@ export const defaultManifest: ResourceManifest = {
                     x: 96,
                     y: 96,
                     width: 16,
-                    height: 16
+                    height: 16,
                 },
                 [UISPRITES.ITEM_PANEL_HOVER]: {
                     x: 112,
                     y: 96,
                     width: 16,
-                    height: 16
+                    height: 16,
                 },
                 ...DARK_PANEL_SPRITES,
                 ...BUTTON_DEFAULT_SPRITES,

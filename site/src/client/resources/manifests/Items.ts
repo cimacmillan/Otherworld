@@ -1,4 +1,8 @@
-import { Item, ItemComponentType, ItemCategory } from "../../services/scripting/items/types";
+import {
+    Item,
+    ItemCategory,
+    ItemComponentType,
+} from "../../services/scripting/items/types";
 import { Sprites } from "./Types";
 
 const ITEM_BROWN_SHELL_FRAGMENT: Item = {
@@ -8,7 +12,7 @@ const ITEM_BROWN_SHELL_FRAGMENT: Item = {
     name: "Brown Shell fragment",
     behaviours: [],
     tradePrice: 10,
-    category: ItemCategory.CRAFTING
+    category: ItemCategory.CRAFTING,
 };
 
 const ITEM_GREEN_SHELL_FRAGMENT: Item = {
@@ -18,7 +22,7 @@ const ITEM_GREEN_SHELL_FRAGMENT: Item = {
     name: "Green Shell fragment",
     behaviours: [],
     tradePrice: 50,
-    category: ItemCategory.CRAFTING
+    category: ItemCategory.CRAFTING,
 };
 
 const ITEM_BLUE_SHELL_FRAGMENT: Item = {
@@ -28,7 +32,7 @@ const ITEM_BLUE_SHELL_FRAGMENT: Item = {
     name: "Blue Shell fragment",
     behaviours: [],
     tradePrice: 200,
-    category: ItemCategory.CRAFTING
+    category: ItemCategory.CRAFTING,
 };
 
 const ITEM_MACATOR_INNARDS: Item = {
@@ -42,7 +46,7 @@ const ITEM_MACATOR_INNARDS: Item = {
             amount: 0.2,
         },
     ],
-    category: ItemCategory.CONSUMABLE
+    category: ItemCategory.CONSUMABLE,
 };
 
 export const GameItems = {

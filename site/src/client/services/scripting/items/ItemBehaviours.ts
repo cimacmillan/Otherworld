@@ -13,7 +13,9 @@ export type ItemBehaviourImplementation<T> = (
 ) => Partial<ItemBehaviour>;
 
 type ItemBehaviourMap = {
-    [key in ItemComponentType]: (component: ItemComponent) => Partial<ItemBehaviour>;
+    [key in ItemComponentType]: (
+        component: ItemComponent
+    ) => Partial<ItemBehaviour>;
 };
 
 const itemBehaviours: ItemBehaviourMap = {
