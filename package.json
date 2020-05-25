@@ -21,6 +21,7 @@
         "@babel/polyfill": "^7.6.0",
         "@babel/preset-env": "^7.6.2",
         "@babel/register": "^7.6.2",
+        "@rooks/use-boundingclientrect": "^3.6.0",
         "@types/express": "^4.17.1",
         "@types/lodash": "^4.14.150",
         "@types/node": "^12.7.11",

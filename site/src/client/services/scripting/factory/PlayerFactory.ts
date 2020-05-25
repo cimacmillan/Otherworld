@@ -57,8 +57,10 @@ export function createPlayer(serviceLocator: ServiceLocator) {
         collidesEntities: true,
         inventory: {
             items: [
+                { item: GameItems.ITEM_MACATOR_INNARDS, count: 10 },
                 { item: GameItems.ITEM_BLUE_SHELL_FRAGMENT, count: 10 },
-                { item: GameItems.ITEM_BLUE_SHELL_FRAGMENT, count: 10 },
+                { item: GameItems.ITEM_BROWN_SHELL_FRAGMENT, count: 10 },
+                { item: GameItems.ITEM_GREEN_SHELL_FRAGMENT, count: 10 },
                 { item: GameItems.ITEM_BLUE_SHELL_FRAGMENT, count: 10 },
                 { item: GameItems.ITEM_BLUE_SHELL_FRAGMENT, count: 10 },
                 { item: GameItems.ITEM_BLUE_SHELL_FRAGMENT, count: 10 },

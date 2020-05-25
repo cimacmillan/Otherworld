@@ -5,6 +5,7 @@ export enum TextFont {
 }
 
 export enum TextSize {
+    VSMALL = 14,
     SMALL = 20,
     MED = 36,
     BIG = 50,
@@ -13,6 +14,8 @@ export enum TextSize {
 export enum TextColour {
     LIGHT = "#c0cbdc",
     DARK = "#3e2731",
+    RED = "#e43b44",
+    YELLOW = "#feae34",
 }
 
 export interface TextComponentProps {

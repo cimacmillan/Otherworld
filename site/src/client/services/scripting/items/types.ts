@@ -6,11 +6,12 @@ export interface Item {
     tradePrice?: number;
     behaviours: ItemComponent[];
     category: ItemCategory;
+    description: string;
 }
 
 export enum ItemCategory {
-    CONSUMABLE = "CONSUMABLE",
-    CRAFTING = "CRAFTING",
+    CONSUMABLE = "Consumable",
+    CRAFTING = "Crafting",
 }
 
 export interface ItemMetadata {
