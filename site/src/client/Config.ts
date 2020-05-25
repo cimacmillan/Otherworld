@@ -4,7 +4,7 @@ export const MAJOR = "0";
 export const VERSION = `V${MAJOR}.${PHASE}.${MINOR}`;
 
 export const DOM_WIDTH = 1280;
-export const DOM_HEIGHT = 720;
+export const DOM_HEIGHT = 680;
 export const RES_DIV = 4;
 export const WIDTH = DOM_WIDTH / RES_DIV;
 export const HEIGHT = DOM_HEIGHT / RES_DIV;

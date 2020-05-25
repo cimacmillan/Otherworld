@@ -5,6 +5,7 @@ import { UIContainer } from "./ui/UIContainer";
 import { GameEvent } from "./engine/events/Event";
 import { DOM_WIDTH, DOM_HEIGHT, WIDTH, HEIGHT, RES_DIV } from "./Config";
 import { Actions } from "./ui/actions/Actions";
+import { SiteContainer } from "./uisite/SiteContainer";
 
 export interface GameComponentProps {
     game: Game;
@@ -22,16 +23,27 @@ export class GameComponent extends React.Component<GameComponentProps> {
     public render() {
         return (
             <>
-                <UIContainer game={this.props.game} />
-                <CanvasComponent
-                    ref="main_canvas"
-                    id={"main_canvas"}
-                    dom_width={DOM_WIDTH}
-                    dom_height={DOM_HEIGHT}
-                    width={WIDTH}
-                    height={HEIGHT}
-                    resolution={RES_DIV}
-                />
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginTop: 68,
+                    }}
+                >
+                    <div>
+                        <UIContainer game={this.props.game} />
+                        <CanvasComponent
+                            ref="main_canvas"
+                            id={"main_canvas"}
+                            dom_width={DOM_WIDTH}
+                            dom_height={DOM_HEIGHT}
+                            width={WIDTH}
+                            height={HEIGHT}
+                            resolution={RES_DIV}
+                        />
+                    </div>
+                </div>
+                <SiteContainer />
             </>
         );
     }
