@@ -19,7 +19,6 @@ import {
     HealthState,
     InventoryState,
 } from "../../../engine/state/State";
-import { GameItems } from "../../../resources/manifests/Items";
 import { ServiceLocator } from "../../ServiceLocator";
 
 export type PlayerState = BaseState &
@@ -56,20 +55,7 @@ export function createPlayer(serviceLocator: ServiceLocator) {
         collidesWalls: true,
         collidesEntities: true,
         inventory: {
-            items: [
-                { item: GameItems.ITEM_MACATOR_INNARDS, count: 10 },
-                { item: GameItems.ITEM_BLUE_SHELL_FRAGMENT, count: 10 },
-                { item: GameItems.ITEM_BROWN_SHELL_FRAGMENT, count: 10 },
-                { item: GameItems.ITEM_GREEN_SHELL_FRAGMENT, count: 10 },
-                { item: GameItems.ITEM_BLUE_SHELL_FRAGMENT, count: 10 },
-                { item: GameItems.ITEM_BLUE_SHELL_FRAGMENT, count: 10 },
-                { item: GameItems.ITEM_BLUE_SHELL_FRAGMENT, count: 10 },
-                { item: GameItems.ITEM_BLUE_SHELL_FRAGMENT, count: 10 },
-                { item: GameItems.ITEM_BLUE_SHELL_FRAGMENT, count: 10 },
-                { item: GameItems.ITEM_BLUE_SHELL_FRAGMENT, count: 10 },
-                { item: GameItems.ITEM_BLUE_SHELL_FRAGMENT, count: 10 },
-                { item: GameItems.ITEM_BLUE_SHELL_FRAGMENT, count: 10 },
-            ],
+            items: [],
         },
     };
 

@@ -107,6 +107,7 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
         <div
             ref={myRef}
             style={{
+                position: "absolute",
                 width: DOM_WIDTH,
                 height: DOM_HEIGHT,
             }}
