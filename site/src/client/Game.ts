@@ -89,8 +89,8 @@ export class Game {
     private update = () => {
         this.serviceLocator.getScriptingService().update();
         this.serviceLocator.getWorld().performSync();
-        this.serviceLocator.getInputService().update();
         if (this.updateWorld) {
+            this.serviceLocator.getInputService().update();
             this.serviceLocator.getWorld().update();
             this.serviceLocator.getPhysicsService().update();
             this.serviceLocator.getInteractionService().update();

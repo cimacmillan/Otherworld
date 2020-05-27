@@ -5,6 +5,7 @@ import { Game } from "./Game";
 import { dispatch } from "./ui/State";
 import { Actions } from "./ui/actions/Actions";
 import { VERSION } from "./Config";
+import { SiteContainer } from "./SiteContainer";
 
 // For viewing deployed version
 console.log(VERSION);
@@ -13,7 +14,7 @@ const game = new Game();
 
 const render = () => {
     ReactDOM.render(
-        <GameComponent
+        <SiteContainer
             game={game}
             uiListener={(action: Actions) => dispatch.next(action)}
         />,
