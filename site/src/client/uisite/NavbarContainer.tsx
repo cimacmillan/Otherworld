@@ -6,12 +6,13 @@ import {
     TextColour,
 } from "../ui/components/TextComponent";
 import { DOM_WIDTH } from "../Config";
+import { animation, sin } from "../util/animation/Animations";
 
 export enum NavPage {
     GAME = "Game",
     ABOUT = "About",
     GUIDE = "Guide",
-    CHANGELOG = "Changelog",
+    ANNOUNCEMENTS = "Announcements",
 }
 
 interface NavbarContainerProps {
@@ -23,15 +24,11 @@ interface NavbarContainerProps {
 export const NavbarContainer: React.FunctionComponent<NavbarContainerProps> = (
     props
 ) => {
-    const { page, setPage } = props;
-
-    const { setShowGame } = props;
-
+    const { page, setPage, setShowGame } = props;
     const showGame = () => setShowGame(true);
     const hideGame = () => {
         setShowGame(false);
     };
-
     const onSelect = (navPage: NavPage) => {
         setPage(navPage);
         if (navPage === NavPage.GAME) {
@@ -76,7 +73,7 @@ export const NavbarContainer: React.FunctionComponent<NavbarContainerProps> = (
                 onClick={onSelect}
             />
             <NavItem
-                navPage={NavPage.CHANGELOG}
+                navPage={NavPage.ANNOUNCEMENTS}
                 selectedNavPage={page}
                 onClick={onSelect}
             />
@@ -92,13 +89,31 @@ interface NavItemProps {
 
 const NavItem: React.FunctionComponent<NavItemProps> = (props) => {
     const selected = props.navPage === props.selectedNavPage;
+    const [bounce, setBounce] = React.useState(0);
+
+    React.useEffect(() => {
+        if (selected) {
+            animation(setBounce)
+                .tween(sin)
+                .tween((x) => 1 - x)
+                .driven()
+                .speed(100)
+                .start();
+        }
+    }, [selected]);
+
+    const scale = 1 - Math.floor(bounce * 100) / 100;
+
     return (
         <TextComponent
             text={props.navPage}
             size={TextSize.SMALL}
             font={TextFont.REGULAR}
             colour={selected ? TextColour.LIGHT : TextColour.LESS_LIGHT}
-            style={{}}
+            style={{
+                transformOrigin: "center",
+                transform: `scale(${scale})`,
+            }}
             clickable={() => props.onClick(props.navPage)}
         />
     );

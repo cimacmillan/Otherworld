@@ -3,7 +3,7 @@ import ReactMarkdown = require("react-markdown");
 import { NavbarContainer, NavPage } from "./NavbarContainer";
 import { PageAbout } from "./PageAbout";
 import { PageGuide } from "./PageGuide";
-import { PageChangelog } from "./PageChangelog";
+import { PageAnnouncements } from "./PageAnnouncements";
 
 export interface WebContentContainerProps {
     setShowGame: (showGame: boolean) => void;
@@ -56,7 +56,7 @@ const PageContentSwitch = (page: NavPage) => {
             return <PageAbout />;
         case NavPage.GUIDE:
             return <PageGuide />;
-        case NavPage.CHANGELOG:
-            return <PageChangelog />;
+        case NavPage.ANNOUNCEMENTS:
+            return <PageAnnouncements />;
     }
 };

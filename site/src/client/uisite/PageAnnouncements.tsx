@@ -1,6 +1,6 @@
 import React = require("react");
 
-export const PageChangelog: React.FunctionComponent = (props) => {
+export const PageAnnouncements: React.FunctionComponent = (props) => {
     return (
         <div
             style={{
