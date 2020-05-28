@@ -19,6 +19,7 @@ export class Game {
 
     private initialised: boolean = false;
     private updateWorld: boolean = false;
+    private isHidden: boolean = false;
 
     public async init(
         openGL: WebGLRenderingContext,
@@ -86,10 +87,14 @@ export class Game {
         this.updateWorld = updateWorld;
     }
 
+    public setIsHidden(isHidden: boolean) {
+        this.isHidden = isHidden;
+    }
+
     private update = () => {
         this.serviceLocator.getScriptingService().update();
         this.serviceLocator.getWorld().performSync();
-        if (this.updateWorld) {
+        if (this.updateWorld && !this.isHidden) {
             this.serviceLocator.getInputService().update();
             this.serviceLocator.getWorld().update();
             this.serviceLocator.getPhysicsService().update();

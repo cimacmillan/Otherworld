@@ -13,6 +13,7 @@ export enum TextSize {
 
 export enum TextColour {
     LIGHT = "#c0cbdc",
+    LESS_LIGHT = "#5a6988",
     DARK = "#3e2731",
     RED = "#e43b44",
     YELLOW = "#feae34",
@@ -25,6 +26,8 @@ export interface TextComponentProps {
     font: TextFont;
     size: TextSize;
     colour: TextColour;
+
+    clickable?: () => void;
 }
 
 const ignoreFont = ["←", "→"];
@@ -38,6 +41,11 @@ export const TextComponent: React.FunctionComponent<TextComponentProps> = (
         : {
               fontFamily: props.font,
           };
+    const pointer = props.clickable
+        ? {
+              cursor: "pointer",
+          }
+        : {};
 
     return (
         <div
@@ -50,9 +58,10 @@ export const TextComponent: React.FunctionComponent<TextComponentProps> = (
                 WebkitUserSelect: "none",
                 msUserSelect: "none",
                 userSelect: "none",
-
+                ...pointer,
                 ...props.style,
             }}
+            onClick={() => props.clickable && props.clickable()}
         >
             {props.text}
         </div>

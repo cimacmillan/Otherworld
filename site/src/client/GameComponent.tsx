@@ -13,7 +13,9 @@ export interface GameComponentProps {
     shouldShow: boolean;
 }
 
-export const GameComponent: React.FunctionComponent<GameComponentProps> = props => {
+export const GameComponent: React.FunctionComponent<GameComponentProps> = (
+    props
+) => {
     const canvas = React.useRef<CanvasComponent>();
     React.useEffect(() => {
         props.game.init(
@@ -22,8 +24,8 @@ export const GameComponent: React.FunctionComponent<GameComponentProps> = props 
         );
     }, []);
     React.useEffect(() => {
-        props.game.setUpdateWorld(props.shouldShow);
-    }, [props.shouldShow])
+        props.game.setIsHidden(!props.shouldShow);
+    }, [props.shouldShow]);
 
     return (
         <div
@@ -31,17 +33,23 @@ export const GameComponent: React.FunctionComponent<GameComponentProps> = props 
                 display: "flex",
                 justifyContent: "center",
                 marginTop: 68,
+                position: "absolute",
+                width: "100%",
             }}
         >
             <div>
-                { !props.shouldShow && <div style={{
-                        position: "absolute",
-                        width: DOM_WIDTH,
-                        height: DOM_HEIGHT,
-                        backgroundColor: "#000000",
-                        color: "#000000",
-                        zIndex: 1,
-                    }}/>}
+                {!props.shouldShow && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            width: DOM_WIDTH,
+                            height: DOM_HEIGHT,
+                            backgroundColor: "#000000",
+                            color: "#000000",
+                            zIndex: 1,
+                        }}
+                    />
+                )}
                 <UIContainer game={props.game} />
                 <CanvasComponent
                     ref={canvas}
@@ -54,5 +62,5 @@ export const GameComponent: React.FunctionComponent<GameComponentProps> = props 
                 />
             </div>
         </div>
-);
-}
+    );
+};
