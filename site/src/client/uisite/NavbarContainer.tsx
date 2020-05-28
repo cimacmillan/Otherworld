@@ -47,6 +47,8 @@ export const NavbarContainer: React.FunctionComponent<NavbarContainerProps> = (
                 justifyContent: "space-between",
                 alignItems: "center",
                 position: "fixed",
+                height: 68,
+                backgroundColor: "black",
             }}
         >
             <TextComponent
