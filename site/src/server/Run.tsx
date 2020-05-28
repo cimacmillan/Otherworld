@@ -13,7 +13,7 @@ const app = Express();
 
 app.use(Express.static(STATIC_DIRECTORY));
 
-app.get("/home", (req: Express.Request, res: Express.Response) => {
+app.get("/", (req: Express.Request, res: Express.Response) => {
     try {
         res.sendFile(INDEX_DIRECTORY + "home.html", INDEX_DIRECTORY);
     } catch (err) {
@@ -34,7 +34,7 @@ app.use(function (
 });
 
 app.get("*", function (req, res) {
-    res.redirect("/home");
+    res.redirect("/");
 });
 
 const port = 80;
