@@ -69,11 +69,11 @@ export const NavbarContainer: React.FunctionComponent<NavbarContainerProps> = (
                 selectedNavPage={page}
                 onClick={onSelect}
             />
-            <NavItem
+            {/* <NavItem
                 navPage={NavPage.GUIDE}
                 selectedNavPage={page}
                 onClick={onSelect}
-            />
+            /> */}
             <NavItem
                 navPage={NavPage.ANNOUNCEMENTS}
                 selectedNavPage={page}
