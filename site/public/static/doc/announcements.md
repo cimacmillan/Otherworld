@@ -1,7 +1,8 @@
 
-### 31/05/2020 - Changelog
+**31/05/2020 - Changelog**
 
-* Added code prettifying and deep dive page
+* Added deep dive pages on game events and how they're used
+* Added google code prettifying
 
 ```js
 function fib(x: number): number {

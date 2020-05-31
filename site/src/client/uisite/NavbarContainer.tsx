@@ -11,7 +11,7 @@ import { animation, sin } from "../util/animation/Animations";
 export enum NavPage {
     GAME = "Game",
     ABOUT = "About",
-    DEEPDIVE = "Deep Dive",
+    DEEPDIVE = "Deep Dives",
     ANNOUNCEMENTS = "Announcements",
 }
 
