@@ -14,7 +14,7 @@ export interface WebContentContainerProps {
 export const WebContentContainer: React.FunctionComponent<WebContentContainerProps> = (
     props
 ) => {
-    const [page, setPage] = React.useState(NavPage.DEEPDIVE);
+    const [page, setPage] = React.useState(NavPage.GAME);
     const { setShowGame, isGameShowing } = props;
 
     return (
