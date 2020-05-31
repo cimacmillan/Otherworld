@@ -1,5 +1,6 @@
 import React = require("react");
-import ReactMarkdown = require("react-markdown");
+import * as ReactMarkdown from "react-markdown";
+import { AsyncMarkdownRenderers } from "./AsyncMarkdownRenderers";
 
 interface AsyncMarkdownProps extends ReactMarkdown.ReactMarkdownProps {
     url: string;
@@ -19,5 +20,11 @@ export const AsyncMarkdown: React.FunctionComponent<AsyncMarkdownProps> = (
             })
             .catch((e) => setSource(`${e}`));
     }, [props.url]);
-    return <ReactMarkdown {...props} source={source} />;
+    return (
+        <ReactMarkdown
+            {...props}
+            source={source}
+            renderers={AsyncMarkdownRenderers()}
+        />
+    );
 };

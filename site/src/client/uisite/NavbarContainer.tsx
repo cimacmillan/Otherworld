@@ -11,7 +11,7 @@ import { animation, sin } from "../util/animation/Animations";
 export enum NavPage {
     GAME = "Game",
     ABOUT = "About",
-    GUIDE = "Guide",
+    DEEPDIVE = "Deep Dive",
     ANNOUNCEMENTS = "Announcements",
 }
 
@@ -66,6 +66,11 @@ export const NavbarContainer: React.FunctionComponent<NavbarContainerProps> = (
             />
             <NavItem
                 navPage={NavPage.ABOUT}
+                selectedNavPage={page}
+                onClick={onSelect}
+            />
+            <NavItem
+                navPage={NavPage.DEEPDIVE}
                 selectedNavPage={page}
                 onClick={onSelect}
             />

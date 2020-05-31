@@ -27,6 +27,7 @@
         "@types/node": "^12.7.11",
         "@types/react-redux": "^7.1.7",
         "chalk": "^2.4.2",
+        "code-prettify": "^0.1.0",
         "deep-freeze": "0.0.1",
         "express": "^4.17.1",
         "gl-matrix": "^3.2.1",

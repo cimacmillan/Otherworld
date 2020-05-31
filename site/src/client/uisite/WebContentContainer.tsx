@@ -4,25 +4,12 @@ import { NavbarContainer, NavPage } from "./NavbarContainer";
 import { PageAbout } from "./PageAbout";
 import { PageGuide } from "./PageGuide";
 import { PageAnnouncements } from "./PageAnnouncements";
+import { PageDeepDive } from "./PageDeepDive";
 
 export interface WebContentContainerProps {
     setShowGame: (showGame: boolean) => void;
     isGameShowing: boolean;
 }
-
-const example = `\n
-Hello World 
-### title1
-## title title title
-# title 
-* bullet1
-* bullet2
-
-    code
-    (x = 1) * 10
-
-[link](google.com)
-`;
 
 export const WebContentContainer: React.FunctionComponent<WebContentContainerProps> = (
     props
@@ -54,8 +41,8 @@ const PageContentSwitch = (page: NavPage) => {
     switch (page) {
         case NavPage.ABOUT:
             return <PageAbout />;
-        case NavPage.GUIDE:
-            return <PageGuide />;
+        case NavPage.DEEPDIVE:
+            return <PageDeepDive />;
         case NavPage.ANNOUNCEMENTS:
             return <PageAnnouncements />;
     }
