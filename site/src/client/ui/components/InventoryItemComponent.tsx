@@ -18,6 +18,7 @@ interface InventoryItemComponentProps {
     style: React.CSSProperties;
     onMouseEnter: () => void;
     onMouseLeave: () => void;
+    onClick: () => void;
 }
 
 export const InventoryItemComponent: React.FunctionComponent<InventoryItemComponentProps> = (
@@ -69,6 +70,7 @@ export const InventoryItemComponent: React.FunctionComponent<InventoryItemCompon
             }}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
+            onClick={props.onClick}
         >
             <div
                 style={{

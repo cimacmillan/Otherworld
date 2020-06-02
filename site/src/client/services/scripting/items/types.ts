@@ -23,13 +23,18 @@ export interface Inventory {
     items: ItemMetadata[];
 }
 
-export type ItemComponent = ItemHealsPlayer;
+export type ItemComponent = ItemHealsPlayer | MakesNoiseWhenConsumed;
 
 export interface ItemHealsPlayer {
     type: ItemComponentType.HEALS_PLAYER;
     amount: number;
 }
 
+export interface MakesNoiseWhenConsumed {
+    type: ItemComponentType.MAKES_NOISE_WHEN_CONSUMED;
+}
+
 export enum ItemComponentType {
     HEALS_PLAYER = "HEALS_PLAYER",
+    MAKES_NOISE_WHEN_CONSUMED = "MAKES_NOISE_WHEN_CONSUMED",
 }

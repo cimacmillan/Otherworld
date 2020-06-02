@@ -15,6 +15,9 @@ export class PlayerInventoryComponent<T extends PlayerState>
             case PlayerEventType.PLAYER_ITEM_DROP_COLLECTED:
                 this.onPickedUp(entity, event.payload.item);
                 break;
+            case PlayerEventType.PLAYER_ITEM_USED:
+                this.onItemUsed(entity, event.payload.item);
+                break;
         }
     }
 
@@ -26,8 +29,7 @@ export class PlayerInventoryComponent<T extends PlayerState>
             const itemMetadata = inventory.items[x];
             if (
                 itemMetadata.item.id === item.id &&
-                itemMetadata.item.stackable &&
-                item.behaviours
+                itemMetadata.item.stackable
             ) {
                 itemMetadata.count++;
                 countIncreased = true;
@@ -43,5 +45,26 @@ export class PlayerInventoryComponent<T extends PlayerState>
         }
 
         entity.setState({ inventory });
+    }
+
+    private onItemUsed(entity: Entity<PlayerState>, item: Item) {
+        const { inventory } = entity.getState();
+        const items = [...inventory.items];
+
+        for (let x = 0; x < inventory.items.length; x++) {
+            const itemMetadata = items[x];
+            if (itemMetadata.item.id === item.id) {
+                itemMetadata.count--;
+                break;
+            }
+        }
+
+        const newInventory = {
+            items: items.filter((item) => item.count > 0),
+        };
+
+        entity.setState({
+            inventory: newInventory,
+        });
     }
 }

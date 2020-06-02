@@ -82,7 +82,20 @@ export class PlayerControlComponent<T extends PlayerState>
     public onObservedEvent(
         entity: Entity<PlayerState>,
         event: GameEvent
-    ): void {}
+    ): void {
+        switch (event.type) {
+            case PlayerEventType.PLAYER_HEALED:
+                const health = entity.getState().health;
+                const newHealth = Math.min(1, health + event.payload.amount);
+                entity.setState({
+                    health: newHealth,
+                });
+                entity.emitGlobally({
+                    type: PlayerEventType.PLAYER_INFO_CHANGE,
+                });
+                break;
+        }
+    }
 
     public onStateTransition(entity: Entity<T>, from: T, to: T): void {
         entity.emitGlobally({

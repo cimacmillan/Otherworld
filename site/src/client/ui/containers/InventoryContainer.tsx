@@ -50,6 +50,15 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
         x: 0,
         y: 0,
     });
+    const [items, setItems] = React.useState<ItemMetadata[]>([]);
+
+    React.useEffect(() => {
+        const inventoryItems = serviceLocator
+            .getScriptingService()
+            .getPlayer()
+            .getState().inventory.items;
+        setItems(inventoryItems);
+    });
 
     useDispatchListener((action: Actions) => {
         switch (action.type) {
@@ -70,11 +79,7 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
         }
     });
 
-    const inventoryItems = serviceLocator
-        .getScriptingService()
-        .getPlayer()
-        .getState().inventory.items;
-    const itemGrid = chunk(inventoryItems, ITEM_GRID_WIDTH);
+    const itemGrid = chunk(items, ITEM_GRID_WIDTH);
     const inventoryItemLines = itemGrid.map((itemMetadatas: ItemMetadata[]) => (
         <div
             style={{
@@ -94,6 +99,38 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                     onMouseLeave={() =>
                         tooltipItem === metadata && onSetItemTooltip(undefined)
                     }
+                    onClick={() => {
+                        const itemAmount = serviceLocator
+                            .getScriptingService()
+                            .getPlayer()
+                            .getState().inventory.items.length;
+
+                        serviceLocator
+                            .getScriptingService()
+                            .inventoryService.useItemFromInventory(
+                                serviceLocator
+                                    .getScriptingService()
+                                    .getPlayer(),
+                                metadata
+                            );
+
+                        const inventoryItems = serviceLocator
+                            .getScriptingService()
+                            .getPlayer()
+                            .getState().inventory.items;
+
+                        setItems(inventoryItems);
+
+                        if (
+                            serviceLocator
+                                .getScriptingService()
+                                .getPlayer()
+                                .getState().inventory.items.length !==
+                            itemAmount
+                        ) {
+                            onSetItemTooltip(undefined);
+                        }
+                    }}
                 />
             ))}
         </div>

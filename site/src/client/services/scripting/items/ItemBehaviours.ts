@@ -1,11 +1,19 @@
 import { Entity } from "../../../engine/Entity";
-import { BaseState } from "../../../engine/state/State";
+import { BaseState, HealthState } from "../../../engine/state/State";
+import { ServiceLocator } from "../../ServiceLocator";
 import { HealsPlayerBehaviour } from "./behaviours/HealsPlayer";
-import { join } from "./helper";
+import { MakesNoiseWhenConsumedComponent } from "./behaviours/MakesNoiseWhenConsumed";
+import { join, joinOR } from "./helper";
 import { Item, ItemComponent, ItemComponentType } from "./types";
 
 interface ItemBehaviour {
-    onConsume: (entity: Entity<BaseState>) => void;
+    onConsume: (args: ConsumeArgs) => void;
+    canConsume: (args: ConsumeArgs) => boolean;
+}
+
+export interface ConsumeArgs {
+    serviceLocator: ServiceLocator;
+    entity: Entity<HealthState & BaseState>;
 }
 
 export type ItemBehaviourImplementation<T> = (
@@ -20,10 +28,12 @@ type ItemBehaviourMap = {
 
 const itemBehaviours: ItemBehaviourMap = {
     [ItemComponentType.HEALS_PLAYER]: HealsPlayerBehaviour,
+    [ItemComponentType.MAKES_NOISE_WHEN_CONSUMED]: MakesNoiseWhenConsumedComponent,
 };
 
 const defaultBehaviour: ItemBehaviour = {
     onConsume: () => undefined,
+    canConsume: () => false,
 };
 
 function getItemBehaviours(item: Item) {
@@ -34,6 +44,7 @@ function getItemBehaviours(item: Item) {
     return {
         ...defaultBehaviour,
         onConsume: join(behaviours.map((behaviour) => behaviour.onConsume)),
+        canConsume: joinOR(behaviours.map((behaviour) => behaviour.canConsume)),
     };
 }
 

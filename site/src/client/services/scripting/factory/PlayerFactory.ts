@@ -19,6 +19,7 @@ import {
     HealthState,
     InventoryState,
 } from "../../../engine/state/State";
+import { GameItems } from "../../../resources/manifests/Items";
 import { ServiceLocator } from "../../ServiceLocator";
 
 export type PlayerState = BaseState &
@@ -50,12 +51,17 @@ export function createPlayer(serviceLocator: ServiceLocator) {
         friction: 0.8,
         mass: 1,
         elastic: 0,
-        health: 1,
+        health: 0.5,
         exists: false,
         collidesWalls: true,
         collidesEntities: true,
         inventory: {
-            items: [],
+            items: [
+                {
+                    item: GameItems.ITEM_MACATOR_INNARDS,
+                    count: 10,
+                },
+            ],
         },
     };
 

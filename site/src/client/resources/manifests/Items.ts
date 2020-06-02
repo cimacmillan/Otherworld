@@ -47,7 +47,10 @@ const ITEM_MACATOR_INNARDS: Item = {
     behaviours: [
         {
             type: ItemComponentType.HEALS_PLAYER,
-            amount: 1,
+            amount: 0.25,
+        },
+        {
+            type: ItemComponentType.MAKES_NOISE_WHEN_CONSUMED,
         },
     ],
     category: ItemCategory.CONSUMABLE,

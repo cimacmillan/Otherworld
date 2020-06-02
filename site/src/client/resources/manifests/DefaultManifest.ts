@@ -202,5 +202,6 @@ export const defaultManifest: ResourceManifest = {
         [Audios.END]: "audio/end.mp3",
         [Audios.HISS]: "audio/hiss.mp3",
         [Audios.INCOMING]: "audio/incoming.mp3",
+        [Audios.EATING_SOGGY]: "audio/eating_soggy.mp3",
     },
 };

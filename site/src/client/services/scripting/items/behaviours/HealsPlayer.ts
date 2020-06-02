@@ -1,10 +1,20 @@
-import { Entity } from "../../../../engine/Entity";
-import { BaseState } from "../../../../engine/state/State";
-import { ItemBehaviourImplementation } from "../ItemBehaviours";
+import { PlayerEventType } from "../../../../engine/events/PlayerEvents";
+import { ConsumeArgs, ItemBehaviourImplementation } from "../ItemBehaviours";
 import { ItemHealsPlayer } from "../types";
 
 export const HealsPlayerBehaviour: ItemBehaviourImplementation<ItemHealsPlayer> = (
     item: ItemHealsPlayer
 ) => ({
-    onConsume: (entity: Entity<BaseState>) => {},
+    onConsume: (args: ConsumeArgs) => {
+        args.entity.onObservedEvent({
+            type: PlayerEventType.PLAYER_HEALED,
+            payload: {
+                amount: item.amount,
+            },
+        });
+    },
+    canConsume: (args: ConsumeArgs) => {
+        const healthLessThanOne = args.entity.getState().health < 1;
+        return healthLessThanOne;
+    },
 });

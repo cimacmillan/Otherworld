@@ -23,6 +23,20 @@ interface PlayerItemDropCollected {
     };
 }
 
+interface PlayerItemUsed {
+    type: PlayerEventType.PLAYER_ITEM_USED;
+    payload: {
+        item: Item;
+    };
+}
+
+interface PlayerHealed {
+    type: PlayerEventType.PLAYER_HEALED;
+    payload: {
+        amount: number;
+    };
+}
+
 interface PlayerInventoryOpened {
     type: PlayerEventType.PLAYER_INVENTORY_OPENED;
 }
@@ -34,10 +48,12 @@ interface PlayerInventoryClosed {
 export enum PlayerEventType {
     PLAYER_ATTACK = "PLAYER_ATTACK",
     PLAYER_DAMAGED = "PLAYER_DAMAGED",
+    PLAYER_HEALED = "PLAYER_HEALED",
     PLAYER_KILLED = "PLAYER_KILLED",
     PLAYER_INFO_CHANGE = "PLAYER_INFO_CHANGE",
 
     PLAYER_ITEM_DROP_COLLECTED = "PLAYER_ITEM_DROP_COLLECTED",
+    PLAYER_ITEM_USED = "PLAYER_ITEM_USED",
 
     PLAYER_INVENTORY_OPENED = "PLAYER_INVENTORY_OPENED",
     PLAYER_INVENTORY_CLOSED = "PLAYER_INVENTORY_CLOSED",
@@ -47,7 +63,9 @@ export type PlayerEvents =
     | PlayerAttack
     | PlayerDamaged
     | PlayerKilled
+    | PlayerHealed
     | PlayerInfoChange
     | PlayerItemDropCollected
+    | PlayerItemUsed
     | PlayerInventoryOpened
     | PlayerInventoryClosed;

@@ -5,6 +5,13 @@ export function joinAND<T>(
         funcs.reduce((prev, curr) => prev && (curr ? curr(arg) : true), true);
 }
 
+export function joinOR<T>(
+    funcs: Array<((arg: T) => boolean) | undefined>
+): (arg: T) => boolean {
+    return (arg) =>
+        funcs.reduce((prev, curr) => prev || (curr ? curr(arg) : false), false);
+}
+
 export function joinADD<T>(
     funcs: Array<((arg: T) => number) | undefined>
 ): (arg: T) => number {

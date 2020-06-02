@@ -104,6 +104,7 @@ export enum Audios {
     END,
     HISS,
     INCOMING,
+    EATING_SOGGY,
 }
 
 export enum SCENERYSPRITES {
