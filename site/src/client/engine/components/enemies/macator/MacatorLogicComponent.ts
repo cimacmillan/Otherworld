@@ -183,7 +183,7 @@ export class MacatorLogicComponent<T extends MacatorStateType>
                     .emit({
                         type: InteractionEventType.ON_DAMAGED,
                         payload: {
-                            amount: 0.02,
+                            amount: 0.05,
                         },
                     });
             }

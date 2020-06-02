@@ -3,12 +3,16 @@ import {
     ItemCategory,
     ItemComponent,
     ItemComponentType,
+    Item,
 } from "../../services/scripting/items/types";
 import React = require("react");
 import { TextComponent, TextFont, TextColour, TextSize } from "./TextComponent";
 import { Vector2D } from "../../types";
 import { ShadowComponentStyle } from "./ShadowComponent";
 import { animation } from "../../util/animation/Animations";
+import { SpriteImageComponent } from "./SpriteImageComponent";
+import { ServiceLocator } from "../../services/ServiceLocator";
+import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
 
 const TOOLTIP_WIDTH = 256;
 const TOOLTIP_HEIGHT = 128;
@@ -33,6 +37,7 @@ export interface TooltipNullContext {
 export type TooltipContext = TooltipItemContext | TooltipNullContext;
 
 export interface TooltipComponentProps {
+    serviceLocator: ServiceLocator;
     context: TooltipContext;
     position: Vector2D;
 }
@@ -47,6 +52,7 @@ export const TooltipComponent: React.FunctionComponent<TooltipComponentProps> = 
             case TooltipType.ITEM:
                 return (
                     <ItemTooltipComponent
+                        serviceLocator={props.serviceLocator}
                         itemMetadata={props.context.itemMetadata}
                     />
                 );
@@ -67,6 +73,7 @@ export const TooltipComponent: React.FunctionComponent<TooltipComponentProps> = 
 };
 
 interface ItemTooltipComponentProps {
+    serviceLocator: ServiceLocator;
     itemMetadata: ItemMetadata;
 }
 
@@ -133,6 +140,7 @@ export const ItemTooltipComponent: React.FunctionComponent<ItemTooltipComponentP
                     <li>{jsx}</li>
                 ))}
             </ul>
+            { getUsingHintFromItem(props.serviceLocator, props.itemMetadata.item) }
         </div>
     );
 };
@@ -159,12 +167,34 @@ function getDescriptionFromBehaviour(
     return undefined;
 }
 
+function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
+    const [ offset, setOffset ] = React.useState(0);
+    React.useEffect(() => {
+        animation(setOffset).speed(500).looping().driven().start();
+    }, []);
+
+    const diff = 2;
+    let yOffset = offset;
+    yOffset = offset > 0.5 ? diff : -diff;
+
+    switch (item.category) {
+        case ItemCategory.CONSUMABLE: 
+            return row([<SpriteImageComponent
+                serviceLocator={serviceLocator}
+                spriteSheet={SpriteSheets.UI}
+                sprite={UISPRITES.ITEM_FINGER}
+                style={{width: 32, height: 32, transform: `translate(0px, ${yOffset}px)`}}
+            />, text("to consume")]);
+    }
+}
+
 const row = (elements: JSX.Element[]) => {
     return (
         <div
             style={{
                 display: "flex",
                 flexDirection: "row",
+                alignItems: "center"
             }}
         >
             {elements}

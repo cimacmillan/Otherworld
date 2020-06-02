@@ -167,6 +167,12 @@ export const defaultManifest: ResourceManifest = {
                     width: 16,
                     height: 16,
                 },
+                [UISPRITES.ITEM_FINGER]: {
+                    x: 96,
+                    y: 112,
+                    width: 16,
+                    height: 16,
+                },
                 ...DARK_PANEL_SPRITES,
                 ...BUTTON_DEFAULT_SPRITES,
                 ...BUTTON_HOVER_SPRITES,

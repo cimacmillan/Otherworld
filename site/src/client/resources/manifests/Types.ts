@@ -18,6 +18,8 @@ export enum UISPRITES {
     ITEM_PANEL,
     ITEM_PANEL_HOVER,
 
+    ITEM_FINGER,
+
     PANEL_CENTER,
     PANEL_TL,
     PANEL_TM,

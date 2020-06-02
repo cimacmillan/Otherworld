@@ -7,6 +7,8 @@ import { ServiceLocator } from "../ServiceLocator";
 import { createEgg } from "./factory/EnemyFactory";
 import { createPlayer, PlayerState } from "./factory/PlayerFactory";
 import { InventoryService } from "./items/InventoryService";
+import { GameEventSource } from "../EventRouter";
+import { PlayerEventType } from "../../engine/events/PlayerEvents";
 
 /**
  * Service for quick commands that usually take more lines, eg
@@ -75,7 +77,7 @@ export class ScriptingService {
 
         this.resetContent();
         this.game.setUpdateWorld(true);
-    }
+}
 
     private bootstrapContent() {
         const world = this.serviceLocator.getWorld();

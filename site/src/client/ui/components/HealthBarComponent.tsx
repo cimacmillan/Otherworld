@@ -60,7 +60,6 @@ export const HealthBarComponent: React.FunctionComponent<HealthBarComponentProps
                         .getPlayer()
                         .getState().health
                 );
-
                 break;
         }
     });

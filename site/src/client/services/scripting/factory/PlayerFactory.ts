@@ -51,17 +51,12 @@ export function createPlayer(serviceLocator: ServiceLocator) {
         friction: 0.8,
         mass: 1,
         elastic: 0,
-        health: 0.5,
+        health: 1,
         exists: false,
         collidesWalls: true,
         collidesEntities: true,
         inventory: {
-            items: [
-                {
-                    item: GameItems.ITEM_MACATOR_INNARDS,
-                    count: 10,
-                },
-            ],
+            items: [],
         },
     };
 
