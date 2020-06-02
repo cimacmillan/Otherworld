@@ -96,6 +96,12 @@ export class PlayerControlComponent<T extends PlayerState>
                 entity.setState({
                     health: newHealth,
                 });
+                entity.emitGlobally({
+                    type: PlayerEventType.PLAYER_INFO_CHANGE,
+                    payload: {
+                        health: entity.getState().health,
+                    },
+                });
                 break;
         }
     }
