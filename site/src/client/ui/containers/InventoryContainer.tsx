@@ -94,7 +94,7 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                     style={{
                         marginLeft: 10,
                         marginTop: 10,
-                        cursor: "pointer"
+                        cursor: "pointer",
                     }}
                     onMouseEnter={() => onSetItemTooltip(metadata)}
                     onMouseLeave={() =>

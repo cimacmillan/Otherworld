@@ -19,7 +19,6 @@ import {
     HealthState,
     InventoryState,
 } from "../../../engine/state/State";
-import { GameItems } from "../../../resources/manifests/Items";
 import { ServiceLocator } from "../../ServiceLocator";
 
 export type PlayerState = BaseState &

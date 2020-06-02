@@ -140,7 +140,10 @@ export const ItemTooltipComponent: React.FunctionComponent<ItemTooltipComponentP
                     <li>{jsx}</li>
                 ))}
             </ul>
-            { getUsingHintFromItem(props.serviceLocator, props.itemMetadata.item) }
+            {getUsingHintFromItem(
+                props.serviceLocator,
+                props.itemMetadata.item
+            )}
         </div>
     );
 };
@@ -168,7 +171,7 @@ function getDescriptionFromBehaviour(
 }
 
 function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
-    const [ offset, setOffset ] = React.useState(0);
+    const [offset, setOffset] = React.useState(0);
     React.useEffect(() => {
         animation(setOffset).speed(500).looping().driven().start();
     }, []);
@@ -178,13 +181,20 @@ function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
     yOffset = offset > 0.5 ? diff : -diff;
 
     switch (item.category) {
-        case ItemCategory.CONSUMABLE: 
-            return row([<SpriteImageComponent
-                serviceLocator={serviceLocator}
-                spriteSheet={SpriteSheets.UI}
-                sprite={UISPRITES.ITEM_FINGER}
-                style={{width: 32, height: 32, transform: `translate(0px, ${yOffset}px)`}}
-            />, text("to consume")]);
+        case ItemCategory.CONSUMABLE:
+            return row([
+                <SpriteImageComponent
+                    serviceLocator={serviceLocator}
+                    spriteSheet={SpriteSheets.UI}
+                    sprite={UISPRITES.ITEM_FINGER}
+                    style={{
+                        width: 32,
+                        height: 32,
+                        transform: `translate(0px, ${yOffset}px)`,
+                    }}
+                />,
+                text("to consume"),
+            ]);
     }
 }
 
@@ -194,7 +204,7 @@ const row = (elements: JSX.Element[]) => {
             style={{
                 display: "flex",
                 flexDirection: "row",
-                alignItems: "center"
+                alignItems: "center",
             }}
         >
             {elements}

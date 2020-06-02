@@ -1,4 +1,9 @@
 
+**02/06/2020 - Changelog**
+
+* Added ability to use consumables from inventory
+* Macator innards now heal player
+
 **31/05/2020 - Changelog**
 
 * Added deep dive pages on game events and how they're used
