@@ -6,10 +6,12 @@ import {
 } from "../actions/GameStartActions";
 
 export interface HealthBarState {
+    health: number;
     showing: boolean;
 }
 
 const initialHealthState = {
+    health: 1,
     showing: true,
 };
 
@@ -29,6 +31,11 @@ export function healthBarReducer(
             return {
                 ...state,
                 showing: false,
+            };
+        case PlayerEventType.PLAYER_INFO_CHANGE:
+            return {
+                ...state,
+                health: action.payload.health,
             };
     }
     return state;

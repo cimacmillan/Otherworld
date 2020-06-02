@@ -42,6 +42,12 @@ export class PlayerControlComponent<T extends PlayerState>
             .speed(400)
             .looping()
             .start();
+        entity.emitGlobally({
+            type: PlayerEventType.PLAYER_INFO_CHANGE,
+            payload: {
+                health: entity.getState().health,
+            },
+        });
     }
 
     public update(entity: Entity<PlayerState>): void {
@@ -90,16 +96,20 @@ export class PlayerControlComponent<T extends PlayerState>
                 entity.setState({
                     health: newHealth,
                 });
-                entity.emitGlobally({
-                    type: PlayerEventType.PLAYER_INFO_CHANGE,
-                });
                 break;
         }
     }
 
-    public onStateTransition(entity: Entity<T>, from: T, to: T): void {
+    public onStateTransition(
+        entity: Entity<PlayerState>,
+        from: PlayerState,
+        to: PlayerState
+    ): void {
         entity.emitGlobally({
             type: PlayerEventType.PLAYER_INFO_CHANGE,
+            payload: {
+                health: to.health,
+            },
         });
     }
 

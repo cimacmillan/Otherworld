@@ -14,6 +14,9 @@ interface PlayerKilled {
 
 interface PlayerInfoChange {
     type: PlayerEventType.PLAYER_INFO_CHANGE;
+    payload: {
+        health: number;
+    };
 }
 
 interface PlayerItemDropCollected {
