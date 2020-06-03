@@ -10,7 +10,7 @@ import {
     TextSize,
     TextFont,
 } from "../components/TextComponent";
-import { useDispatchListener } from "../effects/GlobalState";
+import { useDispatchListener, useGlobalState } from "../effects/GlobalState";
 import { Actions } from "../actions/Actions";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { GamePanelComponent } from "../components/GamePanelComponent";
@@ -51,6 +51,7 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
         y: 0,
     });
     const [items, setItems] = React.useState<ItemMetadata[]>([]);
+    const [state, dispatch] = useGlobalState();
 
     React.useEffect(() => {
         const inventoryItems = serviceLocator
@@ -60,24 +61,21 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
         setItems(inventoryItems);
     });
 
-    useDispatchListener((action: Actions) => {
-        switch (action.type) {
-            case PlayerEventType.PLAYER_INVENTORY_OPENED:
-                setInventoryShowing(true);
-                animation(setFade).speed(FADE_IN).driven().start();
-                break;
-            case PlayerEventType.PLAYER_INVENTORY_CLOSED:
-                animation((x) => setFade(1 - x))
-                    .speed(FADE_IN)
-                    .driven()
-                    .start()
-                    .whenDone(() => {
-                        setInventoryShowing(false);
-                        setTooltipItem(undefined);
-                    });
-                break;
+    React.useEffect(() => {
+        if (state.inventory.showing) {
+            setInventoryShowing(true);
+            animation(setFade).speed(FADE_IN).driven().start();
+        } else {
+            animation((x) => setFade(1 - x))
+                .speed(FADE_IN)
+                .driven()
+                .start()
+                .whenDone(() => {
+                    setInventoryShowing(false);
+                    setTooltipItem(undefined);
+                });
         }
-    });
+    }, [state.inventory.showing]);
 
     const itemGrid = chunk(items, ITEM_GRID_WIDTH);
     const inventoryItemLines = itemGrid.map((itemMetadatas: ItemMetadata[]) => (

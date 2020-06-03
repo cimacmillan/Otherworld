@@ -1,32 +1,30 @@
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { Actions } from "../actions/Actions";
-import {
-    GameStartActionType,
-} from "../actions/GameStartActions";
 
-export interface WeaponState {
+export interface InventoryUIState {
     showing: boolean;
 }
 
-const initialWeaponState = {
+const initialInventoryState = {
     showing: false,
 };
 
-export function weaponReducer(
-    state: WeaponState = initialWeaponState,
+export const inventoryReducer = (
+    state: InventoryUIState = initialInventoryState,
     action: Actions
-) {
+) => {
     switch (action.type) {
-        case GameStartActionType.START_GAME:
+        case PlayerEventType.PLAYER_INVENTORY_OPENED:
             return {
                 ...state,
                 showing: true,
             };
-        case PlayerEventType.PLAYER_KILLED:
+        case PlayerEventType.PLAYER_INVENTORY_CLOSED:
             return {
                 ...state,
                 showing: false,
             };
     }
+
     return state;
-}
+};

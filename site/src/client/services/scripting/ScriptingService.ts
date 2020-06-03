@@ -15,6 +15,7 @@ import { InventoryService } from "./items/InventoryService";
  */
 export class ScriptingService {
     public inventoryService: InventoryService;
+
     private game: Game;
     private serviceLocator: ServiceLocator;
 

@@ -2,6 +2,10 @@ import { BehaviorSubject, Subject } from "rxjs";
 import { Actions } from "./actions/Actions";
 import { gameStartReducer, GameStartState } from "./reducers/GameStartReducer";
 import { healthBarReducer, HealthBarState } from "./reducers/HealthBarReducer";
+import {
+    inventoryReducer,
+    InventoryUIState,
+} from "./reducers/InventoryReducer";
 import { uiReducer, UIState } from "./reducers/UIReducer";
 import { weaponReducer, WeaponState } from "./reducers/WeaponReducer";
 import { Sagas } from "./saga/Saga";
@@ -11,6 +15,7 @@ export interface State {
     weaponState: WeaponState;
     healthState: HealthBarState;
     gameStart: GameStartState;
+    inventory: InventoryUIState;
 }
 
 export const reducers: { [key: string]: (...args: any[]) => any } = {
@@ -18,6 +23,7 @@ export const reducers: { [key: string]: (...args: any[]) => any } = {
     weaponState: weaponReducer,
     healthState: healthBarReducer,
     gameStart: gameStartReducer,
+    inventory: inventoryReducer,
 };
 
 export const farmState = (currentState: State | undefined, action: Actions) => {

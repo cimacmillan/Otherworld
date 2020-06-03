@@ -1,7 +1,6 @@
 import { EnemyEventType } from "../../engine/events/EnemyEvents";
-import { GameEvent } from "../../engine/events/Event";
+import { Actions } from "../actions/Actions";
 import {
-    GameStartActions,
     GameStartActionType,
 } from "../actions/GameStartActions";
 
@@ -20,11 +19,9 @@ const initialGameStartState = {
     gameLoadPercentage: 0,
 };
 
-type GameStartEvents = GameEvent | GameStartActions;
-
 export function gameStartReducer(
     state: GameStartState = initialGameStartState,
-    action: GameStartEvents
+    action: Actions
 ): GameStartState {
     switch (action.type) {
         case GameStartActionType.START_GAME:

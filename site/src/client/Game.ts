@@ -8,6 +8,7 @@ import { InputService } from "./services/input/InputService";
 import { InteractionService } from "./services/interaction/InteractionService";
 import { PhysicsService } from "./services/physics/PhysicsService";
 import { RenderService, ScreenBuffer } from "./services/render";
+import { ProcedureService } from "./services/scripting/ProcedureService";
 import { ScriptingService } from "./services/scripting/ScriptingService";
 import { ServiceLocator } from "./services/ServiceLocator";
 import { Actions } from "./ui/actions/Actions";
@@ -47,6 +48,8 @@ export class Game {
 
         const interactionService = new InteractionService();
 
+        const procedureService = new ProcedureService();
+
         this.serviceLocator = new ServiceLocator(
             this,
             resourceManager,
@@ -57,7 +60,8 @@ export class Game {
             scriptingService,
             inputService,
             new PhysicsService(),
-            interactionService
+            interactionService,
+            procedureService
         );
 
         this.serviceLocator.getInputService().init(this.serviceLocator);
@@ -65,6 +69,7 @@ export class Game {
         this.serviceLocator.getWorld().init();
 
         this.serviceLocator.getScriptingService().init(this.serviceLocator);
+        this.serviceLocator.getProcedureService().init(this.serviceLocator);
 
         const loop = new TimeControlledLoop(TARGET_MILLIS, this.mainLoop);
         this.initialised = true;

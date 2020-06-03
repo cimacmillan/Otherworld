@@ -1,7 +1,6 @@
-import { GameEvent } from "../../engine/events/Event";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
+import { Actions } from "../actions/Actions";
 import {
-    GameStartActions,
     GameStartActionType,
 } from "../actions/GameStartActions";
 
@@ -15,11 +14,9 @@ const initialHealthState = {
     showing: true,
 };
 
-type HealthBarEvents = GameEvent | GameStartActions;
-
 export function healthBarReducer(
     state: HealthBarState = initialHealthState,
-    action: HealthBarEvents
+    action: Actions
 ) {
     switch (action.type) {
         case GameStartActionType.START_GAME:
