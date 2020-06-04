@@ -1,24 +1,131 @@
 import { ServiceLocator } from "../ServiceLocator";
+import { TARGET_MILLIS } from "../../Config";
+import { SyncedArray } from "../../util/array/SyncedArray";
+import { ConsistentArray } from "../../util/array/ConsistentArray";
 
 type Callback = () => void;
+
 export type ProcedureID = number;
 
-export class ProcedureService {
-    private serviceLocator: ServiceLocator;
+interface ProcedureTimeoutReference {
+    id: number;
+    callback: Callback;
+    startTime: number;
+    endTime: number;
+    length: number;
+    gameTime: boolean;
+}
 
-    public constructor() {}
+class ProcedureServiceImpl {
+    private static id = 0;
 
-    public init(serviceLocator: ServiceLocator) {
-        this.serviceLocator = serviceLocator;
+    private realtime: number;
+    private gametime: number;
+
+    private timeoutArray: ConsistentArray<ProcedureTimeoutReference>;
+    private intervalArray: ConsistentArray<ProcedureTimeoutReference>;
+
+    public constructor() {
+        this.timeoutArray = new ConsistentArray();
+        this.intervalArray = new ConsistentArray();
     }
 
-    public update() {}
+    public init() {
+        this.realtime = Date.now();
+        this.gametime = Date.now();
+    }
+
+    public gameUpdate() {
+        this.gametime += TARGET_MILLIS;
+    }
+
+    public update() {
+        this.realtime += TARGET_MILLIS;
+
+        this.checkTimers();
+
+        this.timeoutArray.sync();
+        this.intervalArray.sync();
+    }
+
+    private checkTimers() {
+        for (let timeout of this.timeoutArray.getArray()) {
+            const shouldRemove = this.shouldRemoveTimer(timeout);
+            if (shouldRemove) {
+                timeout.callback();
+                this.timeoutArray.remove(timeout);
+            }
+        }
+
+        for (let interval of this.intervalArray.getArray()) {
+            const shouldRemove = this.shouldRemoveTimer(interval);
+            if (shouldRemove) {
+                interval.callback();
+                interval.startTime = interval.gameTime ? this.gametime : this.realtime;
+                interval.endTime = interval.startTime + interval.length;
+            }
+        }
+    }
+
+    private shouldRemoveTimer(reference: ProcedureTimeoutReference) {
+        const { endTime, gameTime } = reference;
+        
+        if (gameTime) {
+            return this.gametime >= endTime;
+        } else {
+            return this.realtime >= endTime;
+        }
+    }
 
     public setTimeout(callback: Callback, time: number): ProcedureID {
-        return 0;
+        this.timeoutArray.add(this.constructTimeoutReference(callback, time, false));
+        ProcedureServiceImpl.id++;
+        return ProcedureServiceImpl.id - 1;
+    }
+
+    public setInterval(callback: Callback, time: number): ProcedureID {
+        this.intervalArray.add(this.constructTimeoutReference(callback, time, false));
+        ProcedureServiceImpl.id++;
+        return ProcedureServiceImpl.id - 1;
     }
 
     public setGameTimeout(callback: Callback, time: number): ProcedureID {
-        return 0;
+        this.timeoutArray.add(this.constructTimeoutReference(callback, time, true));
+        ProcedureServiceImpl.id++;
+        return ProcedureServiceImpl.id - 1;
+    }
+
+    public setGameInterval(callback: Callback, time: number): ProcedureID {
+        this.intervalArray.add(this.constructTimeoutReference(callback, time, false));
+        ProcedureServiceImpl.id++;
+        return ProcedureServiceImpl.id - 1;
+    }
+
+    public clearTimeout(id: ProcedureID) {
+        const toRemove = this.timeoutArray.getArray().find(ref => ref.id === id);
+        if (toRemove) {
+            this.timeoutArray.remove(toRemove);
+        }
+    }
+
+    public clearInterval(id: ProcedureID) {
+        const toRemove = this.intervalArray.getArray().find(ref => ref.id === id);
+        if (toRemove) {
+            this.intervalArray.remove(toRemove);
+        }
+    }
+
+    private constructTimeoutReference(callback: Callback, time: number, game: boolean): ProcedureTimeoutReference {
+        return {
+            id: ProcedureServiceImpl.id,
+            callback,
+            startTime: game ? this.gametime : this.realtime,
+            endTime: (game ? this.gametime : this.realtime) + time,
+            length: time,
+            gameTime: game
+        }
     }
 }
+
+
+export const ProcedureService = new ProcedureServiceImpl();

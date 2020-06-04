@@ -12,6 +12,7 @@ import { EggLogicState, EggState } from "../../state/Macator";
 import { BaseState, LogicState } from "../../state/State";
 import { PhysicsStateType } from "../physics/PhysicsComponent";
 import { SpriteStateType } from "../rendering/SpriteRenderComponent";
+import { ProcedureService } from "../../../services/scripting/ProcedureService";
 
 export type EggStateType = BaseState &
     SpriteStateType &
@@ -61,7 +62,7 @@ export class EggLogicComponent<T extends EggStateType>
             .looping()
             .whenDone(() => this.hatch(entity));
 
-        setTimeout(() => {
+        ProcedureService.setGameTimeout(() => {
             this.hatchingAnimation.withOffset(
                 idleAnimation.getCurrentPosition()
             );

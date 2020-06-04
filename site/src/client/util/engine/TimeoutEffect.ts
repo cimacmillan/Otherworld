@@ -1,19 +1,21 @@
 export function timeoutEffect(
+    timeoutFunction: (callback: () => void, time: number) => number,
+    clearTimeoutFunction: (id: number) => void,
     callback: () => void,
     time: number,
     onQuit?: () => void
 ) {
-    let timeout: NodeJS.Timeout;
+    let timeout: number;
     let done: boolean = false;
     return {
         onEnter: () => {
-            timeout = setTimeout(() => {
+            timeout = timeoutFunction(() => {
                 done = true;
                 callback();
             }, time);
         },
         onLeave: () => {
-            clearTimeout(timeout);
+            clearTimeoutFunction(timeout);
             if (done === false) {
                 onQuit && onQuit();
             }

@@ -48,8 +48,6 @@ export class Game {
 
         const interactionService = new InteractionService();
 
-        const procedureService = new ProcedureService();
-
         this.serviceLocator = new ServiceLocator(
             this,
             resourceManager,
@@ -60,8 +58,7 @@ export class Game {
             scriptingService,
             inputService,
             new PhysicsService(),
-            interactionService,
-            procedureService
+            interactionService
         );
 
         this.serviceLocator.getInputService().init(this.serviceLocator);
@@ -69,7 +66,6 @@ export class Game {
         this.serviceLocator.getWorld().init();
 
         this.serviceLocator.getScriptingService().init(this.serviceLocator);
-        this.serviceLocator.getProcedureService().init(this.serviceLocator);
 
         const loop = new TimeControlledLoop(TARGET_MILLIS, this.mainLoop);
         this.initialised = true;
@@ -99,11 +95,13 @@ export class Game {
     private update = () => {
         this.serviceLocator.getScriptingService().update();
         this.serviceLocator.getWorld().performSync();
+        ProcedureService.update();
         if (this.updateWorld && !this.isHidden) {
             this.serviceLocator.getInputService().update();
             this.serviceLocator.getWorld().update();
             this.serviceLocator.getPhysicsService().update();
             this.serviceLocator.getInteractionService().update();
+            ProcedureService.gameUpdate();
         }
     };
 

@@ -21,8 +21,7 @@ export class ServiceLocator {
         private scriptingService: ScriptingService,
         private inputService: InputService,
         private physicsService: PhysicsService,
-        private interactionService: InteractionService,
-        private procedureService: ProcedureService
+        private interactionService: InteractionService
     ) {}
 
     public getGame() {
@@ -63,9 +62,5 @@ export class ServiceLocator {
 
     public getInteractionService() {
         return this.interactionService;
-    }
-
-    public getProcedureService() {
-        return this.procedureService;
     }
 }

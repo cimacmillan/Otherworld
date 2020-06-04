@@ -9,6 +9,7 @@ import { ServiceLocator } from "../../services/ServiceLocator";
 import { SpriteSheets, Sprites } from "../../resources/manifests/Types";
 import { animation } from "../../util/animation/Animations";
 import { GameAnimation } from "../../util/animation/GameAnimation";
+import { ProcedureService } from "../../services/scripting/ProcedureService";
 
 const Y_FADE = 32;
 const DING = 200;
@@ -55,11 +56,11 @@ export const ItemCollectionComponent: React.FunctionComponent<ItemCollectionComp
         if (amount > 1) {
             dingAnimation.start();
         }
-        const timeout = setTimeout(() => fadeOutAnimation.start(), PERSISTANCE);
+        const timeout = ProcedureService.setTimeout(() => fadeOutAnimation.start(), PERSISTANCE);
         return () => {
             setNumberDing(0);
             dingAnimation.stop();
-            clearTimeout(timeout);
+            ProcedureService.clearTimeout(timeout);
         };
     }, [amount, fadeOutAnimation]);
 

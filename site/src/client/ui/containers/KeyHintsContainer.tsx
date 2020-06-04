@@ -4,6 +4,7 @@ import { KeyHintComponent } from "../components/KeyHintComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { ViewportComponent } from "../components/ViewportComponent";
 import { ShadowComponentStyle } from "../components/ShadowComponent";
+import { ProcedureService } from "../../services/scripting/ProcedureService";
 
 export interface KeyHintsContainerProps {
     serviceLocator: ServiceLocator;
@@ -88,6 +89,7 @@ const clickSpeed = 500;
 export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> = (
     props
 ) => {
+    const { serviceLocator } = props;
     const [keyHints, setKeyHints] = React.useState([] as KeyHint[]);
     const [keyStage, setKeyStage] = React.useState(0);
     const [keyDown, setKeyDown] = React.useState(false);
@@ -120,8 +122,8 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
     };
 
     React.useEffect(() => {
-        const timeout = setTimeout(() => setKeyDown(!keyDown), clickSpeed);
-        return () => clearTimeout(timeout);
+        const timeout = ProcedureService.setTimeout(() => setKeyDown(!keyDown), clickSpeed);
+        return () => ProcedureService.clearTimeout(timeout);
     }, [keyDown]);
 
     React.useEffect(() => {

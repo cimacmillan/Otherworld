@@ -1,11 +1,11 @@
 import { ANIMATION_RESOLUTION } from "./GameAnimation";
+import { ProcedureService } from "../../services/scripting/ProcedureService";
 
 export class IntervalDriver {
-    private intervalId?: NodeJS.Timeout;
-
+    private intervalId?: number;
     public drive(callback: () => void) {
         this.maybeStopTimer();
-        this.intervalId = setInterval(callback, ANIMATION_RESOLUTION);
+        this.intervalId = ProcedureService.setInterval(callback, ANIMATION_RESOLUTION);
         return this;
     }
 
@@ -15,7 +15,7 @@ export class IntervalDriver {
 
     private maybeStopTimer() {
         if (this.intervalId) {
-            clearInterval(this.intervalId);
+            ProcedureService.clearInterval(this.intervalId);
         }
         this.intervalId = undefined;
     }
