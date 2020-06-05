@@ -25,7 +25,7 @@ export const ScoreContainer: React.FunctionComponent = (props) => {
             .tween((x) => x * 2)
             .tween(sin)
             .speed(300)
-            .driven();
+            .driven(false);
     }, []);
 
     useDispatchListener((action: Actions) => {

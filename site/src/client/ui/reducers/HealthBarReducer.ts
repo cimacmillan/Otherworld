@@ -1,8 +1,6 @@
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { Actions } from "../actions/Actions";
-import {
-    GameStartActionType,
-} from "../actions/GameStartActions";
+import { GameStartActionType } from "../actions/GameStartActions";
 
 export interface HealthBarState {
     health: number;

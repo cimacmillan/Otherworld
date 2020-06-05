@@ -64,11 +64,11 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
     React.useEffect(() => {
         if (state.inventory.showing) {
             setInventoryShowing(true);
-            animation(setFade).speed(FADE_IN).driven().start();
+            animation(setFade).speed(FADE_IN).driven(false).start();
         } else {
             animation((x) => setFade(1 - x))
                 .speed(FADE_IN)
-                .driven()
+                .driven(false)
                 .start()
                 .whenDone(() => {
                     setInventoryShowing(false);

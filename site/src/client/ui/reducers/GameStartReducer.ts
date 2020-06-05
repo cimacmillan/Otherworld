@@ -1,8 +1,6 @@
 import { EnemyEventType } from "../../engine/events/EnemyEvents";
 import { Actions } from "../actions/Actions";
-import {
-    GameStartActionType,
-} from "../actions/GameStartActions";
+import { GameStartActionType } from "../actions/GameStartActions";
 
 export interface GameStartState {
     showingMenu: boolean;

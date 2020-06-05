@@ -1,5 +1,6 @@
 import { Animations, SpriteSheets } from "../../../resources/manifests/Types";
 import { createMacator } from "../../../services/scripting/factory/EnemyFactory";
+import { ProcedureService } from "../../../services/scripting/ProcedureService";
 import { animation, sin } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
 import { effectFromAnimation } from "../../../util/engine/AnimationEffect";
@@ -12,7 +13,6 @@ import { EggLogicState, EggState } from "../../state/Macator";
 import { BaseState, LogicState } from "../../state/State";
 import { PhysicsStateType } from "../physics/PhysicsComponent";
 import { SpriteStateType } from "../rendering/SpriteRenderComponent";
-import { ProcedureService } from "../../../services/scripting/ProcedureService";
 
 export type EggStateType = BaseState &
     SpriteStateType &

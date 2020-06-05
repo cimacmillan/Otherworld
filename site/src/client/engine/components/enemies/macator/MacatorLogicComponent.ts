@@ -28,7 +28,6 @@ import {
 import { InteractionStateType } from "../../InteractionComponent";
 import { PhysicsStateType } from "../../physics/PhysicsComponent";
 import { SpriteStateType } from "../../rendering/SpriteRenderComponent";
-import { ProcedureService } from "../../../../services/scripting/ProcedureService";
 
 export type MacatorStateType = BaseState &
     SpriteStateType &
@@ -60,8 +59,6 @@ export class MacatorLogicComponent<T extends MacatorStateType>
                     this.damagesPlayer(entity),
                     this.moveTowardsPlayer(entity, ATTACK_SPEED),
                     timeoutEffect(
-                        ProcedureService.setTimeout,
-                        ProcedureService.clearTimeout,
                         () =>
                             entity.setState({
                                 macatorState: MacatorState.WALKING,
@@ -71,10 +68,7 @@ export class MacatorLogicComponent<T extends MacatorStateType>
                 ),
                 [MacatorState.DAMAGED]: joinEffect(
                     this.damagedEffect(entity),
-                    timeoutEffect(
-                        ProcedureService.setTimeout,
-                        ProcedureService.clearTimeout,
-                        () => {
+                    timeoutEffect(() => {
                         entity.setState({
                             macatorState:
                                 entity.getState().health > 0

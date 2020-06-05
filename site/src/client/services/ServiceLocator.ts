@@ -7,7 +7,6 @@ import { InputService } from "./input/InputService";
 import { InteractionService } from "./interaction/InteractionService";
 import { PhysicsService } from "./physics/PhysicsService";
 import { RenderService } from "./render";
-import { ProcedureService } from "./scripting/ProcedureService";
 import { ScriptingService } from "./scripting/ScriptingService";
 
 export class ServiceLocator {

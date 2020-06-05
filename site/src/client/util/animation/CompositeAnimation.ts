@@ -26,8 +26,8 @@ export class CompositeAnimation {
         this.type = params.type;
     }
 
-    public driven(): CompositeAnimation {
-        this.driver = new IntervalDriver();
+    public driven(gameTime: boolean): CompositeAnimation {
+        this.driver = new IntervalDriver(gameTime);
         return this;
     }
 

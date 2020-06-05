@@ -1,6 +1,6 @@
+import { ProcedureService } from "../../services/scripting/ProcedureService";
+
 export function timeoutEffect(
-    timeoutFunction: (callback: () => void, time: number) => number,
-    clearTimeoutFunction: (id: number) => void,
     callback: () => void,
     time: number,
     onQuit?: () => void
@@ -9,13 +9,13 @@ export function timeoutEffect(
     let done: boolean = false;
     return {
         onEnter: () => {
-            timeout = timeoutFunction(() => {
+            timeout = ProcedureService.setGameTimeout(() => {
                 done = true;
                 callback();
             }, time);
         },
         onLeave: () => {
-            clearTimeoutFunction(timeout);
+            ProcedureService.clearTimeout(timeout);
             if (done === false) {
                 onQuit && onQuit();
             }

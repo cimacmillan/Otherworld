@@ -30,7 +30,7 @@ export const FadeComponent: React.FunctionComponent<FadeComponentProps> = (
         const fade = animation(setOpacity)
             .speed(props.shouldShow ? props.fadeInSpeed : props.fadeOutSpeed)
             .tween(interpolate(opacity, props.shouldShow ? 1 : 0))
-            .driven()
+            .driven(false)
             .start();
 
         return () => {

@@ -49,7 +49,7 @@ export const WeaponComponent: React.FunctionComponent<WeaponComponentProps> = (
             animation((x: number) => setPosY(POS_Y + 1 / 4 - x / 4)).speed(100),
             animation((x: number) => setRotate((1 - x) * 180)).speed(100)
         );
-        composite = sequence(swingDown, swingUp).driven();
+        composite = sequence(swingDown, swingUp).driven(false);
 
         headBob = animation((x: number) => {
             const velocity = props.serviceLocator
@@ -59,7 +59,7 @@ export const WeaponComponent: React.FunctionComponent<WeaponComponentProps> = (
             const speed = vec.vec_distance(velocity);
             setPosY(POS_Y + Math.sin(x * Math.PI * 2) * speed);
         })
-            .driven()
+            .driven(true)
             .speed(400)
             .looping()
             .start();

@@ -25,8 +25,8 @@ export class GameAnimation {
         return this;
     }
 
-    public driven(): GameAnimation {
-        this.driver = new IntervalDriver();
+    public driven(gameTime: boolean): GameAnimation {
+        this.driver = new IntervalDriver(gameTime);
         return this;
     }
 

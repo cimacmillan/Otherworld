@@ -38,11 +38,11 @@ export const ItemCollectionComponent: React.FunctionComponent<ItemCollectionComp
     );
 
     React.useEffect(() => {
-        const anim = animation(setFade).speed(FADE_IN).driven().start();
+        const anim = animation(setFade).speed(FADE_IN).driven(false).start();
         setFadeOutAnimation(
             animation((x) => setFade(1 - x))
                 .speed(FADE_OUT)
-                .driven()
+                .driven(false)
                 .whenDone(props.onRemove)
         );
         return () => anim.stop();
@@ -52,11 +52,14 @@ export const ItemCollectionComponent: React.FunctionComponent<ItemCollectionComp
         const dingAnimation = animation((x) => setNumberDing(1 - x))
             .speed(DING)
             .whenDone(() => setNumberDing(0))
-            .driven();
+            .driven(false);
         if (amount > 1) {
             dingAnimation.start();
         }
-        const timeout = ProcedureService.setTimeout(() => fadeOutAnimation.start(), PERSISTANCE);
+        const timeout = ProcedureService.setTimeout(
+            () => fadeOutAnimation && fadeOutAnimation.start(),
+            PERSISTANCE
+        );
         return () => {
             setNumberDing(0);
             dingAnimation.stop();

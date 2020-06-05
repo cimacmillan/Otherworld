@@ -36,7 +36,7 @@ export const KeyHintComponent: React.FunctionComponent<KeyHintComponent> = (
                 .tween(sin)
                 .speed(fadeSpeed)
                 .whenDone(props.onFadeComplete)
-                .driven()
+                .driven(false)
         );
     }, []);
 
@@ -44,7 +44,7 @@ export const KeyHintComponent: React.FunctionComponent<KeyHintComponent> = (
         const fadeIn = animation((x: number) => setFadeOffset(1 - x))
             .tween(sin)
             .speed(fadeSpeed)
-            .driven()
+            .driven(false)
             .start();
         setFadeInAnimation(fadeIn);
     }, []);

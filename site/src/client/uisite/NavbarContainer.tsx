@@ -103,7 +103,7 @@ const NavItem: React.FunctionComponent<NavItemProps> = (props) => {
             animation(setBounce)
                 .tween(sin)
                 .tween((x) => 1 - x)
-                .driven()
+                .driven(false)
                 .speed(100)
                 .start();
         }

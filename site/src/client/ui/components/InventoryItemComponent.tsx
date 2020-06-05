@@ -39,7 +39,7 @@ export const InventoryItemComponent: React.FunctionComponent<InventoryItemCompon
             sizeAnimation.stop();
         }
         const anim = animation(setSize)
-            .driven()
+            .driven(false)
             .speed(INVENTORY_ITEM_SIZE_SPEED)
             .start();
         setSizeAnimation(anim);
@@ -51,7 +51,7 @@ export const InventoryItemComponent: React.FunctionComponent<InventoryItemCompon
             sizeAnimation.stop();
         }
         const anim = animation((x) => setSize(1 - x))
-            .driven()
+            .driven(false)
             .speed(INVENTORY_ITEM_SIZE_SPEED)
             .start();
         setSizeAnimation(anim);

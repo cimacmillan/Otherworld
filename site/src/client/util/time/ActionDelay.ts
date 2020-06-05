@@ -1,31 +1,24 @@
+import { ProcedureService } from "../../services/scripting/ProcedureService";
+
 export class ActionDelay {
     private delay: number;
-    private lastTime?: number;
+    private canPerform: boolean = true;
     public constructor(delay: number) {
         this.delay = delay;
     }
 
-    public canAction() {
-        if (!this.lastTime) {
-            return true;
-        }
-        const timeSinceLast = Date.now() - this.lastTime;
-        return timeSinceLast >= this.delay;
+    public canAction(): boolean {
+        return this.canPerform;
     }
 
     public onAction() {
-        this.lastTime = Date.now();
+        this.canPerform = false;
+        ProcedureService.setGameTimeout(() => {
+            this.canPerform = true;
+        }, this.delay);
     }
 
     public updateDelay(delay: number) {
         this.delay = delay;
-    }
-
-    public getProgress() {
-        if (!this.lastTime) {
-            return 1;
-        }
-        const timeSinceLast = Date.now() - this.lastTime;
-        return Math.min(timeSinceLast / this.delay, 1);
     }
 }

@@ -83,7 +83,7 @@ export const ItemTooltipComponent: React.FunctionComponent<ItemTooltipComponentP
     const [fade, setFade] = React.useState(0);
 
     React.useEffect(() => {
-        const anim = animation(setFade).driven().speed(200).start();
+        const anim = animation(setFade).driven(false).speed(200).start();
         return () => anim.stop();
     }, []);
 
@@ -173,7 +173,7 @@ function getDescriptionFromBehaviour(
 function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
     const [offset, setOffset] = React.useState(0);
     React.useEffect(() => {
-        animation(setOffset).speed(500).looping().driven().start();
+        animation(setOffset).speed(500).looping().driven(false).start();
     }, []);
 
     const diff = 2;

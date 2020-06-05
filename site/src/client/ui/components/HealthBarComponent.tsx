@@ -37,7 +37,7 @@ export const HealthBarComponent: React.FunctionComponent<HealthBarComponentProps
         knockAnimation = animation((x: number) => {
             setHealthBarOffset(Math.sin(x * Math.PI));
         })
-            .driven()
+            .driven(false)
             .speed(HEALTH_BAR_BUMP_SPEED);
         return () => knockAnimation.stop();
     }, []);

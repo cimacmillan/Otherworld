@@ -122,7 +122,10 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
     };
 
     React.useEffect(() => {
-        const timeout = ProcedureService.setTimeout(() => setKeyDown(!keyDown), clickSpeed);
+        const timeout = ProcedureService.setTimeout(
+            () => setKeyDown(!keyDown),
+            clickSpeed
+        );
         return () => ProcedureService.clearTimeout(timeout);
     }, [keyDown]);
 
