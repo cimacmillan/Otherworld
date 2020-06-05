@@ -1,4 +1,8 @@
 
+**05/06/2020 - Changelog**
+
+* Added global timeout handler that syncs to game clock. Fixes issue with enemies all attacking at the same time when menu paused.
+
 **02/06/2020 - Changelog**
 
 * Added ability to use consumables from inventory
