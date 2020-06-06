@@ -109,4 +109,8 @@ export class Entity<State extends BaseState> {
     public getServiceLocator() {
         return this.serviceLocator;
     }
+
+    public getComponents() {
+        return this.components;
+    }
 }

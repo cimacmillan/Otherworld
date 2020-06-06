@@ -8,6 +8,7 @@ import { InteractionService } from "./interaction/InteractionService";
 import { PhysicsService } from "./physics/PhysicsService";
 import { RenderService } from "./render";
 import { ScriptingService } from "./scripting/ScriptingService";
+import { SerialisationService } from "./serialisation/SerialisationService";
 
 export class ServiceLocator {
     public constructor(
@@ -20,7 +21,8 @@ export class ServiceLocator {
         private scriptingService: ScriptingService,
         private inputService: InputService,
         private physicsService: PhysicsService,
-        private interactionService: InteractionService
+        private interactionService: InteractionService,
+        private serialisationService: SerialisationService
     ) {}
 
     public getGame() {
@@ -61,5 +63,9 @@ export class ServiceLocator {
 
     public getInteractionService() {
         return this.interactionService;
+    }
+
+    public getSerialisationService() {
+        return this.serialisationService;
     }
 }

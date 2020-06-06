@@ -41,6 +41,13 @@ export class DefaultControlScheme implements ControlScheme {
         if (key == "KeyI") {
             OpenInventory(this.serviceLocator)();
         }
+
+        if (key == "KeyQ") {
+            console.log("attempting to serialise");
+            console.log(
+                this.serviceLocator.getSerialisationService().serialise()
+            );
+        }
     }
 
     public onKeyUp(key: string, keysDown: { [key: string]: boolean }) {}

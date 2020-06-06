@@ -95,6 +95,16 @@ class ProcedureServiceImpl {
         }
     }
 
+    public getPendingTimerCounts(): {
+        intervals: number;
+        timeouts: number;
+    } {
+        return {
+            intervals: this.intervalArray.getArray().length,
+            timeouts: this.timeoutArray.getArray().length,
+        };
+    }
+
     private checkTimers() {
         for (const timeout of this.timeoutArray.getArray()) {
             const shouldRemove = this.shouldRemoveTimer(timeout);

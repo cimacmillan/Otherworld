@@ -1,7 +1,7 @@
 import { PhysicsEntity } from "../../../services/physics/PhysicsService";
 import { Vector2D } from "../../../types";
 import { Entity } from "../../Entity";
-import { EntityComponent } from "../../EntityComponent";
+import { EntityComponent, EntityComponentType } from "../../EntityComponent";
 import { BaseState, SurfacePositionState } from "../../state/State";
 
 export interface PhysicsState {
@@ -18,6 +18,8 @@ export type PhysicsStateType = BaseState & SurfacePositionState & PhysicsState;
 
 export class PhysicsComponent<T extends PhysicsStateType>
     implements EntityComponent<T> {
+    public componentType = EntityComponentType.PhysicsComponent;
+
     private physicsEntity: PhysicsEntity;
 
     public onCreate(entity: Entity<PhysicsStateType>) {

@@ -1,4 +1,4 @@
-import { ProcedureService } from "../../services/scripting/ProcedureService";
+import { ProcedureService } from "../../services/jobs/ProcedureService";
 import { ANIMATION_RESOLUTION } from "./GameAnimation";
 
 export class IntervalDriver {

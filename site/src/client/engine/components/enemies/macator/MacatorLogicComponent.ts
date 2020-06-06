@@ -11,7 +11,7 @@ import { timeoutEffect } from "../../../../util/engine/TimeoutEffect";
 import { vec } from "../../../../util/math";
 import { ActionDelay } from "../../../../util/time/ActionDelay";
 import { Entity } from "../../../Entity";
-import { EntityComponent } from "../../../EntityComponent";
+import { EntityComponent, EntityComponentType } from "../../../EntityComponent";
 import { EnemyEventType } from "../../../events/EnemyEvents";
 import { GameEvent } from "../../../events/Event";
 import { InteractionEventType } from "../../../events/InteractionEvents";
@@ -44,6 +44,8 @@ const ATTACK_DISTANCE = 0.6;
 
 export class MacatorLogicComponent<T extends MacatorStateType>
     implements EntityComponent<T> {
+    public componentType = EntityComponentType.MacatorLogicComponent;
+
     private attackDelay: ActionDelay;
     private macatorStateBehaviour: StateEffect;
 

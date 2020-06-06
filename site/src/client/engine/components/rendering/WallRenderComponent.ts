@@ -3,7 +3,7 @@ import {
     Wall,
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
-import { EntityComponent } from "../../EntityComponent";
+import { EntityComponent, EntityComponentType } from "../../EntityComponent";
 import { BaseState } from "../../state/State";
 
 export interface WallState {
@@ -16,6 +16,7 @@ export type WallStateType = BaseState & WallState;
 
 export class WallRenderComponent<T extends WallStateType>
     implements EntityComponent<T> {
+    public componentType = EntityComponentType.WallRenderComponent;
     private toRenderRef?: RenderItem;
 
     public update(entity: Entity<WallStateType>): void {

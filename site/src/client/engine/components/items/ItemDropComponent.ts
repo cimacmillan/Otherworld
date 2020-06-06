@@ -3,7 +3,7 @@ import { animation } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
 import { vec } from "../../../util/math";
 import { Entity } from "../../Entity";
-import { EntityComponent } from "../../EntityComponent";
+import { EntityComponent, EntityComponentType } from "../../EntityComponent";
 import { PlayerEventType } from "../../events/PlayerEvents";
 import { BaseState, SpriteRenderState } from "../../state/State";
 import { PhysicsState } from "../physics/PhysicsComponent";
@@ -24,6 +24,8 @@ type ItemDropComponentStateType = BaseState &
 
 export class ItemDropComponent
     implements EntityComponent<ItemDropComponentStateType> {
+    public componentType = EntityComponentType.ItemDropComponent;
+
     private animation: GameAnimation;
 
     private initialSpriteWidth: number;

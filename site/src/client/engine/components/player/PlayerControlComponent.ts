@@ -8,7 +8,7 @@ import { vec } from "../../../util/math";
 import { ActionDelay } from "../../../util/time/ActionDelay";
 import { fpsNorm } from "../../../util/time/GlobalFPSController";
 import { Entity } from "../../Entity";
-import { EntityComponent } from "../../EntityComponent";
+import { EntityComponent, EntityComponentType } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
 import { InteractionEventType } from "../../events/InteractionEvents";
 import { PlayerEventType } from "../../events/PlayerEvents";
@@ -24,6 +24,8 @@ const HEAD_BOB_NERF = 0.6;
 
 export class PlayerControlComponent<T extends PlayerState>
     implements EntityComponent<T> {
+    public componentType = EntityComponentType.PlayerControlComponent;
+
     private accumulatedWalk: Vector2D = { x: 0, y: 0 };
     private accumulatedAngle: number = 0;
     private attackDelay: ActionDelay;

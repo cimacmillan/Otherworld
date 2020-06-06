@@ -8,7 +8,7 @@ import { effectFromAnimation } from "../../../../util/engine/AnimationEffect";
 import { joinEffect } from "../../../../util/engine/JoinEffect";
 import { StateEffect } from "../../../../util/engine/StateEffect";
 import { Entity } from "../../../Entity";
-import { EntityComponent } from "../../../EntityComponent";
+import { EntityComponent, EntityComponentType } from "../../../EntityComponent";
 import {
     MacatorLogicState,
     MacatorState,
@@ -23,6 +23,8 @@ const JUMP_HEIGHT = 0.25;
 
 export class MacatorRenderComponent<T extends MacatorRenderState>
     implements EntityComponent<T> {
+    public componentType = EntityComponentType.MacatorRenderComponent;
+
     private animationStateEffect: StateEffect;
 
     public init(entity: Entity<MacatorRenderState>): void {

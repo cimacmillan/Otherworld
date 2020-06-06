@@ -1,4 +1,4 @@
-import { ProcedureService } from "../../services/scripting/ProcedureService";
+import { ProcedureService } from "../../services/jobs/ProcedureService";
 
 export function timeoutEffect(
     callback: () => void,

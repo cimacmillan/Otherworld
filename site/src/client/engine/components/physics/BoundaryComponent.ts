@@ -1,6 +1,6 @@
 import { PhysicsBoundary } from "../../../services/physics/PhysicsService";
 import { Entity } from "../../Entity";
-import { EntityComponent } from "../../EntityComponent";
+import { EntityComponent, EntityComponentType } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
 import { BaseState } from "../../state/State";
 
@@ -15,6 +15,8 @@ export type BoundaryStateType = BaseState & BoundaryState;
 
 export class BoundaryComponent<T extends BoundaryStateType>
     implements EntityComponent<T> {
+    public componentType = EntityComponentType.BoundaryComponent;
+
     public update(entity: Entity<BoundaryStateType>): void {}
 
     public onEvent(entity: Entity<BoundaryStateType>, event: GameEvent): void {}

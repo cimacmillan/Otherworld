@@ -4,7 +4,7 @@ import { KeyHintComponent } from "../components/KeyHintComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { ViewportComponent } from "../components/ViewportComponent";
 import { ShadowComponentStyle } from "../components/ShadowComponent";
-import { ProcedureService } from "../../services/scripting/ProcedureService";
+import { ProcedureService } from "../../services/jobs/ProcedureService";
 
 export interface KeyHintsContainerProps {
     serviceLocator: ServiceLocator;

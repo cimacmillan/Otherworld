@@ -1,12 +1,12 @@
 import { Animations, SpriteSheets } from "../../../resources/manifests/Types";
+import { ProcedureService } from "../../../services/jobs/ProcedureService";
 import { createMacator } from "../../../services/scripting/factory/EnemyFactory";
-import { ProcedureService } from "../../../services/scripting/ProcedureService";
 import { animation, sin } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
 import { effectFromAnimation } from "../../../util/engine/AnimationEffect";
 import { StateEffect } from "../../../util/engine/StateEffect";
 import { Entity } from "../../Entity";
-import { EntityComponent } from "../../EntityComponent";
+import { EntityComponent, EntityComponentType } from "../../EntityComponent";
 import { EnemyEventType } from "../../events/EnemyEvents";
 import { GameEvent } from "../../events/Event";
 import { EggLogicState, EggState } from "../../state/Macator";
@@ -24,6 +24,8 @@ const SIZE = 3;
 
 export class EggLogicComponent<T extends EggStateType>
     implements EntityComponent<T> {
+    public componentType = EntityComponentType.EggLogicComponent;
+
     private hatchingAnimation: GameAnimation;
     private animations: StateEffect;
 

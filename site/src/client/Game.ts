@@ -6,10 +6,11 @@ import { AudioService } from "./services/audio/AudioService";
 import { EventRouter, GameEventSource } from "./services/EventRouter";
 import { InputService } from "./services/input/InputService";
 import { InteractionService } from "./services/interaction/InteractionService";
+import { ProcedureService } from "./services/jobs/ProcedureService";
 import { PhysicsService } from "./services/physics/PhysicsService";
 import { RenderService, ScreenBuffer } from "./services/render";
-import { ProcedureService } from "./services/scripting/ProcedureService";
 import { ScriptingService } from "./services/scripting/ScriptingService";
+import { SerialisationService } from "./services/serialisation/SerialisationService";
 import { ServiceLocator } from "./services/ServiceLocator";
 import { Actions } from "./ui/actions/Actions";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
@@ -48,6 +49,8 @@ export class Game {
 
         const interactionService = new InteractionService();
 
+        const serialisationService = new SerialisationService();
+
         this.serviceLocator = new ServiceLocator(
             this,
             resourceManager,
@@ -58,9 +61,11 @@ export class Game {
             scriptingService,
             inputService,
             new PhysicsService(),
-            interactionService
+            interactionService,
+            serialisationService
         );
 
+        this.serviceLocator.getSerialisationService().init(this.serviceLocator);
         this.serviceLocator.getInputService().init(this.serviceLocator);
         this.serviceLocator.getRenderService().init(screen.getOpenGL());
         this.serviceLocator.getWorld().init();
@@ -116,13 +121,15 @@ export class Game {
         budgetUsage: number
     ) => {
         logFPS((fps) => {
+            const result = ProcedureService.getPendingTimerCounts();
             console.log(
                 `FPS: ${fps} BudgetUsage: ${Math.floor(
                     budgetUsage * 100
                 )}% EntityCount: ${
                     this.serviceLocator.getWorld().getEntityArray().getArray()
                         .length
-                }`
+                } Intervals ${result.intervals} Timeouts ${result.timeouts}
+                `
             );
         });
         setFPSProportion(1 / actualProportion);
