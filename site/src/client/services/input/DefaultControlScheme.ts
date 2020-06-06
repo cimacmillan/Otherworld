@@ -44,9 +44,13 @@ export class DefaultControlScheme implements ControlScheme {
 
         if (key == "KeyQ") {
             console.log("attempting to serialise");
-            console.log(
-                this.serviceLocator.getSerialisationService().serialise()
-            );
+            const serialised = this.serviceLocator
+                .getSerialisationService()
+                .serialise();
+            console.log(serialised);
+            this.serviceLocator
+                .getSerialisationService()
+                .deserialise(serialised);
         }
     }
 

@@ -64,7 +64,10 @@ export class EggLogicComponent<T extends EggStateType>
             .looping()
             .whenDone(() => this.hatch(entity));
 
+        console.log("new EGG");
+
         ProcedureService.setGameTimeout(() => {
+            console.log("new EGG hatching");
             this.hatchingAnimation.withOffset(
                 idleAnimation.getCurrentPosition()
             );

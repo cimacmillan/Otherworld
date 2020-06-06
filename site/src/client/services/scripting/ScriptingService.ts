@@ -1,4 +1,5 @@
 import { Entity } from "../../engine/Entity";
+import { BaseState } from "../../engine/state/State";
 import { Game } from "../../Game";
 import { Audios, MAPS } from "../../resources/manifests/Types";
 import { loadMap } from "../../resources/MapLoader";
@@ -29,7 +30,7 @@ export class ScriptingService {
     public init(serviceLocator: ServiceLocator) {
         this.serviceLocator = serviceLocator;
         this.inventoryService = new InventoryService(serviceLocator);
-        this.bootstrapContent();
+        this.bootstrapInitialContent();
     }
 
     public getPlayer() {
@@ -48,7 +49,7 @@ export class ScriptingService {
             for (const entity of entityArray.getArray()) {
                 world.removeEntity(entity);
             }
-            this.bootstrapContent();
+            this.bootstrapInitialContent();
         }
     }
 
@@ -78,7 +79,28 @@ export class ScriptingService {
         this.game.setUpdateWorld(true);
     }
 
-    private bootstrapContent() {
+    public bootsrapDeserialisedContent(entity: Array<Entity<BaseState>>) {
+        const world = this.serviceLocator.getWorld();
+        const entityArray = world.getEntityArray();
+        for (const entity of entityArray.getArray()) {
+            world.removeEntity(entity);
+        }
+        world.performSync();
+
+        this.player = entity[0] as Entity<PlayerState>;
+        world.addEntity(this.player);
+
+        const camera = this.player.getState().camera;
+        this.serviceLocator.getAudioService().attachCamera(camera);
+        this.serviceLocator.getRenderService().attachCamera(camera);
+
+        for (let i = 1; i < entity.length; i++) {
+            world.addEntity(entity[i]);
+        }
+        world.performSync();
+    }
+
+    private bootstrapInitialContent() {
         const world = this.serviceLocator.getWorld();
 
         this.player = createPlayer(this.serviceLocator);
