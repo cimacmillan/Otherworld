@@ -63,6 +63,7 @@ export class ScriptingService {
             );
         this.game.setUpdateWorld(false);
         this.serviceLocator.getInputService().setInputState(InputState.MENU);
+        this.resetContent();
     }
 
     public startGame() {
@@ -75,7 +76,6 @@ export class ScriptingService {
             );
         this.serviceLocator.getInputService().setInputState(InputState.DEFAULT);
 
-        this.resetContent();
         this.game.setUpdateWorld(true);
     }
 

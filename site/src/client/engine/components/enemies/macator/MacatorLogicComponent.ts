@@ -71,6 +71,11 @@ export class MacatorLogicComponent<T extends MacatorStateType>
                 [MacatorState.DAMAGED]: joinEffect(
                     this.damagedEffect(entity),
                     timeoutEffect(() => {
+                        if (entity.getState().health <= 0) {
+                            entity.emitGlobally({
+                                type: EnemyEventType.ENEMY_KILLED,
+                            });
+                        }
                         entity.setState({
                             macatorState:
                                 entity.getState().health > 0
@@ -212,10 +217,6 @@ export class MacatorLogicComponent<T extends MacatorStateType>
                     ...entity.getState().interactable,
                     [InteractionType.ATTACK]: false,
                 },
-            });
-
-            entity.emitGlobally({
-                type: EnemyEventType.ENEMY_KILLED,
             });
         };
 

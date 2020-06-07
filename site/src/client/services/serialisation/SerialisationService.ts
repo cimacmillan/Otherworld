@@ -1,4 +1,4 @@
-import { EggLogicComponent } from "../../engine/components/enemies/EggLogicComponent";
+import { EggLogicComponent } from "../../engine/components/enemies/egg/EggLogicComponent";
 import { MacatorLogicComponent } from "../../engine/components/enemies/macator/MacatorLogicComponent";
 import { MacatorRenderComponent } from "../../engine/components/enemies/macator/MacatorRenderComponent";
 import { InteractionComponent } from "../../engine/components/InteractionComponent";

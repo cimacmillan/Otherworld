@@ -1,18 +1,21 @@
-import { Animations, SpriteSheets } from "../../../resources/manifests/Types";
-import { ProcedureService } from "../../../services/jobs/ProcedureService";
-import { createMacator } from "../../../services/scripting/factory/EnemyFactory";
-import { animation, sin } from "../../../util/animation/Animations";
-import { GameAnimation } from "../../../util/animation/GameAnimation";
-import { effectFromAnimation } from "../../../util/engine/AnimationEffect";
-import { StateEffect } from "../../../util/engine/StateEffect";
-import { Entity } from "../../Entity";
-import { EntityComponent, EntityComponentType } from "../../EntityComponent";
-import { EnemyEventType } from "../../events/EnemyEvents";
-import { GameEvent } from "../../events/Event";
-import { EggLogicState, EggState } from "../../state/Macator";
-import { BaseState, LogicState } from "../../state/State";
-import { PhysicsStateType } from "../physics/PhysicsComponent";
-import { SpriteStateType } from "../rendering/SpriteRenderComponent";
+import {
+    Animations,
+    SpriteSheets,
+} from "../../../../resources/manifests/Types";
+import { ProcedureService } from "../../../../services/jobs/ProcedureService";
+import { createMacator } from "../../../../services/scripting/factory/EnemyFactory";
+import { animation, sin } from "../../../../util/animation/Animations";
+import { GameAnimation } from "../../../../util/animation/GameAnimation";
+import { effectFromAnimation } from "../../../../util/engine/AnimationEffect";
+import { StateEffect } from "../../../../util/engine/StateEffect";
+import { Entity } from "../../../Entity";
+import { EntityComponent, EntityComponentType } from "../../../EntityComponent";
+import { EnemyEventType } from "../../../events/EnemyEvents";
+import { GameEvent } from "../../../events/Event";
+import { EggLogicState, EggState } from "../../../state/Macator";
+import { BaseState, LogicState } from "../../../state/State";
+import { PhysicsStateType } from "../../physics/PhysicsComponent";
+import { SpriteStateType } from "../../rendering/SpriteRenderComponent";
 
 export type EggStateType = BaseState &
     SpriteStateType &
@@ -20,53 +23,51 @@ export type EggStateType = BaseState &
     PhysicsStateType &
     EggLogicState;
 
-const SIZE = 3;
-
 export class EggLogicComponent<T extends EggStateType>
     implements EntityComponent<T> {
     public componentType = EntityComponentType.EggLogicComponent;
 
     private hatchingAnimation: GameAnimation;
     private animations: StateEffect;
+    private hatchingID: number;
 
     public init(entity: Entity<EggStateType>) {
         const spritesheet = entity.getServiceLocator().getResourceManager()
             .manifest.spritesheets[SpriteSheets.SPRITE];
-        const idleAnimation = animation((x) => {
-            const frame = spritesheet.getAnimationInterp(
-                Animations.EGG_CHARGE,
-                x
-            );
+        const idleAnimation = animation((x) =>
             entity.setState(
                 {
-                    textureCoordinate: frame.textureCoordinate,
+                    textureCoordinate: spritesheet.getAnimationInterp(
+                        Animations.EGG_CHARGE,
+                        x
+                    ).textureCoordinate,
                 },
                 false
-            );
-        })
+            )
+        )
             .speed(2000)
             .looping();
 
-        this.hatchingAnimation = animation((x) => {
-            const frame = spritesheet.getAnimationInterp(
-                Animations.EGG_CHARGE,
-                x
-            );
+        this.hatchingAnimation = animation((x) =>
             entity.setState(
                 {
-                    textureCoordinate: frame.textureCoordinate,
+                    textureCoordinate: spritesheet.getAnimationInterp(
+                        Animations.EGG_CHARGE,
+                        x
+                    ).textureCoordinate,
                 },
                 false
-            );
-        })
+            )
+        )
             .speed(400)
             .tween(sin)
             .looping()
+            // Here be the problem
             .whenDone(() => this.hatch(entity));
 
         console.log("new EGG");
 
-        ProcedureService.setGameTimeout(() => {
+        this.hatchingID = ProcedureService.setGameTimeout(() => {
             console.log("new EGG hatching");
             this.hatchingAnimation.withOffset(
                 idleAnimation.getCurrentPosition()
@@ -111,6 +112,11 @@ export class EggLogicComponent<T extends EggStateType>
 
     public onCreate(entity: Entity<EggStateType>) {
         this.animations.load();
+    }
+
+    public onDestroy(entity: Entity<EggStateType>) {
+        this.animations.unload();
+        ProcedureService.clearTimeout(this.hatchingID);
     }
 
     public onStateTransition(

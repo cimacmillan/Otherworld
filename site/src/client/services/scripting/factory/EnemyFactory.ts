@@ -1,7 +1,7 @@
 import {
     EggLogicComponent,
     EggStateType,
-} from "../../../engine/components/enemies/EggLogicComponent";
+} from "../../../engine/components/enemies/egg/EggLogicComponent";
 import {
     MacatorLogicComponent,
     MacatorStateType,
