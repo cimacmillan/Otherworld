@@ -2,12 +2,12 @@ import { GameItems } from "../../../../resources/manifests/Items";
 import { Audios } from "../../../../resources/manifests/Types";
 import { InteractionType } from "../../../../services/interaction/InteractionType";
 import { Vector2D } from "../../../../types";
-import { joinEffect } from "../../../../util/engine/JoinEffect";
+import { joinEffect } from "../../../effects/JoinEffect";
 import {
     StateEffect,
     StateEffectCallback,
-} from "../../../../util/engine/StateEffect";
-import { timeoutEffect } from "../../../../util/engine/TimeoutEffect";
+} from "../../../effects/StateEffect";
+import { timeoutEffect } from "../../../effects/TimeoutEffect";
 import { vec } from "../../../../util/math";
 import { ActionDelay } from "../../../../util/time/ActionDelay";
 import { Entity } from "../../../Entity";

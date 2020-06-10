@@ -4,9 +4,9 @@ import {
     SpriteSheets,
 } from "../../../../resources/manifests/Types";
 import { animation } from "../../../../util/animation/Animations";
-import { effectFromAnimation } from "../../../../util/engine/AnimationEffect";
-import { joinEffect } from "../../../../util/engine/JoinEffect";
-import { StateEffect } from "../../../../util/engine/StateEffect";
+import { effectFromAnimation } from "../../../effects/AnimationEffect";
+import { joinEffect } from "../../../effects/JoinEffect";
+import { StateEffect } from "../../../effects/StateEffect";
 import { Entity } from "../../../Entity";
 import { EntityComponent, EntityComponentType } from "../../../EntityComponent";
 import {

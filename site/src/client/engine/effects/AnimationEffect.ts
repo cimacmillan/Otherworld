@@ -1,5 +1,5 @@
-import { CompositeAnimation } from "../animation/CompositeAnimation";
-import { GameAnimation } from "../animation/GameAnimation";
+import { CompositeAnimation } from "../../util/animation/CompositeAnimation";
+import { GameAnimation } from "../../util/animation/GameAnimation";
 
 export function effectFromAnimation(
     animation: GameAnimation | CompositeAnimation

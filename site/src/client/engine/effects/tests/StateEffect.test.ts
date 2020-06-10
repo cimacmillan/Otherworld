@@ -1,4 +1,4 @@
-import "./node_modules/jest-extended";
+import "jest-extended";
 import { StateEffect, StateEffectParameters } from "../StateEffect";
 
 describe("StateEffect", () => {

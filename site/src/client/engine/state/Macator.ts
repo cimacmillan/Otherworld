@@ -17,7 +17,7 @@ export enum EggState {
 }
 
 export interface EggLogicState {
-    eggState: EggState;
+    logicState: EggState;
     targetCount: number;
     currentLiving: number;
 }

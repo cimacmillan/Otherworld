@@ -2,12 +2,12 @@ import {
     Animations,
     SpriteSheets,
 } from "../../../../resources/manifests/Types";
-import { ProcedureService } from "../../../../services/jobs/ProcedureService";
+import { ProcedureService, ProcedureID } from "../../../../services/jobs/ProcedureService";
 import { createMacator } from "../../../../services/scripting/factory/EnemyFactory";
 import { animation, sin } from "../../../../util/animation/Animations";
 import { GameAnimation } from "../../../../util/animation/GameAnimation";
-import { effectFromAnimation } from "../../../../util/engine/AnimationEffect";
-import { StateEffect } from "../../../../util/engine/StateEffect";
+import { effectFromAnimation } from "../../../effects/AnimationEffect";
+import { StateEffect } from "../../../effects/StateEffect";
 import { Entity } from "../../../Entity";
 import { EntityComponent, EntityComponentType } from "../../../EntityComponent";
 import { EnemyEventType } from "../../../events/EnemyEvents";
@@ -16,6 +16,7 @@ import { EggLogicState, EggState } from "../../../state/Macator";
 import { BaseState, LogicState } from "../../../state/State";
 import { PhysicsStateType } from "../../physics/PhysicsComponent";
 import { SpriteStateType } from "../../rendering/SpriteRenderComponent";
+import { joinEffect } from "../../../effects/JoinEffect";
 
 export type EggStateType = BaseState &
     SpriteStateType &
@@ -28,8 +29,9 @@ export class EggLogicComponent<T extends EggStateType>
     public componentType = EntityComponentType.EggLogicComponent;
 
     private hatchingAnimation: GameAnimation;
-    private animations: StateEffect;
-    private hatchingID: number;
+    private stateEffects: StateEffect;
+    // private hatchingID: number;
+
 
     public init(entity: Entity<EggStateType>) {
         const spritesheet = entity.getServiceLocator().getResourceManager()
@@ -61,35 +63,19 @@ export class EggLogicComponent<T extends EggStateType>
         )
             .speed(400)
             .tween(sin)
-            .looping()
-            // Here be the problem
-            .whenDone(() => this.hatch(entity));
+            .looping();
 
-        console.log("new EGG");
-
-        this.hatchingID = ProcedureService.setGameTimeout(() => {
-            console.log("new EGG hatching");
-            this.hatchingAnimation.withOffset(
-                idleAnimation.getCurrentPosition()
-            );
-            entity.setState({
-                logicState: EggState.HATCHING,
-            });
-        }, 5000);
-
-        this.animations = new StateEffect(
+        this.stateEffects = new StateEffect(
             {
-                [EggState.IDLE]: effectFromAnimation(idleAnimation),
-                [EggState.HATCHING]: effectFromAnimation(
-                    this.hatchingAnimation
-                ),
+                [EggState.IDLE]: joinEffect(effectFromAnimation(idleAnimation), this.idleEffect(entity)),
+                [EggState.HATCHING]: joinEffect(effectFromAnimation(this.hatchingAnimation), this.hatchingEffect(entity))
             },
             EggState.IDLE
         );
     }
 
     public update(entity: Entity<EggStateType>): void {
-        this.animations.update();
+        this.stateEffects.update();
     }
 
     public onObservedEvent(
@@ -103,20 +89,16 @@ export class EggLogicComponent<T extends EggStateType>
                 },
                 false
             );
-
-            if (entity.getState().currentLiving <= 0) {
-                this.increaseDifficulty(entity);
-            }
         }
     }
 
     public onCreate(entity: Entity<EggStateType>) {
-        this.animations.load();
+        const { logicState } = entity.getState();     
+        this.stateEffects.load();
     }
 
     public onDestroy(entity: Entity<EggStateType>) {
-        this.animations.unload();
-        ProcedureService.clearTimeout(this.hatchingID);
+        this.stateEffects.unload();
     }
 
     public onStateTransition(
@@ -125,7 +107,62 @@ export class EggLogicComponent<T extends EggStateType>
         to: EggStateType
     ) {
         if (from.logicState !== to.logicState) {
-            this.animations.setState(to.logicState);
+            this.stateEffects.setState(to.logicState);
+        }
+    }
+
+    private idleEffect(entity: Entity<EggStateType>) {
+        let timeout: ProcedureID | undefined;
+        return {
+            onEnter: () => {
+                const { targetCount } = entity.getState();
+                if (targetCount === 1) {
+                    timeout = ProcedureService.setGameTimeout(() => {
+                        this.increaseDifficulty(entity);
+                        entity.setState({
+                            logicState: EggState.HATCHING
+                        });
+                    }, 5000);
+                }
+            },
+            onUpdate: () => {
+                const { currentLiving, targetCount} = entity.getState();
+                if ( currentLiving <= 0 && targetCount !== 1) {
+                    this.increaseDifficulty(entity);
+                    entity.setState({
+                        logicState: EggState.HATCHING
+                    });
+                }
+            },
+            onLeave: () => {
+                if (timeout) {
+                    ProcedureService.clearTimeout(timeout);
+                }
+            }
+        }
+    }
+
+    private hatchingEffect(entity: Entity<EggStateType>) {
+        let timeout: ProcedureID | undefined;
+        return {
+            onEnter: () => {
+                const { targetCount } = entity.getState();
+                timeout = ProcedureService.setGameInterval(() => {
+                    this.hatch(entity);
+                    const { currentLiving } = entity.getState();
+                    if (currentLiving >= targetCount) {
+                        ProcedureService.clearInterval(timeout);
+                        entity.setState({
+                            logicState: EggState.IDLE
+                        })
+                    }
+                    
+                }, 100 / targetCount + 300 );
+            },
+            onUpdate: () => {},
+            onLeave: () => {
+                ProcedureService.clearInterval(timeout);
+            }
         }
     }
 

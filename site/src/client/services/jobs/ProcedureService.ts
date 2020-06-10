@@ -15,7 +15,7 @@ interface ProcedureTimeoutReference {
 }
 
 class ProcedureServiceImpl {
-    private static id = 0;
+    private static id = 1;
 
     private realtime: number;
     private gametime: number;
