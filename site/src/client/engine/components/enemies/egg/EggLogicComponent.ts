@@ -2,11 +2,15 @@ import {
     Animations,
     SpriteSheets,
 } from "../../../../resources/manifests/Types";
-import { ProcedureService, ProcedureID } from "../../../../services/jobs/ProcedureService";
+import {
+    ProcedureID,
+    ProcedureService,
+} from "../../../../services/jobs/ProcedureService";
 import { createMacator } from "../../../../services/scripting/factory/EnemyFactory";
 import { animation, sin } from "../../../../util/animation/Animations";
 import { GameAnimation } from "../../../../util/animation/GameAnimation";
 import { effectFromAnimation } from "../../../effects/AnimationEffect";
+import { joinEffect } from "../../../effects/JoinEffect";
 import { StateEffect } from "../../../effects/StateEffect";
 import { Entity } from "../../../Entity";
 import { EntityComponent, EntityComponentType } from "../../../EntityComponent";
@@ -16,7 +20,6 @@ import { EggLogicState, EggState } from "../../../state/Macator";
 import { BaseState, LogicState } from "../../../state/State";
 import { PhysicsStateType } from "../../physics/PhysicsComponent";
 import { SpriteStateType } from "../../rendering/SpriteRenderComponent";
-import { joinEffect } from "../../../effects/JoinEffect";
 
 export type EggStateType = BaseState &
     SpriteStateType &
@@ -31,7 +34,6 @@ export class EggLogicComponent<T extends EggStateType>
     private hatchingAnimation: GameAnimation;
     private stateEffects: StateEffect;
     // private hatchingID: number;
-
 
     public init(entity: Entity<EggStateType>) {
         const spritesheet = entity.getServiceLocator().getResourceManager()
@@ -67,10 +69,16 @@ export class EggLogicComponent<T extends EggStateType>
 
         this.stateEffects = new StateEffect(
             {
-                [EggState.IDLE]: joinEffect(effectFromAnimation(idleAnimation), this.idleEffect(entity)),
-                [EggState.HATCHING]: joinEffect(effectFromAnimation(this.hatchingAnimation), this.hatchingEffect(entity))
+                [EggState.IDLE]: joinEffect(
+                    effectFromAnimation(idleAnimation),
+                    this.idleEffect(entity)
+                ),
+                [EggState.HATCHING]: joinEffect(
+                    effectFromAnimation(this.hatchingAnimation),
+                    this.hatchingEffect(entity)
+                ),
             },
-            EggState.IDLE
+            entity.getState().logicState
         );
     }
 
@@ -93,7 +101,7 @@ export class EggLogicComponent<T extends EggStateType>
     }
 
     public onCreate(entity: Entity<EggStateType>) {
-        const { logicState } = entity.getState();     
+        const { logicState } = entity.getState();
         this.stateEffects.load();
     }
 
@@ -116,21 +124,21 @@ export class EggLogicComponent<T extends EggStateType>
         return {
             onEnter: () => {
                 const { targetCount } = entity.getState();
-                if (targetCount === 1) {
+                if (targetCount === 0) {
                     timeout = ProcedureService.setGameTimeout(() => {
                         this.increaseDifficulty(entity);
                         entity.setState({
-                            logicState: EggState.HATCHING
+                            logicState: EggState.HATCHING,
                         });
                     }, 5000);
                 }
             },
             onUpdate: () => {
-                const { currentLiving, targetCount} = entity.getState();
-                if ( currentLiving <= 0 && targetCount !== 1) {
+                const { currentLiving, targetCount } = entity.getState();
+                if (currentLiving <= 0 && targetCount !== 0) {
                     this.increaseDifficulty(entity);
                     entity.setState({
-                        logicState: EggState.HATCHING
+                        logicState: EggState.HATCHING,
                     });
                 }
             },
@@ -138,8 +146,8 @@ export class EggLogicComponent<T extends EggStateType>
                 if (timeout) {
                     ProcedureService.clearTimeout(timeout);
                 }
-            }
-        }
+            },
+        };
     }
 
     private hatchingEffect(entity: Entity<EggStateType>) {
@@ -153,21 +161,20 @@ export class EggLogicComponent<T extends EggStateType>
                     if (currentLiving >= targetCount) {
                         ProcedureService.clearInterval(timeout);
                         entity.setState({
-                            logicState: EggState.IDLE
-                        })
+                            logicState: EggState.IDLE,
+                        });
                     }
-                    
-                }, 100 / targetCount + 300 );
+                }, 100 / targetCount + 300);
             },
             onUpdate: () => {},
             onLeave: () => {
                 ProcedureService.clearInterval(timeout);
-            }
-        }
+            },
+        };
     }
 
     private increaseDifficulty(entity: Entity<EggStateType>) {
-        const targetCount = entity.getState().targetCount * 2;
+        const targetCount = entity.getState().targetCount * 2 + 1;
         entity.setState({
             targetCount,
             logicState: EggState.HATCHING,
@@ -196,7 +203,6 @@ export class EggLogicComponent<T extends EggStateType>
             position.x,
             position.y
         );
-        macator.attachListener(entity);
         entity.getServiceLocator().getWorld().addEntity(macator);
     }
 }

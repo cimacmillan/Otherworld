@@ -2,14 +2,11 @@ import { GameItems } from "../../../../resources/manifests/Items";
 import { Audios } from "../../../../resources/manifests/Types";
 import { InteractionType } from "../../../../services/interaction/InteractionType";
 import { Vector2D } from "../../../../types";
-import { joinEffect } from "../../../effects/JoinEffect";
-import {
-    StateEffect,
-    StateEffectCallback,
-} from "../../../effects/StateEffect";
-import { timeoutEffect } from "../../../effects/TimeoutEffect";
 import { vec } from "../../../../util/math";
 import { ActionDelay } from "../../../../util/time/ActionDelay";
+import { joinEffect } from "../../../effects/JoinEffect";
+import { StateEffect, StateEffectCallback } from "../../../effects/StateEffect";
+import { timeoutEffect } from "../../../effects/TimeoutEffect";
 import { Entity } from "../../../Entity";
 import { EntityComponent, EntityComponentType } from "../../../EntityComponent";
 import { EnemyEventType } from "../../../events/EnemyEvents";
@@ -72,9 +69,18 @@ export class MacatorLogicComponent<T extends MacatorStateType>
                     this.damagedEffect(entity),
                     timeoutEffect(() => {
                         if (entity.getState().health <= 0) {
-                            entity.emitGlobally({
-                                type: EnemyEventType.ENEMY_KILLED,
-                            });
+                            entity
+                                .getServiceLocator()
+                                .getWorld()
+                                .emitIntoWorld({
+                                    type: EnemyEventType.ENEMY_KILLED,
+                                });
+                            entity
+                                .getServiceLocator()
+                                .getWorld()
+                                .emitOutOfWorld({
+                                    type: EnemyEventType.ENEMY_KILLED,
+                                });
                         }
                         entity.setState({
                             macatorState:

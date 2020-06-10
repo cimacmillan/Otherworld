@@ -31,7 +31,6 @@ export class World {
         this.entityArray.remove(entity);
     }
 
-    // TOOD add global observer type
     public emitIntoWorld(event: GameEvent) {
         const entities = this.getEntityArray().getArray();
         for (let i = 0; i < entities.length; i++) {
@@ -40,7 +39,6 @@ export class World {
     }
 
     public emitOutOfWorld(event: GameEvent) {
-        // console.log("World Dispatch: ", event);
         this.worldDispatch(event);
     }
 

@@ -74,7 +74,7 @@ export function createEgg(serviceLocator: ServiceLocator) {
 
     const initialState: EggStateType = {
         logicState: EggState.IDLE,
-        targetCount: 1,
+        targetCount: 0,
         currentLiving: 0,
         velocity: { x: 0, y: 0 },
         friction: 0.5,

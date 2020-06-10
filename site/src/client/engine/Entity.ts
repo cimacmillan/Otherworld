@@ -10,7 +10,6 @@ export class Entity<State extends BaseState> {
     private shouldEmit: boolean = false;
 
     private initialised: boolean = false;
-    private listeners: Array<Entity<BaseState>> = [];
 
     constructor(
         private serviceLocator: ServiceLocator,
@@ -27,14 +26,6 @@ export class Entity<State extends BaseState> {
 
     public getState() {
         return this.newState;
-    }
-
-    public attachListener(entity: Entity<BaseState>) {
-        this.listeners.push(entity);
-    }
-
-    public removeListener(entity: Entity<BaseState>) {
-        this.listeners.splice(this.listeners.indexOf(entity));
     }
 
     public update() {
@@ -85,10 +76,6 @@ export class Entity<State extends BaseState> {
                     break;
             }
         }
-        for (let x = 0; x < this.listeners.length; x++) {
-            this.listeners[x].onObservedEvent &&
-                this.listeners[x].onObservedEvent(event);
-        }
     }
 
     public onObservedEvent(event: GameEvent) {
@@ -100,10 +87,6 @@ export class Entity<State extends BaseState> {
 
     public emitGlobally(event: GameEvent) {
         this.serviceLocator.getWorld().emitOutOfWorld(event);
-        for (let x = 0; x < this.listeners.length; x++) {
-            this.listeners[x].onObservedEvent &&
-                this.listeners[x].onObservedEvent(event);
-        }
     }
 
     public getServiceLocator() {
