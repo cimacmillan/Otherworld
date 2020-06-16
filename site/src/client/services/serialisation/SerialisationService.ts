@@ -15,10 +15,11 @@ import {
     EntityComponent,
     EntityComponentType,
 } from "../../engine/EntityComponent";
+import { State, store } from "../../ui/State";
 import { ServiceLocator } from "../ServiceLocator";
 import { Serialisable } from "./Serialisable";
 
-interface SerialisationObject {
+export interface SerialisationObject {
     version: number;
     world: {
         entities: Array<{
@@ -28,6 +29,7 @@ interface SerialisationObject {
             }>;
         }>;
     };
+    uiState: State;
 }
 
 interface SerialisationEntity {
@@ -48,11 +50,13 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
 
     public serialise(): SerialisationObject {
         const entities = this.serialiseEntities();
+        const uiState = store.getValue();
         const serialisation = {
             version: 1,
             world: {
                 entities,
             },
+            uiState,
         };
         return serialisation;
     }
@@ -64,6 +68,7 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
         this.serviceLocator
             .getScriptingService()
             .bootsrapDeserialisedContent(deserialisedEntities);
+        store.next(data.uiState);
     }
 
     public deserialiseEntity(entity: SerialisationEntity): Entity<any> {

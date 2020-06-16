@@ -31,7 +31,6 @@ export class ScriptingService {
     public init(serviceLocator: ServiceLocator) {
         this.serviceLocator = serviceLocator;
         this.inventoryService = new InventoryService(serviceLocator);
-        this.bootstrapInitialContent();
     }
 
     public getPlayer() {
@@ -101,7 +100,7 @@ export class ScriptingService {
         world.performSync();
     }
 
-    private bootstrapInitialContent() {
+    public bootstrapInitialContent() {
         const world = this.serviceLocator.getWorld();
 
         this.player = createPlayer(this.serviceLocator);

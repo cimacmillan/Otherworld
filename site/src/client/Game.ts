@@ -4,13 +4,15 @@ import { World } from "./engine/World";
 import { ResourceManager } from "./resources/ResourceManager";
 import { AudioService } from "./services/audio/AudioService";
 import { EventRouter, GameEventSource } from "./services/EventRouter";
-import { InputService } from "./services/input/InputService";
+import { InputService, InputState } from "./services/input/InputService";
 import { InteractionService } from "./services/interaction/InteractionService";
 import { ProcedureService } from "./services/jobs/ProcedureService";
 import { PhysicsService } from "./services/physics/PhysicsService";
 import { RenderService, ScreenBuffer } from "./services/render";
 import { ScriptingService } from "./services/scripting/ScriptingService";
+import { SerialisationListeners } from "./services/serialisation/Listeners";
 import { SerialisationService } from "./services/serialisation/SerialisationService";
+import { GameStorage } from "./services/serialisation/Storage";
 import { ServiceLocator } from "./services/ServiceLocator";
 import { Actions } from "./ui/actions/Actions";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
@@ -18,6 +20,7 @@ import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
 
 export class Game {
     private serviceLocator: ServiceLocator;
+    private storage: GameStorage;
 
     private initialised: boolean = false;
     private updateWorld: boolean = false;
@@ -71,6 +74,26 @@ export class Game {
         this.serviceLocator.getWorld().init();
 
         this.serviceLocator.getScriptingService().init(this.serviceLocator);
+
+        this.storage = new GameStorage();
+
+        if (this.storage.isSaveAvailable()) {
+            const save = this.storage.getSaveGame();
+            console.log("Loading save game...", save);
+            this.serviceLocator.getSerialisationService().deserialise(save);
+            this.setUpdateWorld(true);
+            this.serviceLocator
+                .getInputService()
+                .setInputState(InputState.DEFAULT);
+        } else {
+            console.log("No save game, bootstrapping...");
+            this.serviceLocator.getScriptingService().bootstrapInitialContent();
+        }
+
+        SerialisationListeners.attachWindowExitListener(
+            this.serviceLocator,
+            this.storage
+        );
 
         const loop = new TimeControlledLoop(TARGET_MILLIS, this.mainLoop);
         this.initialised = true;
