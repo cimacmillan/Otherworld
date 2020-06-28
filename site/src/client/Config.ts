@@ -21,3 +21,5 @@ export const DEFAULT_PLAYER_HEIGHT = 0.5;
 export const DEFAULT_PLAYER_RADIUS = 0.5;
 
 export const SCENERY_PIXEL_DENSITY = 16;
+
+export const IS_DEV_MODE = () => window.location.href === "http://localhost/";

@@ -79,7 +79,10 @@ export class ScriptingService {
         this.game.setUpdateWorld(true);
     }
 
-    public bootsrapDeserialisedContent(entity: Array<Entity<BaseState>>) {
+    public bootsrapDeserialisedContent(
+        player: Entity<BaseState>,
+        entity: Array<Entity<BaseState>>
+    ) {
         const world = this.serviceLocator.getWorld();
         const entityArray = world.getEntityArray();
         for (const entity of entityArray.getArray()) {
@@ -87,16 +90,18 @@ export class ScriptingService {
         }
         world.performSync();
 
-        this.player = entity[0] as Entity<PlayerState>;
+        this.player = player as Entity<PlayerState>;
         world.addEntity(this.player);
 
         const camera = this.player.getState().camera;
         this.serviceLocator.getAudioService().attachCamera(camera);
         this.serviceLocator.getRenderService().attachCamera(camera);
 
+        world.addEntity(player);
         for (let i = 1; i < entity.length; i++) {
             world.addEntity(entity[i]);
         }
+
         world.performSync();
     }
 
