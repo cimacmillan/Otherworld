@@ -1,7 +1,7 @@
 import { VERSION } from "../../Config";
-import { EggLogicComponent } from "../../engine/components/enemies/egg/EggLogicComponent";
-import { MacatorLogicComponent } from "../../engine/components/enemies/macator/MacatorLogicComponent";
-import { MacatorRenderComponent } from "../../engine/components/enemies/macator/MacatorRenderComponent";
+import { EggLogicComponent } from "../../engine/components/creatures/egg/EggLogicComponent";
+import { MacatorLogicComponent } from "../../engine/components/creatures/macator/MacatorLogicComponent";
+import { MacatorRenderComponent } from "../../engine/components/creatures/macator/MacatorRenderComponent";
 import { InteractionComponent } from "../../engine/components/InteractionComponent";
 import { ItemDropComponent } from "../../engine/components/items/ItemDropComponent";
 import { BoundaryComponent } from "../../engine/components/physics/BoundaryComponent";

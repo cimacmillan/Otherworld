@@ -1,12 +1,12 @@
 import {
     EggLogicComponent,
     EggStateType,
-} from "../../../engine/components/enemies/egg/EggLogicComponent";
+} from "../../../engine/components/creatures/egg/EggLogicComponent";
 import {
     MacatorLogicComponent,
     MacatorStateType,
-} from "../../../engine/components/enemies/macator/MacatorLogicComponent";
-import { MacatorRenderComponent } from "../../../engine/components/enemies/macator/MacatorRenderComponent";
+} from "../../../engine/components/creatures/macator/MacatorLogicComponent";
+import { MacatorRenderComponent } from "../../../engine/components/creatures/macator/MacatorRenderComponent";
 import { InteractionComponent } from "../../../engine/components/InteractionComponent";
 import { PhysicsComponent } from "../../../engine/components/physics/PhysicsComponent";
 import { SpriteRenderComponent } from "../../../engine/components/rendering/SpriteRenderComponent";

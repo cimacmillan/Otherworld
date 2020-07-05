@@ -1,10 +1,4 @@
-import {
-    HEIGHT,
-    IS_DEV_MODE,
-    TARGET_MILLIS,
-    VERSION,
-    WIDTH,
-} from "./Config";
+import { HEIGHT, IS_DEV_MODE, TARGET_MILLIS, VERSION, WIDTH } from "./Config";
 import { GameEvent, RootEventType } from "./engine/events/Event";
 import { World } from "./engine/World";
 import { ResourceManager } from "./resources/ResourceManager";
