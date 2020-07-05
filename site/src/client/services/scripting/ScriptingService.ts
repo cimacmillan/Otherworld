@@ -1,13 +1,12 @@
 import { Entity } from "../../engine/Entity";
 import { BaseState } from "../../engine/state/State";
 import { Game } from "../../Game";
-import { Audios, MAPS } from "../../resources/manifests/Types";
-import { loadMap } from "../../resources/MapLoader";
+import { Audios } from "../../resources/manifests/Types";
 import { InputState } from "../input/InputService";
 import { ProcedureService } from "../jobs/ProcedureService";
 import { ServiceLocator } from "../ServiceLocator";
-import { createEgg } from "./factory/EnemyFactory";
-import { createPlayer, PlayerState } from "./factory/PlayerFactory";
+import { bootstrap } from "./Bootstrap";
+import { PlayerState } from "./factory/PlayerFactory";
 import { InventoryService } from "./items/InventoryService";
 
 /**
@@ -106,20 +105,7 @@ export class ScriptingService {
     }
 
     public bootstrapInitialContent() {
-        const world = this.serviceLocator.getWorld();
-
-        this.player = createPlayer(this.serviceLocator);
-        world.addEntity(this.player);
-
-        const camera = this.player.getState().camera;
-        this.serviceLocator.getAudioService().attachCamera(camera);
-        this.serviceLocator.getRenderService().attachCamera(camera);
-
-        world.addEntity(createEgg(this.serviceLocator));
-
-        loadMap(
-            this.serviceLocator,
-            this.serviceLocator.getResourceManager().manifest.maps[MAPS.DEFAULT]
-        );
+        const bootstrapInfo = bootstrap(this.serviceLocator);
+        this.player = bootstrapInfo.player;
     }
 }
