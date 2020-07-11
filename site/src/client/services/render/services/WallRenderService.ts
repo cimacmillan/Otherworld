@@ -1,8 +1,13 @@
 import { mat4 } from "gl-matrix";
 import { ISyncedArrayRef, SyncedArray } from "../../../util/array/SyncedArray";
 import { compileTextureRepeatShader } from "../shaders/Shaders";
+import { CompiledShader } from "../shaders/types";
 import { Wall } from "../types/RenderInterface";
 import { RenderItem, RenderItemInterface } from "../types/RenderItemInterface";
+import {
+    BackgroundRenderService,
+    BackgroundShaderPositions,
+} from "./BackgroundRenderService";
 
 export class WallRenderService implements RenderItemInterface<Wall> {
     private gl: WebGLRenderingContext;
@@ -25,9 +30,16 @@ export class WallRenderService implements RenderItemInterface<Wall> {
     private modelViewMatrix: mat4;
     private projectionMatrix: mat4;
 
+    private backgroundShaderPositions: BackgroundShaderPositions;
+
+    public constructor(
+        private backgroundRenderService: BackgroundRenderService
+    ) {}
+
     public init(gl: WebGLRenderingContext) {
         this.gl = gl;
         this.shader = compileTextureRepeatShader(gl);
+        this.backgroundShaderPositions = this.shader.uniform as any;
 
         this.wallArray = new SyncedArray({
             onReconstruct: (array: Array<ISyncedArrayRef<Wall>>) =>
@@ -101,6 +113,10 @@ export class WallRenderService implements RenderItemInterface<Wall> {
         this.gl.enableVertexAttribArray(this.shader.attribute.textureSize);
 
         this.gl.useProgram(this.shader.shaderId);
+        this.backgroundRenderService.applyShaderArguments(
+            this.backgroundShaderPositions
+        );
+
         this.gl.uniformMatrix4fv(
             this.shader.uniform.projectionMatrix,
             false,

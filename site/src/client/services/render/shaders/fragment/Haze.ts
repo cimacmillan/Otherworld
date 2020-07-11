@@ -1,18 +1,37 @@
-const background_r = 0.22;
-const background_g = 0.26;
-const background_b = 0.4;
-
-const hazeAmount = 0.2;
+import { UniformPositions } from "../types";
 
 export const hazeFunction = `
-    lowp vec3 haze(lowp vec3 colour) {
+    uniform lowp float hazeAmount;
+    uniform lowp float hazeR;
+    uniform lowp float hazeG;
+    uniform lowp float hazeB;
+
+    lowp vec3 haze(lowp vec3 colour, lowp float distance) {
 
         lowp vec3 hazeColour = vec3(
-            ${background_r}, ${background_g}, ${background_b}
+            hazeR, hazeG, hazeB
         );
 
-        lowp float grad = ${hazeAmount};
+        lowp float grad = 1.0 - distance;
 
         return (grad * hazeColour) + ((1.0 - grad) * colour);
     }
 `;
+
+export enum Parameters {
+    hazeAmount = `hazeAmount`,
+    hazeR = `hazeR`,
+    hazeG = `hazeG`,
+    hazeB = `hazeB`,
+}
+
+export const hazeUniformPositions = (
+    shaderId: WebGLProgram,
+    gl: WebGLRenderingContext
+) => {
+    const uniform: UniformPositions = {};
+    for (const param in Parameters) {
+        uniform[param] = gl.getUniformLocation(shaderId, param);
+    }
+    return uniform;
+};

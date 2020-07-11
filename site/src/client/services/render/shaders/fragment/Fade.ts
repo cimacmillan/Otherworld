@@ -1,15 +1,17 @@
-const maxViewDistance = 20;
-const minDistance = 6;
-
-export const fadeAccuracy = 8;
-export const fadePixelAccuracy = 4;
+import { UniformPositions } from "../types";
 
 export const fadeFunction = `
+
+    uniform lowp float fadeAccuracy;
+    uniform lowp float fadePixelAccuracy;
+    uniform lowp float minViewDistance;
+    uniform lowp float maxViewDistance;
+
     lowp float fade(lowp float distance) {
 
-        lowp float accuracy = ${fadeAccuracy}.0;
-        lowp float minDistance = ${minDistance}.0;
-        lowp float maxDistance = ${maxViewDistance}.0;
+        lowp float accuracy = fadeAccuracy;
+        lowp float minDistance = minViewDistance;
+        lowp float maxDistance = maxViewDistance;
 
         lowp float grad = (distance - minDistance) / (maxDistance - minDistance);
 
@@ -18,3 +20,21 @@ export const fadeFunction = `
         return 1.0 - max(min(grad, 1.0), 0.0);
     }
 `;
+
+export enum Parameters {
+    fadeAccuracy = `fadeAccuracy`,
+    fadePixelAccuracy = `fadePixelAccuracy`,
+    minViewDistance = `minViewDistance`,
+    maxViewDistance = `maxViewDistance`,
+}
+
+export const fadeUniformPositions = (
+    shaderId: WebGLProgram,
+    gl: WebGLRenderingContext
+) => {
+    const uniform: UniformPositions = {};
+    for (const param in Parameters) {
+        uniform[param] = gl.getUniformLocation(shaderId, param);
+    }
+    return uniform;
+};

@@ -1,6 +1,9 @@
+import { fadeUniformPositions } from "./fragment/Fade";
 import { fsSource } from "./fragment/Fragment";
+import { hazeUniformPositions } from "./fragment/Haze";
 import { rfsSource } from "./fragment/RepeatedFragment";
 import { initShaderProgram } from "./ShaderCompiler";
+import { AttributePositions, UniformPositions } from "./types";
 import { BilloardVertex } from "./vertex/BillboardVertex";
 import { RepeatedVertex } from "./vertex/RepeatedVertex";
 import { Vertex } from "./vertex/Vertex";
@@ -8,6 +11,8 @@ import { Vertex } from "./vertex/Vertex";
 export function compileSpriteShader(gl: WebGLRenderingContext) {
     const shaderId = initShaderProgram(gl, BilloardVertex.source, fsSource);
     const uniform: UniformPositions = {
+        ...fadeUniformPositions(shaderId, gl),
+        ...hazeUniformPositions(shaderId, gl),
         textureSampler: gl.getUniformLocation(
             shaderId,
             BilloardVertex.v.textureSampler
@@ -41,6 +46,9 @@ export function compileSpriteShader(gl: WebGLRenderingContext) {
 export function compileModelShader(gl: WebGLRenderingContext) {
     const shaderId = initShaderProgram(gl, Vertex.source, fsSource);
     const uniform: UniformPositions = {
+        ...fadeUniformPositions(shaderId, gl),
+        ...hazeUniformPositions(shaderId, gl),
+
         textureSampler: gl.getUniformLocation(
             shaderId,
             Vertex.v.textureSampler
@@ -64,6 +72,9 @@ export function compileModelShader(gl: WebGLRenderingContext) {
 export function compileTextureRepeatShader(gl: WebGLRenderingContext) {
     const shaderId = initShaderProgram(gl, RepeatedVertex.source, rfsSource);
     const uniform: UniformPositions = {
+        ...fadeUniformPositions(shaderId, gl),
+        ...hazeUniformPositions(shaderId, gl),
+
         textureSampler: gl.getUniformLocation(
             shaderId,
             RepeatedVertex.v.textureSampler

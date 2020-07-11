@@ -1,8 +1,13 @@
 import { mat4 } from "gl-matrix";
 import { ISyncedArrayRef, SyncedArray } from "../../../util/array/SyncedArray";
 import { compileSpriteShader } from "../shaders/Shaders";
+import { CompiledShader } from "../shaders/types";
 import { Sprite } from "../types/RenderInterface";
 import { RenderItem, RenderItemInterface } from "../types/RenderItemInterface";
+import {
+    BackgroundRenderService,
+    BackgroundShaderPositions,
+} from "./BackgroundRenderService";
 
 export class SpriteRenderService implements RenderItemInterface<Sprite> {
     private gl: WebGLRenderingContext;
@@ -23,9 +28,16 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
     private modelViewMatrix: mat4;
     private projectionMatrix: mat4;
 
+    private backgroundShaderPositions: BackgroundShaderPositions;
+
+    public constructor(
+        private backgroundRenderService: BackgroundRenderService
+    ) {}
+
     public init(gl: WebGLRenderingContext) {
         this.gl = gl;
         this.shader = compileSpriteShader(gl);
+        this.backgroundShaderPositions = this.shader.uniform as any;
 
         this.spriteArray = new SyncedArray({
             onReconstruct: (array: Array<ISyncedArrayRef<Sprite>>) =>
@@ -89,6 +101,10 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         this.gl.enableVertexAttribArray(this.shader.attribute.texturePosition);
 
         this.gl.useProgram(this.shader.shaderId);
+        this.backgroundRenderService.applyShaderArguments(
+            this.backgroundShaderPositions
+        );
+
         this.gl.uniformMatrix4fv(
             this.shader.uniform.projectionMatrix,
             false,

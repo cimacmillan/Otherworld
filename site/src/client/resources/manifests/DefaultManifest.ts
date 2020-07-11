@@ -3,7 +3,7 @@ import { BUTTON_DEFAULT_SPRITES } from "./ButtonDefault";
 import { BUTTON_HOVER_SPRITES } from "./ButtonHover";
 import { BUTTON_PRESS_SPRITES } from "./ButtonPress";
 import { DARK_PANEL_SPRITES } from "./DarkPanel";
-import Map from "./maps/map";
+import Market from "./maps/Market";
 import {
     Animations,
     Audios,
@@ -17,7 +17,7 @@ import {
 
 export const defaultManifest: ResourceManifest = {
     maps: {
-        [MAPS.DEFAULT]: Map,
+        [MAPS.DEFAULT]: Market,
     },
     spritesheets: {
         [SpriteSheets.SPRITE]: {
