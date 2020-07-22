@@ -16,7 +16,9 @@ export class ChickenLogicComponent
         );
     }
 
-    public update(entity: Entity<ChickenStateType>) {}
+    public update(entity: Entity<ChickenStateType>) {
+        this.chickenStateBehaviour.update();
+    }
 
     public onCreate(entity: Entity<ChickenStateType>) {
         this.chickenStateBehaviour.load();

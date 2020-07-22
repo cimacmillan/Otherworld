@@ -128,6 +128,30 @@ export const defaultManifest: ResourceManifest = {
                     x: 16,
                     y: 0,
                 },
+                [Sprites.CHICKEN_STANDING_EYE_OPEN]: {
+                    width: 16,
+                    height: 16,
+                    x: 128,
+                    y: 160,
+                },
+                [Sprites.CHICKEN_STANDING_EYE_CLOSED]: {
+                    width: 16,
+                    height: 16,
+                    x: 144,
+                    y: 160,
+                },
+                [Sprites.CHICKEN_SITTING_EYE_OPEN]: {
+                    width: 16,
+                    height: 16,
+                    x: 160,
+                    y: 160,
+                },
+                [Sprites.CHICKEN_SITTING_EYE_CLOSED]: {
+                    width: 16,
+                    height: 16,
+                    x: 176,
+                    y: 160,
+                },
             },
         },
         [SpriteSheets.UI]: {

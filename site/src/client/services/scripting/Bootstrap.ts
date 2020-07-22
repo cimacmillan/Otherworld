@@ -2,6 +2,7 @@ import { Entity } from "../../engine/Entity";
 import { MAPS } from "../../resources/manifests/Types";
 import { loadMap } from "../../resources/MapLoader";
 import { ServiceLocator } from "../ServiceLocator";
+import { createChicken } from "./factory/EnemyFactory";
 import { createPlayer, PlayerState } from "./factory/PlayerFactory";
 
 interface BootstrapInfo {
@@ -19,6 +20,13 @@ export function bootstrap(serviceLocator: ServiceLocator): BootstrapInfo {
     serviceLocator.getRenderService().attachCamera(camera);
 
     // world.addEntity(createEgg(this.serviceLocator));
+
+    for (let i = 0; i < 40; i++) {
+        const spread = 5;
+        const x = (Math.random() - 0.5) * spread;
+        const y = (Math.random() - 0.5) * spread;
+        world.addEntity(createChicken(serviceLocator, x, y));
+    }
 
     loadMap(
         serviceLocator,
