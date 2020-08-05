@@ -1,6 +1,7 @@
 import {
     Sprites,
     SpriteSheets,
+    Animations,
 } from "../../../../resources/manifests/Types";
 import { ProcedureService } from "../../../../services/jobs/ProcedureService";
 import { StateEffect } from "../../../effects/StateEffect";
@@ -8,6 +9,8 @@ import { Entity } from "../../../Entity";
 import { EntityComponent, EntityComponentType } from "../../../EntityComponent";
 import { BaseState, SpriteRenderState } from "../../../state/State";
 import { ChickenLogicState, ChickenState } from "./ChickenState";
+import { effectFromAnimation } from "../../../effects/AnimationEffect";
+import { animation } from "../../../../util/animation/Animations";
 
 type ChickenRenderState = BaseState & ChickenState & SpriteRenderState;
 
@@ -23,6 +26,54 @@ export class ChickenRenderComponent<T extends ChickenRenderState>
         const spritesheet =
             resourceManager.manifest.spritesheets[SpriteSheets.SPRITE];
 
+        const walkingAnimation = animation((x: number) => {
+            entity.setState(
+                {
+                    textureCoordinate: spritesheet.getAnimationInterp(
+                        Animations.CHICKEN_WALKING,
+                        x
+                    ).textureCoordinate,
+                },
+                false
+            );
+        }).speed(1000).withOffset(Math.random()).looping();
+
+        const sittingAnimation = animation((x: number) => {
+            entity.setState(
+                {
+                    textureCoordinate: spritesheet.getAnimationInterp(
+                        Animations.CHICKEN_SITTING,
+                        x
+                    ).textureCoordinate,
+                },
+                false
+            );
+        }).speed(1000).withOffset(Math.random()).looping();
+
+        const jumpingAnimation = animation((x: number) => {
+            entity.setState(
+                {
+                    textureCoordinate: spritesheet.getAnimationInterp(
+                        Animations.CHICKEN_JUMPING,
+                        x
+                    ).textureCoordinate,
+                },
+                false
+            );
+        }).speed(1000).withOffset(Math.random()).looping();
+
+        const eatingAnimation = animation((x: number) => {
+            entity.setState(
+                {
+                    textureCoordinate: spritesheet.getAnimationInterp(
+                        Animations.CHICKEN_EATING,
+                        x
+                    ).textureCoordinate,
+                },
+                false
+            );
+        }).speed(1000).withOffset(Math.random()).looping();
+
         this.chickenStateBehaviour = new StateEffect(
             {
                 [ChickenLogicState.STANDING_IDLE]: this.chickenBlinksRandomly(
@@ -31,6 +82,28 @@ export class ChickenRenderComponent<T extends ChickenRenderState>
                     Sprites.CHICKEN_STANDING_EYE_CLOSED
                 ),
                 [ChickenLogicState.SITTING_IDLE]: this.chickenBlinksRandomly(
+                    entity,
+                    Sprites.CHICKEN_SITTING_EYE_OPEN,
+                    Sprites.CHICKEN_SITTING_EYE_CLOSED
+                ),
+                [ChickenLogicState.WALKING]: effectFromAnimation(
+                    walkingAnimation
+                ),
+                [ChickenLogicState.SITTING]: effectFromAnimation(
+                    sittingAnimation
+                ),
+                [ChickenLogicState.JUMPING]: effectFromAnimation(
+                    jumpingAnimation
+                ),
+                [ChickenLogicState.EATING]: effectFromAnimation(
+                    eatingAnimation
+                ),
+                [ChickenLogicState.SLEEPING]: {
+                    onEnter: () => entity.setState({
+                        textureCoordinate: spritesheet.getSprite(Sprites.CHICKEN_SITTING_EYE_CLOSED).textureCoordinate,
+                    })
+                },
+                [ChickenLogicState.HATCHING]: this.chickenBlinksRandomly(
                     entity,
                     Sprites.CHICKEN_SITTING_EYE_OPEN,
                     Sprites.CHICKEN_SITTING_EYE_CLOSED

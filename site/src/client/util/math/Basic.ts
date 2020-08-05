@@ -58,3 +58,9 @@ export function getTextureCoordinate(
         textureHeight: height / spriteSheetHeight,
     };
 }
+
+
+export function randomSelection<T>(toSelect: T[]): T {
+    const randomIndex = Math.floor(Math.random() * toSelect.length);
+    return toSelect[randomIndex];
+}

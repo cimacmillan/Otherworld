@@ -72,6 +72,34 @@ export const defaultManifest: ResourceManifest = {
                     y: 128,
                     frames: 8,
                 },
+                [Animations.CHICKEN_WALKING]: {
+                    width: 16,
+                    height: 16,
+                    x: 128,
+                    y: 176,
+                    frames: 8,
+                },
+                [Animations.CHICKEN_SITTING]: {
+                    width: 16,
+                    height: 16,
+                    x: 128,
+                    y: 192,
+                    frames: 8,
+                },
+                [Animations.CHICKEN_JUMPING]: {
+                    width: 16,
+                    height: 16,
+                    x: 128,
+                    y: 208,
+                    frames: 8,
+                },
+                [Animations.CHICKEN_EATING]: {
+                    width: 16,
+                    height: 16,
+                    x: 128,
+                    y: 224,
+                    frames: 8,
+                },
             },
             sprites: {
                 [Sprites.SWORD]: {
@@ -150,6 +178,12 @@ export const defaultManifest: ResourceManifest = {
                     width: 16,
                     height: 16,
                     x: 176,
+                    y: 160,
+                },
+                [Sprites.CHICKEN_DAMAGED]: {
+                    width: 16,
+                    height: 16,
+                    x: 192,
                     y: 160,
                 },
             },

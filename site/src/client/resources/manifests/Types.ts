@@ -84,6 +84,11 @@ export enum Animations {
     CRABLET_GREEN_ATTACK,
     CRABLET_BLUE_ATTACK,
     EGG_CHARGE,
+
+    CHICKEN_WALKING,
+    CHICKEN_SITTING,
+    CHICKEN_JUMPING,
+    CHICKEN_EATING
 }
 export enum Sprites {
     SWORD,
@@ -100,6 +105,7 @@ export enum Sprites {
     CHICKEN_STANDING_EYE_CLOSED,
     CHICKEN_SITTING_EYE_OPEN,
     CHICKEN_SITTING_EYE_CLOSED,
+    CHICKEN_DAMAGED,
 }
 export enum Audios {
     INTRO,
