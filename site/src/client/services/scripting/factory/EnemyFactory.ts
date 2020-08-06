@@ -24,8 +24,8 @@ import {
     SpriteSheets,
 } from "../../../resources/manifests/Types";
 import { TextureCoordinate } from "../../../resources/SpriteSheet";
-import { ServiceLocator } from "../../ServiceLocator";
 import { randomSelection } from "../../../util/math";
+import { ServiceLocator } from "../../ServiceLocator";
 
 const noTexture: TextureCoordinate = {
     textureX: 0,
@@ -131,7 +131,7 @@ export function createChicken(
         ChickenLogicState.JUMPING,
         ChickenLogicState.EATING,
         ChickenLogicState.SLEEPING,
-        ChickenLogicState.HATCHING
+        ChickenLogicState.HATCHING,
     ]);
 
     const initialState: ChickenStateType = {

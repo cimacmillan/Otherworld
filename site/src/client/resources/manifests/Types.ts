@@ -88,7 +88,7 @@ export enum Animations {
     CHICKEN_WALKING,
     CHICKEN_SITTING,
     CHICKEN_JUMPING,
-    CHICKEN_EATING
+    CHICKEN_EATING,
 }
 export enum Sprites {
     SWORD,

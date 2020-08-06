@@ -1,8 +1,11 @@
+import { randomSelection } from "../../../../util/math";
 import { StateEffect } from "../../../effects/StateEffect";
+import { timeoutEffect } from "../../../effects/TimeoutEffect";
 import { Entity } from "../../../Entity";
 import { EntityComponent, EntityComponentType } from "../../../EntityComponent";
-import { ChickenStateType } from "./ChickenState";
+import { ChickenLogicState, ChickenStateType } from "./ChickenState";
 
+// CHickens bugged they slowly end up doing nothing
 export class ChickenLogicComponent
     implements EntityComponent<ChickenStateType> {
     public componentType = EntityComponentType.ChickenLogicComponent;
@@ -11,7 +14,16 @@ export class ChickenLogicComponent
 
     public init(entity: Entity<ChickenStateType>) {
         this.chickenStateBehaviour = new StateEffect(
-            {},
+            {
+                [ChickenLogicState.STANDING_IDLE]: this.nextStateRandom(entity),
+                [ChickenLogicState.SITTING_IDLE]: this.nextStateRandom(entity),
+                [ChickenLogicState.WALKING]: this.nextStateRandom(entity),
+                [ChickenLogicState.SITTING]: this.nextStateRandom(entity),
+                [ChickenLogicState.JUMPING]: this.nextStateRandom(entity),
+                [ChickenLogicState.EATING]: this.nextStateRandom(entity),
+                [ChickenLogicState.SLEEPING]: this.nextStateRandom(entity),
+                [ChickenLogicState.HATCHING]: this.nextStateRandom(entity),
+            },
             entity.getState().logicState
         );
     }
@@ -28,7 +40,29 @@ export class ChickenLogicComponent
         this.chickenStateBehaviour.unload();
     }
 
-    // public onEvent?: (entity: Entity<ChickenStateType>, event: import("../../../events/Event").GameEvent) => void;
-    // public onObservedEvent?: (entity: Entity<ChickenStateType>, event: import("../../../events/Event").GameEvent) => void;
-    // public onStateTransition?: (entity: Entity<ChickenStateType>, from: ChickenStateType, to: ChickenStateType) => void;
+    public onStateTransition(
+        entity: Entity<ChickenStateType>,
+        from: ChickenStateType,
+        to: ChickenStateType
+    ) {
+        this.chickenStateBehaviour.setState(to.logicState);
+    }
+
+    private nextStateRandom = (entity: Entity<ChickenStateType>) => {
+        return timeoutEffect(() => {
+            const randomState = randomSelection([
+                ChickenLogicState.STANDING_IDLE,
+                ChickenLogicState.SITTING_IDLE,
+                ChickenLogicState.WALKING,
+                ChickenLogicState.SITTING,
+                ChickenLogicState.JUMPING,
+                ChickenLogicState.EATING,
+                ChickenLogicState.SLEEPING,
+                ChickenLogicState.HATCHING,
+            ]);
+            entity.setState({
+                logicState: randomState,
+            });
+        }, 1000);
+    };
 }

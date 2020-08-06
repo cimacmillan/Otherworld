@@ -1,78 +1,39 @@
 import {
     Sprites,
     SpriteSheets,
-    Animations,
 } from "../../../../resources/manifests/Types";
 import { ProcedureService } from "../../../../services/jobs/ProcedureService";
+import { effectFromAnimation } from "../../../effects/AnimationEffect";
 import { StateEffect } from "../../../effects/StateEffect";
 import { Entity } from "../../../Entity";
 import { EntityComponent, EntityComponentType } from "../../../EntityComponent";
 import { BaseState, SpriteRenderState } from "../../../state/State";
-import { ChickenLogicState, ChickenState } from "./ChickenState";
-import { effectFromAnimation } from "../../../effects/AnimationEffect";
-import { animation } from "../../../../util/animation/Animations";
+import { getChickenAnimations } from "./animations";
+import {
+    ChickenLogicState,
+    ChickenState,
+    ChickenStateType,
+} from "./ChickenState";
 
 type ChickenRenderState = BaseState & ChickenState & SpriteRenderState;
 
-export class ChickenRenderComponent<T extends ChickenRenderState>
+export class ChickenRenderComponent<T extends ChickenStateType>
     implements EntityComponent<T> {
     public componentType = EntityComponentType.ChickenRenderComponent;
 
     private chickenStateBehaviour: StateEffect;
 
-    public init(entity: Entity<ChickenRenderState>) {
+    public init(entity: Entity<ChickenStateType>) {
         const { logicState } = entity.getState();
-        const resourceManager = entity.getServiceLocator().getResourceManager();
-        const spritesheet =
-            resourceManager.manifest.spritesheets[SpriteSheets.SPRITE];
+        const spritesheet = entity.getServiceLocator().getResourceManager()
+            .manifest.spritesheets[SpriteSheets.SPRITE];
 
-        const walkingAnimation = animation((x: number) => {
-            entity.setState(
-                {
-                    textureCoordinate: spritesheet.getAnimationInterp(
-                        Animations.CHICKEN_WALKING,
-                        x
-                    ).textureCoordinate,
-                },
-                false
-            );
-        }).speed(1000).withOffset(Math.random()).looping();
-
-        const sittingAnimation = animation((x: number) => {
-            entity.setState(
-                {
-                    textureCoordinate: spritesheet.getAnimationInterp(
-                        Animations.CHICKEN_SITTING,
-                        x
-                    ).textureCoordinate,
-                },
-                false
-            );
-        }).speed(1000).withOffset(Math.random()).looping();
-
-        const jumpingAnimation = animation((x: number) => {
-            entity.setState(
-                {
-                    textureCoordinate: spritesheet.getAnimationInterp(
-                        Animations.CHICKEN_JUMPING,
-                        x
-                    ).textureCoordinate,
-                },
-                false
-            );
-        }).speed(1000).withOffset(Math.random()).looping();
-
-        const eatingAnimation = animation((x: number) => {
-            entity.setState(
-                {
-                    textureCoordinate: spritesheet.getAnimationInterp(
-                        Animations.CHICKEN_EATING,
-                        x
-                    ).textureCoordinate,
-                },
-                false
-            );
-        }).speed(1000).withOffset(Math.random()).looping();
+        const {
+            walkingAnimation,
+            sittingAnimation,
+            jumpingAnimation,
+            eatingAnimation,
+        } = getChickenAnimations(entity);
 
         this.chickenStateBehaviour = new StateEffect(
             {
@@ -99,9 +60,12 @@ export class ChickenRenderComponent<T extends ChickenRenderState>
                     eatingAnimation
                 ),
                 [ChickenLogicState.SLEEPING]: {
-                    onEnter: () => entity.setState({
-                        textureCoordinate: spritesheet.getSprite(Sprites.CHICKEN_SITTING_EYE_CLOSED).textureCoordinate,
-                    })
+                    onEnter: () =>
+                        entity.setState({
+                            textureCoordinate: spritesheet.getSprite(
+                                Sprites.CHICKEN_SITTING_EYE_CLOSED
+                            ).textureCoordinate,
+                        }),
                 },
                 [ChickenLogicState.HATCHING]: this.chickenBlinksRandomly(
                     entity,
@@ -113,20 +77,28 @@ export class ChickenRenderComponent<T extends ChickenRenderState>
         );
     }
 
-    public update(entity: Entity<ChickenRenderState>) {
+    public update(entity: Entity<ChickenStateType>) {
         this.chickenStateBehaviour.update();
     }
 
-    public onCreate(entity: Entity<ChickenRenderState>) {
+    public onCreate(entity: Entity<ChickenStateType>) {
         this.chickenStateBehaviour.load();
     }
 
-    public onDestroy(entity: Entity<ChickenRenderState>) {
+    public onDestroy(entity: Entity<ChickenStateType>) {
         this.chickenStateBehaviour.unload();
     }
 
+    public onStateTransition(
+        entity: Entity<ChickenStateType>,
+        from: ChickenStateType,
+        to: ChickenStateType
+    ) {
+        this.chickenStateBehaviour.setState(to.logicState);
+    }
+
     private chickenBlinksRandomly(
-        entity: Entity<ChickenRenderState>,
+        entity: Entity<ChickenStateType>,
         eyeOpenSprite: number,
         eyeClosedSprite: number
     ) {
@@ -143,7 +115,8 @@ export class ChickenRenderComponent<T extends ChickenRenderState>
             const timeTillFlip = open
                 ? Math.random() * 2000 + 1000
                 : Math.random() * 200 + 100;
-            ProcedureService.setGameTimeout(() => {
+            ProcedureService.clearTimeout(timeout);
+            timeout = ProcedureService.setGameTimeout(() => {
                 open = !open;
                 blink();
             }, timeTillFlip);
