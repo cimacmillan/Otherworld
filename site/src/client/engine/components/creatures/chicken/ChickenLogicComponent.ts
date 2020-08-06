@@ -50,7 +50,7 @@ export class ChickenLogicComponent
 
     private nextStateRandom = (entity: Entity<ChickenStateType>) => {
         return timeoutEffect(() => {
-            const randomState = randomSelection([
+            const possibleStates = [
                 ChickenLogicState.STANDING_IDLE,
                 ChickenLogicState.SITTING_IDLE,
                 ChickenLogicState.WALKING,
@@ -59,9 +59,9 @@ export class ChickenLogicComponent
                 ChickenLogicState.EATING,
                 ChickenLogicState.SLEEPING,
                 ChickenLogicState.HATCHING,
-            ]);
+            ].filter(logicState => logicState !== entity.getState().logicState);
             entity.setState({
-                logicState: randomState,
+                logicState: randomSelection(possibleStates),
             });
         }, 1000);
     };

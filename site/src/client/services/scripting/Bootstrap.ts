@@ -21,7 +21,7 @@ export function bootstrap(serviceLocator: ServiceLocator): BootstrapInfo {
 
     // world.addEntity(createEgg(this.serviceLocator));
 
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 30; i++) {
         const spread = 5;
         const x = (Math.random() - 0.5) * spread;
         const y = (Math.random() - 0.5) * spread;
