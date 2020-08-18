@@ -24,7 +24,6 @@ import {
     SpriteSheets,
 } from "../../../resources/manifests/Types";
 import { TextureCoordinate } from "../../../resources/SpriteSheet";
-import { randomSelection } from "../../../util/math";
 import { ServiceLocator } from "../../ServiceLocator";
 
 const noTexture: TextureCoordinate = {
@@ -123,19 +122,22 @@ export function createChicken(
     const spritesheet = serviceLocator.getResourceManager().manifest
         .spritesheets[SpriteSheets.SPRITE];
 
-    const logicState = randomSelection([
-        ChickenLogicState.STANDING_IDLE,
-        ChickenLogicState.SITTING_IDLE,
-        ChickenLogicState.WALKING,
-        ChickenLogicState.SITTING,
-        ChickenLogicState.JUMPING,
-        ChickenLogicState.EATING,
-        ChickenLogicState.SLEEPING,
-        ChickenLogicState.HATCHING,
-    ]);
+    // const logicState = randomSelection([
+    //     ChickenLogicState.STANDING_IDLE,
+    //     ChickenLogicState.SITTING_IDLE,
+    //     ChickenLogicState.WALKING,
+    //     ChickenLogicState.SITTING,
+    //     ChickenLogicState.JUMPING,
+    //     ChickenLogicState.EATING,
+    //     ChickenLogicState.SLEEPING,
+    //     ChickenLogicState.HATCHING,
+    // ]);
 
     const initialState: ChickenStateType = {
-        logicState,
+        chickenState: {
+            logicState: ChickenLogicState.STANDING_IDLE,
+            cooldown: Math.random(),
+        },
         velocity: { x: 0, y: 0 },
         friction: 0.8,
         mass: 0.4,

@@ -1,7 +1,4 @@
-import {
-    Sprites,
-    SpriteSheets,
-} from "../../../../resources/manifests/Types";
+import { Sprites, SpriteSheets } from "../../../../resources/manifests/Types";
 import { ProcedureService } from "../../../../services/jobs/ProcedureService";
 import { effectFromAnimation } from "../../../effects/AnimationEffect";
 import { StateEffect } from "../../../effects/StateEffect";
@@ -24,7 +21,7 @@ export class ChickenRenderComponent<T extends ChickenStateType>
     private chickenStateBehaviour: StateEffect;
 
     public init(entity: Entity<ChickenStateType>) {
-        const { logicState } = entity.getState();
+        const { logicState } = entity.getState().chickenState;
         const spritesheet = entity.getServiceLocator().getResourceManager()
             .manifest.spritesheets[SpriteSheets.SPRITE];
 
@@ -94,7 +91,7 @@ export class ChickenRenderComponent<T extends ChickenStateType>
         from: ChickenStateType,
         to: ChickenStateType
     ) {
-        this.chickenStateBehaviour.setState(to.logicState);
+        this.chickenStateBehaviour.setState(to.chickenState.logicState);
     }
 
     private chickenBlinksRandomly(

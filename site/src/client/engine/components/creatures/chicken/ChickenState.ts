@@ -1,8 +1,25 @@
+import { Vector2D } from "../../../../types";
 import { BaseState, SpriteRenderState } from "../../../state/State";
 import { PhysicsStateType } from "../../physics/PhysicsComponent";
 
 export interface ChickenState {
+    chickenState: ChickenNodes;
+}
+
+export interface ChickenNode {
     logicState: ChickenLogicState;
+}
+
+export type ChickenNodes = ChickenWalkingState | ChickenStandingState;
+
+export interface ChickenWalkingState extends ChickenNode {
+    logicState: ChickenLogicState.WALKING;
+    destination: Vector2D;
+}
+
+export interface ChickenStandingState extends ChickenNode {
+    logicState: ChickenLogicState.STANDING_IDLE;
+    cooldown: number;
 }
 
 export enum ChickenLogicState {
