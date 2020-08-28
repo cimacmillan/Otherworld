@@ -1,4 +1,4 @@
-import { HEIGHT, TARGET_MILLIS, WIDTH } from "./Config";
+import { HEIGHT, IS_DEV_MODE, TARGET_MILLIS, VERSION, WIDTH } from "./Config";
 import { GameEvent, RootEventType } from "./engine/events/Event";
 import { World } from "./engine/World";
 import { ResourceManager } from "./resources/ResourceManager";
@@ -11,7 +11,10 @@ import { PhysicsService } from "./services/physics/PhysicsService";
 import { RenderService, ScreenBuffer } from "./services/render";
 import { ScriptingService } from "./services/scripting/ScriptingService";
 import { SerialisationListeners } from "./services/serialisation/Listeners";
-import { SerialisationService } from "./services/serialisation/SerialisationService";
+import {
+    SerialisationObject,
+    SerialisationService,
+} from "./services/serialisation/SerialisationService";
 import { GameStorage } from "./services/serialisation/Storage";
 import { ServiceLocator } from "./services/ServiceLocator";
 import { Actions } from "./ui/actions/Actions";
@@ -77,16 +80,38 @@ export class Game {
 
         this.storage = new GameStorage();
 
+        let compatibleSave: SerialisationObject | undefined;
+
         if (this.storage.isSaveAvailable()) {
             const save = this.storage.getSaveGame();
-            console.log("Loading save game...", save);
-            this.serviceLocator.getSerialisationService().deserialise(save);
+            compatibleSave = save;
+
+            if (save.version !== VERSION) {
+                compatibleSave = undefined;
+                console.log(
+                    "save version incompatible ",
+                    save.version,
+                    VERSION
+                );
+            }
+
+            if (IS_DEV_MODE()) {
+                compatibleSave = undefined;
+                console.log("not loading save, in dev mode");
+            }
+        }
+
+        if (compatibleSave) {
+            console.log("Loading save game...", compatibleSave);
+            this.serviceLocator
+                .getSerialisationService()
+                .deserialise(compatibleSave);
             this.setUpdateWorld(true);
             this.serviceLocator
                 .getInputService()
                 .setInputState(InputState.DEFAULT);
         } else {
-            console.log("No save game, bootstrapping...");
+            console.log("No compatible save, bootstrapping...");
             this.serviceLocator.getScriptingService().bootstrapInitialContent();
         }
 

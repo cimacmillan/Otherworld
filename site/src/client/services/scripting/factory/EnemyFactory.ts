@@ -1,18 +1,28 @@
+import { ChickenLogicComponent } from "../../../engine/components/creatures/chicken/ChickenLogicComponent";
+import { ChickenRenderComponent } from "../../../engine/components/creatures/chicken/ChickenRenderComponent";
+import {
+    ChickenLogicState,
+    ChickenStateType,
+} from "../../../engine/components/creatures/chicken/ChickenState";
 import {
     EggLogicComponent,
     EggStateType,
-} from "../../../engine/components/enemies/egg/EggLogicComponent";
+} from "../../../engine/components/creatures/egg/EggLogicComponent";
 import {
     MacatorLogicComponent,
     MacatorStateType,
-} from "../../../engine/components/enemies/macator/MacatorLogicComponent";
-import { MacatorRenderComponent } from "../../../engine/components/enemies/macator/MacatorRenderComponent";
+} from "../../../engine/components/creatures/macator/MacatorLogicComponent";
+import { MacatorRenderComponent } from "../../../engine/components/creatures/macator/MacatorRenderComponent";
 import { InteractionComponent } from "../../../engine/components/InteractionComponent";
 import { PhysicsComponent } from "../../../engine/components/physics/PhysicsComponent";
 import { SpriteRenderComponent } from "../../../engine/components/rendering/SpriteRenderComponent";
 import { Entity } from "../../../engine/Entity";
 import { EggState, MacatorState } from "../../../engine/state/Macator";
-import { Animations, SpriteSheets } from "../../../resources/manifests/Types";
+import {
+    Animations,
+    Sprites,
+    SpriteSheets,
+} from "../../../resources/manifests/Types";
 import { TextureCoordinate } from "../../../resources/SpriteSheet";
 import { ServiceLocator } from "../../ServiceLocator";
 
@@ -99,5 +109,65 @@ export function createEgg(serviceLocator: ServiceLocator) {
         new SpriteRenderComponent(),
         new PhysicsComponent(),
         new EggLogicComponent()
+    );
+}
+
+export function createChicken(
+    serviceLocator: ServiceLocator,
+    x: number,
+    y: number
+) {
+    const DEFAULT_HEIGHT = 0.5;
+
+    const spritesheet = serviceLocator.getResourceManager().manifest
+        .spritesheets[SpriteSheets.SPRITE];
+
+    // const logicState = randomSelection([
+    //     ChickenLogicState.STANDING_IDLE,
+    //     ChickenLogicState.SITTING_IDLE,
+    //     ChickenLogicState.WALKING,
+    //     ChickenLogicState.SITTING,
+    //     ChickenLogicState.JUMPING,
+    //     ChickenLogicState.EATING,
+    //     ChickenLogicState.SLEEPING,
+    //     ChickenLogicState.HATCHING,
+    // ]);
+
+    const initialState: ChickenStateType = {
+        chickenState: {
+            logicState: ChickenLogicState.STANDING_IDLE,
+            cooldown: Math.random(),
+        },
+        velocity: { x: 0, y: 0 },
+        friction: 0.8,
+        mass: 0.4,
+        elastic: 0,
+        exists: false,
+        position: { x, y },
+        height: DEFAULT_HEIGHT,
+        radius: 0.5,
+        angle: 0,
+        collidesEntities: true,
+        collidesWalls: true,
+        shouldRender: true,
+        textureCoordinate: spritesheet.getSprite(
+            Sprites.CHICKEN_STANDING_EYE_OPEN
+        ).textureCoordinate,
+        spriteWidth: 1,
+        spriteHeight: 1,
+        interactable: {
+            ATTACK: true,
+        },
+        health: 1,
+    };
+
+    return new Entity<ChickenStateType>(
+        serviceLocator,
+        initialState,
+        new SpriteRenderComponent(),
+        new PhysicsComponent(),
+        new ChickenLogicComponent(),
+        new ChickenRenderComponent(),
+        new InteractionComponent()
     );
 }

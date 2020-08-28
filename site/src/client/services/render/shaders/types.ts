@@ -1,12 +1,12 @@
-interface UniformPositions {
+export interface UniformPositions {
     [key: string]: WebGLUniformLocation;
 }
 
-interface AttributePositions {
+export interface AttributePositions {
     [key: string]: number;
 }
 
-interface CompiledShader {
+export interface CompiledShader {
     shaderId: WebGLProgram;
     uniform: UniformPositions;
     attribute: AttributePositions;

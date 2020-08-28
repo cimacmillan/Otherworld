@@ -172,16 +172,15 @@ export class PlayerControlComponent<T extends PlayerState>
                 1.5
             );
 
-        if (attacks.length > 0) {
-            entity
-                .getServiceLocator()
-                .getAudioService()
-                .play(
-                    entity.getServiceLocator().getResourceManager().manifest
-                        .audio[Audios.SLAM]
-                );
-        }
+        let hasAttacked = false;
+
         attacks.forEach((attacked) => {
+            if (attacked === entity) {
+                return;
+            }
+
+            hasAttacked = true;
+
             attacked.emit({
                 type: InteractionEventType.ON_DAMAGED,
                 payload: {
@@ -190,6 +189,16 @@ export class PlayerControlComponent<T extends PlayerState>
                 },
             });
         });
+
+        if (hasAttacked) {
+            entity
+                .getServiceLocator()
+                .getAudioService()
+                .play(
+                    entity.getServiceLocator().getResourceManager().manifest
+                        .audio[Audios.SLAM]
+                );
+        }
     }
 
     private onWalk(entity: Entity<PlayerState>, direction: WalkDirection) {

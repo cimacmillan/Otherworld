@@ -7,6 +7,10 @@ import {
     ZNEAR,
 } from "../../../Config";
 import {
+    InteractionComponent,
+    InteractionState,
+} from "../../../engine/components/InteractionComponent";
+import {
     PhysicsComponent,
     PhysicsStateType,
 } from "../../../engine/components/physics/PhysicsComponent";
@@ -25,7 +29,8 @@ export type PlayerState = BaseState &
     PhysicsStateType &
     CameraState &
     HealthState &
-    InventoryState;
+    InventoryState &
+    InteractionState;
 
 export function createPlayer(serviceLocator: ServiceLocator) {
     const initialPosition = { x: 0, y: 2 };
@@ -57,6 +62,9 @@ export function createPlayer(serviceLocator: ServiceLocator) {
         inventory: {
             items: [],
         },
+        interactable: {
+            ATTACK: true,
+        },
     };
 
     return new Entity<PlayerState>(
@@ -64,6 +72,7 @@ export function createPlayer(serviceLocator: ServiceLocator) {
         initialState,
         new PhysicsComponent(),
         new PlayerControlComponent(),
-        new PlayerInventoryComponent()
+        new PlayerInventoryComponent(),
+        new InteractionComponent()
     );
 }

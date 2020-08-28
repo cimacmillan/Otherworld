@@ -27,23 +27,29 @@ export class StateEffect {
             const currentStateCallback = this.effects[this.currentState];
             const newStateCallback = this.effects[this.newState];
 
-            currentStateCallback.onLeave && currentStateCallback.onLeave();
-            newStateCallback.onEnter && newStateCallback.onEnter();
+            currentStateCallback &&
+                currentStateCallback.onLeave &&
+                currentStateCallback.onLeave();
+            newStateCallback &&
+                newStateCallback.onEnter &&
+                newStateCallback.onEnter();
 
             this.currentState = this.newState;
         }
         const currentStateCallback = this.effects[this.currentState];
 
-        currentStateCallback.onUpdate && currentStateCallback.onUpdate();
+        currentStateCallback &&
+            currentStateCallback.onUpdate &&
+            currentStateCallback.onUpdate();
     }
 
     public unload() {
         const currentState = this.effects[this.currentState];
-        currentState.onLeave && currentState.onLeave();
+        currentState && currentState.onLeave && currentState.onLeave();
     }
 
     public load() {
         const currentState = this.effects[this.currentState];
-        currentState.onEnter && currentState.onEnter();
+        currentState && currentState.onEnter && currentState.onEnter();
     }
 }

@@ -1,3 +1,9 @@
+**28/08/2020 - Chicken Update**
+* Added chickens who chill in a corner of the map
+* Added background rendering for outdoor feel
+
+**28/06/2020 - Changelog 0.1.0**
+* Added serialisation versioning to reload game when changes made
 
 **16/06/2020 - Changelog**
 

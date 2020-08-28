@@ -2,6 +2,7 @@ import { mat4 } from "gl-matrix";
 import { SpriteSheets } from "../../resources/manifests/Types";
 import { ResourceManager } from "../../resources/ResourceManager";
 import { Camera } from "../../types";
+import { BackgroundRenderService } from "./services/BackgroundRenderService";
 import { FloorRenderService } from "./services/FloorRenderService";
 import { ScreenShakeService } from "./services/ScreenShakeService";
 import { SpriteRenderService } from "./services/SpriteRenderService";
@@ -13,19 +14,28 @@ export class RenderService implements RenderInterface {
     public wallRenderService: WallRenderService;
     public floorRenderService: FloorRenderService;
     public screenShakeService: ScreenShakeService;
+    public backgroundRenderService: BackgroundRenderService;
     private gl: WebGLRenderingContext;
 
     private camera: Camera;
 
     public constructor(private resourceManager: ResourceManager) {
-        this.spriteRenderService = new SpriteRenderService();
-        this.wallRenderService = new WallRenderService();
-        this.floorRenderService = new FloorRenderService();
+        this.backgroundRenderService = new BackgroundRenderService();
+        this.spriteRenderService = new SpriteRenderService(
+            this.backgroundRenderService
+        );
+        this.wallRenderService = new WallRenderService(
+            this.backgroundRenderService
+        );
+        this.floorRenderService = new FloorRenderService(
+            this.backgroundRenderService
+        );
         this.screenShakeService = new ScreenShakeService();
     }
 
     public init(gl: WebGLRenderingContext) {
         this.gl = gl;
+        this.backgroundRenderService.init(gl);
         this.spriteRenderService.init(gl);
         this.spriteRenderService.attachSpritesheet(
             this.resourceManager.manifest.spritesheets[
@@ -68,7 +78,7 @@ export class RenderService implements RenderInterface {
             projectionMatrix
         );
 
-        this.clearScreen();
+        this.backgroundRenderService.draw();
         this.screenShakeService.update();
         this.spriteRenderService.draw();
         this.wallRenderService.draw();
@@ -77,16 +87,6 @@ export class RenderService implements RenderInterface {
 
     public attachCamera(camera: Camera) {
         this.camera = camera;
-    }
-
-    private clearScreen() {
-        this.gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
-        this.gl.clearDepth(1.0); // Clear everything
-        this.gl.enable(this.gl.DEPTH_TEST); // Enable depth testing
-        this.gl.depthFunc(this.gl.LEQUAL); // Near things obscure far things
-        // gl.enable(gl.BLEND);
-        // gl.blendFunc(gl.SRC_COLOR, gl.DST_COLOR);
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     }
 
     private calculateCameraMatrices() {

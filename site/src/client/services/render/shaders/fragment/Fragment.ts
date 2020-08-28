@@ -1,4 +1,4 @@
-import { fadeFunction, fadePixelAccuracy } from "./Fade";
+import { fadeFunction } from "./Fade";
 import { hazeFunction } from "./Haze";
 
 export const fsSource = `
@@ -16,10 +16,9 @@ export const fsSource = `
         discard;
       }
 
-      lowp float fadeAccuracy = ${fadePixelAccuracy}.0;
       lowp float distance = length(floor(position * fadeAccuracy) / fadeAccuracy);
       lowp float multiplier = fade(distance);
 
-      gl_FragColor = vec4(haze(texColor.rgb * multiplier), 1);
+      gl_FragColor = vec4(haze(texColor.rgb, multiplier), 1);
     }
   `;

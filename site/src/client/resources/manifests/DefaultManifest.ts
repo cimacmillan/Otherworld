@@ -3,7 +3,7 @@ import { BUTTON_DEFAULT_SPRITES } from "./ButtonDefault";
 import { BUTTON_HOVER_SPRITES } from "./ButtonHover";
 import { BUTTON_PRESS_SPRITES } from "./ButtonPress";
 import { DARK_PANEL_SPRITES } from "./DarkPanel";
-import Map from "./maps/map";
+import MacatorCave from "./maps/MacatorCave";
 import {
     Animations,
     Audios,
@@ -17,7 +17,7 @@ import {
 
 export const defaultManifest: ResourceManifest = {
     maps: {
-        [MAPS.DEFAULT]: Map,
+        [MAPS.DEFAULT]: MacatorCave,
     },
     spritesheets: {
         [SpriteSheets.SPRITE]: {
@@ -70,6 +70,34 @@ export const defaultManifest: ResourceManifest = {
                     height: 32,
                     x: 0,
                     y: 128,
+                    frames: 8,
+                },
+                [Animations.CHICKEN_WALKING]: {
+                    width: 16,
+                    height: 16,
+                    x: 128,
+                    y: 176,
+                    frames: 8,
+                },
+                [Animations.CHICKEN_SITTING]: {
+                    width: 16,
+                    height: 16,
+                    x: 128,
+                    y: 192,
+                    frames: 8,
+                },
+                [Animations.CHICKEN_JUMPING]: {
+                    width: 16,
+                    height: 16,
+                    x: 128,
+                    y: 208,
+                    frames: 8,
+                },
+                [Animations.CHICKEN_EATING]: {
+                    width: 16,
+                    height: 16,
+                    x: 128,
+                    y: 224,
                     frames: 8,
                 },
             },
@@ -127,6 +155,36 @@ export const defaultManifest: ResourceManifest = {
                     height: 8,
                     x: 16,
                     y: 0,
+                },
+                [Sprites.CHICKEN_STANDING_EYE_OPEN]: {
+                    width: 16,
+                    height: 16,
+                    x: 128,
+                    y: 160,
+                },
+                [Sprites.CHICKEN_STANDING_EYE_CLOSED]: {
+                    width: 16,
+                    height: 16,
+                    x: 144,
+                    y: 160,
+                },
+                [Sprites.CHICKEN_SITTING_EYE_OPEN]: {
+                    width: 16,
+                    height: 16,
+                    x: 160,
+                    y: 160,
+                },
+                [Sprites.CHICKEN_SITTING_EYE_CLOSED]: {
+                    width: 16,
+                    height: 16,
+                    x: 176,
+                    y: 160,
+                },
+                [Sprites.CHICKEN_DAMAGED]: {
+                    width: 16,
+                    height: 16,
+                    x: 192,
+                    y: 160,
                 },
             },
         },

@@ -1,6 +1,7 @@
-import { EggLogicComponent } from "../../engine/components/enemies/egg/EggLogicComponent";
-import { MacatorLogicComponent } from "../../engine/components/enemies/macator/MacatorLogicComponent";
-import { MacatorRenderComponent } from "../../engine/components/enemies/macator/MacatorRenderComponent";
+import { VERSION } from "../../Config";
+import { EggLogicComponent } from "../../engine/components/creatures/egg/EggLogicComponent";
+import { MacatorLogicComponent } from "../../engine/components/creatures/macator/MacatorLogicComponent";
+import { MacatorRenderComponent } from "../../engine/components/creatures/macator/MacatorRenderComponent";
 import { InteractionComponent } from "../../engine/components/InteractionComponent";
 import { ItemDropComponent } from "../../engine/components/items/ItemDropComponent";
 import { BoundaryComponent } from "../../engine/components/physics/BoundaryComponent";
@@ -19,15 +20,18 @@ import { State, store } from "../../ui/State";
 import { ServiceLocator } from "../ServiceLocator";
 import { Serialisable } from "./Serialisable";
 
+interface SerialisedEntity {
+    state: object;
+    components: Array<{
+        componentType: EntityComponentType;
+    }>;
+}
+
 export interface SerialisationObject {
-    version: number;
+    version: string;
     world: {
-        entities: Array<{
-            state: object;
-            components: Array<{
-                componentType: EntityComponentType;
-            }>;
-        }>;
+        entities: SerialisedEntity[];
+        player: SerialisationEntity;
     };
     uiState: State;
 }
@@ -49,12 +53,14 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
     }
 
     public serialise(): SerialisationObject {
-        const entities = this.serialiseEntities();
         const uiState = store.getValue();
+        const entities = this.serialiseEntities();
+
         const serialisation = {
-            version: 1,
+            version: VERSION,
             world: {
-                entities,
+                player: entities[0],
+                entities: entities.slice(1, entities.length),
             },
             uiState,
         };
@@ -65,9 +71,10 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
         const deserialisedEntities = data.world.entities.map((ent) =>
             this.deserialiseEntity(ent)
         );
+        const player = this.deserialiseEntity(data.world.player);
         this.serviceLocator
             .getScriptingService()
-            .bootsrapDeserialisedContent(deserialisedEntities);
+            .bootsrapDeserialisedContent(player, deserialisedEntities);
         store.next(data.uiState);
     }
 

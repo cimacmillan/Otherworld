@@ -130,7 +130,7 @@ function randomBlocks() {
 
 export default {
     walls: [
-        ...block(-20, -20, 40, 40, SCENERYSPRITES.WALL, 5, 0, true),
+        // ...block(-20, -20, 40, 40, SCENERYSPRITES.WALL, 5, 0, true),
         ...block(-2, -2, 4, 4, SCENERYSPRITES.FLOOR, 1, 3, false),
         ...block(-5, -5, 10, 10, SCENERYSPRITES.FLOOR, 1, 4, false),
         ...hex(-1.5, -1.5, 0.5, 6, 3, 0),
@@ -143,9 +143,7 @@ export default {
         ...hex(4, 4, 0.8, 6, 4, 0),
         ...hex(-4, 4, -0.8, 6, 4, 0),
 
-        // Random b blocks
-
-        ...randomBlocks(),
+        ...block(10, 10, 20, 20, SCENERYSPRITES.WALL, 5, 0, true),
     ],
 
     floors: [
@@ -154,27 +152,6 @@ export default {
             starty: -50,
             endx: 50,
             endy: 50,
-        },
-        {
-            startx: -2,
-            starty: -2,
-            endx: 2,
-            endy: 2,
-            height: 3,
-        },
-        {
-            startx: -5,
-            starty: -5,
-            endx: 5,
-            endy: 5,
-            height: 4,
-        },
-        {
-            startx: -20,
-            starty: -20,
-            endx: 20,
-            endy: 20,
-            height: 5,
         },
     ],
 } as MapSchema;
