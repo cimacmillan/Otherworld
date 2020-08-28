@@ -30,6 +30,7 @@ export class ChickenRenderComponent<T extends ChickenStateType>
             sittingAnimation,
             jumpingAnimation,
             eatingAnimation,
+            runningAnimation,
         } = getChickenAnimations(entity);
 
         this.chickenStateBehaviour = new StateEffect(
@@ -69,6 +70,17 @@ export class ChickenRenderComponent<T extends ChickenStateType>
                     Sprites.CHICKEN_SITTING_EYE_OPEN,
                     Sprites.CHICKEN_SITTING_EYE_CLOSED
                 ),
+                [ChickenLogicState.RUNNING_AWAY]: effectFromAnimation(
+                    runningAnimation
+                ),
+                [ChickenLogicState.DAMAGED]: {
+                    onEnter: () =>
+                        entity.setState({
+                            textureCoordinate: spritesheet.getSprite(
+                                Sprites.CHICKEN_DAMAGED
+                            ).textureCoordinate,
+                        }),
+                },
             },
             logicState
         );

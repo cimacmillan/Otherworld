@@ -169,12 +169,12 @@ export default {
             endy: 5,
             height: 4,
         },
-        {
-            startx: -20,
-            starty: -20,
-            endx: 20,
-            endy: 20,
-            height: 5,
-        },
+        // {
+        //     startx: -20,
+        //     starty: -20,
+        //     endx: 20,
+        //     endy: 20,
+        //     height: 5,
+        // },
     ],
 } as MapSchema;

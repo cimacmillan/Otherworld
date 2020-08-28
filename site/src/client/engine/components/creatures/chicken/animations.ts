@@ -8,6 +8,7 @@ import { Entity } from "../../../Entity";
 import { ChickenStateType } from "./ChickenState";
 
 const WALKING_ANIMATION_LENGTH = 1000;
+const RUNNING_ANIMATION_LENGTH = 400;
 const SITTING_ANIMATION_LENGTH = 1000;
 const JUMPING_ANIMATION_LENGTH = 1000;
 const EATING_ANIMATION_LENGTH = 1000;
@@ -21,6 +22,13 @@ export const getChickenAnimations = (entity: Entity<ChickenStateType>) => {
         setEntityTexture(entity, spritesheet, Animations.CHICKEN_WALKING)
     )
         .speed(WALKING_ANIMATION_LENGTH)
+        .withOffset(Math.random())
+        .looping();
+
+    const runningAnimation = animation(
+        setEntityTexture(entity, spritesheet, Animations.CHICKEN_WALKING)
+    )
+        .speed(RUNNING_ANIMATION_LENGTH)
         .withOffset(Math.random())
         .looping();
     const sittingAnimation = animation(
@@ -43,6 +51,7 @@ export const getChickenAnimations = (entity: Entity<ChickenStateType>) => {
         .looping();
 
     return {
+        runningAnimation,
         walkingAnimation,
         sittingAnimation,
         jumpingAnimation,

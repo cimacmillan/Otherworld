@@ -1,3 +1,5 @@
+**28/08/2020 - Changelog 0.1.0**
+* Added serialisation versioning to reload game when changes made
 
 **28/06/2020 - Changelog 0.1.0**
 * Added serialisation versioning to reload game when changes made

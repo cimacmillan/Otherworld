@@ -1,12 +1,18 @@
 import { Vector2D } from "../../../../types";
-import { vec } from "../../../../util/math";
+import { randomSelection, toGameVector, vec } from "../../../../util/math";
 import { joinEffect } from "../../../effects/JoinEffect";
 import { StateEffect } from "../../../effects/StateEffect";
 import { timeoutEffect } from "../../../effects/TimeoutEffect";
 import { Entity } from "../../../Entity";
 import { EntityComponent, EntityComponentType } from "../../../EntityComponent";
+import { GameEvent } from "../../../events/Event";
+import { InteractionEventType } from "../../../events/InteractionEvents";
 import {
+    ChickenDamagedState,
+    ChickenHatchingState,
     ChickenLogicState,
+    ChickenNodes,
+    ChickenRunningState,
     ChickenStandingState,
     ChickenStateType,
     ChickenWalkingState,
@@ -15,6 +21,10 @@ import {
 const COOLDOWN_TO_MS = 20000;
 const ROAM_DISTANCE = 5;
 const WALK_TIME = 5000;
+const HATCHING_TIME = 10000;
+const DAMAGED_TIME = 200;
+const RUNNING_AWAY_TIME = 3000;
+const RUNNING_DISTANCE = 10;
 
 // CHickens bugged they slowly end up doing nothing
 export class ChickenLogicComponent
@@ -35,10 +45,36 @@ export class ChickenLogicComponent
                 // [ChickenLogicState.JUMPING]: this.nextStateRandom(entity),
                 // [ChickenLogicState.EATING]: this.nextStateRandom(entity),
                 // [ChickenLogicState.SLEEPING]: this.nextStateRandom(entity),
-                // [ChickenLogicState.HATCHING]: this.nextStateRandom(entity),
+                [ChickenLogicState.HATCHING]: this.hatchingEffect(entity),
+                [ChickenLogicState.DAMAGED]: this.damagedEffect(entity),
+                [ChickenLogicState.RUNNING_AWAY]: this.runningAwayEffect(
+                    entity
+                ),
             },
             entity.getState().chickenState.logicState
         );
+    }
+
+    public onEvent(entity: Entity<ChickenStateType>, event: GameEvent): void {
+        switch (event.type) {
+            case InteractionEventType.ON_DAMAGED:
+                const source = event.payload.source;
+                if (source) {
+                    const gameVector = toGameVector(source.angle);
+                    const force = vec.vec_mult_scalar(gameVector, 0.5);
+                    entity.setState({
+                        chickenState: {
+                            logicState: ChickenLogicState.DAMAGED,
+                            source,
+                        },
+                        velocity: vec.vec_add(
+                            entity.getState().velocity,
+                            force
+                        ),
+                    });
+                }
+                break;
+        }
     }
 
     public update(entity: Entity<ChickenStateType>) {
@@ -61,20 +97,70 @@ export class ChickenLogicComponent
         this.chickenStateBehaviour.setState(to.chickenState.logicState);
     }
 
+    private damagedEffect = (entity: Entity<ChickenStateType>) => {
+        return timeoutEffect(() => {
+            const currentPosition = entity.getState().position;
+            const runAwayFrom = (entity.getState()
+                .chickenState as ChickenDamagedState).source.angle;
+            const diff = toGameVector(runAwayFrom);
+            const destination = vec.vec_add(currentPosition, {
+                x: diff.x * RUNNING_DISTANCE,
+                y: diff.y * RUNNING_DISTANCE,
+            });
+
+            entity.setState({
+                chickenState: {
+                    logicState: ChickenLogicState.RUNNING_AWAY,
+                    destination,
+                },
+            });
+        }, DAMAGED_TIME);
+    };
+
+    private runningAwayEffect = (entity: Entity<ChickenStateType>) => {
+        const onReachedDestination = () => {
+            entity.setState({
+                chickenState: this.getNextState(entity),
+            });
+        };
+
+        return joinEffect(
+            timeoutEffect(() => {
+                onReachedDestination();
+            }, RUNNING_AWAY_TIME),
+            this.movingToEffect(
+                entity,
+                onReachedDestination,
+                () =>
+                    (entity.getState().chickenState as ChickenRunningState)
+                        .destination,
+                0.06
+            )
+        );
+    };
+
+    private hatchingEffect = (entity: Entity<ChickenStateType>) => {
+        return timeoutEffect(() => {
+            entity.setState({
+                chickenState: this.getNextState(entity),
+            });
+        }, HATCHING_TIME);
+    };
+
     private standingIdleEffect = (entity: Entity<ChickenStateType>) => {
         const cooldown = (entity.getState()
             .chickenState as ChickenStandingState).cooldown;
         const time = COOLDOWN_TO_MS * cooldown;
         return timeoutEffect(() => {
             entity.setState({
-                chickenState: this.getRandomWalkState(entity),
+                chickenState: this.getNextState(entity),
             });
         }, time);
     };
 
     private walkingEffect = (entity: Entity<ChickenStateType>) => {
         let destination: Vector2D;
-        let timeOnStart = 0;
+        const timeOnStart = 0;
 
         const onReachedDestination = () => {
             entity.setState({
@@ -86,42 +172,59 @@ export class ChickenLogicComponent
             timeoutEffect(() => {
                 onReachedDestination();
             }, WALK_TIME),
-            {
-                onEnter: () => {
-                    timeOnStart = Date.now();
-                    destination = (entity.getState()
-                        .chickenState as ChickenWalkingState).destination;
-                },
-                onUpdate: () => {
-                    const timeInEffect = Date.now() - timeOnStart;
-                    const interp = timeInEffect / WALK_TIME;
-
-                    const position = entity.getState().position;
-                    const diff = vec.vec_sub(destination, position);
-
-                    // const velocity = vec.vec_mult_scalar(diff, 0.05);
-
-                    const distance = vec.vec_distance(diff);
-                    const xSpeed = diff.x / distance;
-                    const ySpeed = diff.y / distance;
-
-                    const speed = 0.01;
-                    const velocity = {
-                        x: xSpeed * speed,
-                        y: ySpeed * speed,
-                    };
-
-                    entity.setState({
-                        velocity,
-                    });
-
-                    if (Math.abs(diff.x) < 0.01 && Math.abs(diff.y) < 0.01) {
-                        onReachedDestination();
-                    }
-                },
-            }
+            this.movingToEffect(
+                entity,
+                onReachedDestination,
+                () =>
+                    (entity.getState().chickenState as ChickenWalkingState)
+                        .destination,
+                0.01
+            )
         );
     };
+
+    private movingToEffect(
+        entity: Entity<ChickenStateType>,
+        onReachedDestination: () => void,
+        getDestination: () => Vector2D,
+        speed: number
+    ) {
+        let timeOnStart: number;
+        let destination: Vector2D;
+
+        return {
+            onEnter: () => {
+                timeOnStart = Date.now();
+                destination = getDestination();
+            },
+            onUpdate: () => {
+                const timeInEffect = Date.now() - timeOnStart;
+                const interp = timeInEffect / WALK_TIME;
+
+                const position = entity.getState().position;
+                const diff = vec.vec_sub(destination, position);
+
+                // const velocity = vec.vec_mult_scalar(diff, 0.05);
+
+                const distance = vec.vec_distance(diff);
+                const xSpeed = diff.x / distance;
+                const ySpeed = diff.y / distance;
+
+                const velocity = {
+                    x: xSpeed * speed,
+                    y: ySpeed * speed,
+                };
+
+                entity.setState({
+                    velocity,
+                });
+
+                if (Math.abs(diff.x) < 0.01 && Math.abs(diff.y) < 0.01) {
+                    onReachedDestination();
+                }
+            },
+        };
+    }
 
     private getRandomWalkState(
         entity: Entity<ChickenStateType>
@@ -146,21 +249,26 @@ export class ChickenLogicComponent
         };
     }
 
-    // private nextStateRandom = (entity: Entity<ChickenStateType>) => {
-    //     return timeoutEffect(() => {
-    //         const possibleStates = [
-    //             ChickenLogicState.STANDING_IDLE,
-    //             ChickenLogicState.SITTING_IDLE,
-    //             ChickenLogicState.WALKING,
-    //             ChickenLogicState.SITTING,
-    //             ChickenLogicState.JUMPING,
-    //             ChickenLogicState.EATING,
-    //             ChickenLogicState.SLEEPING,
-    //             ChickenLogicState.HATCHING,
-    //         ].filter(logicState => logicState !== entity.getState().logicState);
-    //         entity.setState({
-    //             logicState: randomSelection(possibleStates),
-    //         });
-    //     }, 1000);
-    // };
+    private getRandomHatchingState(
+        entity: Entity<ChickenStateType>
+    ): ChickenHatchingState {
+        return {
+            logicState: ChickenLogicState.HATCHING,
+        };
+    }
+
+    private getNextState = (entity: Entity<ChickenStateType>): ChickenNodes => {
+        const nextState = randomSelection([
+            this.getRandomWalkState(entity),
+            this.getRandomStandingState(entity),
+            this.getRandomHatchingState(entity),
+        ]);
+        // I am lazy
+        if (
+            entity.getState().chickenState.logicState === nextState.logicState
+        ) {
+            return this.getNextState(entity);
+        }
+        return nextState;
+    };
 }

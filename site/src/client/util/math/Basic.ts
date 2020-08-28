@@ -1,3 +1,5 @@
+import { Vector2D } from "../../types";
+
 export function interpolate(alpha: number, a: number, b: number) {
     return (b - a) * alpha + a;
 }
@@ -62,4 +64,15 @@ export function getTextureCoordinate(
 export function randomSelection<T>(toSelect: T[]): T {
     const randomIndex = Math.floor(Math.random() * toSelect.length);
     return toSelect[randomIndex];
+}
+
+export function toGameAngle(x: number, y: number) {
+    return Math.atan2(x, -y);
+}
+
+export function toGameVector(angle: number): Vector2D {
+    return {
+        x: Math.sin(angle),
+        y: -Math.cos(angle),
+    };
 }

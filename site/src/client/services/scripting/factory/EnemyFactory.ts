@@ -155,6 +155,10 @@ export function createChicken(
         ).textureCoordinate,
         spriteWidth: 1,
         spriteHeight: 1,
+        interactable: {
+            ATTACK: true,
+        },
+        health: 1,
     };
 
     return new Entity<ChickenStateType>(
@@ -163,6 +167,7 @@ export function createChicken(
         new SpriteRenderComponent(),
         new PhysicsComponent(),
         new ChickenLogicComponent(),
-        new ChickenRenderComponent()
+        new ChickenRenderComponent(),
+        new InteractionComponent()
     );
 }

@@ -2,7 +2,7 @@ import { GameItems } from "../../../../resources/manifests/Items";
 import { Audios } from "../../../../resources/manifests/Types";
 import { InteractionType } from "../../../../services/interaction/InteractionType";
 import { Vector2D } from "../../../../types";
-import { vec } from "../../../../util/math";
+import { toGameAngle, vec } from "../../../../util/math";
 import { ActionDelay } from "../../../../util/time/ActionDelay";
 import { joinEffect } from "../../../effects/JoinEffect";
 import { StateEffect, StateEffectCallback } from "../../../effects/StateEffect";
@@ -173,32 +173,64 @@ export class MacatorLogicComponent<T extends MacatorStateType>
         };
 
         const onUpdate = () => {
-            const playerPos = entity
-                .getServiceLocator()
-                .getScriptingService()
-                .getPlayer()
-                .getState().position;
+            const state = entity.getState();
+            const angle = toGameAngle(state.velocity.x, state.velocity.y);
 
-            const macatorPos = entity.getState().position;
-            if (
-                vec.vec_distance(vec.vec_sub(playerPos, macatorPos)) <
-                ATTACK_DISTANCE
-            ) {
+            const attacks = entity
+                .getServiceLocator()
+                .getInteractionService()
+                .getInteractables(
+                    InteractionType.ATTACK,
+                    state.position,
+                    angle,
+                    ATTACK_DISTANCE
+                );
+
+            let hasAttacked = false;
+
+            attacks.forEach((attacked) => {
+                if (
+                    attacked
+                        .getComponents()
+                        .some(
+                            (component) =>
+                                component.componentType ===
+                                EntityComponentType.MacatorLogicComponent
+                        )
+                ) {
+                    return;
+                }
+
+                const source: SurfacePositionState = {
+                    position: state.position,
+                    height: state.height,
+                    radius: state.radius,
+                    angle: toGameAngle(state.velocity.x, state.velocity.y),
+                };
+
+                attacked.emit({
+                    type: InteractionEventType.ON_DAMAGED,
+                    payload: {
+                        amount: 0.05,
+                        source,
+                    },
+                });
+
+                hasAttacked = true;
+            });
+
+            if (hasAttacked) {
                 this.attackDelay.onAction();
                 entity.setState({
                     macatorState: MacatorState.WALKING,
                 });
-
                 entity
                     .getServiceLocator()
-                    .getScriptingService()
-                    .getPlayer()
-                    .emit({
-                        type: InteractionEventType.ON_DAMAGED,
-                        payload: {
-                            amount: 0.05,
-                        },
-                    });
+                    .getAudioService()
+                    .play(
+                        entity.getServiceLocator().getResourceManager().manifest
+                            .audio[Audios.SLAM]
+                    );
             }
         };
 
