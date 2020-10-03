@@ -5,8 +5,8 @@ import { block } from "./scenery/Block";
 export type MapGenerator = (seed: number) => MapSchema;
 
 export const MazeGenerator = (): MapGenerator => (seed: number) => {
-    let seedrandom = require("seedrandom");
-    let random = seedrandom(seed); // or any seed.
+    const seedrandom = require("seedrandom");
+    const random = seedrandom(seed); // or any seed.
 
     const longWall = [];
 

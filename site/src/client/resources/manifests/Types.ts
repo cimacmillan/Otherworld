@@ -106,6 +106,9 @@ export enum Sprites {
     CHICKEN_SITTING_EYE_OPEN,
     CHICKEN_SITTING_EYE_CLOSED,
     CHICKEN_DAMAGED,
+
+    MERCHANT,
+    CHEST,
 }
 export enum Audios {
     INTRO,

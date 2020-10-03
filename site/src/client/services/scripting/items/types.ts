@@ -21,6 +21,7 @@ export interface ItemMetadata {
 
 export interface Inventory {
     items: ItemMetadata[];
+    gold: number;
 }
 
 export type ItemComponent = ItemHealsPlayer | MakesNoiseWhenConsumed;

@@ -1,9 +1,13 @@
 import { Entity } from "../../engine/Entity";
-import { MAPS } from "../../resources/manifests/Types";
-import { loadMap } from "../../resources/MapLoader";
+import { SCENERYSPRITES, Sprites } from "../../resources/manifests/Types";
 import { ServiceLocator } from "../ServiceLocator";
-import { createChicken, createEgg } from "./factory/EnemyFactory";
+import { createChicken } from "./factory/EnemyFactory";
+import { createMerchant } from "./factory/NPCFactory";
 import { createPlayer, PlayerState } from "./factory/PlayerFactory";
+import {
+    createStaticFloor,
+    createStaticSprite,
+} from "./factory/SceneryFactory";
 
 interface BootstrapInfo {
     player: Entity<PlayerState>;
@@ -24,7 +28,7 @@ export function bootstrap(serviceLocator: ServiceLocator): BootstrapInfo {
     serviceLocator.getAudioService().attachCamera(camera);
     serviceLocator.getRenderService().attachCamera(camera);
 
-    world.addEntity(createEgg(serviceLocator));
+    // world.addEntity(createEgg(serviceLocator));
 
     for (let i = 0; i < 30; i++) {
         const spread = 5;
@@ -35,10 +39,41 @@ export function bootstrap(serviceLocator: ServiceLocator): BootstrapInfo {
         world.addEntity(createChicken(serviceLocator, x, y));
     }
 
-    loadMap(
-        serviceLocator,
-        serviceLocator.getResourceManager().manifest.maps[MAPS.DEFAULT]
+    const addChest = (x: number, y: number) => {
+        world.addEntity(
+            createStaticSprite(
+                serviceLocator,
+                Sprites.CHEST,
+                {
+                    x,
+                    y,
+                },
+                0.5,
+                1,
+                1
+            )
+        );
+    };
+
+    world.addEntity(createMerchant(serviceLocator, 0, -5));
+    addChest(0.5, -5);
+    addChest(0, -5.5);
+    addChest(-0.5, -5);
+
+    world.addEntity(
+        createStaticFloor(
+            serviceLocator,
+            SCENERYSPRITES.FLOOR,
+            0,
+            { x: -100, y: -100 },
+            { x: 100, y: 100 }
+        )
     );
+
+    // loadMap(
+    //     serviceLocator,
+    //     serviceLocator.getResourceManager().manifest.maps[MAPS.DEFAULT]
+    // );
 
     // loadMap(
     //     serviceLocator,

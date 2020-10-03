@@ -186,6 +186,18 @@ export const defaultManifest: ResourceManifest = {
                     x: 192,
                     y: 160,
                 },
+                [Sprites.MERCHANT]: {
+                    width: 16,
+                    height: 32,
+                    x: 0,
+                    y: 16,
+                },
+                [Sprites.CHEST]: {
+                    width: 16,
+                    height: 16,
+                    x: 0,
+                    y: 48,
+                },
             },
         },
         [SpriteSheets.UI]: {

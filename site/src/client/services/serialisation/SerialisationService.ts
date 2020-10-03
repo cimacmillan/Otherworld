@@ -1,4 +1,6 @@
 import { VERSION } from "../../Config";
+import { ChickenLogicComponent } from "../../engine/components/creatures/chicken/ChickenLogicComponent";
+import { ChickenRenderComponent } from "../../engine/components/creatures/chicken/ChickenRenderComponent";
 import { EggLogicComponent } from "../../engine/components/creatures/egg/EggLogicComponent";
 import { MacatorLogicComponent } from "../../engine/components/creatures/macator/MacatorLogicComponent";
 import { MacatorRenderComponent } from "../../engine/components/creatures/macator/MacatorRenderComponent";
@@ -31,17 +33,44 @@ export interface SerialisationObject {
     version: string;
     world: {
         entities: SerialisedEntity[];
-        player: SerialisationEntity;
+        player: SerialisedEntity;
     };
     uiState: State;
 }
 
-interface SerialisationEntity {
-    state: object;
-    components: Array<{
-        componentType: EntityComponentType;
-    }>;
-}
+type ComponentSerialisationMap = {
+    [component in EntityComponentType]: () => EntityComponent<any>;
+};
+
+const componentSerialisationMap: ComponentSerialisationMap = {
+    [EntityComponentType.PhysicsComponent]: () => new PhysicsComponent(),
+    [EntityComponentType.InteractionComponent]: () =>
+        new InteractionComponent(),
+    [EntityComponentType.BoundaryComponent]: () => new BoundaryComponent(),
+
+    [EntityComponentType.FloorRenderComponent]: () =>
+        new FloorRenderComponent(),
+    [EntityComponentType.SpriteRenderComponent]: () =>
+        new SpriteRenderComponent(),
+    [EntityComponentType.WallRenderComponent]: () => new WallRenderComponent(),
+
+    [EntityComponentType.PlayerInventoryComponent]: () =>
+        new PlayerInventoryComponent(),
+    [EntityComponentType.PlayerControlComponent]: () =>
+        new PlayerControlComponent(),
+    [EntityComponentType.ItemDropComponent]: () => new ItemDropComponent(),
+
+    [EntityComponentType.EggLogicComponent]: () => new EggLogicComponent(),
+    [EntityComponentType.MacatorLogicComponent]: () =>
+        new MacatorLogicComponent(),
+    [EntityComponentType.MacatorRenderComponent]: () =>
+        new MacatorRenderComponent(),
+
+    [EntityComponentType.ChickenLogicComponent]: () =>
+        new ChickenLogicComponent(),
+    [EntityComponentType.ChickenRenderComponent]: () =>
+        new ChickenRenderComponent(),
+};
 
 export class SerialisationService implements Serialisable<SerialisationObject> {
     private serviceLocator: ServiceLocator;
@@ -78,7 +107,7 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
         store.next(data.uiState);
     }
 
-    public deserialiseEntity(entity: SerialisationEntity): Entity<any> {
+    public deserialiseEntity(entity: SerialisedEntity): Entity<any> {
         const components = entity.components.map((component) =>
             this.deserialiseComponent(component.componentType)
         );
@@ -92,43 +121,11 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
 
     public deserialiseComponent(
         componentType: EntityComponentType
-    ): EntityComponent<any> | undefined {
-        switch (componentType) {
-            case EntityComponentType.PhysicsComponent:
-                return new PhysicsComponent();
-            case EntityComponentType.InteractionComponent:
-                return new InteractionComponent();
-            case EntityComponentType.BoundaryComponent:
-                return new BoundaryComponent();
-
-            case EntityComponentType.FloorRenderComponent:
-                return new FloorRenderComponent();
-            case EntityComponentType.SpriteRenderComponent:
-                return new SpriteRenderComponent();
-            case EntityComponentType.WallRenderComponent:
-                return new WallRenderComponent();
-
-            case EntityComponentType.PlayerInventoryComponent:
-                return new PlayerInventoryComponent();
-            case EntityComponentType.PlayerControlComponent:
-                return new PlayerControlComponent();
-            case EntityComponentType.ItemDropComponent:
-                return new ItemDropComponent();
-
-            case EntityComponentType.EggLogicComponent:
-                return new EggLogicComponent();
-            case EntityComponentType.MacatorLogicComponent:
-                return new MacatorLogicComponent();
-            case EntityComponentType.MacatorRenderComponent:
-                return new MacatorRenderComponent();
-        }
-
-        throw new Error(
-            `Deserialisation error, component type not recognised ${componentType}`
-        );
+    ): EntityComponent<any> {
+        return componentSerialisationMap[componentType]();
     }
 
-    private serialiseEntities(): SerialisationEntity[] {
+    private serialiseEntities(): SerialisedEntity[] {
         const entities = this.serviceLocator
             .getWorld()
             .getEntityArray()
@@ -137,7 +134,7 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
         return serialised;
     }
 
-    private serialiseEntity(entity: Entity<any>): SerialisationEntity {
+    private serialiseEntity(entity: Entity<any>): SerialisedEntity {
         return {
             state: { ...entity.getState(), exists: false },
             components: entity.getComponents().map((component) => {

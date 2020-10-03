@@ -8,6 +8,10 @@ import {
     FloorStateType,
 } from "../../../engine/components/rendering/FloorRenderComponent";
 import {
+    SpriteRenderComponent,
+    SpriteStateType,
+} from "../../../engine/components/rendering/SpriteRenderComponent";
+import {
     WallRenderComponent,
     WallStateType,
 } from "../../../engine/components/rendering/WallRenderComponent";
@@ -125,5 +129,36 @@ export function createStaticWall(
         initialState,
         new WallRenderComponent(),
         new BoundaryComponent()
+    );
+}
+
+export function createStaticSprite(
+    serviceLocator: ServiceLocator,
+    spriteString: number,
+    position: Vector2D,
+    height: number,
+    spriteWidth: number,
+    spriteHeight: number
+) {
+    const sprite = serviceLocator
+        .getResourceManager()
+        .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(spriteString);
+
+    const initialState: SpriteStateType = {
+        exists: true,
+        position,
+        height,
+        radius: 0,
+        angle: 0,
+        shouldRender: true,
+        textureCoordinate: sprite.textureCoordinate,
+        spriteWidth,
+        spriteHeight,
+    };
+
+    return new Entity<SpriteStateType>(
+        serviceLocator,
+        initialState,
+        new SpriteRenderComponent()
     );
 }

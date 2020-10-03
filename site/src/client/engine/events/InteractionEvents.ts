@@ -1,4 +1,9 @@
-import { SurfacePositionState } from "../state/State";
+import { Entity } from "../Entity";
+import {
+    BaseState,
+    InventoryState,
+    SurfacePositionState,
+} from "../state/State";
 
 interface Attack {
     type: InteractionEventType.ATTACK;
@@ -12,9 +17,18 @@ interface OnDamaged {
     };
 }
 
+interface OnBarter {
+    type: InteractionEventType.ON_BARTER;
+    payload: {
+        source: Entity<InventoryState & BaseState>;
+        target: Entity<InventoryState & BaseState>;
+    };
+}
+
 export enum InteractionEventType {
     ATTACK = "ATTACK",
     ON_DAMAGED = "ON_DAMAGED",
+    ON_BARTER = "ON_BARTER",
 }
 
-export type InteractionEvents = Attack | OnDamaged;
+export type InteractionEvents = Attack | OnDamaged | OnBarter;

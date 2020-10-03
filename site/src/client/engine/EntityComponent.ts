@@ -14,7 +14,6 @@ export enum EntityComponentType {
     PlayerInventoryComponent = "PlayerInventoryComponent",
     PlayerControlComponent = "PlayerControlComponent",
     ItemDropComponent = "ItemDropComponent",
-    BarterComponentState = "BarterComponentState",
 
     EggLogicComponent = "EggLogicComponent",
     MacatorLogicComponent = "MacatorLogicComponent",

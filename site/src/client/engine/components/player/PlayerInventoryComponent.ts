@@ -60,6 +60,7 @@ export class PlayerInventoryComponent<T extends PlayerState>
 
         const newInventory = {
             items: items.filter((item) => item.count > 0),
+            gold: inventory.gold,
         };
 
         entity.setState({

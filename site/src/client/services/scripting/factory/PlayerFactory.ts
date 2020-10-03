@@ -61,6 +61,7 @@ export function createPlayer(serviceLocator: ServiceLocator) {
         collidesEntities: true,
         inventory: {
             items: [],
+            gold: 0,
         },
         interactable: {
             ATTACK: true,
