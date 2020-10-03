@@ -21,11 +21,6 @@ export class BoundaryComponent<T extends BoundaryStateType>
 
     public onEvent(entity: Entity<BoundaryStateType>, event: GameEvent): void {}
 
-    public onObservedEvent(
-        entity: Entity<BoundaryStateType>,
-        event: GameEvent
-    ): void {}
-
     public onCreate(entity: Entity<BoundaryStateType>) {
         const { boundary, collides } = entity.getState().boundaryState;
         if (collides) {

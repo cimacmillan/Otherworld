@@ -84,14 +84,6 @@ export class PlayerControlComponent<T extends PlayerState>
             case InteractionEventType.ON_DAMAGED:
                 this.onDamaged(entity, event.payload.amount);
                 break;
-        }
-    }
-
-    public onObservedEvent(
-        entity: Entity<PlayerState>,
-        event: GameEvent
-    ): void {
-        switch (event.type) {
             case PlayerEventType.PLAYER_HEALED:
                 const health = entity.getState().health;
                 const newHealth = Math.min(1, health + event.payload.amount);

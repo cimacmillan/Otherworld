@@ -43,7 +43,7 @@ export class InventoryService {
             entity,
             serviceLocator: this.serviceLocator,
         });
-        entity.onObservedEvent({
+        entity.emit({
             type: PlayerEventType.PLAYER_ITEM_USED,
             payload: { item: item.item },
         });

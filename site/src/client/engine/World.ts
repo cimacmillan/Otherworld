@@ -34,7 +34,7 @@ export class World {
     public emitIntoWorld(event: GameEvent) {
         const entities = this.getEntityArray().getArray();
         for (let i = 0; i < entities.length; i++) {
-            entities[i].onObservedEvent(event);
+            entities[i].emit(event);
         }
     }
 

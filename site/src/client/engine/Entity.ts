@@ -78,13 +78,6 @@ export class Entity<State extends BaseState> {
         }
     }
 
-    public onObservedEvent(event: GameEvent) {
-        for (let x = 0; x < this.components.length; x++) {
-            this.components[x].onObservedEvent &&
-                this.components[x].onObservedEvent(this, event);
-        }
-    }
-
     public emitGlobally(event: GameEvent) {
         this.serviceLocator.getWorld().emitOutOfWorld(event);
     }

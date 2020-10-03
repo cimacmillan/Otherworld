@@ -6,7 +6,7 @@ export const HealsPlayerBehaviour: ItemBehaviourImplementation<ItemHealsPlayer> 
     item: ItemHealsPlayer
 ) => ({
     onConsume: (args: ConsumeArgs) => {
-        args.entity.onObservedEvent({
+        args.entity.emit({
             type: PlayerEventType.PLAYER_HEALED,
             payload: {
                 amount: item.amount,

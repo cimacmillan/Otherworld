@@ -82,37 +82,46 @@ export class Game {
 
         let compatibleSave: SerialisationObject | undefined;
 
-        if (this.storage.isSaveAvailable()) {
-            const save = this.storage.getSaveGame();
-            compatibleSave = save;
-
-            if (save.version !== VERSION) {
-                compatibleSave = undefined;
-                console.log(
-                    "save version incompatible ",
-                    save.version,
-                    VERSION
-                );
-            }
-
-            if (IS_DEV_MODE()) {
-                compatibleSave = undefined;
-                console.log("not loading save, in dev mode");
-            }
-        }
-
-        if (compatibleSave) {
-            console.log("Loading save game...", compatibleSave);
-            this.serviceLocator
-                .getSerialisationService()
-                .deserialise(compatibleSave);
-            this.setUpdateWorld(true);
-            this.serviceLocator
-                .getInputService()
-                .setInputState(InputState.DEFAULT);
-        } else {
-            console.log("No compatible save, bootstrapping...");
+        const newGame = () => {
             this.serviceLocator.getScriptingService().bootstrapInitialContent();
+        };
+
+        try {
+            if (this.storage.isSaveAvailable()) {
+                const save = this.storage.getSaveGame();
+                compatibleSave = save;
+
+                if (save.version !== VERSION) {
+                    compatibleSave = undefined;
+                    console.log(
+                        "save version incompatible ",
+                        save.version,
+                        VERSION
+                    );
+                }
+
+                if (IS_DEV_MODE()) {
+                    compatibleSave = undefined;
+                    console.log("not loading save, in dev mode");
+                }
+            }
+
+            if (compatibleSave) {
+                console.log("Loading save game...", compatibleSave);
+                this.serviceLocator
+                    .getSerialisationService()
+                    .deserialise(compatibleSave);
+                this.setUpdateWorld(true);
+                this.serviceLocator
+                    .getInputService()
+                    .setInputState(InputState.DEFAULT);
+                console.log("Successfully loaded save game...", compatibleSave);
+            } else {
+                newGame();
+            }
+        } catch (e) {
+            console.log("Error loading save game: ", e);
+            newGame();
         }
 
         SerialisationListeners.attachWindowExitListener(
