@@ -9,7 +9,12 @@ interface BootstrapInfo {
     player: Entity<PlayerState>;
 }
 
+export let BOOTSTRAP_SEED =
+    Math.random() * 1998 + Math.random() * 5000 + Math.random() * 3000;
+
 export function bootstrap(serviceLocator: ServiceLocator): BootstrapInfo {
+    console.log("SEED: ", BOOTSTRAP_SEED);
+
     const world = serviceLocator.getWorld();
 
     const player = createPlayer(serviceLocator);
@@ -34,6 +39,11 @@ export function bootstrap(serviceLocator: ServiceLocator): BootstrapInfo {
         serviceLocator,
         serviceLocator.getResourceManager().manifest.maps[MAPS.DEFAULT]
     );
+
+    // loadMap(
+    //     serviceLocator,
+    //     CaveGenerator(BOOTSTRAP_SEED)
+    // );
 
     return {
         player,

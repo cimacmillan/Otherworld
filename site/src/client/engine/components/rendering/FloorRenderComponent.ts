@@ -4,7 +4,6 @@ import {
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
 import { EntityComponent, EntityComponentType } from "../../EntityComponent";
-import { GameEvent } from "../../events/Event";
 import { BaseState } from "../../state/State";
 
 export interface FloorState {
@@ -30,13 +29,6 @@ export class FloorRenderComponent<T extends FloorStateType>
                 .floorRenderService.updateItem(this.toRenderRef, floor);
         }
     }
-
-    public onEvent(entity: Entity<FloorStateType>, event: GameEvent): void {}
-
-    public onObservedEvent(
-        entity: Entity<FloorStateType>,
-        event: GameEvent
-    ): void {}
 
     public onStateTransition(
         entity: Entity<FloorStateType>,

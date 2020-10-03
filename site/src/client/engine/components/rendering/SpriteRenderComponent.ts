@@ -4,7 +4,6 @@ import {
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
 import { EntityComponent, EntityComponentType } from "../../EntityComponent";
-import { GameEvent } from "../../events/Event";
 import {
     BaseState,
     SpriteRenderState,
@@ -33,11 +32,6 @@ export class SpriteRenderComponent<T extends SpriteStateType>
                 .spriteRenderService.updateItem(this.toRenderRef, this.sprite);
         }
     }
-
-    public onObservedEvent(
-        entity: Entity<SpriteStateType>,
-        event: GameEvent
-    ): void {}
 
     public onStateTransition(
         entity: Entity<SpriteStateType>,

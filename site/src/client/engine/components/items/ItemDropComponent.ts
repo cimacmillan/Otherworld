@@ -80,7 +80,7 @@ export class ItemDropComponent
                 .getServiceLocator()
                 .getScriptingService()
                 .getPlayer()
-                .onObservedEvent({
+                .emit({
                     type: PlayerEventType.PLAYER_ITEM_DROP_COLLECTED,
                     payload: {
                         item: entity.getState().item,

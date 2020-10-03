@@ -86,10 +86,7 @@ export class EggLogicComponent<T extends EggStateType>
         this.stateEffects.update();
     }
 
-    public onObservedEvent(
-        entity: Entity<EggStateType>,
-        event: GameEvent
-    ): void {
+    public onEvent(entity: Entity<EggStateType>, event: GameEvent): void {
         if (event.type === EnemyEventType.ENEMY_KILLED) {
             entity.setState(
                 {

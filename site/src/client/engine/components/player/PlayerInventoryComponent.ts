@@ -9,10 +9,7 @@ export class PlayerInventoryComponent<T extends PlayerState>
     implements EntityComponent<T> {
     public componentType = EntityComponentType.PlayerInventoryComponent;
 
-    public onObservedEvent(
-        entity: Entity<PlayerState>,
-        event: GameEvent
-    ): void {
+    public onEvent(entity: Entity<PlayerState>, event: GameEvent): void {
         switch (event.type) {
             case PlayerEventType.PLAYER_ITEM_DROP_COLLECTED:
                 this.onPickedUp(entity, event.payload.item);

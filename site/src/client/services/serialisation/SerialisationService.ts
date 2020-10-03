@@ -82,6 +82,7 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
         const components = entity.components.map((component) =>
             this.deserialiseComponent(component.componentType)
         );
+
         return new Entity(
             this.serviceLocator,
             entity.state as any,
@@ -91,7 +92,7 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
 
     public deserialiseComponent(
         componentType: EntityComponentType
-    ): EntityComponent<any> {
+    ): EntityComponent<any> | undefined {
         switch (componentType) {
             case EntityComponentType.PhysicsComponent:
                 return new PhysicsComponent();
@@ -121,6 +122,10 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
             case EntityComponentType.MacatorRenderComponent:
                 return new MacatorRenderComponent();
         }
+
+        throw new Error(
+            `Deserialisation error, component type not recognised ${componentType}`
+        );
     }
 
     private serialiseEntities(): SerialisationEntity[] {
