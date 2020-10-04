@@ -109,6 +109,7 @@ export enum Sprites {
 
     MERCHANT,
     CHEST,
+    ITEM_GOLD,
 }
 export enum Audios {
     INTRO,

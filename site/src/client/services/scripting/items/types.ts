@@ -3,7 +3,7 @@ export interface Item {
     spriteIcon: number;
     stackable: boolean;
     name: string;
-    tradePrice?: number;
+    value?: number;
     behaviours: ItemComponent[];
     category: ItemCategory;
     description: string;
@@ -12,6 +12,7 @@ export interface Item {
 export enum ItemCategory {
     CONSUMABLE = "Consumable",
     CRAFTING = "Crafting",
+    PRECIOUS = "Precious",
 }
 
 export interface ItemMetadata {
@@ -21,7 +22,6 @@ export interface ItemMetadata {
 
 export interface Inventory {
     items: ItemMetadata[];
-    gold: number;
 }
 
 export type ItemComponent = ItemHealsPlayer | MakesNoiseWhenConsumed;

@@ -154,6 +154,8 @@ function getCategoryColour(category: ItemCategory): TextColour {
             return TextColour.RED;
         case ItemCategory.CRAFTING:
             return TextColour.YELLOW;
+        case ItemCategory.PRECIOUS:
+            return TextColour.GOLD;
     }
 }
 

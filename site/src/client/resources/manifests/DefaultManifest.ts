@@ -198,6 +198,12 @@ export const defaultManifest: ResourceManifest = {
                     x: 0,
                     y: 48,
                 },
+                [Sprites.ITEM_GOLD]: {
+                    x: 0,
+                    y: 0,
+                    width: 8,
+                    height: 8,
+                },
             },
         },
         [SpriteSheets.UI]: {

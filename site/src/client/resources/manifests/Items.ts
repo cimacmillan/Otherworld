@@ -11,7 +11,7 @@ const ITEM_BROWN_SHELL_FRAGMENT: Item = {
     stackable: true,
     name: "Brown Shell Fragment",
     behaviours: [],
-    tradePrice: 10,
+    value: 10,
     category: ItemCategory.CRAFTING,
     description: "Fragment from a macator's shell. It has a dull brown colour.",
 };
@@ -22,7 +22,7 @@ const ITEM_GREEN_SHELL_FRAGMENT: Item = {
     stackable: true,
     name: "Green Shell Fragment",
     behaviours: [],
-    tradePrice: 50,
+    value: 50,
     category: ItemCategory.CRAFTING,
     description:
         "Fragment from a macator's shell. It has a matte green colour.",
@@ -34,7 +34,7 @@ const ITEM_BLUE_SHELL_FRAGMENT: Item = {
     stackable: true,
     name: "Blue Shell Fragment",
     behaviours: [],
-    tradePrice: 200,
+    value: 200,
     category: ItemCategory.CRAFTING,
     description: "Fragment from a macator's shell. It has a shiny blue colour.",
 };
@@ -57,9 +57,20 @@ const ITEM_MACATOR_INNARDS: Item = {
     description: "It smells funny.",
 };
 
+const GOLD: Item = {
+    spriteIcon: Sprites.ITEM_GOLD,
+    id: 5,
+    stackable: true,
+    name: "Gold",
+    behaviours: [],
+    category: ItemCategory.PRECIOUS,
+    description: "Shiny gold",
+};
+
 export const GameItems = {
     ITEM_BROWN_SHELL_FRAGMENT,
     ITEM_GREEN_SHELL_FRAGMENT,
     ITEM_BLUE_SHELL_FRAGMENT,
     ITEM_MACATOR_INNARDS,
+    GOLD,
 };

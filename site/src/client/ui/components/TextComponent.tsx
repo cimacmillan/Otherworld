@@ -17,6 +17,7 @@ export enum TextColour {
     DARK = "#3e2731",
     RED = "#e43b44",
     YELLOW = "#feae34",
+    GOLD = "#fee761",
 }
 
 export interface TextComponentProps {

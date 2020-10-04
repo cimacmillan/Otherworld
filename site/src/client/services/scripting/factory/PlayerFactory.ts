@@ -23,6 +23,7 @@ import {
     HealthState,
     InventoryState,
 } from "../../../engine/state/State";
+import { GameItems } from "../../../resources/manifests/Items";
 import { ServiceLocator } from "../../ServiceLocator";
 
 export type PlayerState = BaseState &
@@ -60,8 +61,12 @@ export function createPlayer(serviceLocator: ServiceLocator) {
         collidesWalls: true,
         collidesEntities: true,
         inventory: {
-            items: [],
-            gold: 0,
+            items: [
+                {
+                    item: GameItems.GOLD,
+                    count: 10,
+                },
+            ],
         },
         interactable: {
             ATTACK: true,
