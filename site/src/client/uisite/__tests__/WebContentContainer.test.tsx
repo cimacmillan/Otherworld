@@ -19,8 +19,8 @@ describe("WebContentContainer", () => {
         expect(wrapper.find(NavbarContainer).props().page).toEqual(
             NavPage.GAME
         );
-        expect(wrapper.find(PageAbout).exists()).toBeFalse();
-        expect(wrapper.find(PageDeepDive).exists()).toBeFalse();
-        expect(wrapper.find(PageAnnouncements).exists()).toBeFalse();
+        expect(wrapper.find(PageAbout).exists()).toBeFalsy();
+        expect(wrapper.find(PageDeepDive).exists()).toBeFalsy();
+        expect(wrapper.find(PageAnnouncements).exists()).toBeFalsy();
     });
 });
