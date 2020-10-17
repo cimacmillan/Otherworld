@@ -1,3 +1,4 @@
+import 'jest-extended';
 import { toGameAngle } from "../Basic";
 
 const ANGLE_ERROR = 0.0001;

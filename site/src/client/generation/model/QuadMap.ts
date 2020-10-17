@@ -93,7 +93,10 @@ export class QuadMap {
             this.maxY = y;
         }
 
-        this.crossAttachNodes(mapNode, quadNode, direction);
+        this.crossAttachNodeAtDirection(quadNode, QuadDirection.UP);
+        this.crossAttachNodeAtDirection(quadNode, QuadDirection.DOWN);
+        this.crossAttachNodeAtDirection(quadNode, QuadDirection.LEFT);
+        this.crossAttachNodeAtDirection(quadNode, QuadDirection.RIGHT);
         this.mapNodes.push(quadNode);
         return quadNode;
     }
@@ -119,6 +122,25 @@ export class QuadMap {
         });
 
         return { nodes, width, height };
+    }
+
+    public getNodeAtCoordinate(x: number, y: number): QuadMapNode | undefined {
+        const node = this.mapNodes.find((node) => node.x === x && node.y === y);
+        return node;
+    }
+
+    private crossAttachNodeAtDirection(
+        source: QuadMapNode,
+        direction: QuadDirection
+    ) {
+        const coordinate = getXYOffset(direction);
+        const x = source.x + coordinate.x;
+        const y = source.y + coordinate.y;
+        const toAttach = this.getNodeAtCoordinate(x, y);
+
+        if (toAttach) {
+            this.crossAttachNodes(source, toAttach, direction);
+        }
     }
 
     private crossAttachNodes(
