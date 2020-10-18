@@ -3,7 +3,7 @@ import {
     Sprite,
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
-import { EntityComponent, EntityComponentType } from "../../EntityComponent";
+import { EntityComponent } from "../../EntityComponent";
 import {
     BaseState,
     SpriteRenderState,
@@ -16,8 +16,6 @@ export type SpriteStateType = BaseState &
 
 export class SpriteRenderComponent<T extends SpriteStateType>
     implements EntityComponent<T> {
-    public componentType = EntityComponentType.SpriteRenderComponent;
-
     private toRenderRef?: RenderItem;
     private sprite: Sprite;
 

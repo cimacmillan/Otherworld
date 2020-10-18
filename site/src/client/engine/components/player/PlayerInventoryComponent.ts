@@ -1,14 +1,12 @@
 import { PlayerState } from "../../../services/scripting/factory/PlayerFactory";
 import { Item } from "../../../services/scripting/items/types";
 import { Entity } from "../../Entity";
-import { EntityComponent, EntityComponentType } from "../../EntityComponent";
+import { EntityComponent } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
 import { PlayerEventType } from "../../events/PlayerEvents";
 
 export class PlayerInventoryComponent<T extends PlayerState>
     implements EntityComponent<T> {
-    public componentType = EntityComponentType.PlayerInventoryComponent;
-
     public onEvent(entity: Entity<PlayerState>, event: GameEvent): void {
         switch (event.type) {
             case PlayerEventType.PLAYER_ITEM_DROP_COLLECTED:

@@ -1,27 +1,14 @@
 import { VERSION } from "../../Config";
-import { BoundaryComponent } from "../../engine/components/core/BoundaryComponent";
-import { FloorRenderComponent } from "../../engine/components/core/FloorRenderComponent";
-import { InteractionComponent } from "../../engine/components/core/InteractionComponent";
-import { PhysicsComponent } from "../../engine/components/core/PhysicsComponent";
-import { ItemDropComponent } from "../../engine/components/items/ItemDropComponent";
-import { PlayerControlComponent } from "../../engine/components/player/PlayerControlComponent";
-import { PlayerInventoryComponent } from "../../engine/components/player/PlayerInventoryComponent";
-import { SpriteRenderComponent } from "../../engine/components/rendering/SpriteRenderComponent";
-import { WallRenderComponent } from "../../engine/components/rendering/WallRenderComponent";
 import { Entity } from "../../engine/Entity";
-import {
-    EntityComponent,
-    EntityComponentType,
-} from "../../engine/EntityComponent";
+import { EntityComponent } from "../../engine/EntityComponent";
 import { State, store } from "../../ui/State";
+import { EntitySerial } from "../scripting/factory/Serial";
 import { ServiceLocator } from "../ServiceLocator";
 import { Serialisable } from "./Serialisable";
 
 interface SerialisedEntity {
     state: object;
-    components: Array<{
-        componentType: EntityComponentType;
-    }>;
+    serial: EntitySerial;
 }
 
 export interface SerialisationObject {
@@ -33,27 +20,12 @@ export interface SerialisationObject {
     uiState: State;
 }
 
-type ComponentSerialisationMap = {
-    [component in EntityComponentType]: () => EntityComponent<any>;
+type EntitySerialisationMap = {
+    [component in EntitySerial]: () => Array<EntityComponent<any>>;
 };
 
-const componentSerialisationMap: ComponentSerialisationMap = {
-    [EntityComponentType.PhysicsComponent]: () => new PhysicsComponent(),
-    [EntityComponentType.InteractionComponent]: () =>
-        new InteractionComponent(),
-    [EntityComponentType.BoundaryComponent]: () => new BoundaryComponent(),
-
-    [EntityComponentType.FloorRenderComponent]: () =>
-        new FloorRenderComponent(),
-    [EntityComponentType.SpriteRenderComponent]: () =>
-        new SpriteRenderComponent(),
-    [EntityComponentType.WallRenderComponent]: () => new WallRenderComponent(),
-
-    [EntityComponentType.PlayerInventoryComponent]: () =>
-        new PlayerInventoryComponent(),
-    [EntityComponentType.PlayerControlComponent]: () =>
-        new PlayerControlComponent(),
-    [EntityComponentType.ItemDropComponent]: () => new ItemDropComponent(),
+const entitySerialisationMap: EntitySerialisationMap = {
+    [EntitySerial.NULL]: () => [],
 };
 
 export class SerialisationService implements Serialisable<SerialisationObject> {
@@ -92,21 +64,12 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
     }
 
     public deserialiseEntity(entity: SerialisedEntity): Entity<any> {
-        const components = entity.components.map((component) =>
-            this.deserialiseComponent(component.componentType)
-        );
-
         return new Entity(
+            entity.serial,
             this.serviceLocator,
             entity.state as any,
-            ...components
+            ...entitySerialisationMap[entity.serial]()
         );
-    }
-
-    public deserialiseComponent(
-        componentType: EntityComponentType
-    ): EntityComponent<any> {
-        return componentSerialisationMap[componentType]();
     }
 
     private serialiseEntities(): SerialisedEntity[] {
@@ -121,9 +84,7 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
     private serialiseEntity(entity: Entity<any>): SerialisedEntity {
         return {
             state: { ...entity.getState(), exists: false },
-            components: entity.getComponents().map((component) => {
-                return { componentType: component.componentType };
-            }),
+            serial: entity.serial,
         };
     }
 }

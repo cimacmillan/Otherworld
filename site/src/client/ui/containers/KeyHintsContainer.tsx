@@ -165,7 +165,7 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
                         keyCode={keyHint.key}
                         selected={keyDown}
                         text={keyHint.hint}
-                        style={ShadowComponentStyle()}
+                        style={{}}
                         fade={keyHint.fade}
                         onFadeComplete={() => removeKeyHint(keyHint)}
                     />

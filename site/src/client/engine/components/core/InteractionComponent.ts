@@ -1,6 +1,6 @@
 import { InteractionType } from "../../../services/interaction/InteractionType";
 import { Entity } from "../../Entity";
-import { EntityComponent, EntityComponentType } from "../../EntityComponent";
+import { EntityComponent } from "../../EntityComponent";
 import { BaseState, SurfacePositionState } from "../../state/State";
 
 type InteractableMap = { [key in InteractionType]?: boolean };
@@ -15,7 +15,6 @@ export type InteractionStateType = BaseState &
 
 export class InteractionComponent<T extends InteractionStateType>
     implements EntityComponent<T> {
-    public componentType = EntityComponentType.InteractionComponent;
     public onStateTransition(
         entity: Entity<InteractionStateType>,
         from: InteractionStateType,

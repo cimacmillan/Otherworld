@@ -73,6 +73,7 @@ export function createPlayer(serviceLocator: ServiceLocator) {
     };
 
     return new Entity<PlayerState>(
+        undefined,
         serviceLocator,
         initialState,
         new PhysicsComponent(),

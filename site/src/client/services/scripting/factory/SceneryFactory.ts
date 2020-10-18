@@ -10,11 +10,11 @@ import {
 import {
     SpriteRenderComponent,
     SpriteStateType,
-} from "../../../engine/components/rendering/SpriteRenderComponent";
+} from "../../../engine/components/core/SpriteRenderComponent";
 import {
     WallRenderComponent,
     WallStateType,
-} from "../../../engine/components/rendering/WallRenderComponent";
+} from "../../../engine/components/core/WallRenderComponent";
 import { Entity } from "../../../engine/Entity";
 import { SpriteSheets } from "../../../resources/manifests/DefaultManifest";
 import { Vector2D } from "../../../types";
@@ -63,6 +63,7 @@ export function createStaticFloor(
     };
 
     return new Entity<FloorStateType>(
+        undefined,
         serviceLocator,
         initialState,
         new FloorRenderComponent()
@@ -125,6 +126,7 @@ export function createStaticWall(
     };
 
     return new Entity<WallStateType & BoundaryStateType>(
+        undefined,
         serviceLocator,
         initialState,
         new WallRenderComponent(),
@@ -157,6 +159,7 @@ export function createStaticSprite(
     };
 
     return new Entity<SpriteStateType>(
+        undefined,
         serviceLocator,
         initialState,
         new SpriteRenderComponent()

@@ -3,13 +3,13 @@ import {
     PhysicsStateType,
 } from "../../../engine/components/core/PhysicsComponent";
 import {
+    SpriteRenderComponent,
+    SpriteStateType,
+} from "../../../engine/components/core/SpriteRenderComponent";
+import {
     ItemDropComponent,
     ItemDropComponentState,
 } from "../../../engine/components/items/ItemDropComponent";
-import {
-    SpriteRenderComponent,
-    SpriteStateType,
-} from "../../../engine/components/rendering/SpriteRenderComponent";
 import { Entity } from "../../../engine/Entity";
 import { SpriteSheets } from "../../../resources/manifests/DefaultManifest";
 import { Vector2D } from "../../../types";
@@ -76,6 +76,7 @@ export function createItemDrop(
     };
 
     return new Entity<ItemStateType>(
+        undefined,
         serviceLocator,
         initialState,
         new SpriteRenderComponent(),

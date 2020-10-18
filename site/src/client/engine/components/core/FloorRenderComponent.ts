@@ -3,7 +3,7 @@ import {
     RenderItem,
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
-import { EntityComponent, EntityComponentType } from "../../EntityComponent";
+import { EntityComponent } from "../../EntityComponent";
 import { BaseState } from "../../state/State";
 
 export interface FloorState {
@@ -16,8 +16,6 @@ export type FloorStateType = BaseState & FloorState;
 
 export class FloorRenderComponent<T extends FloorStateType>
     implements EntityComponent<T> {
-    public componentType = EntityComponentType.FloorRenderComponent;
-
     private toRenderRef?: RenderItem;
 
     public update(entity: Entity<FloorStateType>): void {
