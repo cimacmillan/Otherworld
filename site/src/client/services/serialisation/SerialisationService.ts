@@ -1,11 +1,11 @@
 import { VERSION } from "../../Config";
-import { InteractionComponent } from "../../engine/components/InteractionComponent";
+import { BoundaryComponent } from "../../engine/components/core/BoundaryComponent";
+import { FloorRenderComponent } from "../../engine/components/core/FloorRenderComponent";
+import { InteractionComponent } from "../../engine/components/core/InteractionComponent";
+import { PhysicsComponent } from "../../engine/components/core/PhysicsComponent";
 import { ItemDropComponent } from "../../engine/components/items/ItemDropComponent";
-import { BoundaryComponent } from "../../engine/components/physics/BoundaryComponent";
-import { PhysicsComponent } from "../../engine/components/physics/PhysicsComponent";
 import { PlayerControlComponent } from "../../engine/components/player/PlayerControlComponent";
 import { PlayerInventoryComponent } from "../../engine/components/player/PlayerInventoryComponent";
-import { FloorRenderComponent } from "../../engine/components/rendering/FloorRenderComponent";
 import { SpriteRenderComponent } from "../../engine/components/rendering/SpriteRenderComponent";
 import { WallRenderComponent } from "../../engine/components/rendering/WallRenderComponent";
 import { Entity } from "../../engine/Entity";

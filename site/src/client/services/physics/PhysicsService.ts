@@ -1,4 +1,4 @@
-import { PhysicsStateType } from "../../engine/components/physics/PhysicsComponent";
+import { PhysicsStateType } from "../../engine/components/core/PhysicsComponent";
 import { Entity } from "../../engine/Entity";
 import { Vector2D } from "../../types";
 import { ConsistentArray } from "../../util/array/ConsistentArray";

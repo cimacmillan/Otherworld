@@ -1,7 +1,7 @@
-import { InteractionType } from "../../services/interaction/InteractionType";
-import { Entity } from "../Entity";
-import { EntityComponent, EntityComponentType } from "../EntityComponent";
-import { BaseState, SurfacePositionState } from "../state/State";
+import { InteractionType } from "../../../services/interaction/InteractionType";
+import { Entity } from "../../Entity";
+import { EntityComponent, EntityComponentType } from "../../EntityComponent";
+import { BaseState, SurfacePositionState } from "../../state/State";
 
 type InteractableMap = { [key in InteractionType]?: boolean };
 

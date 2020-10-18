@@ -1,4 +1,4 @@
-import { InteractionStateType } from "../../engine/components/InteractionComponent";
+import { InteractionStateType } from "../../engine/components/core/InteractionComponent";
 import { Entity } from "../../engine/Entity";
 import { Vector2D } from "../../types";
 import { ConsistentArray } from "../../util/array/ConsistentArray";

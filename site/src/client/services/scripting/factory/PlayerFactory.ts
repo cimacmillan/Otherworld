@@ -9,11 +9,11 @@ import {
 import {
     InteractionComponent,
     InteractionState,
-} from "../../../engine/components/InteractionComponent";
+} from "../../../engine/components/core/InteractionComponent";
 import {
     PhysicsComponent,
     PhysicsStateType,
-} from "../../../engine/components/physics/PhysicsComponent";
+} from "../../../engine/components/core/PhysicsComponent";
 import { PlayerControlComponent } from "../../../engine/components/player/PlayerControlComponent";
 import { PlayerInventoryComponent } from "../../../engine/components/player/PlayerInventoryComponent";
 import { Entity } from "../../../engine/Entity";

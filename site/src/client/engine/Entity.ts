@@ -18,9 +18,6 @@ export class Entity<State extends BaseState> {
     ) {
         this.components = components;
         this.newState = state;
-        for (let i = 0; i < this.components.length; i++) {
-            this.components[i].init && this.components[i].init(this);
-        }
         this.initialised = true;
     }
 

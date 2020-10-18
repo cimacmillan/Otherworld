@@ -6,7 +6,7 @@ import { Entity } from "../../Entity";
 import { EntityComponent, EntityComponentType } from "../../EntityComponent";
 import { PlayerEventType } from "../../events/PlayerEvents";
 import { BaseState, SpriteRenderState } from "../../state/State";
-import { PhysicsState } from "../physics/PhysicsComponent";
+import { PhysicsState } from "../core/PhysicsComponent";
 
 const ITEM_SIZE_CHANGE = 0.05;
 const ITEM_HEIGHT_CHANGE = 0.2;

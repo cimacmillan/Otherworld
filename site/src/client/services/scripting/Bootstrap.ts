@@ -3,9 +3,7 @@ import { ServiceLocator } from "../ServiceLocator";
 
 import { Sprites } from "../../resources/manifests/DefaultManifest";
 import { createPlayer, PlayerState } from "./factory/PlayerFactory";
-import {
-    createStaticFloor,
-} from "./factory/SceneryFactory";
+import { createStaticFloor } from "./factory/SceneryFactory";
 
 interface BootstrapInfo {
     player: Entity<PlayerState>;

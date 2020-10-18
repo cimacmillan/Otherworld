@@ -1,11 +1,11 @@
 import {
+    PhysicsComponent,
+    PhysicsStateType,
+} from "../../../engine/components/core/PhysicsComponent";
+import {
     ItemDropComponent,
     ItemDropComponentState,
 } from "../../../engine/components/items/ItemDropComponent";
-import {
-    PhysicsComponent,
-    PhysicsStateType,
-} from "../../../engine/components/physics/PhysicsComponent";
 import {
     SpriteRenderComponent,
     SpriteStateType,

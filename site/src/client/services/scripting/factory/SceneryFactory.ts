@@ -2,11 +2,11 @@ import { SCENERY_PIXEL_DENSITY } from "../../../Config";
 import {
     BoundaryComponent,
     BoundaryStateType,
-} from "../../../engine/components/physics/BoundaryComponent";
+} from "../../../engine/components/core/BoundaryComponent";
 import {
     FloorRenderComponent,
     FloorStateType,
-} from "../../../engine/components/rendering/FloorRenderComponent";
+} from "../../../engine/components/core/FloorRenderComponent";
 import {
     SpriteRenderComponent,
     SpriteStateType,
