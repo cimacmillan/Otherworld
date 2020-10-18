@@ -3,7 +3,7 @@ import {
     createStaticWall,
 } from "../services/scripting/factory/SceneryFactory";
 import { ServiceLocator } from "../services/ServiceLocator";
-import { SCENERYSPRITES } from "./manifests/Types";
+import { Sprites } from "./manifests/DefaultManifest";
 import { FloorSchema, MapSchema, WallSchema } from "./MapShema";
 
 export function loadMap(serviceLocator: ServiceLocator, mapSchema: MapSchema) {
@@ -15,7 +15,7 @@ export function loadWall(serviceLocator: ServiceLocator, wall: WallSchema) {
     serviceLocator.getWorld().addEntity(
         createStaticWall(
             serviceLocator,
-            wall.texture === undefined ? SCENERYSPRITES.WALL : wall.texture,
+            wall.texture === undefined ? Sprites.FLOOR : wall.texture,
             {
                 x: wall.startx,
                 y: wall.starty,
@@ -35,7 +35,7 @@ export function loadFloor(serviceLocator: ServiceLocator, floor: FloorSchema) {
     serviceLocator.getWorld().addEntity(
         createStaticFloor(
             serviceLocator,
-            floor.texture === undefined ? SCENERYSPRITES.FLOOR : floor.texture,
+            floor.texture === undefined ? Sprites.FLOOR : floor.texture,
             floor.height ? floor.height : 0,
             {
                 x: floor.startx,

@@ -6,10 +6,11 @@ import React = require("react");
 import { TextComponent, TextFont, TextSize, TextColour } from "./TextComponent";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { SpriteSheets, Sprites } from "../../resources/manifests/Types";
+// import { SpriteSheets, Sprites } from "../../resources/manifests/Types";
 import { animation } from "../../util/animation/Animations";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { ProcedureService } from "../../services/jobs/ProcedureService";
+import { SpriteSheets } from "../../resources/manifests/DefaultManifest";
 
 const Y_FADE = 32;
 const DING = 200;
@@ -21,7 +22,7 @@ const SCALE = 0.5;
 export interface ItemCollectionComponentProps {
     serviceLocator: ServiceLocator;
     amount: number;
-    sprite: number;
+    sprite: string;
     name: string;
 
     onRemove: () => void;

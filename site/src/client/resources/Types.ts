@@ -13,7 +13,9 @@ export interface LoadedManifest {
 }
 
 export interface ResourceManifest {
-    spritesheets: SpriteSheetManifest;
+    spritesheets: {
+        [key: string]: SpriteSheetManifest;
+    };
     audio: AudioManifest;
     maps: MapManifest;
 }
@@ -23,11 +25,9 @@ export interface MapManifest {
 }
 
 export interface SpriteSheetManifest {
-    [key: string]: {
-        url: string;
-        sprites: SpriteManifest;
-        animations: AnimationManifest;
-    };
+    url: string;
+    sprites: SpriteManifest;
+    animations: AnimationManifest;
 }
 
 export interface SpriteInfo {

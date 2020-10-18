@@ -16,14 +16,14 @@ import {
     WallStateType,
 } from "../../../engine/components/rendering/WallRenderComponent";
 import { Entity } from "../../../engine/Entity";
-import { SpriteSheets } from "../../../resources/manifests/Types";
+import { SpriteSheets } from "../../../resources/manifests/DefaultManifest";
 import { Vector2D } from "../../../types";
 import { Floor, Wall } from "../../render/types/RenderInterface";
 import { ServiceLocator } from "../../ServiceLocator";
 
 export function createStaticFloor(
     serviceLocator: ServiceLocator,
-    spriteString: number,
+    spriteString: string,
     height: number,
     start: Vector2D,
     end: Vector2D
@@ -33,7 +33,7 @@ export function createStaticFloor(
         pixelCoordinate,
     } = serviceLocator
         .getResourceManager()
-        .manifest.spritesheets[SpriteSheets.SCENERY].getSprite(spriteString);
+        .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(spriteString);
 
     const floor: Floor = {
         startPos: [start.x, start.y],
@@ -71,7 +71,7 @@ export function createStaticFloor(
 
 export function createStaticWall(
     serviceLocator: ServiceLocator,
-    spriteString: number,
+    spriteString: string,
     start: Vector2D,
     end: Vector2D,
     height: number = 1,
@@ -80,7 +80,7 @@ export function createStaticWall(
 ) {
     const sprite = serviceLocator
         .getResourceManager()
-        .manifest.spritesheets[SpriteSheets.SCENERY].getSprite(spriteString);
+        .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(spriteString);
 
     const textureWidth =
         (Math.sqrt(
@@ -134,7 +134,7 @@ export function createStaticWall(
 
 export function createStaticSprite(
     serviceLocator: ServiceLocator,
-    spriteString: number,
+    spriteString: string,
     position: Vector2D,
     height: number,
     spriteWidth: number,

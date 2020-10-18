@@ -1,6 +1,6 @@
 export interface Item {
     id: number;
-    spriteIcon: number;
+    spriteIcon: string;
     stackable: boolean;
     name: string;
     value?: number;

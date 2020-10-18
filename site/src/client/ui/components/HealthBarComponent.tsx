@@ -4,11 +4,11 @@ import { Subscription } from "rxjs";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { DOM_HEIGHT, DOM_WIDTH } from "../../Config";
 import { getImagePropsFromSprite } from "../../util/math/UI";
-import {
-    SpriteSheets,
-    UISPRITES,
-    UIANIMATIONS,
-} from "../../resources/manifests/Types";
+// import {
+//     SpriteSheets,
+//     UISPRITES,
+//     UIANIMATIONS,
+// } from "../../resources/manifests/Types";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
 import { AnimationImageComponent } from "./AnimationImageComponent";
@@ -66,7 +66,7 @@ export const HealthBarComponent: React.FunctionComponent<HealthBarComponentProps
 
     return (
         <div style={{ position: "absolute" }}>
-            <AnimationImageComponent
+            {/* <AnimationImageComponent
                 serviceLocator={props.serviceLocator}
                 spriteSheet={SpriteSheets.UI}
                 animation={UIANIMATIONS.HEALTH_BAR}
@@ -78,7 +78,7 @@ export const HealthBarComponent: React.FunctionComponent<HealthBarComponentProps
                     height,
                     transform: `translate(0, ${translate}px)`,
                 }}
-            />
+            /> */}
         </div>
     );
 };

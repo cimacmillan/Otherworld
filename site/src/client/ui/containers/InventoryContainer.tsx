@@ -14,11 +14,9 @@ import { useDispatchListener, useGlobalState } from "../effects/GlobalState";
 import { Actions } from "../actions/Actions";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { GamePanelComponent } from "../components/GamePanelComponent";
-import { DARK_PANEL } from "../../resources/manifests/DarkPanel";
 import { ShadowComponentStyle } from "../components/ShadowComponent";
 import { SpriteImageComponent } from "../components/SpriteImageComponent";
 import { ItemMetadata } from "../../services/scripting/items/types";
-import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
 import { GameItems } from "../../resources/manifests/Items";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { chunk } from "lodash";
@@ -179,7 +177,6 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                             flexDirection: "column",
                             overflowY: "scroll",
                         }}
-                        panelMap={DARK_PANEL}
                     >
                         {inventoryItemLines}
                     </GamePanelComponent>

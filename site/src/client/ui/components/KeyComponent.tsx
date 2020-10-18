@@ -2,7 +2,6 @@ import React = require("react");
 import { TextComponent, TextFont, TextSize, TextColour } from "./TextComponent";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
 
 interface KeyComponentProps {
     serviceLocator: ServiceLocator;
@@ -18,7 +17,7 @@ export const SELECTED_TEXT_OFFSET = 4;
 export const KeyComponent: React.FunctionComponent<KeyComponentProps> = (
     props
 ) => {
-    const sprite = props.selected ? UISPRITES.KEY_DOWN : UISPRITES.KEY_UP;
+    // const sprite = props.selected ? UISPRITES.KEY_DOWN : UISPRITES.KEY_UP;
     const offset = props.selected ? SELECTED_TEXT_OFFSET : 0;
 
     return (
@@ -29,7 +28,7 @@ export const KeyComponent: React.FunctionComponent<KeyComponentProps> = (
                 height: KEY_HEIGHT,
             }}
         >
-            <SpriteImageComponent
+            {/* <SpriteImageComponent
                 serviceLocator={props.serviceLocator}
                 spriteSheet={SpriteSheets.UI}
                 sprite={sprite}
@@ -38,7 +37,7 @@ export const KeyComponent: React.FunctionComponent<KeyComponentProps> = (
                     width: KEY_WIDTH,
                     height: KEY_HEIGHT,
                 }}
-            />
+            /> */}
             <TextComponent
                 text={props.keyCode}
                 font={TextFont.REGULAR}

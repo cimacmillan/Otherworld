@@ -11,7 +11,7 @@ import {
     SpriteStateType,
 } from "../../../engine/components/rendering/SpriteRenderComponent";
 import { Entity } from "../../../engine/Entity";
-import { SpriteSheets } from "../../../resources/manifests/Types";
+import { SpriteSheets } from "../../../resources/manifests/DefaultManifest";
 import { Vector2D } from "../../../types";
 import { vec } from "../../../util/math";
 import { ServiceLocator } from "../../ServiceLocator";

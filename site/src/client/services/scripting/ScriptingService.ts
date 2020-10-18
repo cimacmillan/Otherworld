@@ -1,7 +1,7 @@
 import { Entity } from "../../engine/Entity";
 import { BaseState } from "../../engine/state/State";
 import { Game } from "../../Game";
-import { Audios } from "../../resources/manifests/Types";
+// import { Audios } from "../../resources/manifests/Types";
 import { InputState } from "../input/InputService";
 import { ProcedureService } from "../jobs/ProcedureService";
 import { ServiceLocator } from "../ServiceLocator";
@@ -53,26 +53,26 @@ export class ScriptingService {
     }
 
     public endGame() {
-        this.serviceLocator
-            .getAudioService()
-            .play(
-                this.serviceLocator.getResourceManager().manifest.audio[
-                    Audios.END
-                ]
-            );
+        // this.serviceLocator
+        //     .getAudioService()
+        //     .play(
+        //         this.serviceLocator.getResourceManager().manifest.audio[
+        //             Audios.END
+        //         ]
+        //     );
         this.game.setUpdateWorld(false);
         this.serviceLocator.getInputService().setInputState(InputState.MENU);
         ProcedureService.setTimeout(() => this.resetContent(), 1000);
     }
 
     public startGame() {
-        this.serviceLocator
-            .getAudioService()
-            .play(
-                this.serviceLocator.getResourceManager().manifest.audio[
-                    Audios.INCOMING
-                ]
-            );
+        // this.serviceLocator
+        //     .getAudioService()
+        //     .play(
+        //         this.serviceLocator.getResourceManager().manifest.audio[
+        //             Audios.INCOMING
+        //         ]
+        //     );
         this.serviceLocator.getInputService().setInputState(InputState.DEFAULT);
 
         this.game.setUpdateWorld(true);

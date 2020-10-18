@@ -14,13 +14,6 @@ export enum EntityComponentType {
     PlayerInventoryComponent = "PlayerInventoryComponent",
     PlayerControlComponent = "PlayerControlComponent",
     ItemDropComponent = "ItemDropComponent",
-
-    EggLogicComponent = "EggLogicComponent",
-    MacatorLogicComponent = "MacatorLogicComponent",
-    MacatorRenderComponent = "MacatorRenderComponent",
-
-    ChickenLogicComponent = "ChickenLogicComponent",
-    ChickenRenderComponent = "ChickenRenderComponent",
 }
 
 export interface EntityComponent<State extends BaseState> {

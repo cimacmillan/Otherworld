@@ -11,7 +11,7 @@ import { Subscription } from "rxjs";
 import { vec } from "../../util/math";
 import { getImagePropsFromSprite } from "../../util/math/UI";
 import { ViewportComponent } from "./ViewportComponent";
-import { SpriteSheets, Sprites } from "../../resources/manifests/Types";
+// import { SpriteSheets, Sprites } from "../../resources/manifests/Types";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { connect } from "react-redux";
@@ -93,7 +93,7 @@ export const WeaponComponent: React.FunctionComponent<WeaponComponentProps> = (
             height={DOM_HEIGHT}
             style={{}}
         >
-            <SpriteImageComponent
+            {/* <SpriteImageComponent
                 serviceLocator={props.serviceLocator}
                 spriteSheet={SpriteSheets.SPRITE}
                 sprite={Sprites.SWORD}
@@ -106,7 +106,7 @@ export const WeaponComponent: React.FunctionComponent<WeaponComponentProps> = (
                         Math.floor(rotate) + DEFAULT_ROTATION
                     }deg) translate(-50%, -50%)`,
                 }}
-            />
+            /> */}
         </ViewportComponent>
     );
 };

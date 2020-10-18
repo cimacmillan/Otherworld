@@ -1,5 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { SpriteSheets } from "../../resources/manifests/Types";
+import { SpriteSheets } from "../../resources/manifests/DefaultManifest";
 import { ResourceManager } from "../../resources/ResourceManager";
 import { Camera } from "../../types";
 import { BackgroundRenderService } from "./services/BackgroundRenderService";
@@ -45,13 +45,13 @@ export class RenderService implements RenderInterface {
         this.wallRenderService.init(gl);
         this.wallRenderService.attachSpritesheet(
             this.resourceManager.manifest.spritesheets[
-                SpriteSheets.SCENERY
+                SpriteSheets.SPRITE
             ].getTexture()
         );
         this.floorRenderService.init(gl);
         this.floorRenderService.attachSpritesheet(
             this.resourceManager.manifest.spritesheets[
-                SpriteSheets.SCENERY
+                SpriteSheets.SPRITE
             ].getTexture()
         );
     }

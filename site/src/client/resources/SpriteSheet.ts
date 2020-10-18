@@ -100,7 +100,7 @@ export class SpriteSheet {
         }
     }
 
-    public getSprite(name: number): Sprite {
+    public getSprite(name: string): Sprite {
         if (!this.spriteHash[name]) {
             console.log(`SpriteSheet ${name} missing`);
         }

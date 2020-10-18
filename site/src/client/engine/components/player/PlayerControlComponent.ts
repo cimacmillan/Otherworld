@@ -1,4 +1,4 @@
-import { Audios } from "../../../resources/manifests/Types";
+// import { Audios } from "../../../resources/manifests/Types";
 import { InteractionType } from "../../../services/interaction/InteractionType";
 import { PlayerState } from "../../../services/scripting/factory/PlayerFactory";
 import { Vector2D } from "../../../types";
@@ -115,14 +115,14 @@ export class PlayerControlComponent<T extends PlayerState>
 
     private onDamaged(entity: Entity<PlayerState>, amount: number) {
         entity.setState({ health: entity.getState().health - amount });
-        entity
-            .getServiceLocator()
-            .getAudioService()
-            .play(
-                entity.getServiceLocator().getResourceManager().manifest.audio[
-                    Audios.PLAYER_HIT
-                ]
-            );
+        // entity
+        //     .getServiceLocator()
+        //     .getAudioService()
+        //     .play(
+        //         entity.getServiceLocator().getResourceManager().manifest.audio[
+        //             Audios.PLAYER_HIT
+        //         ]
+        //     );
         entity
             .getServiceLocator()
             .getRenderService()
@@ -143,14 +143,14 @@ export class PlayerControlComponent<T extends PlayerState>
             type: PlayerEventType.PLAYER_ATTACK,
         });
 
-        entity
-            .getServiceLocator()
-            .getAudioService()
-            .play(
-                entity.getServiceLocator().getResourceManager().manifest.audio[
-                    Audios.WHOOSH
-                ]
-            );
+        // entity
+        //     .getServiceLocator()
+        //     .getAudioService()
+        //     .play(
+        //         entity.getServiceLocator().getResourceManager().manifest.audio[
+        //             Audios.WHOOSH
+        //         ]
+        //     );
 
         this.attackDelay.onAction();
         const state = entity.getState();
@@ -183,13 +183,13 @@ export class PlayerControlComponent<T extends PlayerState>
         });
 
         if (hasAttacked) {
-            entity
-                .getServiceLocator()
-                .getAudioService()
-                .play(
-                    entity.getServiceLocator().getResourceManager().manifest
-                        .audio[Audios.SLAM]
-                );
+            // entity
+            //     .getServiceLocator()
+            //     .getAudioService()
+            //     .play(
+            //         entity.getServiceLocator().getResourceManager().manifest
+            //             .audio[Audios.SLAM]
+            //     );
         }
     }
 

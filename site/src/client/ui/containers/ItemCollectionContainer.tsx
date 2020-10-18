@@ -3,12 +3,10 @@ import { DOM_WIDTH, DOM_HEIGHT } from "../../Config";
 import React = require("react");
 import { GamePanelComponent } from "../components/GamePanelComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { DARK_PANEL } from "../../resources/manifests/DarkPanel";
 import {
     ShadowComponentStyle,
     ShadowComponentStyleSmall,
 } from "../components/ShadowComponent";
-import { SpriteSheets, Sprites } from "../../resources/manifests/Types";
 import { SpriteImageComponent } from "../components/SpriteImageComponent";
 import {
     TextComponent,

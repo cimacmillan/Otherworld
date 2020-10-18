@@ -12,7 +12,7 @@ import { ShadowComponentStyle } from "./ShadowComponent";
 import { animation } from "../../util/animation/Animations";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
+// import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
 
 const TOOLTIP_WIDTH = 256;
 const TOOLTIP_HEIGHT = 128;
@@ -185,16 +185,16 @@ function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
     switch (item.category) {
         case ItemCategory.CONSUMABLE:
             return row([
-                <SpriteImageComponent
-                    serviceLocator={serviceLocator}
-                    spriteSheet={SpriteSheets.UI}
-                    sprite={UISPRITES.ITEM_FINGER}
-                    style={{
-                        width: 32,
-                        height: 32,
-                        transform: `translate(0px, ${yOffset}px)`,
-                    }}
-                />,
+                // <SpriteImageComponent
+                //     serviceLocator={serviceLocator}
+                //     spriteSheet={SpriteSheets.UI}
+                //     sprite={UISPRITES.ITEM_FINGER}
+                //     style={{
+                //         width: 32,
+                //         height: 32,
+                //         transform: `translate(0px, ${yOffset}px)`,
+                //     }}
+                // />,
                 text("to consume"),
             ]);
     }

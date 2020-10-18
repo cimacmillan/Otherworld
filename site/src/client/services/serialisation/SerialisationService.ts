@@ -1,9 +1,4 @@
 import { VERSION } from "../../Config";
-import { ChickenLogicComponent } from "../../engine/components/creatures/chicken/ChickenLogicComponent";
-import { ChickenRenderComponent } from "../../engine/components/creatures/chicken/ChickenRenderComponent";
-import { EggLogicComponent } from "../../engine/components/creatures/egg/EggLogicComponent";
-import { MacatorLogicComponent } from "../../engine/components/creatures/macator/MacatorLogicComponent";
-import { MacatorRenderComponent } from "../../engine/components/creatures/macator/MacatorRenderComponent";
 import { InteractionComponent } from "../../engine/components/InteractionComponent";
 import { ItemDropComponent } from "../../engine/components/items/ItemDropComponent";
 import { BoundaryComponent } from "../../engine/components/physics/BoundaryComponent";
@@ -59,17 +54,6 @@ const componentSerialisationMap: ComponentSerialisationMap = {
     [EntityComponentType.PlayerControlComponent]: () =>
         new PlayerControlComponent(),
     [EntityComponentType.ItemDropComponent]: () => new ItemDropComponent(),
-
-    [EntityComponentType.EggLogicComponent]: () => new EggLogicComponent(),
-    [EntityComponentType.MacatorLogicComponent]: () =>
-        new MacatorLogicComponent(),
-    [EntityComponentType.MacatorRenderComponent]: () =>
-        new MacatorRenderComponent(),
-
-    [EntityComponentType.ChickenLogicComponent]: () =>
-        new ChickenLogicComponent(),
-    [EntityComponentType.ChickenRenderComponent]: () =>
-        new ChickenRenderComponent(),
 };
 
 export class SerialisationService implements Serialisable<SerialisationObject> {
