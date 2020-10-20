@@ -1,10 +1,10 @@
-import { Item } from "../../../services/scripting/items/types";
 import { animation } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
 import { vec } from "../../../util/math";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { PlayerEventType } from "../../events/PlayerEvents";
+import { Item } from "../../scripting/items/types";
 import { BaseState, SpriteRenderState } from "../../state/State";
 import { PhysicsState } from "../core/PhysicsComponent";
 

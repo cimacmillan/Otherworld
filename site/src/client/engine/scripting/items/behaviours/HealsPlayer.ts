@@ -1,4 +1,4 @@
-import { PlayerEventType } from "../../../../engine/events/PlayerEvents";
+import { PlayerEventType } from "../../../events/PlayerEvents";
 import { ConsumeArgs, ItemBehaviourImplementation } from "../ItemBehaviours";
 import { ItemHealsPlayer } from "../types";
 

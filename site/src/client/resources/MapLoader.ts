@@ -1,7 +1,7 @@
 import {
     createStaticFloor,
     createStaticWall,
-} from "../services/scripting/factory/SceneryFactory";
+} from "../engine/scripting/factory/SceneryFactory";
 import { ServiceLocator } from "../services/ServiceLocator";
 import { Sprites } from "./manifests/DefaultManifest";
 import { FloorSchema, MapSchema, WallSchema } from "./MapShema";

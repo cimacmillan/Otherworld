@@ -1,8 +1,8 @@
-import { EntitySerial } from "../services/scripting/factory/Serial";
 import { ServiceLocator } from "../services/ServiceLocator";
 import { EntityComponent } from "./EntityComponent";
 import { EntityEventType } from "./events/EntityEvents";
 import { GameEvent } from "./events/Event";
+import { EntitySerial } from "./scripting/factory/Serial";
 import { BaseState } from "./state/State";
 
 export class Entity<State extends BaseState> {

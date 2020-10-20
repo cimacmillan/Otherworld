@@ -1,3 +1,4 @@
+import { ScriptingService } from "../engine/scripting/ScriptingService";
 import { World } from "../engine/World";
 import { Game } from "../Game";
 import { ResourceManager } from "../resources/ResourceManager";
@@ -7,7 +8,6 @@ import { InputService } from "./input/InputService";
 import { InteractionService } from "./interaction/InteractionService";
 import { PhysicsService } from "./physics/PhysicsService";
 import { RenderService } from "./render";
-import { ScriptingService } from "./scripting/ScriptingService";
 import { SerialisationService } from "./serialisation/SerialisationService";
 
 export class ServiceLocator {

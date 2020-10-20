@@ -1,20 +1,20 @@
+import { SpriteSheets } from "../../../resources/manifests/DefaultManifest";
+import { ServiceLocator } from "../../../services/ServiceLocator";
+import { Vector2D } from "../../../types";
+import { vec } from "../../../util/math";
 import {
     PhysicsComponent,
     PhysicsStateType,
-} from "../../../engine/components/core/PhysicsComponent";
+} from "../../components/core/PhysicsComponent";
 import {
     SpriteRenderComponent,
     SpriteStateType,
-} from "../../../engine/components/core/SpriteRenderComponent";
+} from "../../components/core/SpriteRenderComponent";
 import {
     ItemDropComponent,
     ItemDropComponentState,
-} from "../../../engine/components/items/ItemDropComponent";
-import { Entity } from "../../../engine/Entity";
-import { SpriteSheets } from "../../../resources/manifests/DefaultManifest";
-import { Vector2D } from "../../../types";
-import { vec } from "../../../util/math";
-import { ServiceLocator } from "../../ServiceLocator";
+} from "../../components/items/ItemDropComponent";
+import { Entity } from "../../Entity";
 import { Item } from "../items/types";
 
 const ITEM_SIZE = 0.4;

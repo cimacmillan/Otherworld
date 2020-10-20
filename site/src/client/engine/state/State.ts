@@ -1,6 +1,6 @@
 import { TextureCoordinate } from "../../resources/SpriteSheet";
-import { Inventory } from "../../services/scripting/items/types";
 import { Camera, Vector2D } from "../../types";
+import { Inventory } from "../scripting/items/types";
 
 export interface BaseState {
     exists: boolean;

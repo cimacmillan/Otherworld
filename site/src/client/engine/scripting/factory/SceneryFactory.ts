@@ -1,25 +1,25 @@
 import { SCENERY_PIXEL_DENSITY } from "../../../Config";
+import { SpriteSheets } from "../../../resources/manifests/DefaultManifest";
+import { Floor, Wall } from "../../../services/render/types/RenderInterface";
+import { ServiceLocator } from "../../../services/ServiceLocator";
+import { Vector2D } from "../../../types";
 import {
     BoundaryComponent,
     BoundaryStateType,
-} from "../../../engine/components/core/BoundaryComponent";
+} from "../../components/core/BoundaryComponent";
 import {
     FloorRenderComponent,
     FloorStateType,
-} from "../../../engine/components/core/FloorRenderComponent";
+} from "../../components/core/FloorRenderComponent";
 import {
     SpriteRenderComponent,
     SpriteStateType,
-} from "../../../engine/components/core/SpriteRenderComponent";
+} from "../../components/core/SpriteRenderComponent";
 import {
     WallRenderComponent,
     WallStateType,
-} from "../../../engine/components/core/WallRenderComponent";
-import { Entity } from "../../../engine/Entity";
-import { SpriteSheets } from "../../../resources/manifests/DefaultManifest";
-import { Vector2D } from "../../../types";
-import { Floor, Wall } from "../../render/types/RenderInterface";
-import { ServiceLocator } from "../../ServiceLocator";
+} from "../../components/core/WallRenderComponent";
+import { Entity } from "../../Entity";
 
 export function createStaticFloor(
     serviceLocator: ServiceLocator,

@@ -1,6 +1,6 @@
-import { Entity } from "../../../engine/Entity";
-import { BaseState, HealthState } from "../../../engine/state/State";
-import { ServiceLocator } from "../../ServiceLocator";
+import { ServiceLocator } from "../../../services/ServiceLocator";
+import { Entity } from "../../Entity";
+import { BaseState, HealthState } from "../../state/State";
 import { HealsPlayerBehaviour } from "./behaviours/HealsPlayer";
 import { MakesNoiseWhenConsumedComponent } from "./behaviours/MakesNoiseWhenConsumed";
 import { join, joinOR } from "./helper";

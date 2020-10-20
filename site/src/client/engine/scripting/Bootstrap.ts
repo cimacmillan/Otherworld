@@ -1,7 +1,8 @@
-import { Entity } from "../../engine/Entity";
-import { ServiceLocator } from "../ServiceLocator";
+import { ServiceLocator } from "../../services/ServiceLocator";
+import { Entity } from "../Entity";
 
 import { Sprites } from "../../resources/manifests/DefaultManifest";
+import { createSlime, getSlimeState } from "./factory/EnemyFactory";
 import { createPlayer, PlayerState } from "./factory/PlayerFactory";
 import { createStaticFloor } from "./factory/SceneryFactory";
 
@@ -64,6 +65,10 @@ export function bootstrap(serviceLocator: ServiceLocator): BootstrapInfo {
             { x: -100, y: -100 },
             { x: 100, y: 100 }
         )
+    );
+
+    world.addEntity(
+        createSlime(serviceLocator, getSlimeState(serviceLocator, 0, -10))
     );
 
     // loadMap(

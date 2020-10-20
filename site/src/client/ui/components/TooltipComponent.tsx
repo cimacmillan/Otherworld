@@ -4,7 +4,7 @@ import {
     ItemComponent,
     ItemComponentType,
     Item,
-} from "../../services/scripting/items/types";
+} from "../../engine/scripting/items/types";
 import React = require("react");
 import { TextComponent, TextFont, TextColour, TextSize } from "./TextComponent";
 import { Vector2D } from "../../types";

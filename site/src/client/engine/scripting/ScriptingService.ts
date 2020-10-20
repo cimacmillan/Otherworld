@@ -1,10 +1,10 @@
-import { Entity } from "../../engine/Entity";
-import { BaseState } from "../../engine/state/State";
 import { Game } from "../../Game";
 // import { Audios } from "../../resources/manifests/Types";
-import { InputState } from "../input/InputService";
-import { ProcedureService } from "../jobs/ProcedureService";
-import { ServiceLocator } from "../ServiceLocator";
+import { InputState } from "../../services/input/InputService";
+import { ProcedureService } from "../../services/jobs/ProcedureService";
+import { ServiceLocator } from "../../services/ServiceLocator";
+import { Entity } from "../Entity";
+import { BaseState } from "../state/State";
 import { bootstrap } from "./Bootstrap";
 import { PlayerState } from "./factory/PlayerFactory";
 import { InventoryService } from "./items/InventoryService";

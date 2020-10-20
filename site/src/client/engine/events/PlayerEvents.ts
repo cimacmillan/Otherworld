@@ -1,4 +1,4 @@
-import { Item } from "../../services/scripting/items/types";
+import { Item } from "../scripting/items/types";
 
 interface PlayerAttack {
     type: PlayerEventType.PLAYER_ATTACK;

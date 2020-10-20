@@ -6,24 +6,24 @@ import {
     ZFAR,
     ZNEAR,
 } from "../../../Config";
+import { ServiceLocator } from "../../../services/ServiceLocator";
 import {
     InteractionComponent,
     InteractionState,
-} from "../../../engine/components/core/InteractionComponent";
+} from "../../components/core/InteractionComponent";
 import {
     PhysicsComponent,
     PhysicsStateType,
-} from "../../../engine/components/core/PhysicsComponent";
-import { PlayerControlComponent } from "../../../engine/components/player/PlayerControlComponent";
-import { PlayerInventoryComponent } from "../../../engine/components/player/PlayerInventoryComponent";
-import { Entity } from "../../../engine/Entity";
+} from "../../components/core/PhysicsComponent";
+import { PlayerControlComponent } from "../../components/player/PlayerControlComponent";
+import { PlayerInventoryComponent } from "../../components/player/PlayerInventoryComponent";
+import { Entity } from "../../Entity";
 import {
     BaseState,
     CameraState,
     HealthState,
     InventoryState,
-} from "../../../engine/state/State";
-import { ServiceLocator } from "../../ServiceLocator";
+} from "../../state/State";
 
 export type PlayerState = BaseState &
     PhysicsStateType &

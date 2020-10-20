@@ -1,11 +1,7 @@
-import { Entity } from "../../../engine/Entity";
-import { PlayerEventType } from "../../../engine/events/PlayerEvents";
-import {
-    BaseState,
-    HealthState,
-    InventoryState,
-} from "../../../engine/state/State";
-import { ServiceLocator } from "../../ServiceLocator";
+import { ServiceLocator } from "../../../services/ServiceLocator";
+import { Entity } from "../../Entity";
+import { PlayerEventType } from "../../events/PlayerEvents";
+import { BaseState, HealthState, InventoryState } from "../../state/State";
 import { createItemDrop, ItemDropArguments } from "../factory/ItemFactory";
 import { ItemBehaviours } from "./ItemBehaviours";
 import { ItemMetadata } from "./types";

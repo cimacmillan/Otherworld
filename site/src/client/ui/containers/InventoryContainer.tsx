@@ -16,7 +16,7 @@ import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { GamePanelComponent } from "../components/GamePanelComponent";
 import { ShadowComponentStyle } from "../components/ShadowComponent";
 import { SpriteImageComponent } from "../components/SpriteImageComponent";
-import { ItemMetadata } from "../../services/scripting/items/types";
+import { ItemMetadata } from "../../engine/scripting/items/types";
 import { GameItems } from "../../resources/manifests/Items";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { chunk } from "lodash";

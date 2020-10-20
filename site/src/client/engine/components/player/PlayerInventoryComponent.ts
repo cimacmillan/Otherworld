@@ -1,9 +1,9 @@
-import { PlayerState } from "../../../services/scripting/factory/PlayerFactory";
-import { Item } from "../../../services/scripting/items/types";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
 import { PlayerEventType } from "../../events/PlayerEvents";
+import { PlayerState } from "../../scripting/factory/PlayerFactory";
+import { Item } from "../../scripting/items/types";
 
 export class PlayerInventoryComponent<T extends PlayerState>
     implements EntityComponent<T> {

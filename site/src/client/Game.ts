@@ -1,5 +1,6 @@
 import { HEIGHT, IS_DEV_MODE, TARGET_MILLIS, VERSION, WIDTH } from "./Config";
 import { GameEvent, RootEventType } from "./engine/events/Event";
+import { ScriptingService } from "./engine/scripting/ScriptingService";
 import { World } from "./engine/World";
 import { ResourceManager } from "./resources/ResourceManager";
 import { AudioService } from "./services/audio/AudioService";
@@ -9,7 +10,6 @@ import { InteractionService } from "./services/interaction/InteractionService";
 import { ProcedureService } from "./services/jobs/ProcedureService";
 import { PhysicsService } from "./services/physics/PhysicsService";
 import { RenderService, ScreenBuffer } from "./services/render";
-import { ScriptingService } from "./services/scripting/ScriptingService";
 import { SerialisationListeners } from "./services/serialisation/Listeners";
 import {
     SerialisationObject,

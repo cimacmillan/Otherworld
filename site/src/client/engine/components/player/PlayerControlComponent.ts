@@ -1,6 +1,5 @@
 // import { Audios } from "../../../resources/manifests/Types";
 import { InteractionType } from "../../../services/interaction/InteractionType";
-import { PlayerState } from "../../../services/scripting/factory/PlayerFactory";
 import { Vector2D } from "../../../types";
 import { animation } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
@@ -17,6 +16,7 @@ import {
     TurnDirection,
     WalkDirection,
 } from "../../events/TravelEvents";
+import { PlayerState } from "../../scripting/factory/PlayerFactory";
 
 const WALK_SPEED = 0.02;
 const TURN_SPEED = 0.15;

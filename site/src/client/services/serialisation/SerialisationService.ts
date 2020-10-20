@@ -1,8 +1,8 @@
 import { VERSION } from "../../Config";
 import { Entity } from "../../engine/Entity";
 import { EntityComponent } from "../../engine/EntityComponent";
+import { EntitySerial } from "../../engine/scripting/factory/Serial";
 import { State, store } from "../../ui/State";
-import { EntitySerial } from "../scripting/factory/Serial";
 import { ServiceLocator } from "../ServiceLocator";
 import { Serialisable } from "./Serialisable";
 
