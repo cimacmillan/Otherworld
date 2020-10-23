@@ -77,7 +77,7 @@ export class SpriteRenderComponent<T extends SpriteStateType>
         return {
             position: [state.position.x, state.position.y],
             size: [state.spriteWidth, state.spriteHeight],
-            height: state.height,
+            height: state.height + state.spriteHeight / 2,
             texture: state.textureCoordinate,
         };
     }

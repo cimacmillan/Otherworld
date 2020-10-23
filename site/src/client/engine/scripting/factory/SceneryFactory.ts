@@ -147,6 +147,7 @@ export function createStaticSprite(
         .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(spriteString);
 
     const initialState: SpriteStateType = {
+        yOffset: 0,
         exists: true,
         position,
         height,

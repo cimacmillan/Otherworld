@@ -16,6 +16,8 @@ export interface PhysicsBoundary {
 }
 
 const FORCE_CONSTANT = 0.2;
+const GRAVITY_CONSTANT = 0.01;
+const GRAVITY_LIMIT = 0.01;
 
 export class PhysicsService {
     private entities: ConsistentArray<PhysicsEntity>;
@@ -50,6 +52,7 @@ export class PhysicsService {
         const boundaries = this.boundaries.getArray();
 
         for (const a of array) {
+            this.calculateEntityGravityCollisionImpulse(a);
             this.calculateEntityCollisionImpulse(a, array);
         }
 
@@ -58,6 +61,24 @@ export class PhysicsService {
         }
 
         this.moveEntities(array);
+    }
+
+    private calculateEntityGravityCollisionImpulse(entity: PhysicsEntity) {
+        const { height, heightVelocity } = entity.entity.getState();
+
+        let newVelocity = heightVelocity;
+
+        if (height > GRAVITY_LIMIT) {
+            newVelocity = heightVelocity - GRAVITY_CONSTANT;
+        }
+
+        if (height < 0 && newVelocity < 0) {
+            newVelocity = Math.abs(newVelocity);
+            entity.entity.getState().height = 0;
+            newVelocity = newVelocity * entity.entity.getState().elastic;
+        }
+
+        entity.entity.getState().heightVelocity = newVelocity;
     }
 
     private calculateEntityBoundaryCollisionImpulse(
@@ -181,6 +202,7 @@ export class PhysicsService {
 
             const newPosX = state.position.x + state.velocity.x;
             const newPosY = state.position.y + state.velocity.y;
+            const newHeight = state.height + state.heightVelocity;
 
             const newVelocityX = state.velocity.x * state.friction;
             const newVelocityY = state.velocity.y * state.friction;
@@ -195,6 +217,7 @@ export class PhysicsService {
                         x: newVelocityX,
                         y: newVelocityY,
                     },
+                    height: newHeight,
                 },
                 false
             );

@@ -9,6 +9,7 @@ export interface BaseState {
 export interface SurfacePositionState {
     position: Vector2D;
     height: number;
+    yOffset: number;
     radius: number;
     angle: number;
 }

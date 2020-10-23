@@ -23,7 +23,6 @@ const SpriteSizeWobbles = (wobble: number, wobbleSpeed: number) => {
             entity.setState({
                 spriteWidth: spriteWidth + sin,
                 spriteHeight: spriteHeight - sin,
-                height: (spriteHeight - sin) / 2,
             });
         })
             .looping()
@@ -63,13 +62,15 @@ export function getSlimeState(
         spriteWidth: 1,
         spriteHeight: 1,
         position: { x, y },
-        height: 0.5,
+        height: 1,
+        heightVelocity: 0,
+        yOffset: 0,
         radius: 1,
         angle: 0,
         velocity: { x: 0, y: 0 },
         friction: 0.9,
         mass: 1,
-        elastic: 0.9,
+        elastic: 0.8,
         collidesEntities: true,
         collidesWalls: true,
     };

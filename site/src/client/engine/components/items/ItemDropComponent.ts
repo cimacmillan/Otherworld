@@ -100,7 +100,6 @@ export class ItemDropComponent
             {
                 spriteWidth: newSpriteWidth,
                 spriteHeight: newSpriteHeight,
-                height: newHeight,
             },
             false
         );

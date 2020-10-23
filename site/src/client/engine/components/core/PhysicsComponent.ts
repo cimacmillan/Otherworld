@@ -6,6 +6,7 @@ import { BaseState, SurfacePositionState } from "../../state/State";
 
 export interface PhysicsState {
     velocity: Vector2D;
+    heightVelocity: number;
     friction: number;
     mass: number;
     elastic: number;

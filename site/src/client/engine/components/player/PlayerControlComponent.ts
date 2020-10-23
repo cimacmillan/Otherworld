@@ -1,4 +1,5 @@
 // import { Audios } from "../../../resources/manifests/Types";
+import { DEFAULT_PLAYER_HEIGHT } from "../../../Config";
 import { InteractionType } from "../../../services/interaction/InteractionType";
 import { Vector2D } from "../../../types";
 import { animation } from "../../../util/animation/Animations";
@@ -229,6 +230,6 @@ export class PlayerControlComponent<T extends PlayerState>
         const { position, height, angle, camera } = entity.getState();
         camera.position = position;
         camera.angle = angle;
-        camera.height = height + this.headbobOffset;
+        camera.height = height + this.headbobOffset + DEFAULT_PLAYER_HEIGHT;
     }
 }

@@ -53,9 +53,11 @@ export function createItemDrop(
     );
 
     const initialState: ItemStateType = {
+        yOffset: 0,
         exists: false,
         position: newPosition,
-        height: ITEM_SIZE / 2,
+        height: 0,
+        heightVelocity: 0,
         radius: ITEM_SIZE / 2,
         angle: 0,
         shouldRender: true,
