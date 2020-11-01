@@ -6,6 +6,7 @@ export const fsSource = `
     uniform sampler2D uSampler;
 
     varying lowp vec4 position;
+    varying lowp vec4 colour;
 
     ${fadeFunction}
     ${hazeFunction}
@@ -19,6 +20,8 @@ export const fsSource = `
       lowp float distance = length(floor(position * fadeAccuracy) / fadeAccuracy);
       lowp float multiplier = fade(distance);
 
-      gl_FragColor = vec4(haze(texColor.rgb, multiplier), 1);
+      lowp vec3 col = (colour.rgb * colour.a) + ((1.0 - colour.a) * texColor.rgb);
+
+      gl_FragColor = vec4(haze(col, multiplier), 1);
     }
   `;

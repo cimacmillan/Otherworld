@@ -1,6 +1,7 @@
 import {
     RenderItem,
     Sprite,
+    SpriteShadeOverride,
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
@@ -13,6 +14,13 @@ import {
 export type SpriteStateType = BaseState &
     SurfacePositionState &
     SpriteRenderState;
+
+const DEFAULT_SHADE_OVERRIDE: SpriteShadeOverride = {
+    r: 0,
+    g: 0,
+    b: 0,
+    intensity: 0,
+};
 
 export class SpriteRenderComponent<T extends SpriteStateType>
     implements EntityComponent<T> {
@@ -79,6 +87,7 @@ export class SpriteRenderComponent<T extends SpriteStateType>
             size: [state.spriteWidth, state.spriteHeight],
             height: state.height + state.spriteHeight / 2,
             texture: state.textureCoordinate,
+            shade: state.shade || DEFAULT_SHADE_OVERRIDE,
         };
     }
 }

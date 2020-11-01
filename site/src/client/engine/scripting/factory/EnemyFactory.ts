@@ -73,5 +73,11 @@ export function getSlimeState(
         elastic: 0.8,
         collidesEntities: true,
         collidesWalls: true,
+        shade: {
+            r: 1,
+            g: 1,
+            b: 1,
+            intensity: 0.1,
+        },
     };
 }

@@ -7,6 +7,14 @@ export interface Sprite {
     height: number;
 
     texture: TextureCoordinate;
+    shade: SpriteShadeOverride;
+}
+
+export interface SpriteShadeOverride {
+    r: number;
+    g: number;
+    b: number;
+    intensity: number;
 }
 
 export interface Wall {
