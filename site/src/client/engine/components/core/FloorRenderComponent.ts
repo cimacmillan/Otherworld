@@ -18,21 +18,20 @@ export class FloorRenderComponent<T extends FloorStateType>
     implements EntityComponent<T> {
     private toRenderRef?: RenderItem;
 
-    public update(entity: Entity<FloorStateType>): void {
-        const { floor } = entity.getState().floorState;
-        if (floor) {
-            entity
-                .getServiceLocator()
-                .getRenderService()
-                .floorRenderService.updateItem(this.toRenderRef, floor);
-        }
-    }
-
     public onStateTransition(
         entity: Entity<FloorStateType>,
         from: FloorStateType,
         to: FloorStateType
     ) {
+        if (from.floorState.floor !== to.floorState.floor) {
+            entity
+                .getServiceLocator()
+                .getRenderService()
+                .floorRenderService.updateItem(
+                    this.toRenderRef,
+                    to.floorState.floor
+                );
+        }
         if (!from.floorState.floor && to.floorState.floor) {
             this.toRenderRef = entity
                 .getServiceLocator()

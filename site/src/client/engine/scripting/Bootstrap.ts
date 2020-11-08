@@ -2,11 +2,9 @@ import { ServiceLocator } from "../../services/ServiceLocator";
 import { Entity } from "../Entity";
 
 import { Sprites } from "../../resources/manifests/DefaultManifest";
-import { ParticleRenderComponent } from "../components/core/ParticleRenderComponent";
 import { createSlime, getSlimeState } from "./factory/EnemyFactory";
 import { createPlayer, PlayerState } from "./factory/PlayerFactory";
 import { createStaticFloor } from "./factory/SceneryFactory";
-import { EntitySerial } from "./factory/Serial";
 
 interface BootstrapInfo {
     player: Entity<PlayerState>;
@@ -72,31 +70,6 @@ export function bootstrap(serviceLocator: ServiceLocator): BootstrapInfo {
     world.addEntity(
         createSlime(serviceLocator, getSlimeState(serviceLocator, 0, -5))
     );
-
-    for (let x = -10; x < 10; x++) {
-        for (let y = -100; y < -5; y++) {
-            world.addEntity(
-                new Entity(
-                    EntitySerial.NULL,
-                    serviceLocator,
-                    {
-                        exists: true,
-                        position: { x, y },
-                        height: Math.random(),
-                        yOffset: 0,
-                        radius: 1,
-                        angle: 0,
-                        particleHeight: 0.2,
-                        particleWidth: 0.2,
-                        r: Math.random(),
-                        g: Math.random(),
-                        b: Math.random(),
-                    },
-                    ParticleRenderComponent()
-                )
-            );
-        }
-    }
 
     // loadMap(
     //     serviceLocator,

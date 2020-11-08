@@ -18,21 +18,20 @@ export class WallRenderComponent<T extends WallStateType>
     implements EntityComponent<T> {
     private toRenderRef?: RenderItem;
 
-    public update(entity: Entity<WallStateType>): void {
-        const { wall } = entity.getState().wallState;
-        if (wall) {
-            entity
-                .getServiceLocator()
-                .getRenderService()
-                .wallRenderService.updateItem(this.toRenderRef, wall);
-        }
-    }
-
     public onStateTransition(
         entity: Entity<WallStateType>,
         from: WallStateType,
         to: WallStateType
     ) {
+        if (from.wallState.wall !== to.wallState.wall) {
+            entity
+                .getServiceLocator()
+                .getRenderService()
+                .wallRenderService.updateItem(
+                    this.toRenderRef,
+                    to.wallState.wall
+                );
+        }
         if (!from.wallState.wall && to.wallState.wall) {
             this.toRenderRef = entity
                 .getServiceLocator()
