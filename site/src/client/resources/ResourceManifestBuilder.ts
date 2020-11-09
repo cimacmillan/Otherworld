@@ -1,4 +1,4 @@
-import { MapSchema } from "./MapShema";
+import { MapSchema } from "./maps/MapShema";
 import {
     AnimationManifest,
     AudioManifest,
