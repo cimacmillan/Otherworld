@@ -33,7 +33,7 @@ export type PlayerState = BaseState &
     InteractionState;
 
 export function createPlayer(serviceLocator: ServiceLocator) {
-    const initialPosition = { x: 0, y: 2 };
+    const initialPosition = { x: 4, y: 9 };
     const initialAngle = 0;
 
     const initialState: PlayerState = {

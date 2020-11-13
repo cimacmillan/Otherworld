@@ -52,10 +52,12 @@ export function loadSpriteSheet(
 
 export async function loadImageData(url: string) {
     const img = await loadImage(url);
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = img.width;
     canvas.height = img.height;
-    canvas.getContext('2d').drawImage(img, 0, 0, img.width, img.height);
-    const data = canvas.getContext('2d').getImageData(0, 0, img.width, img.height);
+    canvas.getContext("2d").drawImage(img, 0, 0, img.width, img.height);
+    const data = canvas
+        .getContext("2d")
+        .getImageData(0, 0, img.width, img.height);
     return data;
 }

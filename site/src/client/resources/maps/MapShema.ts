@@ -1,9 +1,12 @@
+import { MapLayerConverter, MapLayerConverterType } from "./MapLayerConverter";
+
 export interface MapSchema {
     layers: MapLayerSchema[];
 }
 
 interface MapLayerSchema {
     imageUrl: string;
+    mapLayerConverter: MapLayerConverterType;
 }
 
 /**
@@ -14,6 +17,7 @@ export interface GameMap {
     layers: MapLayer[];
 }
 
-interface MapLayer {
+export interface MapLayer {
     image: ImageData;
+    mapLayerConverter: MapLayerConverter;
 }

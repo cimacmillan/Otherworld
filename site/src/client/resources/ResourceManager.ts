@@ -2,7 +2,8 @@ import { loadSound } from "../services/audio/AudioService";
 import { Actions } from "../ui/actions/Actions";
 import { setLoadPercentage } from "../ui/actions/GameStartActions";
 import { defaultManifest } from "./manifests/DefaultManifest";
-import { loadSpriteSheet, loadImage, loadImageData } from "./TextureLoader";
+import { mapLayerConverterTypeMap } from "./maps/MapLayerConverter";
+import { loadImageData, loadSpriteSheet } from "./TextureLoader";
 import { LoadedManifest, ResourceManifest } from "./Types";
 
 export class ResourceManager {
@@ -40,7 +41,8 @@ export class ResourceManager {
                     );
                 },
                 0
-            ) + Object.keys(manifest.maps).length;
+            ) +
+            Object.keys(manifest.maps).length;
         let current = 0;
         const increment = () => {
             current++;
@@ -98,15 +100,17 @@ export class ResourceManager {
         for (const key in manifest.maps) {
             const mapSchema = manifest.maps[key];
             loadedManifest.maps[key] = {
-                layers: []
+                layers: [],
             };
 
             for (const layer of mapSchema.layers) {
-                const layerUrl = layer.imageUrl;
-                const image = await loadImageData(layerUrl);
-             
+                const { imageUrl, mapLayerConverter } = layer;
+                const image = await loadImageData(imageUrl);
+
                 loadedManifest.maps[key].layers.push({
-                    image
+                    image,
+                    mapLayerConverter:
+                        mapLayerConverterTypeMap[mapLayerConverter],
                 });
             }
 

@@ -1,8 +1,8 @@
+import { MapPrison } from "../maps/Prison";
 import {
     ResourceManifestBuilder,
     SpriteSheetManifestBuilder,
 } from "../ResourceManifestBuilder";
-import { MapPrison } from "../maps/Prison";
 
 export enum SpriteSheets {
     SPRITE = "SPRITE",
@@ -14,7 +14,7 @@ export enum Sprites {
 }
 
 export enum Maps {
-    PRISON = "PRISON"
+    PRISON = "PRISON",
 }
 
 const sprites = new SpriteSheetManifestBuilder("img/8bit-sprite-sheet.png");

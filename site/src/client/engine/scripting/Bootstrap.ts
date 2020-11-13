@@ -1,12 +1,10 @@
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Entity } from "../Entity";
 
-import { Sprites } from "../../resources/manifests/DefaultManifest";
-import { createSlime, getSlimeState } from "./factory/EnemyFactory";
+import { Maps, Sprites } from "../../resources/manifests/DefaultManifest";
+import { loadMap } from "../../resources/maps/MapLoader";
 import { createPlayer, PlayerState } from "./factory/PlayerFactory";
 import { createStaticFloor } from "./factory/SceneryFactory";
-import { loadMap } from "../../resources/maps/MapLoader";
-import { MapPrison } from "../../resources/maps/Prison";
 
 interface BootstrapInfo {
     player: Entity<PlayerState>;
@@ -69,14 +67,14 @@ export function bootstrap(serviceLocator: ServiceLocator): BootstrapInfo {
         )
     );
 
-    world.addEntity(
-        createSlime(serviceLocator, getSlimeState(serviceLocator, 0, -5))
-    );
+    // world.addEntity(
+    //     createSlime(serviceLocator, getSlimeState(serviceLocator, 0, -5))
+    // );
 
     loadMap(
         serviceLocator,
-        MapPrison
-    )
+        serviceLocator.getResourceManager().manifest.maps[Maps.PRISON]
+    );
 
     // loadMap(
     //     serviceLocator,
