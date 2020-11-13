@@ -18,6 +18,7 @@ export interface MapLayerGenerationArguments {
     g: number;
     b: number;
     a: number;
+    hex: string;
     metadata?: object;
 }
 
@@ -28,9 +29,9 @@ export type MapLayerConverter = (
 const MapLayerConverterDefault: MapLayerConverter = (
     args: MapLayerGenerationArguments
 ) => {
-    const { serviceLocator, x, y, r, g, b, a } = args;
+    const { serviceLocator, x, y, hex } = args;
 
-    if (r === 255) {
+    if (hex === "f6757a") {
         return [
             createSlime(serviceLocator, getSlimeState(serviceLocator, x, y)),
         ];

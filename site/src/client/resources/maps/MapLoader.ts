@@ -1,4 +1,5 @@
 import { ServiceLocator } from "../../services/ServiceLocator";
+import { getHexFromRGB } from "../../util/math/UI";
 import { MapLayerConverter } from "./MapLayerConverter";
 import { GameMap, MapLayer } from "./MapShema";
 
@@ -43,6 +44,7 @@ function loadPixel(
         g,
         b,
         a,
+        hex: getHexFromRGB(r, g, b),
     });
 
     entities.forEach((entity) => serviceLocator.getWorld().addEntity(entity));
