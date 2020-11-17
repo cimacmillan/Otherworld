@@ -166,3 +166,21 @@ export function createStaticSprite(
         new SpriteRenderComponent()
     );
 }
+
+export const createBlock = (
+    serviceLocator: ServiceLocator,
+    x: number,
+    y: number,
+    sprite: string
+) => {
+    const vec1 = { x, y };
+    const vec2 = { x: x + 1, y };
+    const vec3 = { x: x + 1, y: y + 1 };
+    const vec4 = { x, y: y + 1 };
+    return [
+        createStaticWall(serviceLocator, sprite, vec1, vec2),
+        createStaticWall(serviceLocator, sprite, vec2, vec3),
+        createStaticWall(serviceLocator, sprite, vec3, vec4),
+        createStaticWall(serviceLocator, sprite, vec4, vec1),
+    ];
+};

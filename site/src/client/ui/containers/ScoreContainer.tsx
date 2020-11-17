@@ -47,7 +47,7 @@ export const ScoreContainer: React.FunctionComponent = (props) => {
             }}
         >
             <TextComponent
-                text={`${state.gameStart.currentScore}`}
+                text={`${state.gameStart.fps}`}
                 font={TextFont.REGULAR}
                 size={TextSize.MED}
                 colour={TextColour.LIGHT}

@@ -65,7 +65,7 @@ export function getSlimeState(
         height: 1,
         heightVelocity: 0,
         yOffset: 0,
-        radius: 1,
+        radius: 0.5,
         angle: 0,
         velocity: { x: 0, y: 0 },
         friction: 0.9,

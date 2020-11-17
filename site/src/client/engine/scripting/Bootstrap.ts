@@ -67,6 +67,16 @@ export function bootstrap(serviceLocator: ServiceLocator): BootstrapInfo {
         )
     );
 
+    world.addEntity(
+        createStaticFloor(
+            serviceLocator,
+            Sprites.FLOOR,
+            1,
+            { x: -100, y: -100 },
+            { x: 100, y: 100 }
+        )
+    );
+
     // world.addEntity(
     //     createSlime(serviceLocator, getSlimeState(serviceLocator, 0, -5))
     // );

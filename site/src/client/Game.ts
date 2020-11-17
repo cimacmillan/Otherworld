@@ -18,12 +18,14 @@ import {
 import { GameStorage } from "./services/serialisation/Storage";
 import { ServiceLocator } from "./services/ServiceLocator";
 import { Actions } from "./ui/actions/Actions";
+import { GameStartActionType } from "./ui/actions/GameStartActions";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
 
 export class Game {
     private serviceLocator: ServiceLocator;
     private storage: GameStorage;
+    private uiListener: (event: Actions) => void;
 
     private initialised: boolean = false;
     private updateWorld: boolean = false;
@@ -33,6 +35,8 @@ export class Game {
         openGL: WebGLRenderingContext,
         uiListener: (event: Actions) => void
     ) {
+        this.uiListener = uiListener;
+
         const audioContext = new AudioContext();
         const screen = new ScreenBuffer(openGL, WIDTH, HEIGHT);
 
@@ -188,6 +192,11 @@ export class Game {
                 } Intervals ${result.intervals} Timeouts ${result.timeouts}
                 `
             );
+            this.uiListener &&
+                this.uiListener({
+                    type: GameStartActionType.SET_GAME_FPS,
+                    fps,
+                });
         });
         setFPSProportion(1 / actualProportion);
 
