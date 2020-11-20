@@ -1,7 +1,7 @@
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { getHexFromRGB } from "../../util/math/UI";
-import { MapLayerConverter } from "./MapLayerConverter";
-import { GameMap, MapLayer } from "./MapShema";
+import { MapLayerConverter } from "./MapLayerConverters";
+import { GameMap, MapLayer, MapMetadataObject } from "./MapShema";
 
 export function loadMap(serviceLocator: ServiceLocator, gameMap: GameMap) {
     const { layers } = gameMap;
@@ -10,7 +10,7 @@ export function loadMap(serviceLocator: ServiceLocator, gameMap: GameMap) {
 }
 
 function loadLayer(serviceLocator: ServiceLocator, layer: MapLayer) {
-    const { image, mapLayerConverter } = layer;
+    const { image, mapLayerConverter, mapMetadata } = layer;
     const { data, width, height } = image;
 
     for (let y = 0; y < height; y++) {
@@ -21,7 +21,19 @@ function loadLayer(serviceLocator: ServiceLocator, layer: MapLayer) {
             const b = data[index + 2];
             const a = data[index + 3];
 
-            loadPixel(serviceLocator, mapLayerConverter, x, y, r, g, b, a);
+            const metadata = (mapMetadata[x] && mapMetadata[x][y]) || {};
+
+            loadPixel(
+                serviceLocator,
+                mapLayerConverter,
+                x,
+                y,
+                r,
+                g,
+                b,
+                a,
+                metadata
+            );
         }
     }
 }
@@ -34,7 +46,8 @@ function loadPixel(
     r: number,
     g: number,
     b: number,
-    a: number
+    a: number,
+    metadata: MapMetadataObject
 ) {
     const entities = mapLayerConverter({
         serviceLocator,
@@ -45,6 +58,7 @@ function loadPixel(
         b,
         a,
         hex: getHexFromRGB(r, g, b),
+        metadata,
     });
 
     entities.forEach((entity) => serviceLocator.getWorld().addEntity(entity));

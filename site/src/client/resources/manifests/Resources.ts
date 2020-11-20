@@ -1,4 +1,4 @@
-import { MapPrison } from "../maps/Prison";
+import { MapPrison } from "../maps/maps/Prison";
 import {
     ResourceManifestBuilder,
     SpriteSheetManifestBuilder,

@@ -1,4 +1,4 @@
-import { SpriteSheets } from "../../../resources/manifests/DefaultManifest";
+import { SpriteSheets } from "../../../resources/manifests/Resources";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
 import { vec } from "../../../util/math";

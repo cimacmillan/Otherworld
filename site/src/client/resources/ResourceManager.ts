@@ -1,8 +1,9 @@
 import { loadSound } from "../services/audio/AudioService";
 import { Actions } from "../ui/actions/Actions";
 import { setLoadPercentage } from "../ui/actions/GameStartActions";
-import { defaultManifest } from "./manifests/DefaultManifest";
-import { mapLayerConverterTypeMap } from "./maps/MapLayerConverter";
+import { defaultManifest } from "./manifests/Resources";
+import { mapLayerConverterTypeMap } from "./maps/MapLayerConverters";
+import { LoadedMapLayerMetadata, MapLayerMetadata } from "./maps/MapShema";
 import { loadImageData, loadSpriteSheet } from "./TextureLoader";
 import { LoadedManifest, ResourceManifest } from "./Types";
 
@@ -111,6 +112,7 @@ export class ResourceManager {
                     image,
                     mapLayerConverter:
                         mapLayerConverterTypeMap[mapLayerConverter],
+                    mapMetadata: this.convertMapMetadata(layer.mapMetadata),
                 });
             }
 
@@ -118,5 +120,32 @@ export class ResourceManager {
         }
 
         return loadedManifest;
+    }
+
+    private convertMapMetadata(
+        mapMetadata: MapLayerMetadata[]
+    ): LoadedMapLayerMetadata {
+        const loadedMapMetadata: LoadedMapLayerMetadata = {};
+
+        mapMetadata.forEach((metadata) => {
+            const { x, y, data } = metadata;
+            if (
+                loadedMapMetadata[metadata.x] &&
+                loadedMapMetadata[metadata.x][metadata.y]
+            ) {
+                console.log("Merging metadata ", x, y, data);
+                loadedMapMetadata[metadata.x][metadata.y] = {
+                    ...loadedMapMetadata[metadata.x][metadata.y],
+                    data,
+                };
+            } else {
+                if (!loadedMapMetadata[metadata.x]) {
+                    loadedMapMetadata[metadata.x] = {};
+                }
+                loadedMapMetadata[metadata.x][metadata.y] = data;
+            }
+        });
+
+        return loadedMapMetadata;
     }
 }

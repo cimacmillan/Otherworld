@@ -10,7 +10,7 @@ import { ServiceLocator } from "../../services/ServiceLocator";
 import { animation } from "../../util/animation/Animations";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { ProcedureService } from "../../services/jobs/ProcedureService";
-import { SpriteSheets } from "../../resources/manifests/DefaultManifest";
+import { SpriteSheets } from "../../resources/manifests/Resources";
 
 const Y_FADE = 32;
 const DING = 200;

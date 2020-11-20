@@ -1,7 +1,7 @@
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Entity } from "../Entity";
 
-import { Maps, Sprites } from "../../resources/manifests/DefaultManifest";
+import { Maps, Sprites } from "../../resources/manifests/Resources";
 import { loadMap } from "../../resources/maps/MapLoader";
 import { createPlayer, PlayerState } from "./factory/PlayerFactory";
 import { createStaticFloor } from "./factory/SceneryFactory";

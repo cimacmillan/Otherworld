@@ -1,5 +1,5 @@
 import { SCENERY_PIXEL_DENSITY } from "../../../Config";
-import { SpriteSheets } from "../../../resources/manifests/DefaultManifest";
+import { SpriteSheets } from "../../../resources/manifests/Resources";
 import { Floor, Wall } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
@@ -183,4 +183,17 @@ export const createBlock = (
         createStaticWall(serviceLocator, sprite, vec3, vec4),
         createStaticWall(serviceLocator, sprite, vec4, vec1),
     ];
+};
+
+export const createDoor = (
+    serviceLocator: ServiceLocator,
+    x: number,
+    y: number,
+    sprite: string,
+    horizontal: boolean = true
+) => {
+    const vec1 = horizontal ? { x, y: y + 0.5 } : { x: x + 0.5, y: y + 1 };
+    const vec2 = horizontal ? { x: x + 1, y: y + 0.5 } : { x: x + 0.5, y };
+
+    return [createStaticWall(serviceLocator, sprite, vec1, vec2)];
 };
