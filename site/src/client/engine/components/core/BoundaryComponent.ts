@@ -50,7 +50,7 @@ export class BoundaryComponent<T extends BoundaryStateType>
             entity
                 .getServiceLocator()
                 .getPhysicsService()
-                .unregisterBoundary(to.boundaryState.boundary);
+                .unregisterBoundary(from.boundaryState.boundary);
         }
     }
 

@@ -30,4 +30,4 @@ export interface MapLayerGenerationArguments {
 
 export type MapLayerConverter = (
     args: MapLayerGenerationArguments
-) => Array<Entity<BaseState>>;
+) => Array<Entity<BaseState>> | Entity<BaseState>;

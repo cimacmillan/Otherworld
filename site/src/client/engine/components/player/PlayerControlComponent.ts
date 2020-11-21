@@ -1,16 +1,20 @@
 // import { Audios } from "../../../resources/manifests/Types";
 import { DEFAULT_PLAYER_HEIGHT } from "../../../Config";
-import { InteractionType } from "../../../services/interaction/InteractionType";
+import {
+    InteractionSourceType,
+    InteractionType,
+} from "../../../services/interaction/InteractionType";
 import { Vector2D } from "../../../types";
 import { animation } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
 import { vec } from "../../../util/math";
 import { ActionDelay } from "../../../util/time/ActionDelay";
 import { fpsNorm } from "../../../util/time/GlobalFPSController";
+import { throttle } from "../../../util/time/Throttle";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
-import { InteractionEventType } from "../../events/InteractionEvents";
+// import { InteractionEventType } from "../../events/InteractionEvents";
 import { PlayerEventType } from "../../events/PlayerEvents";
 import {
     TravelEventType,
@@ -31,6 +35,35 @@ export class PlayerControlComponent<T extends PlayerState>
     private killed = false;
     private headbob: GameAnimation;
     private headbobOffset = 0;
+
+    private interact = throttle(
+        (entity: Entity<PlayerState>, event: GameEvent) => {
+            const state = entity.getState();
+            const interacts = entity
+                .getServiceLocator()
+                .getInteractionService()
+                .getInteractables(
+                    InteractionType.INTERACT,
+                    state.position,
+                    state.angle,
+                    1.5
+                );
+            interacts.forEach((ent) => {
+                if (ent === entity) {
+                    return;
+                }
+
+                ent.emit({
+                    type: InteractionType.INTERACT,
+                    source: {
+                        type: InteractionSourceType.PLAYER,
+                        entity,
+                    },
+                });
+            });
+        },
+        1000
+    );
 
     public onCreate(entity: Entity<PlayerState>) {
         this.attackDelay = new ActionDelay(300);
@@ -75,14 +108,18 @@ export class PlayerControlComponent<T extends PlayerState>
             case TravelEventType.TURN:
                 this.onTurn(entity, event.payload);
                 break;
-            case InteractionEventType.ATTACK:
-                if (this.attackDelay.canAction()) {
-                    this.onAttack(entity);
-                }
+
+            case "TEMP_INTERACT_COMMAND":
+                this.interact(entity, event);
                 break;
-            case InteractionEventType.ON_DAMAGED:
-                this.onDamaged(entity, event.payload.amount);
-                break;
+            // case InteractionEventType.ATTACK:
+            //     if (this.attackDelay.canAction()) {
+            //         this.onAttack(entity);
+            //     }
+            //     break;
+            // case InteractionEventType.ON_DAMAGED:
+            //     this.onDamaged(entity, event.payload.amount);
+            //     break;
             case PlayerEventType.PLAYER_HEALED:
                 const health = entity.getState().health;
                 const newHealth = Math.min(1, health + event.payload.amount);
@@ -172,13 +209,13 @@ export class PlayerControlComponent<T extends PlayerState>
 
             hasAttacked = true;
 
-            attacked.emit({
-                type: InteractionEventType.ON_DAMAGED,
-                payload: {
-                    amount: 0.4,
-                    source: state,
-                },
-            });
+            // attacked.emit({
+            //     type: InteractionEventType.ON_DAMAGED,
+            //     payload: {
+            //         amount: 0.4,
+            //         source: state,
+            //     },
+            // });
         });
 
         if (hasAttacked) {

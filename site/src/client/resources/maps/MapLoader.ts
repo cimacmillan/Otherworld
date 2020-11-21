@@ -1,3 +1,5 @@
+import { Entity } from "../../engine/Entity";
+import { BaseState } from "../../engine/state/State";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { getHexFromRGB } from "../../util/math/UI";
 import { MapLayerConverter } from "./MapLayerConverters";
@@ -61,5 +63,15 @@ function loadPixel(
         metadata,
     });
 
-    entities.forEach((entity) => serviceLocator.getWorld().addEntity(entity));
+    const addEntity = (entity: Entity<BaseState>) => {
+        serviceLocator.getWorld().addEntity(entity);
+    };
+
+    if (Array.isArray(entities)) {
+        entities.forEach((entity) =>
+            serviceLocator.getWorld().addEntity(entity)
+        );
+    } else {
+        addEntity(entities);
+    }
 }

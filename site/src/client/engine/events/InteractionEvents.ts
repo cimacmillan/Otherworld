@@ -1,34 +1,33 @@
-import { Entity } from "../Entity";
 import {
-    BaseState,
-    InventoryState,
-    SurfacePositionState,
-} from "../state/State";
+    InteractionSource,
+    InteractionType,
+} from "../../services/interaction/InteractionType";
 
-interface Attack {
-    type: InteractionEventType.ATTACK;
+interface OnInteract {
+    type: InteractionType;
+    source: InteractionSource;
 }
 
-interface OnDamaged {
-    type: InteractionEventType.ON_DAMAGED;
-    payload: {
-        amount: number;
-        source?: SurfacePositionState;
-    };
+// TODO Refactor player and delete this
+
+interface InteractCommand {
+    type: "TEMP_INTERACT_COMMAND";
 }
 
-interface OnBarter {
-    type: InteractionEventType.ON_BARTER;
-    payload: {
-        source: Entity<InventoryState & BaseState>;
-        target: Entity<InventoryState & BaseState>;
-    };
-}
+// interface OnDamaged {
+//     type: InteractionEventType.ON_DAMAGED;
+//     payload: {
+//         amount: number;
+//         source?: SurfacePositionState;
+//     };
+// }
 
-export enum InteractionEventType {
-    ATTACK = "ATTACK",
-    ON_DAMAGED = "ON_DAMAGED",
-    ON_BARTER = "ON_BARTER",
-}
+// interface OnBarter {
+//     type: InteractionEventType.ON_BARTER;
+//     payload: {
+//         source: Entity<InventoryState & BaseState>;
+//         target: Entity<InventoryState & BaseState>;
+//     };
+// }
 
-export type InteractionEvents = Attack | OnDamaged | OnBarter;
+export type InteractionEvents = OnInteract | InteractCommand;

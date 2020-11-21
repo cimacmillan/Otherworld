@@ -29,7 +29,8 @@ export function JoinComponent<T extends BaseState>(
             ),
         onDestroy: (entity: Entity<T>) =>
             components.forEach(
-                (component) => component.onCreate && component.onCreate(entity)
+                (component) =>
+                    component.onDestroy && component.onDestroy(entity)
             ),
     };
 }

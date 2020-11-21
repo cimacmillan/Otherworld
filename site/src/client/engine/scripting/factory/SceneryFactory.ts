@@ -1,8 +1,14 @@
 import { SCENERY_PIXEL_DENSITY } from "../../../Config";
 import { SpriteSheets } from "../../../resources/manifests/Resources";
+import {
+    InteractionSource,
+    InteractionType,
+} from "../../../services/interaction/InteractionType";
 import { Floor, Wall } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
+import { animation } from "../../../util/animation/Animations";
+import { vec } from "../../../util/math/Vector";
 import {
     BoundaryComponent,
     BoundaryStateType,
@@ -12,6 +18,10 @@ import {
     FloorStateType,
 } from "../../components/core/FloorRenderComponent";
 import {
+    InteractionComponent,
+    InteractionStateType,
+} from "../../components/core/InteractionComponent";
+import {
     SpriteRenderComponent,
     SpriteStateType,
 } from "../../components/core/SpriteRenderComponent";
@@ -19,7 +29,15 @@ import {
     WallRenderComponent,
     WallStateType,
 } from "../../components/core/WallRenderComponent";
+import { AnimationComponent } from "../../components/util/AnimationComponent";
+import { JoinComponent } from "../../components/util/JoinComponent";
+import {
+    SwitchComponent,
+    SwitchComponents,
+} from "../../components/util/SwitchComponent";
 import { Entity } from "../../Entity";
+import { EntityComponent } from "../../EntityComponent";
+import { GameEvent } from "../../events/Event";
 
 export function createStaticFloor(
     serviceLocator: ServiceLocator,
@@ -79,37 +97,14 @@ export function createStaticWall(
     offset: number = 0,
     collides: boolean = true
 ) {
-    const sprite = serviceLocator
-        .getResourceManager()
-        .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(spriteString);
-
-    const textureWidth =
-        (Math.sqrt(
-            Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2)
-        ) *
-            sprite.textureCoordinate.textureWidth *
-            SCENERY_PIXEL_DENSITY) /
-        sprite.pixelCoordinate.textureWidth;
-    const textureHeight =
-        (sprite.textureCoordinate.textureHeight *
-            height *
-            SCENERY_PIXEL_DENSITY) /
-        sprite.pixelCoordinate.textureHeight;
-
-    const wall: Wall = {
-        startPos: [start.x, start.y],
-        endPos: [end.x, end.y],
-        startHeight: height,
-        endHeight: height,
-        startOffset: offset,
-        endOffset: offset,
-        textureX: sprite.textureCoordinate.textureX,
-        textureY: sprite.textureCoordinate.textureY,
-        textureWidth,
-        textureHeight,
-        repeatWidth: sprite.textureCoordinate.textureWidth,
-        repeatHeight: sprite.textureCoordinate.textureHeight,
-    };
+    const wall = createWallType(
+        serviceLocator,
+        spriteString,
+        start,
+        end,
+        height,
+        offset
+    );
 
     const initialState: WallStateType & BoundaryStateType = {
         exists: false,
@@ -185,15 +180,163 @@ export const createBlock = (
     ];
 };
 
+const createWallType = (
+    serviceLocator: ServiceLocator,
+    spriteString: string,
+    start: Vector2D,
+    end: Vector2D,
+    height: number = 1,
+    offset: number = 0
+): Wall => {
+    const sprite = serviceLocator
+        .getResourceManager()
+        .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(spriteString);
+
+    const textureWidth =
+        (Math.sqrt(
+            Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2)
+        ) *
+            sprite.textureCoordinate.textureWidth *
+            SCENERY_PIXEL_DENSITY) /
+        sprite.pixelCoordinate.textureWidth;
+    const textureHeight =
+        (sprite.textureCoordinate.textureHeight *
+            height *
+            SCENERY_PIXEL_DENSITY) /
+        sprite.pixelCoordinate.textureHeight;
+
+    return {
+        startPos: [start.x, start.y],
+        endPos: [end.x, end.y],
+        startHeight: height,
+        endHeight: height,
+        startOffset: offset,
+        endOffset: offset,
+        textureX: sprite.textureCoordinate.textureX,
+        textureY: sprite.textureCoordinate.textureY,
+        textureWidth,
+        textureHeight,
+        repeatWidth: sprite.textureCoordinate.textureWidth,
+        repeatHeight: sprite.textureCoordinate.textureHeight,
+    };
+};
+
+const onInteractedWith = <T extends InteractionStateType>(
+    type: InteractionType,
+    callback: (entity: Entity<T>, source: InteractionSource) => void
+): EntityComponent<T> => {
+    return {
+        onEvent: (entity: Entity<T>, event: GameEvent) => {
+            if (event.type === type) {
+                callback(entity, event.source);
+            }
+        },
+    };
+};
+
+enum DoorOpenState {
+    OPEN = "OPEN",
+    CLOSED = "CLOSED",
+}
+
+interface DoorState {
+    open: DoorOpenState;
+}
+
+type DoorStateType = WallStateType &
+    BoundaryStateType &
+    InteractionStateType &
+    DoorState;
+
 export const createDoor = (
     serviceLocator: ServiceLocator,
     x: number,
     y: number,
-    sprite: string,
+    spriteString: string,
     horizontal: boolean = true
 ) => {
-    const vec1 = horizontal ? { x, y: y + 0.5 } : { x: x + 0.5, y: y + 1 };
-    const vec2 = horizontal ? { x: x + 1, y: y + 0.5 } : { x: x + 0.5, y };
+    const start = horizontal ? { x, y: y + 0.5 } : { x: x + 0.5, y: y + 1 };
+    const end = horizontal ? { x: x + 1, y: y + 0.5 } : { x: x + 0.5, y };
+    const collides = true;
 
-    return [createStaticWall(serviceLocator, sprite, vec1, vec2)];
+    const wall: Wall = createWallType(serviceLocator, spriteString, start, end);
+
+    const initialState = {
+        exists: false,
+        boundaryState: {
+            boundary: {
+                start,
+                end,
+            },
+            collides,
+        },
+        wallState: {
+            wall,
+        },
+        position: vec.vec_mult_scalar(vec.vec_add(start, end), 0.5),
+        height: 0,
+        yOffset: 0,
+        radius: 0.5,
+        angle: 0,
+        interactable: {
+            [InteractionType.INTERACT]: true,
+        },
+        open: DoorOpenState.CLOSED,
+    };
+
+    // TODO emit particles here
+    const doorSwitch: SwitchComponents = {
+        ["OPEN"]: AnimationComponent<DoorStateType>(
+            (entity: Entity<DoorStateType>) => {
+                return animation((x: number) => {
+                    const offsetVal = 0.9 * x + Math.random() * 0.06;
+                    const offset = horizontal
+                        ? {
+                              x: offsetVal,
+                              y: 0,
+                          }
+                        : {
+                              x: 0,
+                              y: -offsetVal,
+                          };
+                    const newStart = vec.vec_sub(start, offset);
+                    const newEnd = vec.vec_sub(end, offset);
+
+                    const newWall = createWallType(
+                        serviceLocator,
+                        spriteString,
+                        newStart,
+                        newEnd
+                    );
+
+                    entity.setState({
+                        wallState: {
+                            wall: newWall,
+                        },
+                    });
+                }).speed(2000);
+            }
+        ),
+        ["CLOSED"]: JoinComponent<DoorStateType>([
+            new BoundaryComponent(),
+            new InteractionComponent(),
+            onInteractedWith(InteractionType.INTERACT, (ent, source) =>
+                ent.setState({
+                    open: DoorOpenState.OPEN,
+                })
+            ),
+        ]),
+    };
+
+    return new Entity<DoorStateType>(
+        undefined,
+        serviceLocator,
+        initialState,
+        new WallRenderComponent(),
+        new SwitchComponent(
+            doorSwitch,
+            initialState.open,
+            (ent) => ent.getState().open
+        )
+    );
 };

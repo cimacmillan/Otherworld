@@ -1,7 +1,6 @@
 import { GameEventSource } from "../../services/EventRouter";
 import { InputState } from "../../services/input/InputService";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { InteractionEventType } from "../events/InteractionEvents";
 import { PlayerEventType } from "../events/PlayerEvents";
 import {
     TravelEventType,
@@ -26,9 +25,11 @@ export const Turn: CommandCreator = (serviceLocator: ServiceLocator) => (
         payload: turnDirection,
     });
 
-export const Attack: CommandCreator = (serviceLocator: ServiceLocator) => () =>
+export const Interact: CommandCreator = (
+    serviceLocator: ServiceLocator
+) => () =>
     serviceLocator.getScriptingService().getPlayer().emit({
-        type: InteractionEventType.ATTACK,
+        type: "TEMP_INTERACT_COMMAND",
     });
 
 export const OpenInventory: CommandCreator = (

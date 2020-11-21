@@ -1,5 +1,5 @@
 import {
-    Attack,
+    Interact,
     OpenInventory,
     Turn,
     Walk,
@@ -33,7 +33,7 @@ export class DefaultControlScheme implements ControlScheme {
         }
 
         if (keysDown.KeyE) {
-            Attack(this.serviceLocator)();
+            Interact(this.serviceLocator)();
         }
     }
 
