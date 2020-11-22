@@ -62,26 +62,26 @@ const keyStages = [
         {
             keycode: "KeyE",
             key: "E",
-            hint: "Attack",
+            hint: "Interact",
             fade: false,
         },
     ],
-    [
-        {
-            keycode: "KeyI",
-            key: "I",
-            hint: "Inventory",
-            fade: false,
-        },
-    ],
-    [
-        {
-            keycode: "KeyI",
-            key: "I",
-            hint: "Close Inventory",
-            fade: false,
-        },
-    ],
+    // [
+    //     {
+    //         keycode: "KeyI",
+    //         key: "I",
+    //         hint: "Inventory",
+    //         fade: false,
+    //     },
+    // ],
+    // [
+    //     {
+    //         keycode: "KeyI",
+    //         key: "I",
+    //         hint: "Close Inventory",
+    //         fade: false,
+    //     },
+    // ],
 ];
 
 const clickSpeed = 500;
