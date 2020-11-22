@@ -110,6 +110,10 @@ export class Game {
                 }
             }
 
+            // TODO remove this
+            compatibleSave = undefined;
+            console.log("save games disabled");
+
             if (compatibleSave) {
                 console.log("Loading save game...", compatibleSave);
                 this.serviceLocator
