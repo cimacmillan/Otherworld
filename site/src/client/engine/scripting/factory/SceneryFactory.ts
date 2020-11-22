@@ -7,6 +7,7 @@ import {
 import { Floor, Wall } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
+import { LockpickGameConfiguration } from "../../../ui/containers/minigame/LockPickContainer";
 import { animation } from "../../../util/animation/Animations";
 import { vec } from "../../../util/math/Vector";
 import { OpenLockpickingChallenge } from "../../commands/MiniGameCommands";
@@ -255,6 +256,7 @@ export const createDoor = (
     x: number,
     y: number,
     spriteString: string,
+    configuration: LockpickGameConfiguration,
     horizontal: boolean = true
 ) => {
     const start = horizontal ? { x, y: y + 0.5 } : { x: x + 0.5, y: y + 1 };
@@ -330,7 +332,8 @@ export const createDoor = (
                                 ? DoorOpenState.OPEN
                                 : DoorOpenState.CLOSED,
                         });
-                    }
+                    },
+                    configuration
                 );
             }),
         ]),

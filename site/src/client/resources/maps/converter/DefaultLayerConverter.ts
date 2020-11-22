@@ -33,6 +33,7 @@ export const MapLayerConverterDefault: MapLayerConverter = (
                 x,
                 y,
                 Sprites.CELL,
+                metadata.configuration,
                 metadata.horizontal
             );
     }

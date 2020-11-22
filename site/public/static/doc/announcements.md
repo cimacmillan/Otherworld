@@ -1,3 +1,8 @@
+**28/08/2020 - Map & Lockpicking Update**
+* Added map loader that reads image to make entities
+* Added door component and simple door opening animation
+* Added lockpicking challenge
+
 **28/08/2020 - Chicken Update**
 * Added chickens who chill in a corner of the map
 * Added background rendering for outdoor feel

@@ -12,6 +12,11 @@ import {
 import { GameButtonContainer } from "../GameButtonContainer";
 import { LockpickingResult } from "../../../engine/events/MiniGameEvents";
 import { MiniGameUIActionType } from "../../actions/MiniGameActions";
+import { LockButtonComponent } from "../../components/LockButtonComponent";
+import { ShadowComponentStyle } from "../../components/ShadowComponent";
+import { Colours } from "../../../resources/design/Colour";
+import { LockMatrixComponent } from "../../components/LockMatrixComponent";
+import { LockPickContainer } from "./LockPickContainer";
 
 interface MiniGameContainerProps {
     // serviceLocator: ServiceLocator;
@@ -33,8 +38,8 @@ export const MiniGameContainer: React.FunctionComponent<MiniGameContainerProps> 
         <FadeComponent
             startingShown={false}
             shouldShow={state.minigame.visible}
-            fadeInSpeed={1000}
-            fadeOutSpeed={150}
+            fadeInSpeed={200}
+            fadeOutSpeed={200}
         >
             <div
                 style={{
@@ -45,10 +50,15 @@ export const MiniGameContainer: React.FunctionComponent<MiniGameContainerProps> 
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
+                    ...ShadowComponentStyle(),
                 }}
             >
+                <LockPickContainer
+                    configuration={state.minigame.configuration}
+                    onComplete={() => onComplete(true)}
+                />
                 <GameButtonContainer
-                    width={256}
+                    width={140}
                     height={46}
                     style={{
                         marginTop: 30,
@@ -59,10 +69,10 @@ export const MiniGameContainer: React.FunctionComponent<MiniGameContainerProps> 
                         alignItems: "center",
                         justifyContent: "center",
                     }}
-                    onSelect={() => onComplete(true)}
+                    onSelect={() => onComplete(false)}
                 >
                     <TextComponent
-                        text={"Finish"}
+                        text={"Give Up"}
                         style={{}}
                         font={TextFont.REGULAR}
                         size={TextSize.SMALL}

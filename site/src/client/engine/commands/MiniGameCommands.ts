@@ -1,12 +1,13 @@
 import { GameEventSource } from "../../services/EventRouter";
 import { InputState } from "../../services/input/InputService";
 import { ServiceLocator } from "../../services/ServiceLocator";
+import { LockpickGameConfiguration } from "../../ui/containers/minigame/LockPickContainer";
 import { LockpickingResult, MiniGameEventType } from "../events/MiniGameEvents";
-import { CommandCreator } from "./Command";
 
-export const OpenLockpickingChallenge: CommandCreator = (
-    serviceLocator: ServiceLocator
-) => (callback: (result: LockpickingResult) => void) => {
+export const OpenLockpickingChallenge = (serviceLocator: ServiceLocator) => (
+    callback: (result: LockpickingResult) => void,
+    configuration: LockpickGameConfiguration
+) => {
     serviceLocator.getGame().setUpdateWorld(false);
     serviceLocator.getInputService().setInputState(InputState.INVENTORY);
     serviceLocator.getEventRouter().routeEvent(GameEventSource.WORLD, {
@@ -16,5 +17,6 @@ export const OpenLockpickingChallenge: CommandCreator = (
             serviceLocator.getInputService().setInputState(InputState.DEFAULT);
             callback(result);
         },
+        configuration,
     });
 };
