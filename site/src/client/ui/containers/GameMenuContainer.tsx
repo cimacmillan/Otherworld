@@ -63,7 +63,6 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
                     colour={TextColour.LIGHT}
                 />
                 <GameButtonContainer
-                    serviceLocator={props.serviceLocator}
                     width={256}
                     height={46}
                     style={{

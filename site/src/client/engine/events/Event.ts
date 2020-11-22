@@ -2,6 +2,7 @@ import { BallEvents } from "./BallEvents";
 import { EnemyEvents } from "./EnemyEvents";
 import { EntityEvents } from "./EntityEvents";
 import { InteractionEvents } from "./InteractionEvents";
+import { MiniGameEvents } from "./MiniGameEvents";
 import { PhysicsEvents } from "./PhysicsEvents";
 import { PlayerEvents } from "./PlayerEvents";
 import { TravelEvents } from "./TravelEvents";
@@ -22,4 +23,5 @@ export type GameEvent =
     | PhysicsEvents
     | InteractionEvents
     | PlayerEvents
-    | EnemyEvents;
+    | EnemyEvents
+    | MiniGameEvents;

@@ -4,9 +4,9 @@ import { InputState } from "../../services/input/InputService";
 import { ProcedureService } from "../../services/jobs/ProcedureService";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Entity } from "../Entity";
+import { Player } from "../player/Player";
 import { BaseState } from "../state/State";
 import { bootstrap } from "./Bootstrap";
-import { PlayerState } from "./factory/PlayerFactory";
 import { InventoryService } from "./items/InventoryService";
 
 /**
@@ -20,7 +20,7 @@ export class ScriptingService {
     private game: Game;
     private serviceLocator: ServiceLocator;
 
-    private player: Entity<PlayerState>;
+    private player: Player;
     private shouldReset: boolean = false;
 
     public constructor(game: Game) {
@@ -79,7 +79,7 @@ export class ScriptingService {
     }
 
     public bootsrapDeserialisedContent(
-        player: Entity<BaseState>,
+        player: Player,
         entity: Array<Entity<BaseState>>
     ) {
         const world = this.serviceLocator.getWorld();
@@ -89,14 +89,14 @@ export class ScriptingService {
         }
         world.performSync();
 
-        this.player = player as Entity<PlayerState>;
-        world.addEntity(this.player);
+        this.player = player;
+        // world.addEntity(this.player);
 
-        const camera = this.player.getState().camera;
+        const camera = this.player.getCamera();
         this.serviceLocator.getAudioService().attachCamera(camera);
         this.serviceLocator.getRenderService().attachCamera(camera);
 
-        world.addEntity(player);
+        // world.addEntity(player);
         for (let i = 1; i < entity.length; i++) {
             world.addEntity(entity[i]);
         }

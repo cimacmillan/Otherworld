@@ -52,11 +52,11 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
     const [state, dispatch] = useGlobalState();
 
     React.useEffect(() => {
-        const inventoryItems = serviceLocator
-            .getScriptingService()
-            .getPlayer()
-            .getState().inventory.items;
-        setItems(inventoryItems);
+        // const inventoryItems = serviceLocator
+        //     .getScriptingService()
+        //     .getPlayer()
+        //     .getState().inventory.items;
+        // setItems(inventoryItems);
     });
 
     React.useEffect(() => {
@@ -97,36 +97,32 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                         tooltipItem === metadata && onSetItemTooltip(undefined)
                     }
                     onClick={() => {
-                        const itemAmount = serviceLocator
-                            .getScriptingService()
-                            .getPlayer()
-                            .getState().inventory.items.length;
-
-                        serviceLocator
-                            .getScriptingService()
-                            .inventoryService.useItemFromInventory(
-                                serviceLocator
-                                    .getScriptingService()
-                                    .getPlayer(),
-                                metadata
-                            );
-
-                        const inventoryItems = serviceLocator
-                            .getScriptingService()
-                            .getPlayer()
-                            .getState().inventory.items;
-
-                        setItems(inventoryItems);
-
-                        if (
-                            serviceLocator
-                                .getScriptingService()
-                                .getPlayer()
-                                .getState().inventory.items.length !==
-                            itemAmount
-                        ) {
-                            onSetItemTooltip(undefined);
-                        }
+                        // const itemAmount = serviceLocator
+                        //     .getScriptingService()
+                        //     .getPlayer()
+                        //     .getState().inventory.items.length;
+                        // serviceLocator
+                        //     .getScriptingService()
+                        //     .inventoryService.useItemFromInventory(
+                        //         serviceLocator
+                        //             .getScriptingService()
+                        //             .getPlayer(),
+                        //         metadata
+                        //     );
+                        // const inventoryItems = serviceLocator
+                        //     .getScriptingService()
+                        //     .getPlayer()
+                        //     .getState().inventory.items;
+                        // setItems(inventoryItems);
+                        // if (
+                        //     serviceLocator
+                        //         .getScriptingService()
+                        //         .getPlayer()
+                        //         .getState().inventory.items.length !==
+                        //     itemAmount
+                        // ) {
+                        //     onSetItemTooltip(undefined);
+                        // }
                     }}
                 />
             ))}

@@ -10,6 +10,7 @@ export enum InputState {
     DEFAULT = "DEFAULT",
     INVENTORY = "INVENTORY",
     MENU = "MENU",
+    MINIGAME = "MINIGAME",
 }
 
 /**

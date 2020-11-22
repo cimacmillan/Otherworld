@@ -7,6 +7,7 @@ import { KeyHintsContainer } from "./KeyHintsContainer";
 import { useGlobalState } from "../effects/GlobalState";
 import { InventoryContainer } from "./InventoryContainer";
 import { ItemCollectionContainer } from "./ItemCollectionContainer";
+import { MiniGameContainer } from "./minigame/MiniGameContainer";
 
 interface PlayModeContainerProps {
     serviceLocator: ServiceLocator;
@@ -29,6 +30,7 @@ export const PlayModeContainer: React.FunctionComponent<PlayModeContainerProps> 
             <KeyHintsContainer serviceLocator={props.serviceLocator} />
             <ItemCollectionContainer serviceLocator={props.serviceLocator} />
             <InventoryContainer serviceLocator={props.serviceLocator} />
+            <MiniGameContainer />
         </>
     );
 };

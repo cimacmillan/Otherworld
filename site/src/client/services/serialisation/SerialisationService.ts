@@ -1,6 +1,7 @@
 import { VERSION } from "../../Config";
 import { Entity } from "../../engine/Entity";
 import { EntityComponent } from "../../engine/EntityComponent";
+import { Player, PlayerSerialisation } from "../../engine/player/Player";
 import { EntitySerial } from "../../engine/scripting/factory/Serial";
 import { State, store } from "../../ui/State";
 import { ServiceLocator } from "../ServiceLocator";
@@ -15,7 +16,7 @@ export interface SerialisationObject {
     version: string;
     world: {
         entities: SerialisedEntity[];
-        player: SerialisedEntity;
+        player: PlayerSerialisation;
     };
     uiState: State;
 }
@@ -56,11 +57,15 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
         const deserialisedEntities = data.world.entities.map((ent) =>
             this.deserialiseEntity(ent)
         );
-        const player = this.deserialiseEntity(data.world.player);
+        const player = this.deserialisePlayer(data.world.player);
         this.serviceLocator
             .getScriptingService()
             .bootsrapDeserialisedContent(player, deserialisedEntities);
         store.next(data.uiState);
+    }
+
+    public deserialisePlayer(player: PlayerSerialisation): Player {
+        return new Player(this.serviceLocator);
     }
 
     public deserialiseEntity(entity: SerialisedEntity): Entity<any> {

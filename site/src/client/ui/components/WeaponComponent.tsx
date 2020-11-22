@@ -52,12 +52,12 @@ export const WeaponComponent: React.FunctionComponent<WeaponComponentProps> = (
         composite = sequence(swingDown, swingUp).driven(false);
 
         headBob = animation((x: number) => {
-            const velocity = props.serviceLocator
-                .getScriptingService()
-                .getPlayer()
-                .getState().velocity;
-            const speed = vec.vec_distance(velocity);
-            setPosY(POS_Y + Math.sin(x * Math.PI * 2) * speed);
+            // const velocity = props.serviceLocator
+            //     .getScriptingService()
+            //     .getPlayer()
+            //     .getState().velocity;
+            // const speed = vec.vec_distance(velocity);
+            // setPosY(POS_Y + Math.sin(x * Math.PI * 2) * speed);
         })
             .driven(true)
             .speed(400)

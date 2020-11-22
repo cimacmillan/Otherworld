@@ -1,4 +1,4 @@
-import { CloseInventory } from "../../engine/commands/PlayerCommands";
+import { CloseInventory } from "../../engine/commands/InventoryCommands";
 import { ServiceLocator } from "../ServiceLocator";
 import { ControlScheme } from "./ControlScheme";
 

@@ -9,6 +9,7 @@ import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
 import { animation } from "../../../util/animation/Animations";
 import { vec } from "../../../util/math/Vector";
+import { OpenLockpickingChallenge } from "../../commands/MiniGameCommands";
 import {
     BoundaryComponent,
     BoundaryStateType,
@@ -38,6 +39,7 @@ import {
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
+import { LockpickingResult } from "../../events/MiniGameEvents";
 
 export function createStaticFloor(
     serviceLocator: ServiceLocator,
@@ -320,11 +322,17 @@ export const createDoor = (
         ["CLOSED"]: JoinComponent<DoorStateType>([
             new BoundaryComponent(),
             new InteractionComponent(),
-            onInteractedWith(InteractionType.INTERACT, (ent, source) =>
-                ent.setState({
-                    open: DoorOpenState.OPEN,
-                })
-            ),
+            onInteractedWith(InteractionType.INTERACT, (ent, source) => {
+                OpenLockpickingChallenge(serviceLocator)(
+                    (result: LockpickingResult) => {
+                        ent.setState({
+                            open: result
+                                ? DoorOpenState.OPEN
+                                : DoorOpenState.CLOSED,
+                        });
+                    }
+                );
+            }),
         ]),
     };
 

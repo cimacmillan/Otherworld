@@ -6,12 +6,10 @@ import { Colours } from "../../resources/design/Colour";
 import { Spacing } from "../../resources/design/Spacing";
 
 export interface GameButtonContainerProps {
-    serviceLocator: ServiceLocator;
     width: number;
     height: number;
     style: React.CSSProperties;
     childStyle: React.CSSProperties;
-
     onSelect: () => void;
 }
 

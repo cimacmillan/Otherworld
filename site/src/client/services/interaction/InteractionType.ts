@@ -1,5 +1,4 @@
-import { Entity } from "../../engine/Entity";
-import { PlayerState } from "../../engine/scripting/factory/PlayerFactory";
+import { Player } from "../../engine/player/Player";
 
 export enum InteractionType {
     ATTACK = "ATTACK",
@@ -13,7 +12,7 @@ export enum InteractionSourceType {
 
 export interface InteractionSourcePlayer {
     type: InteractionSourceType.PLAYER;
-    entity: Entity<PlayerState>;
+    player: Player;
 }
 
 export type InteractionSource = InteractionSourcePlayer;

@@ -1,13 +1,13 @@
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { Entity } from "../Entity";
 
 import { Maps, Sprites } from "../../resources/manifests/Resources";
 import { loadMap } from "../../resources/maps/MapLoader";
-import { createPlayer, PlayerState } from "./factory/PlayerFactory";
+import { Player } from "../player/Player";
+import { createPlayer } from "./factory/PlayerFactory";
 import { createStaticFloor } from "./factory/SceneryFactory";
 
 interface BootstrapInfo {
-    player: Entity<PlayerState>;
+    player: Player;
 }
 
 export let BOOTSTRAP_SEED =
@@ -19,9 +19,9 @@ export function bootstrap(serviceLocator: ServiceLocator): BootstrapInfo {
     const world = serviceLocator.getWorld();
 
     const player = createPlayer(serviceLocator);
-    world.addEntity(player);
+    // world.addEntity(player);
 
-    const camera = player.getState().camera;
+    const camera = player.getCamera();
     serviceLocator.getAudioService().attachCamera(camera);
     serviceLocator.getRenderService().attachCamera(camera);
 

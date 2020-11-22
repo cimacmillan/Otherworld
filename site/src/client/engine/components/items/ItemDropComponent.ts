@@ -55,7 +55,7 @@ export class ItemDropComponent
             .getScriptingService()
             .getPlayer();
         const { velocity, position } = entity.getState();
-        const playerPosition = player.getState().position;
+        const playerPosition = player.getPositon();
         const difference = vec.vec_sub(playerPosition, position);
         const distance = vec.vec_distance(difference);
         const force = ITEM_ATTRACTION_FORCE / (distance + 1);
@@ -78,7 +78,7 @@ export class ItemDropComponent
                 .getServiceLocator()
                 .getScriptingService()
                 .getPlayer()
-                .emit({
+                .onEvent({
                     type: PlayerEventType.PLAYER_ITEM_DROP_COLLECTED,
                     payload: {
                         item: entity.getState().item,

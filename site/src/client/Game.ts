@@ -163,6 +163,7 @@ export class Game {
         this.serviceLocator.getWorld().performSync();
         ProcedureService.update();
         if (this.updateWorld && !this.isHidden) {
+            this.serviceLocator.getScriptingService().getPlayer().update();
             this.serviceLocator.getInputService().update();
             this.serviceLocator.getWorld().update();
             this.serviceLocator.getPhysicsService().update();

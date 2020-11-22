@@ -6,6 +6,7 @@ import {
     inventoryReducer,
     InventoryUIState,
 } from "./reducers/InventoryReducer";
+import { minigameReducer, MiniGameUIState } from "./reducers/MiniGameReducer";
 import { uiReducer, UIState } from "./reducers/UIReducer";
 import { weaponReducer, WeaponState } from "./reducers/WeaponReducer";
 import { Sagas } from "./saga/Saga";
@@ -16,6 +17,7 @@ export interface State {
     healthState: HealthBarState;
     gameStart: GameStartState;
     inventory: InventoryUIState;
+    minigame: MiniGameUIState;
 }
 
 export const reducers: { [key: string]: (...args: any[]) => any } = {
@@ -24,6 +26,7 @@ export const reducers: { [key: string]: (...args: any[]) => any } = {
     healthState: healthBarReducer,
     gameStart: gameStartReducer,
     inventory: inventoryReducer,
+    minigame: minigameReducer,
 };
 
 export const farmState = (currentState: State | undefined, action: Actions) => {
