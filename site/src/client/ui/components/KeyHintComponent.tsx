@@ -1,8 +1,14 @@
 import React = require("react");
-import { TextComponent, TextFont, TextSize, TextColour } from "./TextComponent";
+import {
+    TextComponent,
+    TextFont,
+    TextSize,
+    TextColour,
+    TextShadow,
+} from "./TextComponent";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
+// import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
 import { KeyComponent, SELECTED_TEXT_OFFSET } from "./KeyComponent";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { CompositeAnimation } from "../../util/animation/CompositeAnimation";
@@ -84,6 +90,7 @@ export const KeyHintComponent: React.FunctionComponent<KeyHintComponent> = (
                 font={TextFont.REGULAR}
                 size={TextSize.MED}
                 colour={TextColour.LIGHT}
+                shadow={TextShadow.LARGE}
                 style={{
                     transform: `translate(0px, ${offset}px)`,
                 }}

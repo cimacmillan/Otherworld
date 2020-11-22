@@ -20,10 +20,12 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
     private spritesheet: WebGLTexture;
     private translationBuffer: WebGLBuffer;
     private textureBuffer: WebGLBuffer;
+    private colourBuffer: WebGLBuffer;
 
     private positions: Float32Array;
     private translations: Float32Array;
     private texture: Float32Array;
+    private colours: Float32Array;
 
     private modelViewMatrix: mat4;
     private projectionMatrix: mat4;
@@ -51,6 +53,7 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         this.positionBuffer = gl.createBuffer();
         this.translationBuffer = gl.createBuffer();
         this.textureBuffer = gl.createBuffer();
+        this.colourBuffer = gl.createBuffer();
     }
 
     public draw() {
@@ -88,6 +91,17 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         this.gl.enableVertexAttribArray(
             this.shader.attribute.vertexTranslation
         );
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colourBuffer);
+        this.gl.vertexAttribPointer(
+            this.shader.attribute.colourOverride,
+            4,
+            type,
+            normalize,
+            stride,
+            offset
+        );
+        this.gl.enableVertexAttribArray(this.shader.attribute.colourOverride);
 
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
         this.gl.vertexAttribPointer(
@@ -165,6 +179,8 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
             new Array(length * 2 * 3 * 3).fill(0)
         );
 
+        this.colours = new Float32Array(new Array(length * 2 * 3 * 4).fill(0));
+
         for (let i = 0; i < array.length; i++) {
             this.onInjection(i, array[i].obj);
         }
@@ -179,11 +195,14 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         gl.bufferData(gl.ARRAY_BUFFER, this.translations, gl.DYNAMIC_DRAW);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.texture, gl.DYNAMIC_DRAW);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW);
     }
 
     private onInjection(index: number, sprite: Sprite) {
         const t1i = index * 2 * 3 * 3;
         const tex = index * 2 * 3 * 2;
+        const col = index * 2 * 3 * 4;
 
         const halfWidth = sprite.size[0] / 2;
         const halfHeight = sprite.size[1] / 2;
@@ -268,5 +287,37 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
 
         this.texture[tex + 10] = texX;
         this.texture[tex + 11] = texY + texHeight;
+
+        // T1
+        this.colours[col] = sprite.shade.r;
+        this.colours[col + 1] = sprite.shade.g;
+        this.colours[col + 2] = sprite.shade.b;
+        this.colours[col + 3] = sprite.shade.intensity;
+
+        this.colours[col + 4] = sprite.shade.r;
+        this.colours[col + 5] = sprite.shade.g;
+        this.colours[col + 6] = sprite.shade.b;
+        this.colours[col + 7] = sprite.shade.intensity;
+
+        this.colours[col + 8] = sprite.shade.r;
+        this.colours[col + 9] = sprite.shade.g;
+        this.colours[col + 10] = sprite.shade.b;
+        this.colours[col + 11] = sprite.shade.intensity;
+
+        // T2
+        this.colours[col + 12] = sprite.shade.r;
+        this.colours[col + 13] = sprite.shade.g;
+        this.colours[col + 14] = sprite.shade.b;
+        this.colours[col + 15] = sprite.shade.intensity;
+
+        this.colours[col + 16] = sprite.shade.r;
+        this.colours[col + 17] = sprite.shade.g;
+        this.colours[col + 18] = sprite.shade.b;
+        this.colours[col + 19] = sprite.shade.intensity;
+
+        this.colours[col + 20] = sprite.shade.r;
+        this.colours[col + 21] = sprite.shade.g;
+        this.colours[col + 22] = sprite.shade.b;
+        this.colours[col + 23] = sprite.shade.intensity;
     }
 }

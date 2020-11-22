@@ -1,5 +1,6 @@
 import { HEIGHT, IS_DEV_MODE, TARGET_MILLIS, VERSION, WIDTH } from "./Config";
 import { GameEvent, RootEventType } from "./engine/events/Event";
+import { ScriptingService } from "./engine/scripting/ScriptingService";
 import { World } from "./engine/World";
 import { ResourceManager } from "./resources/ResourceManager";
 import { AudioService } from "./services/audio/AudioService";
@@ -9,7 +10,6 @@ import { InteractionService } from "./services/interaction/InteractionService";
 import { ProcedureService } from "./services/jobs/ProcedureService";
 import { PhysicsService } from "./services/physics/PhysicsService";
 import { RenderService, ScreenBuffer } from "./services/render";
-import { ScriptingService } from "./services/scripting/ScriptingService";
 import { SerialisationListeners } from "./services/serialisation/Listeners";
 import {
     SerialisationObject,
@@ -18,12 +18,14 @@ import {
 import { GameStorage } from "./services/serialisation/Storage";
 import { ServiceLocator } from "./services/ServiceLocator";
 import { Actions } from "./ui/actions/Actions";
+import { GameStartActionType } from "./ui/actions/GameStartActions";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
 
 export class Game {
     private serviceLocator: ServiceLocator;
     private storage: GameStorage;
+    private uiListener: (event: Actions) => void;
 
     private initialised: boolean = false;
     private updateWorld: boolean = false;
@@ -33,6 +35,8 @@ export class Game {
         openGL: WebGLRenderingContext,
         uiListener: (event: Actions) => void
     ) {
+        this.uiListener = uiListener;
+
         const audioContext = new AudioContext();
         const screen = new ScreenBuffer(openGL, WIDTH, HEIGHT);
 
@@ -159,6 +163,7 @@ export class Game {
         this.serviceLocator.getWorld().performSync();
         ProcedureService.update();
         if (this.updateWorld && !this.isHidden) {
+            this.serviceLocator.getScriptingService().getPlayer().update();
             this.serviceLocator.getInputService().update();
             this.serviceLocator.getWorld().update();
             this.serviceLocator.getPhysicsService().update();
@@ -188,6 +193,11 @@ export class Game {
                 } Intervals ${result.intervals} Timeouts ${result.timeouts}
                 `
             );
+            this.uiListener &&
+                this.uiListener({
+                    type: GameStartActionType.SET_GAME_FPS,
+                    fps,
+                });
         });
         setFPSProportion(1 / actualProportion);
 

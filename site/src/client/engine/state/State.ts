@@ -1,6 +1,7 @@
 import { TextureCoordinate } from "../../resources/SpriteSheet";
-import { Inventory } from "../../services/scripting/items/types";
+import { SpriteShadeOverride } from "../../services/render/types/RenderInterface";
 import { Camera, Vector2D } from "../../types";
+import { Inventory } from "../scripting/items/types";
 
 export interface BaseState {
     exists: boolean;
@@ -9,6 +10,7 @@ export interface BaseState {
 export interface SurfacePositionState {
     position: Vector2D;
     height: number;
+    yOffset: number;
     radius: number;
     angle: number;
 }
@@ -31,6 +33,7 @@ export interface SpriteRenderState extends SurfacePositionState {
     textureCoordinate: TextureCoordinate;
     spriteHeight: number;
     spriteWidth: number;
+    shade?: SpriteShadeOverride;
 }
 
 export interface InventoryState {

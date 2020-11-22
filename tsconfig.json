@@ -10,5 +10,9 @@
     "include": [
         "site/src/client/**/*",
         "site/src/server/**/*"
+    ],
+    "exclude": [
+        "site/**/*.test.ts",
+        "site/**/*.test.tsx"
     ]
 }

@@ -10,18 +10,21 @@ const v = {
     textureSampler: `uSampler`,
     projectionMatrix: `uProjectionMatrix`,
     texturePosition: `aTextureCoord`,
+    colourOverride: `colourOverride`,
 };
 
 const source = `
     attribute vec4 ${v.vertexPosition};
     attribute vec4 ${v.vertexTranslation};
     attribute vec2 ${v.texturePosition};
+    attribute vec4 ${v.colourOverride};
 
     uniform mat4 ${v.modelMatrix};
     uniform mat4 ${v.projectionMatrix};
 
     varying lowp vec2 vTextureCoord;
     varying lowp vec4 position;
+    varying lowp vec4 colour;
 
     void main() {
       mat4 billboardMatrix = mat4(
@@ -34,6 +37,7 @@ const source = `
 
       gl_Position = ${v.projectionMatrix} * ${v.modelMatrix} * rotatedPosition;
       vTextureCoord = ${v.texturePosition};
+      colour = ${v.colourOverride};
       position = gl_Position / 2.0;
     }
   `;

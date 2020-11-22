@@ -4,7 +4,7 @@ import {
     ItemComponent,
     ItemComponentType,
     Item,
-} from "../../services/scripting/items/types";
+} from "../../engine/scripting/items/types";
 import React = require("react");
 import { TextComponent, TextFont, TextColour, TextSize } from "./TextComponent";
 import { Vector2D } from "../../types";
@@ -12,7 +12,7 @@ import { ShadowComponentStyle } from "./ShadowComponent";
 import { animation } from "../../util/animation/Animations";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
+// import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
 
 const TOOLTIP_WIDTH = 256;
 const TOOLTIP_HEIGHT = 128;
@@ -154,6 +154,8 @@ function getCategoryColour(category: ItemCategory): TextColour {
             return TextColour.RED;
         case ItemCategory.CRAFTING:
             return TextColour.YELLOW;
+        case ItemCategory.PRECIOUS:
+            return TextColour.GOLD;
     }
 }
 
@@ -183,16 +185,16 @@ function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
     switch (item.category) {
         case ItemCategory.CONSUMABLE:
             return row([
-                <SpriteImageComponent
-                    serviceLocator={serviceLocator}
-                    spriteSheet={SpriteSheets.UI}
-                    sprite={UISPRITES.ITEM_FINGER}
-                    style={{
-                        width: 32,
-                        height: 32,
-                        transform: `translate(0px, ${yOffset}px)`,
-                    }}
-                />,
+                // <SpriteImageComponent
+                //     serviceLocator={serviceLocator}
+                //     spriteSheet={SpriteSheets.UI}
+                //     sprite={UISPRITES.ITEM_FINGER}
+                //     style={{
+                //         width: 32,
+                //         height: 32,
+                //         transform: `translate(0px, ${yOffset}px)`,
+                //     }}
+                // />,
                 text("to consume"),
             ]);
     }

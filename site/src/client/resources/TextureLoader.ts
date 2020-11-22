@@ -1,5 +1,11 @@
 import { SpriteSheet } from "./SpriteSheet";
 
+// export interface ImageData {
+//     width: number,
+//     height: number,
+//     data: Uint8ClampedArray
+// }
+
 export function loadImage(url: string): Promise<HTMLImageElement> {
     return new Promise<HTMLImageElement>((resolve) => {
         const image = new Image();
@@ -42,4 +48,16 @@ export function loadSpriteSheet(
         const texture = loadTextureFromImage(gl, image);
         return new SpriteSheet(image.width, image.height, texture, image);
     });
+}
+
+export async function loadImageData(url: string) {
+    const img = await loadImage(url);
+    const canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    canvas.getContext("2d").drawImage(img, 0, 0, img.width, img.height);
+    const data = canvas
+        .getContext("2d")
+        .getImageData(0, 0, img.width, img.height);
+    return data;
 }

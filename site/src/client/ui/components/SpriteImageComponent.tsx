@@ -4,8 +4,8 @@ import { ServiceLocator } from "../../services/ServiceLocator";
 
 export interface SpriteImageComponentProps {
     serviceLocator: ServiceLocator;
-    spriteSheet: number;
-    sprite: number;
+    spriteSheet: string;
+    sprite: string;
     style: React.CSSProperties;
 }
 

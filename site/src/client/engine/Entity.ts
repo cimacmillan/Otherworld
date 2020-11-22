@@ -2,6 +2,7 @@ import { ServiceLocator } from "../services/ServiceLocator";
 import { EntityComponent } from "./EntityComponent";
 import { EntityEventType } from "./events/EntityEvents";
 import { GameEvent } from "./events/Event";
+import { EntitySerial } from "./scripting/factory/Serial";
 import { BaseState } from "./state/State";
 
 export class Entity<State extends BaseState> {
@@ -9,19 +10,14 @@ export class Entity<State extends BaseState> {
     private newState: State;
     private shouldEmit: boolean = false;
 
-    private initialised: boolean = false;
-
     constructor(
+        public serial: EntitySerial = EntitySerial.NULL,
         private serviceLocator: ServiceLocator,
         private state: State,
         ...components: Array<EntityComponent<State>>
     ) {
         this.components = components;
         this.newState = state;
-        for (let i = 0; i < this.components.length; i++) {
-            this.components[i].init && this.components[i].init(this);
-        }
-        this.initialised = true;
     }
 
     public getState() {

@@ -1,12 +1,12 @@
-import { Item } from "../../../services/scripting/items/types";
 import { animation } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
 import { vec } from "../../../util/math";
 import { Entity } from "../../Entity";
-import { EntityComponent, EntityComponentType } from "../../EntityComponent";
+import { EntityComponent } from "../../EntityComponent";
 import { PlayerEventType } from "../../events/PlayerEvents";
+import { Item } from "../../scripting/items/types";
 import { BaseState, SpriteRenderState } from "../../state/State";
-import { PhysicsState } from "../physics/PhysicsComponent";
+import { PhysicsState } from "../core/PhysicsComponent";
 
 const ITEM_SIZE_CHANGE = 0.05;
 const ITEM_HEIGHT_CHANGE = 0.2;
@@ -24,8 +24,6 @@ type ItemDropComponentStateType = BaseState &
 
 export class ItemDropComponent
     implements EntityComponent<ItemDropComponentStateType> {
-    public componentType = EntityComponentType.ItemDropComponent;
-
     private animation: GameAnimation;
 
     private initialSpriteWidth: number;
@@ -57,7 +55,7 @@ export class ItemDropComponent
             .getScriptingService()
             .getPlayer();
         const { velocity, position } = entity.getState();
-        const playerPosition = player.getState().position;
+        const playerPosition = player.getPositon();
         const difference = vec.vec_sub(playerPosition, position);
         const distance = vec.vec_distance(difference);
         const force = ITEM_ATTRACTION_FORCE / (distance + 1);
@@ -80,7 +78,7 @@ export class ItemDropComponent
                 .getServiceLocator()
                 .getScriptingService()
                 .getPlayer()
-                .emit({
+                .onEvent({
                     type: PlayerEventType.PLAYER_ITEM_DROP_COLLECTED,
                     payload: {
                         item: entity.getState().item,
@@ -102,7 +100,6 @@ export class ItemDropComponent
             {
                 spriteWidth: newSpriteWidth,
                 spriteHeight: newSpriteHeight,
-                height: newHeight,
             },
             false
         );

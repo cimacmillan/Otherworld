@@ -3,12 +3,10 @@ import { DOM_WIDTH, DOM_HEIGHT } from "../../Config";
 import React = require("react");
 import { GamePanelComponent } from "../components/GamePanelComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { DARK_PANEL } from "../../resources/manifests/DarkPanel";
 import {
     ShadowComponentStyle,
     ShadowComponentStyleSmall,
 } from "../components/ShadowComponent";
-import { SpriteSheets, Sprites } from "../../resources/manifests/Types";
 import { SpriteImageComponent } from "../components/SpriteImageComponent";
 import {
     TextComponent,
@@ -17,7 +15,7 @@ import {
     TextColour,
 } from "../components/TextComponent";
 import { ItemCollectionComponent } from "../components/ItemCollectionComponent";
-import { Item } from "../../services/scripting/items/types";
+import { Item } from "../../engine/scripting/items/types";
 import { GameItems } from "../../resources/manifests/Items";
 import { useGlobalState, useDispatchListener } from "../effects/GlobalState";
 import { Actions } from "../actions/Actions";

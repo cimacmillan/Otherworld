@@ -2,18 +2,14 @@ import React = require("react");
 import { PanelImageMap } from "../../resources/Types";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { GamePanelComponent } from "../components/GamePanelComponent";
+import { Colours } from "../../resources/design/Colour";
+import { Spacing } from "../../resources/design/Spacing";
 
 export interface GameButtonContainerProps {
-    serviceLocator: ServiceLocator;
     width: number;
     height: number;
     style: React.CSSProperties;
     childStyle: React.CSSProperties;
-
-    panelMapDefault: PanelImageMap;
-    panelMapHover: PanelImageMap;
-    panelMapPress: PanelImageMap;
-
     onSelect: () => void;
 }
 
@@ -28,32 +24,32 @@ export const GameButtonContainer: React.FunctionComponent<GameButtonContainerPro
     const [isHovered, setHovered] = React.useState(false);
     const [isDown, setDown] = React.useState(false);
 
-    let panelMap = props.panelMapDefault;
-    if (isHovered) {
-        panelMap = props.panelMapHover;
-    }
-    if (isDown) {
-        panelMap = props.panelMapPress;
-    }
+    const { width, height } = props;
+
+    const backgroundColor = isDown
+        ? Colours.SELECT_WHITE
+        : isHovered
+        ? Colours.HOVER_GREY
+        : Colours.DESELCT_GREY;
 
     return (
-        <GamePanelComponent {...props} childStyle={{}} panelMap={panelMap}>
-            <div
-                onMouseEnter={() => setHovered(true)}
-                onMouseLeave={() => setHovered(false)}
-                onMouseDown={() => setDown(true)}
-                onMouseUp={() => {
-                    setDown(false);
-                    props.onSelect();
-                }}
-                style={{
-                    width: "100%",
-                    height: "100%",
-                    ...props.childStyle,
-                }}
-            >
-                {props.children}
-            </div>
-        </GamePanelComponent>
+        <div
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            onMouseDown={() => setDown(true)}
+            onMouseUp={() => {
+                setDown(false);
+                props.onSelect();
+            }}
+            style={{
+                width,
+                height,
+                backgroundColor,
+                borderRadius: Spacing.RADIUS_SMALL,
+                ...props.childStyle,
+            }}
+        >
+            {props.children}
+        </div>
     );
 };

@@ -3,6 +3,7 @@ export enum GameStartActionType {
     FADE_BACKGROUND = "FADE_BACKGROUND",
     FADE_MENU = "FADE_MENU",
     SET_GAME_LOAD_PERCENTAGE = "SET_GAME_LOAD_PERCENTAGE",
+    SET_GAME_FPS = "SET_GAME_FPS",
 }
 
 interface GameStartActionStart {
@@ -15,6 +16,11 @@ interface FadeBackground {
 
 interface FadeMenu {
     type: GameStartActionType.FADE_MENU;
+}
+
+interface SetGameFPS {
+    type: GameStartActionType.SET_GAME_FPS;
+    fps: number;
 }
 
 interface SetGameLoadPercentage {
@@ -40,4 +46,5 @@ export type GameStartActions =
     | GameStartActionStart
     | FadeBackground
     | FadeMenu
-    | SetGameLoadPercentage;
+    | SetGameLoadPercentage
+    | SetGameFPS;

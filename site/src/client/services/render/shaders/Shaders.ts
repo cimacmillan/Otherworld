@@ -1,3 +1,4 @@
+import { colourFragment } from "./fragment/ColourFragment";
 import { fadeUniformPositions } from "./fragment/Fade";
 import { fsSource } from "./fragment/Fragment";
 import { hazeUniformPositions } from "./fragment/Haze";
@@ -5,6 +6,7 @@ import { rfsSource } from "./fragment/RepeatedFragment";
 import { initShaderProgram } from "./ShaderCompiler";
 import { AttributePositions, UniformPositions } from "./types";
 import { BilloardVertex } from "./vertex/BillboardVertex";
+import { ParticleVertex } from "./vertex/ParticleVertex";
 import { RepeatedVertex } from "./vertex/RepeatedVertex";
 import { Vertex } from "./vertex/Vertex";
 
@@ -38,6 +40,37 @@ export function compileSpriteShader(gl: WebGLRenderingContext) {
         texturePosition: gl.getAttribLocation(
             shaderId,
             BilloardVertex.v.texturePosition
+        ),
+    };
+    return { shaderId, uniform, attribute };
+}
+
+export function compileParticleShader(gl: WebGLRenderingContext) {
+    const shaderId = initShaderProgram(
+        gl,
+        ParticleVertex.source,
+        colourFragment
+    );
+    const uniform: UniformPositions = {
+        ...fadeUniformPositions(shaderId, gl),
+        ...hazeUniformPositions(shaderId, gl),
+        projectionMatrix: gl.getUniformLocation(
+            shaderId,
+            BilloardVertex.v.projectionMatrix
+        ),
+        modelMatrix: gl.getUniformLocation(
+            shaderId,
+            BilloardVertex.v.modelMatrix
+        ),
+    };
+    const attribute: AttributePositions = {
+        vertexPosition: gl.getAttribLocation(
+            shaderId,
+            BilloardVertex.v.vertexPosition
+        ),
+        vertexTranslation: gl.getAttribLocation(
+            shaderId,
+            BilloardVertex.v.vertexTranslation
         ),
     };
     return { shaderId, uniform, attribute };

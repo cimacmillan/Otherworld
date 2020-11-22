@@ -11,7 +11,7 @@ import { Subscription } from "rxjs";
 import { vec } from "../../util/math";
 import { getImagePropsFromSprite } from "../../util/math/UI";
 import { ViewportComponent } from "./ViewportComponent";
-import { SpriteSheets, Sprites } from "../../resources/manifests/Types";
+// import { SpriteSheets, Sprites } from "../../resources/manifests/Types";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { connect } from "react-redux";
@@ -52,12 +52,12 @@ export const WeaponComponent: React.FunctionComponent<WeaponComponentProps> = (
         composite = sequence(swingDown, swingUp).driven(false);
 
         headBob = animation((x: number) => {
-            const velocity = props.serviceLocator
-                .getScriptingService()
-                .getPlayer()
-                .getState().velocity;
-            const speed = vec.vec_distance(velocity);
-            setPosY(POS_Y + Math.sin(x * Math.PI * 2) * speed);
+            // const velocity = props.serviceLocator
+            //     .getScriptingService()
+            //     .getPlayer()
+            //     .getState().velocity;
+            // const speed = vec.vec_distance(velocity);
+            // setPosY(POS_Y + Math.sin(x * Math.PI * 2) * speed);
         })
             .driven(true)
             .speed(400)
@@ -93,7 +93,7 @@ export const WeaponComponent: React.FunctionComponent<WeaponComponentProps> = (
             height={DOM_HEIGHT}
             style={{}}
         >
-            <SpriteImageComponent
+            {/* <SpriteImageComponent
                 serviceLocator={props.serviceLocator}
                 spriteSheet={SpriteSheets.SPRITE}
                 sprite={Sprites.SWORD}
@@ -106,7 +106,7 @@ export const WeaponComponent: React.FunctionComponent<WeaponComponentProps> = (
                         Math.floor(rotate) + DEFAULT_ROTATION
                     }deg) translate(-50%, -50%)`,
                 }}
-            />
+            /> */}
         </ViewportComponent>
     );
 };

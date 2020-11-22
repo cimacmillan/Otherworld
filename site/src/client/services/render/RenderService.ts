@@ -1,9 +1,10 @@
 import { mat4 } from "gl-matrix";
-import { SpriteSheets } from "../../resources/manifests/Types";
+import { SpriteSheets } from "../../resources/manifests/Resources";
 import { ResourceManager } from "../../resources/ResourceManager";
 import { Camera } from "../../types";
 import { BackgroundRenderService } from "./services/BackgroundRenderService";
 import { FloorRenderService } from "./services/FloorRenderService";
+import { ParticleRenderService } from "./services/ParticleRenderService";
 import { ScreenShakeService } from "./services/ScreenShakeService";
 import { SpriteRenderService } from "./services/SpriteRenderService";
 import { WallRenderService } from "./services/WallRenderService";
@@ -15,6 +16,7 @@ export class RenderService implements RenderInterface {
     public floorRenderService: FloorRenderService;
     public screenShakeService: ScreenShakeService;
     public backgroundRenderService: BackgroundRenderService;
+    public particleRenderService: ParticleRenderService;
     private gl: WebGLRenderingContext;
 
     private camera: Camera;
@@ -31,6 +33,9 @@ export class RenderService implements RenderInterface {
             this.backgroundRenderService
         );
         this.screenShakeService = new ScreenShakeService();
+        this.particleRenderService = new ParticleRenderService(
+            this.backgroundRenderService
+        );
     }
 
     public init(gl: WebGLRenderingContext) {
@@ -45,15 +50,16 @@ export class RenderService implements RenderInterface {
         this.wallRenderService.init(gl);
         this.wallRenderService.attachSpritesheet(
             this.resourceManager.manifest.spritesheets[
-                SpriteSheets.SCENERY
+                SpriteSheets.SPRITE
             ].getTexture()
         );
         this.floorRenderService.init(gl);
         this.floorRenderService.attachSpritesheet(
             this.resourceManager.manifest.spritesheets[
-                SpriteSheets.SCENERY
+                SpriteSheets.SPRITE
             ].getTexture()
         );
+        this.particleRenderService.init(gl);
     }
 
     public draw() {
@@ -77,9 +83,14 @@ export class RenderService implements RenderInterface {
             modelViewMatrix,
             projectionMatrix
         );
+        this.particleRenderService.attachViewMatrices(
+            modelViewMatrix,
+            projectionMatrix
+        );
 
         this.backgroundRenderService.draw();
         this.screenShakeService.update();
+        this.particleRenderService.draw();
         this.spriteRenderService.draw();
         this.wallRenderService.draw();
         this.floorRenderService.draw();

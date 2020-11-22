@@ -14,11 +14,9 @@ import { useDispatchListener, useGlobalState } from "../effects/GlobalState";
 import { Actions } from "../actions/Actions";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { GamePanelComponent } from "../components/GamePanelComponent";
-import { DARK_PANEL } from "../../resources/manifests/DarkPanel";
 import { ShadowComponentStyle } from "../components/ShadowComponent";
 import { SpriteImageComponent } from "../components/SpriteImageComponent";
-import { ItemMetadata } from "../../services/scripting/items/types";
-import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
+import { ItemMetadata } from "../../engine/scripting/items/types";
 import { GameItems } from "../../resources/manifests/Items";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { chunk } from "lodash";
@@ -54,11 +52,11 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
     const [state, dispatch] = useGlobalState();
 
     React.useEffect(() => {
-        const inventoryItems = serviceLocator
-            .getScriptingService()
-            .getPlayer()
-            .getState().inventory.items;
-        setItems(inventoryItems);
+        // const inventoryItems = serviceLocator
+        //     .getScriptingService()
+        //     .getPlayer()
+        //     .getState().inventory.items;
+        // setItems(inventoryItems);
     });
 
     React.useEffect(() => {
@@ -99,36 +97,32 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                         tooltipItem === metadata && onSetItemTooltip(undefined)
                     }
                     onClick={() => {
-                        const itemAmount = serviceLocator
-                            .getScriptingService()
-                            .getPlayer()
-                            .getState().inventory.items.length;
-
-                        serviceLocator
-                            .getScriptingService()
-                            .inventoryService.useItemFromInventory(
-                                serviceLocator
-                                    .getScriptingService()
-                                    .getPlayer(),
-                                metadata
-                            );
-
-                        const inventoryItems = serviceLocator
-                            .getScriptingService()
-                            .getPlayer()
-                            .getState().inventory.items;
-
-                        setItems(inventoryItems);
-
-                        if (
-                            serviceLocator
-                                .getScriptingService()
-                                .getPlayer()
-                                .getState().inventory.items.length !==
-                            itemAmount
-                        ) {
-                            onSetItemTooltip(undefined);
-                        }
+                        // const itemAmount = serviceLocator
+                        //     .getScriptingService()
+                        //     .getPlayer()
+                        //     .getState().inventory.items.length;
+                        // serviceLocator
+                        //     .getScriptingService()
+                        //     .inventoryService.useItemFromInventory(
+                        //         serviceLocator
+                        //             .getScriptingService()
+                        //             .getPlayer(),
+                        //         metadata
+                        //     );
+                        // const inventoryItems = serviceLocator
+                        //     .getScriptingService()
+                        //     .getPlayer()
+                        //     .getState().inventory.items;
+                        // setItems(inventoryItems);
+                        // if (
+                        //     serviceLocator
+                        //         .getScriptingService()
+                        //         .getPlayer()
+                        //         .getState().inventory.items.length !==
+                        //     itemAmount
+                        // ) {
+                        //     onSetItemTooltip(undefined);
+                        // }
                     }}
                 />
             ))}
@@ -179,7 +173,6 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                             flexDirection: "column",
                             overflowY: "scroll",
                         }}
-                        panelMap={DARK_PANEL}
                     >
                         {inventoryItemLines}
                     </GamePanelComponent>

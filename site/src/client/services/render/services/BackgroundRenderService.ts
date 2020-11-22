@@ -34,12 +34,12 @@ export const Backgrounds = {
             g: 0.26 * 0.2,
             b: 0.4 * 0.2,
         },
-        hazeAmount: 0.2,
+        hazeAmount: 1,
         fog: {
-            minDepth: 6,
-            maxDepth: 20,
-            pixelAccuracy: 4,
-            depthAccuracy: 8,
+            minDepth: 0,
+            maxDepth: 8,
+            pixelAccuracy: 8,
+            depthAccuracy: 16,
         },
     },
 };
@@ -58,7 +58,7 @@ export interface BackgroundShaderPositions {
 
 export class BackgroundRenderService {
     private gl: WebGLRenderingContext;
-    private currentBackground: Background = Backgrounds.OutdoorBackground;
+    private currentBackground: Background = Backgrounds.CaveBackground;
 
     public init(gl: WebGLRenderingContext) {
         this.gl = gl;

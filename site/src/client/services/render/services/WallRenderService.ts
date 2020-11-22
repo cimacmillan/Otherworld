@@ -200,6 +200,8 @@ export class WallRenderService implements RenderItemInterface<Wall> {
         const tex = index * 2 * 3 * 2;
         const t1i = index * 2 * 3 * 3;
 
+        const correction = 0.0002;
+
         const {
             startPos,
             endPos,
@@ -208,12 +210,15 @@ export class WallRenderService implements RenderItemInterface<Wall> {
             endHeight,
             endOffset,
             textureX,
-            textureY,
+            textureY: textureYNotCorrected,
             textureWidth,
-            textureHeight,
+            textureHeight: textureHeightNotCorrected,
             repeatWidth,
             repeatHeight,
         } = wall;
+
+        const textureY = textureYNotCorrected + correction;
+        const textureHeight = textureHeightNotCorrected - correction;
 
         this.positions[t1i] = startPos[0];
         this.positions[t1i + 1] = startHeight + startOffset;

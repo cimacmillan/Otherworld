@@ -8,6 +8,7 @@ export interface GameStartState {
     currentScore: number;
     bestScore?: number;
     gameLoadPercentage: number;
+    fps: number;
 }
 
 const initialGameStartState = {
@@ -15,6 +16,7 @@ const initialGameStartState = {
     showingFade: true,
     currentScore: 0,
     gameLoadPercentage: 0,
+    fps: 0,
 };
 
 export function gameStartReducer(
@@ -53,6 +55,11 @@ export function gameStartReducer(
             return {
                 ...state,
                 gameLoadPercentage: action.payload.percentage,
+            };
+        case GameStartActionType.SET_GAME_FPS:
+            return {
+                ...state,
+                fps: action.fps,
             };
     }
     return state;

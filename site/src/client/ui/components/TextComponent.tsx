@@ -17,6 +17,12 @@ export enum TextColour {
     DARK = "#3e2731",
     RED = "#e43b44",
     YELLOW = "#feae34",
+    GOLD = "#fee761",
+}
+
+export enum TextShadow {
+    SMALL = "0px 0px 8px #000000",
+    LARGE = "0px 0px 16px #000000",
 }
 
 export interface TextComponentProps {
@@ -26,6 +32,7 @@ export interface TextComponentProps {
     font: TextFont;
     size: TextSize;
     colour: TextColour;
+    shadow?: TextShadow;
 
     clickable?: () => void;
 }
@@ -47,6 +54,8 @@ export const TextComponent: React.FunctionComponent<TextComponentProps> = (
           }
         : {};
 
+    const shadowText = props.shadow || "";
+
     return (
         <div
             style={{
@@ -58,6 +67,7 @@ export const TextComponent: React.FunctionComponent<TextComponentProps> = (
                 WebkitUserSelect: "none",
                 msUserSelect: "none",
                 userSelect: "none",
+                textShadow: shadowText,
                 ...pointer,
                 ...props.style,
             }}

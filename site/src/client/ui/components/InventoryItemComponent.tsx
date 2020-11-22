@@ -1,10 +1,9 @@
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { ItemMetadata } from "../../services/scripting/items/types";
+import { ItemMetadata } from "../../engine/scripting/items/types";
 import React = require("react");
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { animation } from "../../util/animation/Animations";
 import { SpriteImageComponent } from "./SpriteImageComponent";
-import { UISPRITES, SpriteSheets } from "../../resources/manifests/Types";
 import { TextComponent, TextFont, TextSize, TextColour } from "./TextComponent";
 
 const INVENTORY_ITEM_SIZE = 48;
@@ -82,7 +81,7 @@ export const InventoryItemComponent: React.FunctionComponent<InventoryItemCompon
                     justifyContent: "center",
                 }}
             >
-                <SpriteImageComponent
+                {/* <SpriteImageComponent
                     serviceLocator={serviceLocator}
                     sprite={
                         hover
@@ -105,7 +104,7 @@ export const InventoryItemComponent: React.FunctionComponent<InventoryItemCompon
                         width: INVENTORY_ITEM_SIZE + sizeOffset,
                         height: INVENTORY_ITEM_SIZE + sizeOffset,
                     }}
-                />
+                /> */}
             </div>
             <div
                 style={{

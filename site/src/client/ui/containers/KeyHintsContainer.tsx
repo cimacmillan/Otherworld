@@ -62,26 +62,26 @@ const keyStages = [
         {
             keycode: "KeyE",
             key: "E",
-            hint: "Attack",
+            hint: "Interact",
             fade: false,
         },
     ],
-    [
-        {
-            keycode: "KeyI",
-            key: "I",
-            hint: "Inventory",
-            fade: false,
-        },
-    ],
-    [
-        {
-            keycode: "KeyI",
-            key: "I",
-            hint: "Close Inventory",
-            fade: false,
-        },
-    ],
+    // [
+    //     {
+    //         keycode: "KeyI",
+    //         key: "I",
+    //         hint: "Inventory",
+    //         fade: false,
+    //     },
+    // ],
+    // [
+    //     {
+    //         keycode: "KeyI",
+    //         key: "I",
+    //         hint: "Close Inventory",
+    //         fade: false,
+    //     },
+    // ],
 ];
 
 const clickSpeed = 500;
@@ -165,7 +165,7 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
                         keyCode={keyHint.key}
                         selected={keyDown}
                         text={keyHint.hint}
-                        style={ShadowComponentStyle()}
+                        style={{}}
                         fade={keyHint.fade}
                         onFadeComplete={() => removeKeyHint(keyHint)}
                     />
