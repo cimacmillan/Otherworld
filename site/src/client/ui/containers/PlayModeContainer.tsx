@@ -27,7 +27,7 @@ export const PlayModeContainer: React.FunctionComponent<PlayModeContainerProps> 
             <HealthBarComponent serviceLocator={props.serviceLocator} />
             <WeaponComponent serviceLocator={props.serviceLocator} />
             <ScoreContainer />
-            <KeyHintsContainer serviceLocator={props.serviceLocator} />
+            <KeyHintsContainer />
             <ItemCollectionContainer serviceLocator={props.serviceLocator} />
             <InventoryContainer serviceLocator={props.serviceLocator} />
             <MiniGameContainer />

@@ -1,3 +1,4 @@
+import { KeyHintContainerActions } from "../../ui/actions/KeyHintActions";
 import { BallEvents } from "./BallEvents";
 import { EnemyEvents } from "./EnemyEvents";
 import { EntityEvents } from "./EntityEvents";
@@ -24,4 +25,5 @@ export type GameEvent =
     | InteractionEvents
     | PlayerEvents
     | EnemyEvents
-    | MiniGameEvents;
+    | MiniGameEvents
+    | KeyHintContainerActions;

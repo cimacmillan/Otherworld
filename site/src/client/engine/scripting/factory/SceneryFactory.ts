@@ -10,7 +10,9 @@ import { Vector2D } from "../../../types";
 import { LockpickGameConfiguration } from "../../../ui/containers/minigame/LockPickContainer";
 import { animation } from "../../../util/animation/Animations";
 import { vec } from "../../../util/math/Vector";
+import { throttleCount } from "../../../util/time/Throttle";
 import { OpenLockpickingChallenge } from "../../commands/MiniGameCommands";
+import { DeregisterUIHint, RegisterUIHint } from "../../commands/UICommands";
 import {
     BoundaryComponent,
     BoundaryStateType,
@@ -237,6 +239,41 @@ const onInteractedWith = <T extends InteractionStateType>(
     };
 };
 
+const onCanBeInteractedWithByPlayer = <T extends InteractionStateType>(
+    type: InteractionType,
+    onEnter: () => void,
+    onLeave: () => void
+): EntityComponent<T> => {
+    let canBeInteractedWith = false;
+
+    const onUpdate = (entity: Entity<T>) => {
+        const player = entity
+            .getServiceLocator()
+            .getScriptingService()
+            .getPlayer();
+        const { position, angle } = player.getCamera();
+        const interacts = entity
+            .getServiceLocator()
+            .getInteractionService()
+            .getInteractables(InteractionType.INTERACT, position, angle, 1.5);
+        const isInteractable = interacts.some(
+            (interactable) => interactable === entity
+        );
+        if (isInteractable && canBeInteractedWith === false) {
+            onEnter();
+            canBeInteractedWith = true;
+        }
+        if (!isInteractable && canBeInteractedWith === true) {
+            onLeave();
+            canBeInteractedWith = false;
+        }
+    };
+
+    return {
+        update: throttleCount(onUpdate, 5),
+    };
+};
+
 enum DoorOpenState {
     OPEN = "OPEN",
     CLOSED = "CLOSED",
@@ -288,6 +325,8 @@ export const createDoor = (
         open: DoorOpenState.CLOSED,
     };
 
+    let interactHintId: number | undefined;
+
     // TODO emit particles here
     const doorSwitch: SwitchComponents = {
         ["OPEN"]: AnimationComponent<DoorStateType>(
@@ -335,7 +374,24 @@ export const createDoor = (
                     },
                     configuration
                 );
+                if (interactHintId !== undefined) {
+                    DeregisterUIHint(serviceLocator)(interactHintId);
+                }
             }),
+            onCanBeInteractedWithByPlayer(
+                InteractionType.INTERACT,
+                () => {
+                    interactHintId = RegisterUIHint(serviceLocator)(
+                        "E",
+                        "Hello world"
+                    );
+                },
+                () => {
+                    if (interactHintId !== undefined) {
+                        DeregisterUIHint(serviceLocator)(interactHintId);
+                    }
+                }
+            ),
         ]),
     };
 

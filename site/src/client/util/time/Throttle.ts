@@ -12,3 +12,15 @@ export function throttle(callback: Callback, time: number): Callback {
         }
     };
 }
+
+export function throttleCount(callback: Callback, count: number): Callback {
+    let i = 0;
+    return (args) => {
+        if (i >= count) {
+            i = 0;
+            callback(args);
+        } else {
+            i++;
+        }
+    };
+}

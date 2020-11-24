@@ -15,7 +15,6 @@ import { CompositeAnimation } from "../../util/animation/CompositeAnimation";
 import { animation, sin } from "../../util/animation/Animations";
 
 interface KeyHintComponent {
-    serviceLocator: ServiceLocator;
     keyCode: string;
     selected: boolean;
     text: string;
@@ -80,7 +79,6 @@ export const KeyHintComponent: React.FunctionComponent<KeyHintComponent> = (
             }}
         >
             <KeyComponent
-                serviceLocator={props.serviceLocator}
                 keyCode={props.keyCode}
                 selected={props.selected}
                 style={{}}
