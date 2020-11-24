@@ -1,5 +1,6 @@
 import React = require("react");
 import { LockButtonComponent } from "./LockButtonComponent";
+import { Spacing } from "../../resources/design/Spacing";
 
 interface LockMatrixComponentProps {
     selected: boolean[][];
@@ -7,6 +8,7 @@ interface LockMatrixComponentProps {
     style: React.CSSProperties;
     colourPrimary: string;
     colourSecondary: string;
+    colourBackground: string;
 }
 
 export const LockMatrixComponent: React.FunctionComponent<LockMatrixComponentProps> = (
@@ -27,6 +29,9 @@ export const LockMatrixComponent: React.FunctionComponent<LockMatrixComponentPro
             style={{
                 display: "flex",
                 flexDirection: "row",
+                backgroundColor: props.colourBackground,
+                borderRadius: Spacing.RADIUS_SMALL,
+                marginBottom: 16,
             }}
         >
             {rows}

@@ -57,12 +57,11 @@ export const MiniGameContainer: React.FunctionComponent<MiniGameContainerProps> 
                     configuration={state.minigame.configuration}
                     onComplete={() => onComplete(true)}
                 />
+
                 <GameButtonContainer
                     width={140}
                     height={46}
-                    style={{
-                        marginTop: 30,
-                    }}
+                    style={{}}
                     childStyle={{
                         display: "flex",
                         flexDirection: "column",
