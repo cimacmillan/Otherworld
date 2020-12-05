@@ -3,7 +3,7 @@ import { KeyHintContainerActionType } from "../actions/KeyHintActions";
 
 export interface KeyHintUIState {
     keyHints: {
-        [id: number]: {
+        [id: string]: {
             key: string;
             hint: string;
         };

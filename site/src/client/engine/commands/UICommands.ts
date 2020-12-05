@@ -11,7 +11,7 @@ export const RegisterUIHint = (serviceLocator: ServiceLocator) => (
     HINT_ID++;
     serviceLocator.getEventRouter().routeEvent(GameEventSource.WORLD, {
         type: KeyHintContainerActionType.ADD_KEY_HINT,
-        id: HINT_ID,
+        id: `${HINT_ID}`,
         key: code,
         hint,
     });
@@ -23,6 +23,6 @@ export const DeregisterUIHint = (serviceLocator: ServiceLocator) => (
 ) => {
     serviceLocator.getEventRouter().routeEvent(GameEventSource.WORLD, {
         type: KeyHintContainerActionType.REMOVE_KEY_HINT,
-        id: hintId,
+        id: `${hintId}`,
     });
 };

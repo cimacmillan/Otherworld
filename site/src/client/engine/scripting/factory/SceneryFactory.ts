@@ -383,7 +383,7 @@ export const createDoor = (
                 () => {
                     interactHintId = RegisterUIHint(serviceLocator)(
                         "E",
-                        "Hello world"
+                        "Unlock Door"
                     );
                 },
                 () => {

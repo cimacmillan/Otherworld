@@ -142,10 +142,10 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
 
     return (
         <ViewportComponent
-            x={0}
-            y={0}
+            x={DOM_WIDTH}
+            y={DOM_HEIGHT * 0.5}
             width={DOM_WIDTH}
-            height={DOM_HEIGHT}
+            height={DOM_HEIGHT * 0.5}
             style={{
                 display: "flex",
                 justifyContent: "flex-end",
@@ -161,7 +161,6 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
                 {keyHints.map((keyHint) => (
                     <KeyHintComponent
                         key={keyHint.key}
-                        serviceLocator={props.serviceLocator}
                         keyCode={keyHint.key}
                         selected={keyDown}
                         text={keyHint.hint}

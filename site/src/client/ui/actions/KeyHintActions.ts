@@ -5,14 +5,14 @@ export enum KeyHintContainerActionType {
 
 interface AddKeyHint {
     type: KeyHintContainerActionType.ADD_KEY_HINT;
-    id: number;
+    id: string;
     key: string;
     hint: string;
 }
 
 interface RemoveKeyHint {
     type: KeyHintContainerActionType.REMOVE_KEY_HINT;
-    id: number;
+    id: string;
 }
 
 export type KeyHintContainerActions = AddKeyHint | RemoveKeyHint;

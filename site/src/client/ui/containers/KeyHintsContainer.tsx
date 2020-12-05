@@ -21,35 +21,58 @@ export interface KeyHintsContainerProps {
     // serviceLocator: ServiceLocator;
 }
 
+const clickSpeed = 500;
+
 export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> = (
     props
 ) => {
     const [state, dispatch] = useGlobalState();
+    const [keyDown, setKeyDown] = React.useState(false);
 
-    if (Object.keys(state.keyHints.keyHints).length === 0) {
+    const { keyHints } = state.keyHints;
+    const keys = Object.keys(keyHints);
+
+    React.useEffect(() => {
+        const timeout = ProcedureService.setTimeout(
+            () => setKeyDown(!keyDown),
+            clickSpeed
+        );
+        return () => ProcedureService.clearTimeout(timeout);
+    }, [keyDown]);
+
+    if (keys.length === 0) {
         return null;
     }
 
-    return (
-        <div
-            style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: DOM_WIDTH,
-                height: DOM_HEIGHT,
-            }}
-        >
+    const keyComponents = keys.map((key) => {
+        const keyHint = keyHints[key];
+        return (
             <KeyHintComponent
-                keyCode={"W"}
-                selected={false}
-                text={"to go forwards"}
+                keyCode={keyHint.key}
+                selected={keyDown}
+                text={keyHint.hint}
                 style={{
                     ...ShadowComponentStyleAlpha(),
                 }}
                 fade={true}
                 onFadeComplete={() => undefined}
             />
+        );
+    });
+
+    return (
+        <div
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: DOM_HEIGHT * 0.5,
+                width: DOM_WIDTH,
+                height: DOM_HEIGHT * 0.5,
+            }}
+        >
+            {keyComponents}
         </div>
     );
 };
