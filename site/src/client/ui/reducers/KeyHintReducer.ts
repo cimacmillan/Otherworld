@@ -3,11 +3,13 @@ import { KeyHintContainerActionType } from "../actions/KeyHintActions";
 
 export interface KeyHintUIState {
     keyHints: {
-        [id: string]: {
-            key: string;
-            hint: string;
-        };
+        [id: string]: KeyHint;
     };
+}
+
+export interface KeyHint {
+    key: string;
+    hint: string;
 }
 
 const initialKeyHintUIState: KeyHintUIState = {

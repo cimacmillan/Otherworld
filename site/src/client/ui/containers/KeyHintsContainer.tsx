@@ -16,20 +16,56 @@ import {
     TextColour,
 } from "../components/TextComponent";
 import { useGlobalState } from "../effects/GlobalState";
+import { KeyHint } from "../reducers/KeyHintReducer";
+import { isEqual } from "lodash";
 
-export interface KeyHintsContainerProps {
-    // serviceLocator: ServiceLocator;
+export interface KeyHintsContainerProps {}
+
+interface KeyHintInstance {
+    keyHint: KeyHint;
+    shouldBeShown: boolean;
+}
+
+export interface KeyHintInstanceMap {
+    [id: string]: KeyHintInstance;
 }
 
 const clickSpeed = 500;
+const initialState = {} as KeyHintInstanceMap;
 
 export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> = (
     props
 ) => {
     const [state, dispatch] = useGlobalState();
     const [keyDown, setKeyDown] = React.useState(false);
+    const [keyHints, setKeyHints] = React.useState(initialState);
 
-    const { keyHints } = state.keyHints;
+    React.useEffect(() => {
+        const newKeyHints = {} as KeyHintInstanceMap;
+        Object.entries(keyHints).forEach(([key, value]) => {
+            newKeyHints[key] = {
+                keyHint: value.keyHint,
+                shouldBeShown: false,
+            };
+        });
+        Object.entries(state.keyHints.keyHints).forEach(([key, value]) => {
+            newKeyHints[key] = {
+                keyHint: value,
+                shouldBeShown: true,
+            };
+        });
+        if (!isEqual(keyHints, newKeyHints)) {
+            setKeyHints(newKeyHints);
+        }
+    });
+
+    const removeKeyHint = (key: string) => {
+        const newKeyHints = { ...keyHints };
+        delete newKeyHints[key];
+        setKeyHints(newKeyHints);
+    };
+
+    // const { keyHints } = state.keyHints;
     const keys = Object.keys(keyHints);
 
     React.useEffect(() => {
@@ -45,7 +81,7 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
     }
 
     const keyComponents = keys.map((key) => {
-        const keyHint = keyHints[key];
+        const keyHint = keyHints[key].keyHint;
         return (
             <KeyHintComponent
                 keyCode={keyHint.key}
@@ -54,8 +90,8 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
                 style={{
                     ...ShadowComponentStyleAlpha(),
                 }}
-                fade={true}
-                onFadeComplete={() => undefined}
+                fade={!keyHints[key].shouldBeShown}
+                onFadeComplete={() => removeKeyHint(key)}
             />
         );
     });
@@ -63,6 +99,7 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
     return (
         <div
             style={{
+                position: "absolute",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",

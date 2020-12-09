@@ -24,7 +24,7 @@ interface KeyHintComponent {
 }
 
 const yFade = 64;
-const fadeSpeed = 300;
+const fadeSpeed = 200;
 const initialFade: GameAnimation | undefined = undefined;
 
 export const KeyHintComponent: React.FunctionComponent<KeyHintComponent> = (
