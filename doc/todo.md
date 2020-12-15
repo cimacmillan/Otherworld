@@ -28,11 +28,18 @@ TODO ladder sprite
 ### Gameplay
 TODO item drop for key
 TODO inventory data and querier
+TODO Particle effects on door open
 
 
 ### Refactoring 
 TODO effect-ise existing item drop component
 TODO de entityise player module
+TODO de entitiyify services
+TODO remove events from player module
+
+### Performance
+TODO Optimise walls and floors with quiet entities list
+
 
 ### Design
 
