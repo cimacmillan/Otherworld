@@ -23,22 +23,21 @@ import { chunk } from "lodash";
 import { InventoryItemComponent } from "../components/InventoryItemComponent";
 import { TooltipComponent, TooltipType } from "../components/TooltipComponent";
 import { Vector2D } from "../../types";
+import { useServiceLocator } from "../effects/GameEffect";
 
 const FADE_IN = 200;
 const WIDTH = 520;
 const HEIGHT = 312;
 const ITEM_GRID_WIDTH = 7;
 
-export interface InventoryContainerProps {
-    serviceLocator: ServiceLocator;
-}
+export interface InventoryContainerProps {}
 
 export const InventoryContainer: React.FunctionComponent<InventoryContainerProps> = (
     props
 ) => {
     const myRef = React.useRef();
     const getBoundingClientRect = useBoundingclientrect(myRef);
-    const { serviceLocator } = props;
+    const serviceLocator = useServiceLocator();
     const [inventoryShowing, setInventoryShowing] = React.useState(false);
     const [tooltipItem, setTooltipItem] = React.useState<
         ItemMetadata | undefined
@@ -161,7 +160,7 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
             >
                 {inventoryShowing && (
                     <GamePanelComponent
-                        serviceLocator={props.serviceLocator}
+                        serviceLocator={serviceLocator}
                         width={WIDTH}
                         height={HEIGHT}
                         style={{
@@ -179,7 +178,7 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                 )}
                 {tooltipItem && inventoryShowing && (
                     <TooltipComponent
-                        serviceLocator={props.serviceLocator}
+                        serviceLocator={serviceLocator}
                         context={{
                             type: TooltipType.ITEM,
                             itemMetadata: tooltipItem,

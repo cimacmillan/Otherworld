@@ -6,7 +6,6 @@ import { GameComponent } from "./GameComponent";
 import { WebContentContainer } from "./uisite/WebContentContainer";
 
 export interface SiteContainerProps {
-    game: Game;
     uiListener: (event: Actions) => void;
 }
 
@@ -18,7 +17,6 @@ export const SiteContainer: React.FunctionComponent<SiteContainerProps> = (
     return (
         <>
             <GameComponent
-                game={props.game}
                 uiListener={props.uiListener}
                 shouldShow={showGame}
             />

@@ -19,9 +19,7 @@ import { sequence, animation, parallel } from "../../util/animation/Animations";
 import { useGlobalState, useDispatchListener } from "../effects/GlobalState";
 import { Actions } from "../actions/Actions";
 
-interface WeaponComponentProps {
-    serviceLocator: ServiceLocator;
-}
+interface WeaponComponentProps {}
 
 const WEAPON_HEIGHT = 1;
 const WEAPON_WIDTH = WEAPON_HEIGHT / 2;

@@ -6,9 +6,9 @@ import { GameEvent } from "./engine/events/Event";
 import { DOM_WIDTH, DOM_HEIGHT, WIDTH, HEIGHT, RES_DIV } from "./Config";
 import { Actions } from "./ui/actions/Actions";
 import { SiteContainer } from "./SiteContainer";
+import { useGame } from "./ui/effects/GameEffect";
 
 export interface GameComponentProps {
-    game: Game;
     uiListener: (event: Actions) => void;
     shouldShow: boolean;
 }
@@ -17,14 +17,15 @@ export const GameComponent: React.FunctionComponent<GameComponentProps> = (
     props
 ) => {
     const canvas = React.useRef<CanvasComponent>();
+    const game = useGame();
     React.useEffect(() => {
-        props.game.init(
+        game.init(
             (canvas.current as CanvasComponent).getOpenGL(),
             props.uiListener
         );
     }, []);
     React.useEffect(() => {
-        props.game.setIsHidden(!props.shouldShow);
+        game.setIsHidden(!props.shouldShow);
     }, [props.shouldShow]);
 
     return (
@@ -50,7 +51,7 @@ export const GameComponent: React.FunctionComponent<GameComponentProps> = (
                         }}
                     />
                 )}
-                <UIContainer game={props.game} />
+                <UIContainer />
                 <CanvasComponent
                     ref={canvas}
                     id={"main_canvas"}

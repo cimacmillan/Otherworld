@@ -22,9 +22,7 @@ const HEALTH_BAR_HEIGHT = HEALTH_BAR_WIDTH / 3;
 
 const HEALTH_BAR_BUMP_SPEED = 100;
 
-interface HealthBarComponentProps {
-    serviceLocator: ServiceLocator;
-}
+interface HealthBarComponentProps {}
 
 export const HealthBarComponent: React.FunctionComponent<HealthBarComponentProps> = (
     props

@@ -10,9 +10,7 @@ import { KeyComponent } from "./components/KeyComponent";
 import { LoadingScreenContainer } from "./containers/LoadingScreenContainer";
 import { ItemCollectionContainer } from "./containers/ItemCollectionContainer";
 
-export interface UIContainerProps {
-    game: Game;
-}
+export interface UIContainerProps {}
 
 export const UIContainer: React.FunctionComponent<UIContainerProps> = (
     props
@@ -23,15 +21,9 @@ export const UIContainer: React.FunctionComponent<UIContainerProps> = (
         <div style={{ position: "absolute" }}>
             {state.uiState.canAccessGame ? (
                 <>
-                    <PlayModeContainer
-                        serviceLocator={props.game.getServiceLocator()}
-                    />
-                    <GameFadeContainer
-                        serviceLocator={props.game.getServiceLocator()}
-                    />
-                    <GameMenuContainer
-                        serviceLocator={props.game.getServiceLocator()}
-                    />
+                    <PlayModeContainer />
+                    <GameFadeContainer />
+                    <GameMenuContainer />
                 </>
             ) : (
                 <>

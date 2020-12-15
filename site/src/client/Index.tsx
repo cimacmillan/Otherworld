@@ -5,18 +5,18 @@ import { dispatch } from "./ui/State";
 import { Actions } from "./ui/actions/Actions";
 import { VERSION } from "./Config";
 import { SiteContainer } from "./SiteContainer";
+import { game, gameContext } from "./GameContext";
 
 // For viewing deployed version
 console.log(VERSION);
 
-const game = new Game();
-
 const render = () => {
     ReactDOM.render(
-        <SiteContainer
-            game={game}
-            uiListener={(action: Actions) => dispatch.next(action)}
-        />,
+        <gameContext.Provider value={game}>
+            <SiteContainer
+                uiListener={(action: Actions) => dispatch.next(action)}
+            />
+        </gameContext.Provider>,
         document.getElementById("root")
     );
 };

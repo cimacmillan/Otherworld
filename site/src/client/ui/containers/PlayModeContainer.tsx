@@ -9,9 +9,7 @@ import { InventoryContainer } from "./InventoryContainer";
 import { ItemCollectionContainer } from "./ItemCollectionContainer";
 import { MiniGameContainer } from "./minigame/MiniGameContainer";
 
-interface PlayModeContainerProps {
-    serviceLocator: ServiceLocator;
-}
+interface PlayModeContainerProps {}
 
 export const PlayModeContainer: React.FunctionComponent<PlayModeContainerProps> = (
     props
@@ -24,12 +22,12 @@ export const PlayModeContainer: React.FunctionComponent<PlayModeContainerProps> 
 
     return (
         <>
-            <HealthBarComponent serviceLocator={props.serviceLocator} />
-            <WeaponComponent serviceLocator={props.serviceLocator} />
+            <HealthBarComponent />
+            <WeaponComponent />
             <ScoreContainer />
             <KeyHintsContainer />
-            <ItemCollectionContainer serviceLocator={props.serviceLocator} />
-            <InventoryContainer serviceLocator={props.serviceLocator} />
+            <ItemCollectionContainer />
+            <InventoryContainer />
             <MiniGameContainer />
         </>
     );

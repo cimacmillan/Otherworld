@@ -16,19 +16,19 @@ import { startGame } from "../actions/GameStartActions";
 import { KeyComponent } from "../components/KeyComponent";
 import { KeyHintComponent } from "../components/KeyHintComponent";
 import { DOM_WIDTH, DOM_HEIGHT } from "../../Config";
+import { useServiceLocator } from "../effects/GameEffect";
 
-interface GameMenuContainerProps {
-    serviceLocator: ServiceLocator;
-}
+interface GameMenuContainerProps {}
 
 export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> = (
     props
 ) => {
     const [state, dispatch] = useGlobalState();
+    const serviceLocator = useServiceLocator();
 
     const onStartPress = () => {
         dispatch(startGame());
-        props.serviceLocator.getScriptingService().startGame();
+        serviceLocator.getScriptingService().startGame();
     };
 
     const showBestScore = state.gameStart.bestScore !== undefined;

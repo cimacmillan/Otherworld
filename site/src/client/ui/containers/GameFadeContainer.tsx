@@ -8,9 +8,7 @@ import { startGame } from "../actions/GameStartActions";
 import { FadeComponent } from "../components/FadeComponent";
 import { DOM_WIDTH, DOM_HEIGHT } from "../../Config";
 
-interface GameFadeContainerProps {
-    serviceLocator: ServiceLocator;
-}
+interface GameFadeContainerProps {}
 
 export const GameFadeContainer: React.FunctionComponent<GameFadeContainerProps> = (
     props
