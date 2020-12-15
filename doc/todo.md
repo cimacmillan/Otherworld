@@ -1,4 +1,7 @@
 
+### Doing
+TODO Remove phsyics service and interaction service to stop state sync
+
 ### Milestone
 
 First level where player unlocks door to get key which opens another door with a ladder in it
@@ -33,9 +36,9 @@ TODO Particle effects on door open
 
 ### Refactoring 
 TODO effect-ise existing item drop component
-TODO de entityise player module
-TODO de entitiyify services
 TODO remove events from player module
+TODO de entityise player module
+TODO vector class with operations and statics
 
 ### Performance
 TODO Optimise walls and floors with quiet entities list
