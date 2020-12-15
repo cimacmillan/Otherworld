@@ -16,8 +16,6 @@ export interface MapLayerMetadata {
     data: MapMetadataObject;
 }
 
-export type MapMetadataObject = any;
-
 /**
  * Loaded version of the above
  */
@@ -37,3 +35,5 @@ export interface LoadedMapLayerMetadata {
         [y: number]: MapMetadataObject;
     };
 }
+
+export type MapMetadataObject = any;

@@ -1,6 +1,11 @@
-import { InteractionType } from "../../../services/interaction/InteractionType";
+import {
+    InteractionSource,
+    InteractionType,
+} from "../../../services/interaction/InteractionType";
+import { throttleCount } from "../../../util/time/Throttle";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
+import { GameEvent } from "../../events/Event";
 import { BaseState, SurfacePositionState } from "../../state/State";
 
 type InteractableMap = { [key in InteractionType]?: boolean };
@@ -63,3 +68,51 @@ export class InteractionComponent<T extends InteractionStateType>
         }
     }
 }
+
+export const onInteractedWith = <T extends InteractionStateType>(
+    type: InteractionType,
+    callback: (entity: Entity<T>, source: InteractionSource) => void
+): EntityComponent<T> => {
+    return {
+        onEvent: (entity: Entity<T>, event: GameEvent) => {
+            if (event.type === type) {
+                callback(entity, event.source);
+            }
+        },
+    };
+};
+
+export const onCanBeInteractedWithByPlayer = <T extends InteractionStateType>(
+    type: InteractionType,
+    onEnter: () => void,
+    onLeave: () => void
+): EntityComponent<T> => {
+    let canBeInteractedWith = false;
+
+    const onUpdate = (entity: Entity<T>) => {
+        const player = entity
+            .getServiceLocator()
+            .getScriptingService()
+            .getPlayer();
+        const { position, angle } = player.getCamera();
+        const interacts = entity
+            .getServiceLocator()
+            .getInteractionService()
+            .getInteractables(InteractionType.INTERACT, position, angle, 1.5);
+        const isInteractable = interacts.some(
+            (interactable) => interactable === entity
+        );
+        if (isInteractable && canBeInteractedWith === false) {
+            onEnter();
+            canBeInteractedWith = true;
+        }
+        if (!isInteractable && canBeInteractedWith === true) {
+            onLeave();
+            canBeInteractedWith = false;
+        }
+    };
+
+    return {
+        update: throttleCount(onUpdate, 5),
+    };
+};

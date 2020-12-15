@@ -1,11 +1,12 @@
 import {
+    createDoor,
+    createLockedDoor,
+} from "../../../engine/scripting/factory/DoorFactory";
+import {
     createSlime,
     getSlimeState,
 } from "../../../engine/scripting/factory/EnemyFactory";
-import {
-    createBlock,
-    createDoor,
-} from "../../../engine/scripting/factory/SceneryFactory";
+import { createBlock } from "../../../engine/scripting/factory/SceneryFactory";
 import { Sprites } from "../../manifests/Resources";
 import {
     MapLayerConverter,
@@ -28,14 +29,24 @@ export const MapLayerConverterDefault: MapLayerConverter = (
         case "ff0000":
             return createBlock(serviceLocator, x, y, Sprites.WALL);
         case "00ff00":
-            return createDoor(
-                serviceLocator,
-                x,
-                y,
-                Sprites.CELL,
-                metadata.configuration,
-                metadata.horizontal
-            );
+            if (metadata.configuration) {
+                return createLockedDoor(
+                    serviceLocator,
+                    x,
+                    y,
+                    Sprites.CELL,
+                    metadata.configuration,
+                    metadata.horizontal
+                );
+            } else {
+                return createDoor(
+                    serviceLocator,
+                    x,
+                    y,
+                    Sprites.CELL,
+                    metadata.horizontal
+                );
+            }
     }
 
     return [];
