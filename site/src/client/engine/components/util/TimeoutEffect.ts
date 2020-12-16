@@ -1,8 +1,7 @@
 import { ProcedureService } from "../../../services/jobs/ProcedureService";
 import { EntityComponent } from "../../EntityComponent";
-import { BaseState } from "../../state/State";
 
-export function TimeoutComponent<T extends BaseState>(
+export function TimeoutComponent<T>(
     callback: () => void,
     time: number,
     onPrematureQuit?: () => void

@@ -1,9 +1,8 @@
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
-import { BaseState } from "../../state/State";
 
-export function JoinComponent<T extends BaseState>(
+export function JoinComponent<T>(
     components: Array<EntityComponent<T>>
 ): EntityComponent<T> {
     return {

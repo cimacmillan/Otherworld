@@ -3,10 +3,6 @@ import { SpriteShadeOverride } from "../../services/render/types/RenderInterface
 import { Camera, Vector2D } from "../../types";
 import { Inventory } from "../scripting/items/types";
 
-export interface BaseState {
-    exists: boolean;
-}
-
 export interface SurfacePositionState {
     position: Vector2D;
     height: number;

@@ -4,16 +4,15 @@ import {
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import { BaseState, SurfacePositionState } from "../../state/State";
+import { SurfacePositionState } from "../../state/State";
 
-export type ParticleState = BaseState &
-    SurfacePositionState & {
-        particleWidth: number;
-        particleHeight: number;
-        r: number;
-        g: number;
-        b: number;
-    };
+export type ParticleState = SurfacePositionState & {
+    particleWidth: number;
+    particleHeight: number;
+    r: number;
+    g: number;
+    b: number;
+};
 
 export const ParticleRenderComponent = (): EntityComponent<ParticleState> => {
     let renderItem: RenderItem | undefined;

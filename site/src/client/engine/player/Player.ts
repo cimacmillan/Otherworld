@@ -93,7 +93,6 @@ export class Player {
             mass: 1,
             elastic: 0,
             health: 1,
-            exists: false,
             collidesWalls: true,
             collidesEntities: true,
             inventory: {

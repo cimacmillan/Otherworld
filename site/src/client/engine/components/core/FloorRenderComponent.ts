@@ -4,7 +4,6 @@ import {
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import { BaseState } from "../../state/State";
 
 export interface FloorState {
     floorState: {
@@ -12,7 +11,7 @@ export interface FloorState {
     };
 }
 
-export type FloorStateType = BaseState & FloorState;
+export type FloorStateType = FloorState;
 
 export class FloorRenderComponent<T extends FloorStateType>
     implements EntityComponent<T> {

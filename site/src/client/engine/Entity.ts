@@ -1,11 +1,10 @@
 import { ServiceLocator } from "../services/ServiceLocator";
 import { EntityComponent } from "./EntityComponent";
-import { EntityEventType } from "./events/EntityEvents";
+import { EntityEventType, StateTransitionEvent } from "./events/EntityEvents";
 import { GameEvent } from "./events/Event";
 import { EntitySerial } from "./scripting/factory/Serial";
-import { BaseState } from "./state/State";
 
-export class Entity<State extends BaseState> {
+export class Entity<State> {
     private components: Array<EntityComponent<State>>;
     private newState: State;
     private shouldEmit: boolean = false;
@@ -55,11 +54,12 @@ export class Entity<State extends BaseState> {
             // Helper so I don't repeat the same code
             switch (event.type) {
                 case EntityEventType.STATE_TRANSITION:
+                    const transition = event as StateTransitionEvent<State>;
                     this.components[x].onStateTransition &&
                         this.components[x].onStateTransition(
                             this,
-                            event.payload.from as State,
-                            event.payload.to as State
+                            transition.payload.from as State,
+                            transition.payload.to as State
                         );
                     break;
                 case EntityEventType.ENTITY_CREATED:

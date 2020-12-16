@@ -1,8 +1,7 @@
 import { Entity } from "./Entity";
 import { GameEvent } from "./events/Event";
-import { BaseState } from "./state/State";
 
-export interface EntityComponent<State extends BaseState> {
+export interface EntityComponent<State> {
     update?: (entity: Entity<State>) => void;
     onEvent?: (entity: Entity<State>, event: GameEvent) => void;
 

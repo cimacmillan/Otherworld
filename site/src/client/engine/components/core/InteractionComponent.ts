@@ -6,7 +6,7 @@ import { throttleCount } from "../../../util/time/Throttle";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
-import { BaseState, SurfacePositionState } from "../../state/State";
+import { SurfacePositionState } from "../../state/State";
 
 type InteractableMap = { [key in InteractionType]?: boolean };
 
@@ -14,9 +14,7 @@ export interface InteractionState {
     interactable: InteractableMap;
 }
 
-export type InteractionStateType = BaseState &
-    SurfacePositionState &
-    InteractionState;
+export type InteractionStateType = SurfacePositionState & InteractionState;
 
 export class InteractionComponent<T extends InteractionStateType>
     implements EntityComponent<T> {

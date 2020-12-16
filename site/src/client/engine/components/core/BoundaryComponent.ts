@@ -2,7 +2,6 @@ import { PhysicsBoundary } from "../../../services/physics/PhysicsService";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
-import { BaseState } from "../../state/State";
 
 export interface BoundaryState {
     boundaryState: {
@@ -11,7 +10,7 @@ export interface BoundaryState {
     };
 }
 
-export type BoundaryStateType = BaseState & BoundaryState;
+export type BoundaryStateType = BoundaryState;
 
 export class BoundaryComponent<T extends BoundaryStateType>
     implements EntityComponent<T> {

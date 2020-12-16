@@ -2,15 +2,14 @@ import { CompositeAnimation } from "../../../util/animation/CompositeAnimation";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import { BaseState } from "../../state/State";
 
-type AnimationCreationFunction<T extends BaseState> = (
+type AnimationCreationFunction<T> = (
     entity: Entity<T>
 ) => GameAnimation | CompositeAnimation;
 
-export function AnimationComponent<T extends BaseState>(
+export function AnimationComponent<T>(
     createAnimation: AnimationCreationFunction<T>
-): EntityComponent<BaseState> {
+): EntityComponent<T> {
     let animation: GameAnimation | CompositeAnimation;
     return {
         onCreate: (entity: Entity<T>) => {

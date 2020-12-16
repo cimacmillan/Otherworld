@@ -5,7 +5,6 @@ import { ProcedureService } from "../../services/jobs/ProcedureService";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Entity } from "../Entity";
 import { Player } from "../player/Player";
-import { BaseState } from "../state/State";
 import { bootstrap } from "./Bootstrap";
 import { InventoryService } from "./items/InventoryService";
 
@@ -80,7 +79,7 @@ export class ScriptingService {
 
     public bootsrapDeserialisedContent(
         player: Player,
-        entity: Array<Entity<BaseState>>
+        entity: Array<Entity<any>>
     ) {
         const world = this.serviceLocator.getWorld();
         const entityArray = world.getEntityArray();

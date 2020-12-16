@@ -6,11 +6,11 @@ interface EntityDeleted {
     type: EntityEventType.ENTITY_DELETED;
 }
 
-interface StateTransitionEvent {
+export interface StateTransitionEvent<State> {
     type: EntityEventType.STATE_TRANSITION;
     payload: {
-        from: object;
-        to: object;
+        from: State;
+        to: State;
     };
 }
 
@@ -20,4 +20,7 @@ export enum EntityEventType {
     ENTITY_DELETED = "ENTITY_DELETED",
 }
 
-export type EntityEvents = StateTransitionEvent | EntityCreated | EntityDeleted;
+export type EntityEvents =
+    | StateTransitionEvent<any>
+    | EntityCreated
+    | EntityDeleted;

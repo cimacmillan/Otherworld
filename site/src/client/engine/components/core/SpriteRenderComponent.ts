@@ -5,15 +5,9 @@ import {
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import {
-    BaseState,
-    SpriteRenderState,
-    SurfacePositionState,
-} from "../../state/State";
+import { SpriteRenderState, SurfacePositionState } from "../../state/State";
 
-export type SpriteStateType = BaseState &
-    SurfacePositionState &
-    SpriteRenderState;
+export type SpriteStateType = SurfacePositionState & SpriteRenderState;
 
 const DEFAULT_SHADE_OVERRIDE: SpriteShadeOverride = {
     r: 0,

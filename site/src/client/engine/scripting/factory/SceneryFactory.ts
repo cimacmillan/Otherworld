@@ -59,7 +59,6 @@ export function createStaticFloor(
         floorState: {
             floor,
         },
-        exists: false,
     };
 
     return new Entity<FloorStateType>(
@@ -89,7 +88,6 @@ export function createStaticWall(
     );
 
     const initialState: WallStateType & BoundaryStateType = {
-        exists: false,
         boundaryState: {
             boundary: {
                 start,
@@ -125,7 +123,6 @@ export function createStaticSprite(
 
     const initialState: SpriteStateType = {
         yOffset: 0,
-        exists: true,
         position,
         height,
         radius: 0,

@@ -5,7 +5,7 @@ import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { PlayerEventType } from "../../events/PlayerEvents";
 import { Item } from "../../scripting/items/types";
-import { BaseState, SpriteRenderState } from "../../state/State";
+import { SpriteRenderState } from "../../state/State";
 import { PhysicsState } from "../core/PhysicsComponent";
 
 const ITEM_SIZE_CHANGE = 0.05;
@@ -17,8 +17,7 @@ export interface ItemDropComponentState {
     item: Item;
 }
 
-type ItemDropComponentStateType = BaseState &
-    ItemDropComponentState &
+type ItemDropComponentStateType = ItemDropComponentState &
     PhysicsState &
     SpriteRenderState;
 

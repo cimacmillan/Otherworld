@@ -1,9 +1,9 @@
 import { Entity } from "../../engine/Entity";
-import { BaseState, SpriteRenderState } from "../../engine/state/State";
+import { SpriteRenderState } from "../../engine/state/State";
 import { SpriteSheet } from "../../resources/SpriteSheet";
 
 export const setEntityTexture = (
-    entity: Entity<SpriteRenderState & BaseState>,
+    entity: Entity<SpriteRenderState>,
     spritesheet: SpriteSheet,
     animation: number
 ) => (x: number) => {

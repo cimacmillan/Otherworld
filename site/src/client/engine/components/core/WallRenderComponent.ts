@@ -4,7 +4,6 @@ import {
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import { BaseState } from "../../state/State";
 
 export interface WallState {
     wallState: {
@@ -12,7 +11,7 @@ export interface WallState {
     };
 }
 
-export type WallStateType = BaseState & WallState;
+export type WallStateType = WallState;
 
 export class WallRenderComponent<T extends WallStateType>
     implements EntityComponent<T> {
