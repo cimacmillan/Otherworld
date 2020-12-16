@@ -1,3 +1,4 @@
+import { GameItem } from "../../resources/manifests/Items";
 import { GameEventSource } from "../../services/EventRouter";
 import { InputState } from "../../services/input/InputService";
 import { ServiceLocator } from "../../services/ServiceLocator";
@@ -22,4 +23,10 @@ export const CloseInventory: CommandCreator = (
     serviceLocator.getEventRouter().routeEvent(GameEventSource.INPUT, {
         type: PlayerEventType.PLAYER_INVENTORY_CLOSED,
     });
+};
+
+export const PlayerPickUpItem: CommandCreator = (
+    ServiceLocator: ServiceLocator
+) => (item: GameItem) => {
+    console.log("Picked up", item);
 };

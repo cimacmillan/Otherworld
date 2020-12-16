@@ -6,8 +6,10 @@ import {
     createSlime,
     getSlimeState,
 } from "../../../engine/scripting/factory/EnemyFactory";
+import { createItemDrop } from "../../../engine/scripting/factory/ItemFactory";
 import { createBlock } from "../../../engine/scripting/factory/SceneryFactory";
-import { Sprites } from "../../manifests/Resources";
+import { GameItem, GameItems } from "../../manifests/Items";
+import { Sprites } from "../../manifests/Sprites";
 import {
     MapLayerConverter,
     MapLayerGenerationArguments,
@@ -47,6 +49,11 @@ export const MapLayerConverterDefault: MapLayerConverter = (
                     metadata.horizontal
                 );
             }
+        case "ffff00":
+            return createItemDrop(serviceLocator, {
+                item: GameItems[metadata.id as GameItem],
+                position: { x: x + 0.5, y: y + 0.5 },
+            });
     }
 
     return [];

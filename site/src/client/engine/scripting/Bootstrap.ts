@@ -1,6 +1,7 @@
 import { ServiceLocator } from "../../services/ServiceLocator";
 
-import { Maps, Sprites } from "../../resources/manifests/Resources";
+import { Maps } from "../../resources/manifests/Resources";
+import { Sprites } from "../../resources/manifests/Sprites";
 import { loadMap } from "../../resources/maps/MapLoader";
 import { Player } from "../player/Player";
 import { createPlayer } from "./factory/PlayerFactory";

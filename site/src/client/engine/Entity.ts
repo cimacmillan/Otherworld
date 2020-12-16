@@ -85,4 +85,8 @@ export class Entity<State> {
     public getComponents() {
         return this.components;
     }
+
+    public delete() {
+        this.serviceLocator.getWorld().removeEntity(this);
+    }
 }

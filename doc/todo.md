@@ -1,6 +1,5 @@
 
-### Doing
-TODO Remove phsyics service and interaction service to stop state sync
+
 
 ### Milestone
 
@@ -29,16 +28,16 @@ TODO ladder sprite
 
 
 ### Gameplay
-TODO item drop for key
 TODO inventory data and querier
 TODO Particle effects on door open
 
 
 ### Refactoring 
 TODO effect-ise existing item drop component
-TODO remove events from player module
 TODO de entityise player module
 TODO vector class with operations and statics
+TODO remove events from player module
+TODO Remove circular dependencies
 
 ### Performance
 TODO Optimise walls and floors with quiet entities list

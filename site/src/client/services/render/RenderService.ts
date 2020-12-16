@@ -1,5 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { SpriteSheets } from "../../resources/manifests/Resources";
+import { SpriteSheets } from "../../resources/manifests/Sprites";
 import { ResourceManager } from "../../resources/ResourceManager";
 import { Camera } from "../../types";
 import { BackgroundRenderService } from "./services/BackgroundRenderService";

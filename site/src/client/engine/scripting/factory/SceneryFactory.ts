@@ -1,5 +1,5 @@
 import { SCENERY_PIXEL_DENSITY } from "../../../Config";
-import { SpriteSheets } from "../../../resources/manifests/Resources";
+import { SpriteSheets } from "../../../resources/manifests/Sprites";
 import { Floor, Wall } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";

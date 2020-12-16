@@ -1,4 +1,4 @@
-import { Sprites, SpriteSheets } from "../../../resources/manifests/Resources";
+import { Sprites, SpriteSheets } from "../../../resources/manifests/Sprites";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { animation } from "../../../util/animation/Animations";
 import {

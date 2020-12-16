@@ -1,13 +1,5 @@
-// const ITEM_BROWN_SHELL_FRAGMENT: Item = {
-//     spriteIcon: Sprites.ITEM_BROWN_SHELL_FRAGMENT,
-//     id: 1,
-//     stackable: true,
-//     name: "Brown Shell Fragment",
-//     behaviours: [],
-//     value: 10,
-//     category: ItemCategory.CRAFTING,
-//     description: "Fragment from a macator's shell. It has a dull brown colour.",
-// };
+import { Item, ItemCategory } from "../../engine/scripting/items/types";
+import { Sprites } from "./Sprites";
 
 // const ITEM_GREEN_SHELL_FRAGMENT: Item = {
 //     spriteIcon: Sprites.ITEM_GREEN_SHELL_FRAGMENT,
@@ -60,10 +52,30 @@
 //     description: "Shiny gold",
 // };
 
-export const GameItems = {
-    // ITEM_BROWN_SHELL_FRAGMENT,
-    // ITEM_GREEN_SHELL_FRAGMENT,
-    // ITEM_BLUE_SHELL_FRAGMENT,
-    // ITEM_MACATOR_INNARDS,
-    // GOLD,
+// export const GameItems = {
+//     // ITEM_BROWN_SHELL_FRAGMENT,
+//     // ITEM_GREEN_SHELL_FRAGMENT,
+//     // ITEM_BLUE_SHELL_FRAGMENT,
+//     // ITEM_MACATOR_INNARDS,
+//     // GOLD,
+// };
+
+export enum GameItem {
+    "GOLD_KEY",
+}
+
+export type GameItemMap = {
+    [key in GameItem]: Item;
+};
+
+export const GameItems: GameItemMap = {
+    [GameItem.GOLD_KEY]: {
+        id: GameItem.GOLD_KEY,
+        spriteIcon: Sprites.ITEM_KEY,
+        stackable: false,
+        name: "Gold Key",
+        behaviours: [],
+        category: ItemCategory.KEY,
+        description: "I wonder what it unlocks",
+    },
 };

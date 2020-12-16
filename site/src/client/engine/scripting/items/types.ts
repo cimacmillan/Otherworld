@@ -1,5 +1,7 @@
+import { GameItem } from "../../../resources/manifests/Items";
+
 export interface Item {
-    id: number;
+    id: GameItem;
     spriteIcon: string;
     stackable: boolean;
     name: string;
@@ -13,6 +15,7 @@ export enum ItemCategory {
     CONSUMABLE = "Consumable",
     CRAFTING = "Crafting",
     PRECIOUS = "Precious",
+    KEY = "Key",
 }
 
 export interface ItemMetadata {

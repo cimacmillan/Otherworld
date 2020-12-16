@@ -1,3 +1,4 @@
+import { GameItem } from "../../manifests/Items";
 import { MapLayerConverterType } from "../MapLayerConverters";
 import { MapSchema } from "../MapShema";
 
@@ -31,11 +32,18 @@ export const MapPrison: MapSchema = {
                     y: 28,
                     data: {
                         configuration: {
-                            width: 3,
-                            height: 3,
+                            width: 5,
+                            height: 5,
                             shouldReset: true,
                         },
                         horizontal: false,
+                    },
+                },
+                {
+                    x: 31,
+                    y: 25,
+                    data: {
+                        id: GameItem.GOLD_KEY,
                     },
                 },
             ],
