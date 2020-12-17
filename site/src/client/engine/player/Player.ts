@@ -10,7 +10,6 @@ import {
     InteractionSourceType,
     InteractionType,
 } from "../../services/interaction/InteractionType";
-import { PhysicsEntity } from "../../services/physics/PhysicsService";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Vector2D } from "../../types";
 import { animation } from "../../util/animation/Animations";
@@ -35,8 +34,8 @@ import {
     TurnDirection,
     WalkDirection,
 } from "../events/TravelEvents";
-import { Item } from "../scripting/items/types";
-import { CameraState, HealthState, InventoryState } from "../state/State";
+import { getEmptyInventory, Inventory } from "../scripting/items/types";
+import { CameraState, HealthState } from "../state/State";
 
 const WALK_SPEED = 0.02;
 const TURN_SPEED = 0.15;
@@ -45,8 +44,7 @@ const HEAD_BOB_NERF = 0.6;
 type InternalEntityState = PhysicsStateType &
     InteractionStateType &
     HealthState &
-    CameraState &
-    InventoryState;
+    CameraState;
 
 export interface PlayerSerialisation {}
 
@@ -61,7 +59,7 @@ export class Player {
     private killed = false;
     private headbob: GameAnimation;
     private headbobOffset = 0;
-    private physicsEntity: PhysicsEntity;
+    private inventory: Inventory = getEmptyInventory();
 
     public constructor(serviceLocator: ServiceLocator) {
         this.serviceLocator = serviceLocator;
@@ -95,14 +93,6 @@ export class Player {
             health: 1,
             collidesWalls: true,
             collidesEntities: true,
-            inventory: {
-                items: [
-                    // {
-                    //     item: GameItems.GOLD,
-                    //     count: 10,
-                    // },
-                ],
-            },
             interactable: {
                 ATTACK: true,
             },
@@ -166,12 +156,9 @@ export class Player {
             case "TEMP_INTERACT_COMMAND":
                 this.onInteract();
                 break;
-            case PlayerEventType.PLAYER_ITEM_DROP_COLLECTED:
-                this.onPickedUp(event.payload.item);
-                break;
-            case PlayerEventType.PLAYER_ITEM_USED:
-                this.onItemUsed(event.payload.item);
-                break;
+            // case PlayerEventType.PLAYER_ITEM_USED:
+            //     this.onItemUsed(event.payload.item);
+            //     break;
             // case InteractionEventType.ATTACK:
             //     if (this.attackDelay.canAction()) {
             //         this.onAttack(entity);
@@ -215,6 +202,10 @@ export class Player {
 
     public getPositon() {
         return this.entity.getState().position;
+    }
+
+    public getInventory() {
+        return this.inventory;
     }
 
     private onInteract() {
@@ -373,50 +364,24 @@ export class Player {
         camera.height = height + this.headbobOffset + DEFAULT_PLAYER_HEIGHT;
     }
 
-    private onPickedUp(item: Item) {
-        const { inventory } = this.entity.getState();
+    // private onItemUsed(item: Item) {
+    //     const { inventory } = this.entity.getState();
+    //     const items = [...inventory.items];
 
-        let countIncreased = false;
-        for (let x = 0; x < inventory.items.length; x++) {
-            const itemMetadata = inventory.items[x];
-            if (
-                itemMetadata.item.id === item.id &&
-                itemMetadata.item.stackable
-            ) {
-                itemMetadata.count++;
-                countIncreased = true;
-                break;
-            }
-        }
+    //     for (let x = 0; x < inventory.items.length; x++) {
+    //         const itemMetadata = items[x];
+    //         if (itemMetadata.item.id === item.id) {
+    //             itemMetadata.count--;
+    //             break;
+    //         }
+    //     }
 
-        if (!countIncreased) {
-            inventory.items.push({
-                item,
-                count: 1,
-            });
-        }
+    //     const newInventory = {
+    //         items: items.filter((item) => item.count > 0),
+    //     };
 
-        this.entity.setState({ inventory });
-    }
-
-    private onItemUsed(item: Item) {
-        const { inventory } = this.entity.getState();
-        const items = [...inventory.items];
-
-        for (let x = 0; x < inventory.items.length; x++) {
-            const itemMetadata = items[x];
-            if (itemMetadata.item.id === item.id) {
-                itemMetadata.count--;
-                break;
-            }
-        }
-
-        const newInventory = {
-            items: items.filter((item) => item.count > 0),
-        };
-
-        this.entity.setState({
-            inventory: newInventory,
-        });
-    }
+    //     this.entity.setState({
+    //         inventory: newInventory,
+    //     });
+    // }
 }

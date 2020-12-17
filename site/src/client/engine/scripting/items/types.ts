@@ -27,6 +27,10 @@ export interface Inventory {
     items: ItemMetadata[];
 }
 
+export const getEmptyInventory = (): Inventory => ({
+    items: [],
+});
+
 export type ItemComponent = ItemHealsPlayer | MakesNoiseWhenConsumed;
 
 export interface ItemHealsPlayer {

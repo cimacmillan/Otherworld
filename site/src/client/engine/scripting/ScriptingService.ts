@@ -6,7 +6,6 @@ import { ServiceLocator } from "../../services/ServiceLocator";
 import { Entity } from "../Entity";
 import { Player } from "../player/Player";
 import { bootstrap } from "./Bootstrap";
-import { InventoryService } from "./items/InventoryService";
 
 /**
  * Service for quick commands that usually take more lines, eg
@@ -14,8 +13,6 @@ import { InventoryService } from "./items/InventoryService";
  * GameScriptingService.getPlayer().damage();
  */
 export class ScriptingService {
-    public inventoryService: InventoryService;
-
     private game: Game;
     private serviceLocator: ServiceLocator;
 
@@ -28,7 +25,6 @@ export class ScriptingService {
 
     public init(serviceLocator: ServiceLocator) {
         this.serviceLocator = serviceLocator;
-        this.inventoryService = new InventoryService(serviceLocator);
     }
 
     public getPlayer() {

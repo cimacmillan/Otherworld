@@ -37,6 +37,7 @@ export const MapPrison: MapSchema = {
                             shouldReset: true,
                         },
                         horizontal: false,
+                        keyId: GameItem.GOLD_KEY,
                     },
                 },
                 {

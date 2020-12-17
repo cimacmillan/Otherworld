@@ -32,14 +32,15 @@ export const MapLayerConverterDefault: MapLayerConverter = (
             return createBlock(serviceLocator, x, y, Sprites.WALL);
         case "00ff00":
             if (metadata.configuration) {
-                return createLockedDoor(
+                return createLockedDoor({
                     serviceLocator,
                     x,
                     y,
-                    Sprites.CELL,
-                    metadata.configuration,
-                    metadata.horizontal
-                );
+                    spriteString: Sprites.CELL,
+                    configuration: metadata.configuration,
+                    horizontal: metadata.horizontal,
+                    keyId: metadata.keyId,
+                });
             } else {
                 return createDoor(
                     serviceLocator,

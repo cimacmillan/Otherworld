@@ -61,7 +61,7 @@ import { Sprites } from "./Sprites";
 // };
 
 export enum GameItem {
-    "GOLD_KEY",
+    GOLD_KEY = "GOLD_KEY",
 }
 
 export type GameItemMap = {

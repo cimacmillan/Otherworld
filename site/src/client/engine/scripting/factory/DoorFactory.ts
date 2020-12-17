@@ -1,9 +1,11 @@
+import { GameItem } from "../../../resources/manifests/Items";
 import { InteractionType } from "../../../services/interaction/InteractionType";
 import { Wall } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { LockpickGameConfiguration } from "../../../ui/containers/minigame/LockPickContainer";
 import { animation } from "../../../util/animation/Animations";
 import { vec } from "../../../util/math";
+import { DoesPlayerHaveItem } from "../../commands/InventoryCommands";
 import { OpenLockpickingChallenge } from "../../commands/MiniGameCommands";
 import { DeregisterUIHint, RegisterUIHint } from "../../commands/UICommands";
 import {
@@ -156,14 +158,27 @@ export const createDoor = (
     );
 };
 
-export const createLockedDoor = (
-    serviceLocator: ServiceLocator,
-    x: number,
-    y: number,
-    spriteString: string,
-    configuration: LockpickGameConfiguration,
-    horizontal: boolean = true
-) => {
+interface LockedDoorConfig {
+    serviceLocator: ServiceLocator;
+    x: number;
+    y: number;
+    spriteString: string;
+    configuration?: LockpickGameConfiguration;
+    horizontal?: boolean;
+    keyId?: GameItem;
+}
+
+export const createLockedDoor = (args: LockedDoorConfig) => {
+    const {
+        serviceLocator,
+        x,
+        y,
+        spriteString,
+        configuration,
+        horizontal,
+        keyId,
+    } = args;
+
     const start = horizontal ? { x, y: y + 0.5 } : { x: x + 0.5, y: y + 1 };
     const end = horizontal ? { x: x + 1, y: y + 0.5 } : { x: x + 0.5, y };
     const collides = true;
@@ -232,16 +247,22 @@ export const createLockedDoor = (
             new BoundaryComponent(),
             new InteractionComponent(),
             onInteractedWith(InteractionType.INTERACT, (ent, source) => {
-                OpenLockpickingChallenge(serviceLocator)(
-                    (result: LockpickingResult) => {
-                        ent.setState({
-                            open: result
-                                ? DoorOpenState.OPEN
-                                : DoorOpenState.CLOSED,
-                        });
-                    },
-                    configuration
-                );
+                if (keyId && DoesPlayerHaveItem(serviceLocator, keyId)) {
+                    ent.setState({
+                        open: DoorOpenState.OPEN,
+                    });
+                } else {
+                    OpenLockpickingChallenge(serviceLocator)(
+                        (result: LockpickingResult) => {
+                            ent.setState({
+                                open: result
+                                    ? DoorOpenState.OPEN
+                                    : DoorOpenState.CLOSED,
+                            });
+                        },
+                        configuration
+                    );
+                }
                 if (interactHintId !== undefined) {
                     DeregisterUIHint(serviceLocator)(interactHintId);
                 }
@@ -249,10 +270,17 @@ export const createLockedDoor = (
             onCanBeInteractedWithByPlayer(
                 InteractionType.INTERACT,
                 () => {
-                    interactHintId = RegisterUIHint(serviceLocator)(
-                        "E",
-                        "Unlock Door"
-                    );
+                    if (keyId && DoesPlayerHaveItem(serviceLocator, keyId)) {
+                        interactHintId = RegisterUIHint(serviceLocator)(
+                            "E",
+                            "Unlock Door"
+                        );
+                    } else {
+                        interactHintId = RegisterUIHint(serviceLocator)(
+                            "E",
+                            "Lockpick Door"
+                        );
+                    }
                 },
                 () => {
                     if (interactHintId !== undefined) {
