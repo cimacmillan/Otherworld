@@ -120,14 +120,17 @@ export const createDoor = (
         ["CLOSED"]: JoinComponent<DoorStateType>([
             new BoundaryComponent(),
             new InteractionComponent(),
-            onInteractedWith(InteractionType.INTERACT, (ent, source) => {
-                ent.setState({
-                    open: DoorOpenState.OPEN,
-                });
-                if (interactHintId !== undefined) {
-                    DeregisterUIHint(serviceLocator)(interactHintId);
+            onInteractedWith<DoorStateType>(
+                InteractionType.INTERACT,
+                (ent, source) => {
+                    ent.setState({
+                        open: DoorOpenState.OPEN,
+                    });
+                    if (interactHintId !== undefined) {
+                        DeregisterUIHint(serviceLocator)(interactHintId);
+                    }
                 }
-            }),
+            ),
             onCanBeInteractedWithByPlayer(
                 InteractionType.INTERACT,
                 () => {
@@ -246,27 +249,30 @@ export const createLockedDoor = (args: LockedDoorConfig) => {
         ["CLOSED"]: JoinComponent<DoorStateType>([
             new BoundaryComponent(),
             new InteractionComponent(),
-            onInteractedWith(InteractionType.INTERACT, (ent, source) => {
-                if (keyId && DoesPlayerHaveItem(serviceLocator, keyId)) {
-                    ent.setState({
-                        open: DoorOpenState.OPEN,
-                    });
-                } else {
-                    OpenLockpickingChallenge(serviceLocator)(
-                        (result: LockpickingResult) => {
-                            ent.setState({
-                                open: result
-                                    ? DoorOpenState.OPEN
-                                    : DoorOpenState.CLOSED,
-                            });
-                        },
-                        configuration
-                    );
+            onInteractedWith<DoorStateType>(
+                InteractionType.INTERACT,
+                (ent, source) => {
+                    if (keyId && DoesPlayerHaveItem(serviceLocator, keyId)) {
+                        ent.setState({
+                            open: DoorOpenState.OPEN,
+                        });
+                    } else {
+                        OpenLockpickingChallenge(serviceLocator)(
+                            (result: LockpickingResult) => {
+                                ent.setState({
+                                    open: result
+                                        ? DoorOpenState.OPEN
+                                        : DoorOpenState.CLOSED,
+                                });
+                            },
+                            configuration
+                        );
+                    }
+                    if (interactHintId !== undefined) {
+                        DeregisterUIHint(serviceLocator)(interactHintId);
+                    }
                 }
-                if (interactHintId !== undefined) {
-                    DeregisterUIHint(serviceLocator)(interactHintId);
-                }
-            }),
+            ),
             onCanBeInteractedWithByPlayer(
                 InteractionType.INTERACT,
                 () => {

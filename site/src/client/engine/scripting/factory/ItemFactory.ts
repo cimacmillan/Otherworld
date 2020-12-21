@@ -5,17 +5,19 @@ import { animation } from "../../../util/animation/Animations";
 import { vec } from "../../../util/math";
 import { PlayerPickUpItem } from "../../commands/InventoryCommands";
 import {
+    PHYSICS_STATE_DEFAULT,
     PhysicsComponent,
     PhysicsStateType,
 } from "../../components/core/PhysicsComponent";
-import {
-    SpriteRenderComponent,
-    SpriteStateType,
-} from "../../components/core/SpriteRenderComponent";
+import { SpriteRenderComponent } from "../../components/core/SpriteRenderComponent";
 import { AnimationComponent } from "../../components/util/AnimationComponent";
 import { SwitchComponent } from "../../components/util/SwitchComponent";
 import { Entity } from "../../Entity";
-import { SurfacePositionState } from "../../state/State";
+import {
+    SpriteRenderState,
+    SUFRACE_POSITION_STATE_DEFAULT,
+    SurfacePositionState,
+} from "../../state/State";
 import { Item } from "../items/types";
 
 const ITEM_SIZE = 0.8;
@@ -33,7 +35,7 @@ export interface ItemDropArguments {
     withVelocity?: boolean;
 }
 
-type ItemStateType = SpriteStateType &
+type ItemStateType = SpriteRenderState &
     PhysicsStateType & {
         item: Item;
         attracting: "true" | "false";
@@ -65,14 +67,15 @@ const HoversAnimation = (
             .looping()
     );
 
-const WhenInPlayerVicinity = <T extends SurfacePositionState>(
+const WhenInPlayerVicinity = (
     threshold: number,
-    onEnter: (entity: Entity<T>) => void,
-    onLeave: (entity: Entity<T>) => void
+    onEnter: (entity: Entity<SurfacePositionState>) => void,
+    onLeave: (entity: Entity<SurfacePositionState>) => void
 ) => {
     let entered = false;
     return {
-        update: (entity: Entity<T>) => {
+        getInitialState: () => SUFRACE_POSITION_STATE_DEFAULT,
+        update: (entity: Entity<SurfacePositionState>) => {
             const player = entity
                 .getServiceLocator()
                 .getScriptingService()
@@ -102,6 +105,7 @@ const AttractedToPosition = (
     forceMult: number
 ) => {
     return {
+        getInitialState: () => PHYSICS_STATE_DEFAULT,
         update: (entity: Entity<PhysicsStateType>) => {
             const { velocity, position } = entity.getState();
             const playerPosition = getPosition(entity);
@@ -148,7 +152,6 @@ export function createItemDrop(
         heightVelocity: 0,
         radius: ITEM_SIZE / 2,
         angle: 0,
-        shouldRender: true,
         spriteWidth: ITEM_SIZE,
         spriteHeight: ITEM_SIZE,
         textureCoordinate: serviceLocator

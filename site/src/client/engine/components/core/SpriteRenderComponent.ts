@@ -5,9 +5,10 @@ import {
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import { SpriteRenderState, SurfacePositionState } from "../../state/State";
-
-export type SpriteStateType = SurfacePositionState & SpriteRenderState;
+import {
+    DEFAULT_SPRITE_RENDER_STATE,
+    SpriteRenderState,
+} from "../../state/State";
 
 const DEFAULT_SHADE_OVERRIDE: SpriteShadeOverride = {
     r: 0,
@@ -16,56 +17,34 @@ const DEFAULT_SHADE_OVERRIDE: SpriteShadeOverride = {
     intensity: 0,
 };
 
-export class SpriteRenderComponent<T extends SpriteStateType>
-    implements EntityComponent<T> {
+export class SpriteRenderComponent
+    implements EntityComponent<SpriteRenderState> {
     private toRenderRef?: RenderItem;
     private sprite: Sprite;
 
-    public update(entity: Entity<SpriteStateType>): void {
+    public getInitialState = (): SpriteRenderState =>
+        DEFAULT_SPRITE_RENDER_STATE;
+
+    public update(entity: Entity<SpriteRenderState>): void {
         const state = entity.getState();
         this.sprite = this.getSpriteFromState(state);
 
-        if (state.shouldRender) {
-            entity
-                .getServiceLocator()
-                .getRenderService()
-                .spriteRenderService.updateItem(this.toRenderRef, this.sprite);
-        }
+        entity
+            .getServiceLocator()
+            .getRenderService()
+            .spriteRenderService.updateItem(this.toRenderRef, this.sprite);
     }
 
-    public onStateTransition(
-        entity: Entity<SpriteStateType>,
-        from: SpriteStateType,
-        to: SpriteStateType
-    ) {
-        if (!from.shouldRender && to.shouldRender) {
-            this.toRenderRef = entity
-                .getServiceLocator()
-                .getRenderService()
-                .spriteRenderService.createItem(
-                    this.getSpriteFromState(entity.getState())
-                );
-        } else if (from.shouldRender && !to.shouldRender && this.toRenderRef) {
-            entity
-                .getServiceLocator()
-                .getRenderService()
-                .spriteRenderService.freeItem(this.toRenderRef);
-            this.toRenderRef = undefined;
-        }
+    public onCreate(entity: Entity<SpriteRenderState>): void {
+        this.toRenderRef = entity
+            .getServiceLocator()
+            .getRenderService()
+            .spriteRenderService.createItem(
+                this.getSpriteFromState(entity.getState())
+            );
     }
 
-    public onCreate(entity: Entity<SpriteStateType>): void {
-        if (entity.getState().shouldRender) {
-            this.toRenderRef = entity
-                .getServiceLocator()
-                .getRenderService()
-                .spriteRenderService.createItem(
-                    this.getSpriteFromState(entity.getState())
-                );
-        }
-    }
-
-    public onDestroy(entity: Entity<SpriteStateType>) {
+    public onDestroy(entity: Entity<SpriteRenderState>) {
         if (this.toRenderRef) {
             entity
                 .getServiceLocator()
@@ -75,7 +54,7 @@ export class SpriteRenderComponent<T extends SpriteStateType>
         }
     }
 
-    private getSpriteFromState(state: SpriteStateType): Sprite {
+    private getSpriteFromState(state: SpriteRenderState): Sprite {
         return {
             position: [state.position.x, state.position.y],
             size: [state.spriteWidth, state.spriteHeight],

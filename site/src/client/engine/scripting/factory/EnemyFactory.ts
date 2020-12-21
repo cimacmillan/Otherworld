@@ -53,7 +53,6 @@ export function getSlimeState(
         .getResourceManager()
         .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(Sprites.SLIME);
     return {
-        shouldRender: true,
         textureCoordinate,
         spriteWidth: 1,
         spriteHeight: 1,

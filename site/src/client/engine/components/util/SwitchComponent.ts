@@ -17,6 +17,17 @@ export class SwitchComponent<T> implements EntityComponent<T> {
         this.newState = currentState;
     }
 
+    public getInitialState(entity: Entity<T>): T {
+        let state = {} as T;
+        Object.values(this.components).forEach((component) => {
+            if (!component.getInitialState) {
+                return;
+            }
+            state = { ...state, ...component.getInitialState(entity) };
+        });
+        return state;
+    }
+
     public onStateTransition(entity: Entity<T>, from: T, to: T) {
         const currentStateCallback = this.components[this.currentState];
         currentStateCallback &&

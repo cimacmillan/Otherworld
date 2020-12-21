@@ -1,9 +1,11 @@
+import { Sprites } from "../../../resources/manifests/Sprites";
 import {
     RenderItem,
     Wall,
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
+import { createWallType } from "../../scripting/factory/SceneryFactory";
 
 export interface WallState {
     wallState: {
@@ -13,9 +15,30 @@ export interface WallState {
 
 export type WallStateType = WallState;
 
-export class WallRenderComponent<T extends WallStateType>
-    implements EntityComponent<T> {
+export class WallRenderComponent implements EntityComponent<WallStateType> {
     private toRenderRef?: RenderItem;
+
+    public getInitialState = (entity: Entity<WallStateType>): WallStateType => {
+        const wall = createWallType(
+            entity.getServiceLocator(),
+            Sprites.SLIME,
+            {
+                x: 0,
+                y: 0,
+            },
+            {
+                x: 1,
+                y: 0,
+            },
+            1,
+            1
+        );
+        return {
+            wallState: {
+                wall,
+            },
+        };
+    };
 
     public onStateTransition(
         entity: Entity<WallStateType>,

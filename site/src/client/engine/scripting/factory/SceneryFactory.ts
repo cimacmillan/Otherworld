@@ -11,15 +11,13 @@ import {
     FloorRenderComponent,
     FloorStateType,
 } from "../../components/core/FloorRenderComponent";
-import {
-    SpriteRenderComponent,
-    SpriteStateType,
-} from "../../components/core/SpriteRenderComponent";
+import { SpriteRenderComponent } from "../../components/core/SpriteRenderComponent";
 import {
     WallRenderComponent,
     WallStateType,
 } from "../../components/core/WallRenderComponent";
 import { Entity } from "../../Entity";
+import { SpriteRenderState } from "../../state/State";
 
 export function createStaticFloor(
     serviceLocator: ServiceLocator,
@@ -121,19 +119,18 @@ export function createStaticSprite(
         .getResourceManager()
         .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(spriteString);
 
-    const initialState: SpriteStateType = {
+    const initialState: SpriteRenderState = {
         yOffset: 0,
         position,
         height,
         radius: 0,
         angle: 0,
-        shouldRender: true,
         textureCoordinate: sprite.textureCoordinate,
         spriteWidth,
         spriteHeight,
     };
 
-    return new Entity<SpriteStateType>(
+    return new Entity<SpriteRenderState>(
         undefined,
         serviceLocator,
         initialState,

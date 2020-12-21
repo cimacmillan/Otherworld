@@ -12,8 +12,23 @@ export interface BoundaryState {
 
 export type BoundaryStateType = BoundaryState;
 
-export class BoundaryComponent<T extends BoundaryStateType>
-    implements EntityComponent<T> {
+export class BoundaryComponent implements EntityComponent<BoundaryStateType> {
+    public getInitialState = () => ({
+        boundaryState: {
+            boundary: {
+                start: {
+                    x: 0,
+                    y: 0,
+                },
+                end: {
+                    x: 1,
+                    y: 0,
+                },
+            },
+            collides: true,
+        },
+    });
+
     public update(entity: Entity<BoundaryStateType>): void {}
 
     public onEvent(entity: Entity<BoundaryStateType>, event: GameEvent): void {}

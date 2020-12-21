@@ -6,7 +6,10 @@ import { throttleCount } from "../../../util/time/Throttle";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
-import { SurfacePositionState } from "../../state/State";
+import {
+    SUFRACE_POSITION_STATE_DEFAULT,
+    SurfacePositionState,
+} from "../../state/State";
 
 type InteractableMap = { [key in InteractionType]?: boolean };
 
@@ -16,8 +19,15 @@ export interface InteractionState {
 
 export type InteractionStateType = SurfacePositionState & InteractionState;
 
-export class InteractionComponent<T extends InteractionStateType>
-    implements EntityComponent<T> {
+export class InteractionComponent
+    implements EntityComponent<InteractionStateType> {
+    public getInitialState() {
+        return {
+            ...SUFRACE_POSITION_STATE_DEFAULT,
+            interactable: {},
+        };
+    }
+
     public onStateTransition(
         entity: Entity<InteractionStateType>,
         from: InteractionStateType,
@@ -70,8 +80,14 @@ export class InteractionComponent<T extends InteractionStateType>
 export const onInteractedWith = <T extends InteractionStateType>(
     type: InteractionType,
     callback: (entity: Entity<T>, source: InteractionSource) => void
-): EntityComponent<T> => {
+): EntityComponent<InteractionStateType> => {
     return {
+        getInitialState: () => ({
+            ...SUFRACE_POSITION_STATE_DEFAULT,
+            interactable: {
+                [type]: true,
+            },
+        }),
         onEvent: (entity: Entity<T>, event: GameEvent) => {
             if (event.type === type) {
                 callback(entity, event.source);
@@ -84,7 +100,7 @@ export const onCanBeInteractedWithByPlayer = <T extends InteractionStateType>(
     type: InteractionType,
     onEnter: () => void,
     onLeave: () => void
-): EntityComponent<T> => {
+): EntityComponent<InteractionStateType> => {
     let canBeInteractedWith = false;
 
     const onUpdate = (entity: Entity<T>) => {
@@ -111,6 +127,12 @@ export const onCanBeInteractedWithByPlayer = <T extends InteractionStateType>(
     };
 
     return {
+        getInitialState: () => ({
+            ...SUFRACE_POSITION_STATE_DEFAULT,
+            interactable: {
+                [type]: true,
+            },
+        }),
         update: throttleCount(onUpdate, 5),
     };
 };

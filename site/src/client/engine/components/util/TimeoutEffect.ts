@@ -5,10 +5,11 @@ export function TimeoutComponent<T>(
     callback: () => void,
     time: number,
     onPrematureQuit?: () => void
-): EntityComponent<T> {
+): EntityComponent<void> {
     let timeout: number;
     let done: boolean = false;
     return {
+        getInitialState: () => undefined,
         onCreate: () => {
             timeout = ProcedureService.setGameTimeout(() => {
                 done = true;

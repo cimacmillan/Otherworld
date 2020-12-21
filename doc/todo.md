@@ -30,10 +30,10 @@ TODO Particle effects on door open
 
 
 ### Refactoring 
-TODO de entityise player module
 TODO vector class with operations and statics
 TODO remove events from player module
 TODO Remove circular dependencies
+TODO Simplify wall and floor state types (get coords from sprite ID)
 
 
 ### Design

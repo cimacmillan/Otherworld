@@ -5,18 +5,18 @@ import { GameEvent } from "./events/Event";
 import { EntitySerial } from "./scripting/factory/Serial";
 
 export class Entity<State> {
-    private components: Array<EntityComponent<State>>;
+    private components: Array<EntityComponent<Partial<State>>>;
     private newState: State;
     private shouldEmit: boolean = false;
 
     constructor(
         public serial: EntitySerial = EntitySerial.NULL,
         private serviceLocator: ServiceLocator,
-        private state: State,
-        ...components: Array<EntityComponent<State>>
+        private state: Partial<State>,
+        ...components: Array<EntityComponent<Partial<State>>>
     ) {
         this.components = components;
-        this.newState = state;
+        this.newState = this.farmStateFromComponents(state);
     }
 
     public getState() {
@@ -88,5 +88,16 @@ export class Entity<State> {
 
     public delete() {
         this.serviceLocator.getWorld().removeEntity(this);
+    }
+
+    private farmStateFromComponents(override: Partial<State>): State {
+        let state = {} as State;
+        this.components.forEach((component) => {
+            if (!component.getInitialState) {
+                return;
+            }
+            state = { ...state, ...component.getInitialState(this) };
+        });
+        return { ...state, ...override };
     }
 }

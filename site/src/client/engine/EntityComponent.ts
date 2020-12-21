@@ -2,6 +2,7 @@ import { Entity } from "./Entity";
 import { GameEvent } from "./events/Event";
 
 export interface EntityComponent<State> {
+    getInitialState: (entity: Entity<State>) => State;
     update?: (entity: Entity<State>) => void;
     onEvent?: (entity: Entity<State>, event: GameEvent) => void;
 
