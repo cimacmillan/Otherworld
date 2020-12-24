@@ -13,7 +13,6 @@ import {
     BoundaryStateType,
 } from "../../components/core/BoundaryComponent";
 import {
-    InteractionComponent,
     InteractionStateType,
     onCanBeInteractedWithByPlayer,
     onInteractedWith,
@@ -119,7 +118,6 @@ export const createDoor = (
         ),
         ["CLOSED"]: JoinComponent<DoorStateType>([
             new BoundaryComponent(),
-            new InteractionComponent(),
             onInteractedWith<DoorStateType>(
                 InteractionType.INTERACT,
                 (ent, source) => {
@@ -248,7 +246,6 @@ export const createLockedDoor = (args: LockedDoorConfig) => {
         ),
         ["CLOSED"]: JoinComponent<DoorStateType>([
             new BoundaryComponent(),
-            new InteractionComponent(),
             onInteractedWith<DoorStateType>(
                 InteractionType.INTERACT,
                 (ent, source) => {

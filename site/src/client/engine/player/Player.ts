@@ -17,10 +17,7 @@ import { GameAnimation } from "../../util/animation/GameAnimation";
 import { vec } from "../../util/math/Vector";
 import { ActionDelay } from "../../util/time/ActionDelay";
 import { fpsNorm } from "../../util/time/GlobalFPSController";
-import {
-    InteractionComponent,
-    InteractionStateType,
-} from "../components/core/InteractionComponent";
+import { InteractionStateType } from "../components/core/InteractionComponent";
 import {
     PhysicsComponent,
     PhysicsStateType,
@@ -93,17 +90,13 @@ export class Player {
             health: 1,
             collidesWalls: true,
             collidesEntities: true,
-            interactable: {
-                ATTACK: true,
-            },
         };
 
         this.entity = new Entity<InternalEntityState>(
             undefined,
             this.serviceLocator,
             initialState,
-            new PhysicsComponent(),
-            new InteractionComponent()
+            new PhysicsComponent()
         );
 
         this.attackDelay = new ActionDelay(300);
@@ -223,17 +216,15 @@ export class Player {
                 1.5
             );
         interacts.forEach((ent) => {
-            if (ent === this.entity) {
+            if (ent.entity === this.entity) {
                 return;
             }
 
-            ent.emit({
-                type: InteractionType.INTERACT,
-                source: {
+            ent.onInteract &&
+                ent.onInteract({
                     type: InteractionSourceType.PLAYER,
                     player: this,
-                },
-            });
+                });
         });
     }
 
@@ -288,15 +279,13 @@ export class Player {
                 1.5
             );
 
-        let hasAttacked = false;
+        const hasAttacked = false;
 
         attacks.forEach((attacked) => {
-            if (attacked === entity) {
-                return;
-            }
-
-            hasAttacked = true;
-
+            // if (attacked === entity) {
+            //     return;
+            // }
+            // hasAttacked = true;
             // attacked.emit({
             //     type: InteractionEventType.ON_DAMAGED,
             //     payload: {
