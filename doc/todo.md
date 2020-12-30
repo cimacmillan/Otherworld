@@ -1,6 +1,4 @@
 
-
-
 ### Milestone
 
 First level where player unlocks door to get key which opens another door with a ladder in it
@@ -31,7 +29,6 @@ TODO Particle effects on door open
 
 ### Refactoring 
 TODO vector class with operations and statics
-TODO remove events from player module
 TODO Remove circular dependencies
 TODO Simplify wall and floor state types (get coords from sprite ID)
 

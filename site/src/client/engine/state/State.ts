@@ -3,7 +3,7 @@ import { SpriteShadeOverride } from "../../services/render/types/RenderInterface
 import { Camera, Vector2D } from "../../types";
 import { Inventory } from "../scripting/items/types";
 
-export interface SurfacePositionState {
+export interface SurfacePosition {
     position: Vector2D;
     height: number;
     yOffset: number;
@@ -35,7 +35,7 @@ export interface HealthState {
     health: number;
 }
 
-export interface SpriteRenderState extends SurfacePositionState {
+export interface SpriteRenderState extends SurfacePosition {
     textureCoordinate: TextureCoordinate;
     spriteHeight: number;
     spriteWidth: number;

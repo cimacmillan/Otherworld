@@ -37,7 +37,7 @@ export function createSlime(
         serviceLocator,
         state,
         new SpriteRenderComponent(),
-        new PhysicsComponent(),
+        PhysicsComponent(),
         SpriteSizeWobbles(0.1, 500)
     );
 }

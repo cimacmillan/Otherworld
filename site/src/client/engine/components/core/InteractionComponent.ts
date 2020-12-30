@@ -1,6 +1,7 @@
 import { InteractionRegistration } from "../../../services/interaction/InteractionService";
 import {
     InteractionSource,
+    InteractionSourceType,
     InteractionType,
 } from "../../../services/interaction/InteractionType";
 import { throttleCount } from "../../../util/time/Throttle";
@@ -8,13 +9,13 @@ import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import {
     SUFRACE_POSITION_STATE_DEFAULT,
-    SurfacePositionState,
+    SurfacePosition,
 } from "../../state/State";
 import { JoinComponent } from "../util/JoinComponent";
 
 type InteractableMap = { [key in InteractionType]?: boolean };
 
-export type InteractionStateType = SurfacePositionState;
+export type InteractionStateType = SurfacePosition;
 
 // export class InteractionComponent
 //     implements EntityComponent<InteractionStateType> {
@@ -76,19 +77,17 @@ export type InteractionStateType = SurfacePositionState;
 
 const registersSelf = (
     type: InteractionType,
-    registration: (
-        entity: Entity<SurfacePositionState>
-    ) => InteractionRegistration
-): EntityComponent<SurfacePositionState> => {
+    registration: (entity: Entity<SurfacePosition>) => InteractionRegistration
+): EntityComponent<SurfacePosition> => {
     return {
         getInitialState: () => SUFRACE_POSITION_STATE_DEFAULT,
-        onCreate: (entity: Entity<SurfacePositionState>) => {
+        onCreate: (entity: Entity<SurfacePosition>) => {
             entity
                 .getServiceLocator()
                 .getInteractionService()
                 .registerEntity(registration(entity), type);
         },
-        onDestroy: (entity: Entity<SurfacePositionState>) => {
+        onDestroy: (entity: Entity<SurfacePosition>) => {
             entity
                 .getServiceLocator()
                 .getInteractionService()
@@ -104,7 +103,10 @@ export const onInteractedWith = <T extends InteractionStateType>(
     return registersSelf(type, (entity: Entity<T>) => ({
         onInteract: (source: InteractionSource) => callback(entity, source),
         getPosition: () => entity.getState(),
-        entity,
+        source: {
+            type: InteractionSourceType.ENTITY,
+            entity,
+        },
     }));
 };
 
@@ -126,7 +128,9 @@ export const onCanBeInteractedWithByPlayer = <T extends InteractionStateType>(
             .getInteractionService()
             .getInteractables(InteractionType.INTERACT, position, angle, 1.5);
         const isInteractable = interacts.some(
-            (interactable) => interactable.entity === entity
+            (interactable) =>
+                interactable.source.type === InteractionSourceType.ENTITY &&
+                interactable.source.entity === entity
         );
         if (isInteractable && canBeInteractedWith === false) {
             onEnter();
@@ -138,14 +142,17 @@ export const onCanBeInteractedWithByPlayer = <T extends InteractionStateType>(
         }
     };
 
-    return JoinComponent<SurfacePositionState>([
+    return JoinComponent<SurfacePosition>([
         {
             getInitialState: () => SUFRACE_POSITION_STATE_DEFAULT,
             update: throttleCount(onUpdate, 5),
         },
         registersSelf(type, (entity: Entity<T>) => ({
             getPosition: () => entity.getState(),
-            entity,
+            source: {
+                type: InteractionSourceType.ENTITY,
+                entity,
+            },
         })),
     ]);
 };

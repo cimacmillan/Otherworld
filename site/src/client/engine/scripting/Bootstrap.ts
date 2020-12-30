@@ -22,9 +22,8 @@ export function bootstrap(serviceLocator: ServiceLocator): BootstrapInfo {
     const player = createPlayer(serviceLocator);
     // world.addEntity(player);
 
-    const camera = player.getCamera();
-    serviceLocator.getAudioService().attachCamera(camera);
-    serviceLocator.getRenderService().attachCamera(camera);
+    serviceLocator.getAudioService().attachCamera(() => player.getCamera());
+    serviceLocator.getRenderService().attachCamera(() => player.getCamera());
 
     // world.addEntity(createEgg(serviceLocator));
 

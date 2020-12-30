@@ -87,9 +87,12 @@ export class ScriptingService {
         this.player = player;
         // world.addEntity(this.player);
 
-        const camera = this.player.getCamera();
-        this.serviceLocator.getAudioService().attachCamera(camera);
-        this.serviceLocator.getRenderService().attachCamera(camera);
+        this.serviceLocator
+            .getAudioService()
+            .attachCamera(() => this.player.getCamera());
+        this.serviceLocator
+            .getRenderService()
+            .attachCamera(() => this.player.getCamera());
 
         // world.addEntity(player);
         for (let i = 1; i < entity.length; i++) {

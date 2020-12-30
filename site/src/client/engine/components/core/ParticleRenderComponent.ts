@@ -6,10 +6,10 @@ import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import {
     SUFRACE_POSITION_STATE_DEFAULT,
-    SurfacePositionState,
+    SurfacePosition,
 } from "../../state/State";
 
-export type ParticleState = SurfacePositionState & {
+export type ParticleState = SurfacePosition & {
     particleWidth: number;
     particleHeight: number;
     r: number;

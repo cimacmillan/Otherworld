@@ -1,3 +1,4 @@
+import { Entity } from "../../engine/Entity";
 import { Player } from "../../engine/player/Player";
 
 export enum InteractionType {
@@ -8,6 +9,7 @@ export enum InteractionType {
 
 export enum InteractionSourceType {
     PLAYER = "PLAYER",
+    ENTITY = "ENTITY",
 }
 
 export interface InteractionSourcePlayer {
@@ -15,4 +17,11 @@ export interface InteractionSourcePlayer {
     player: Player;
 }
 
-export type InteractionSource = InteractionSourcePlayer;
+export interface InteractionSourceEntity {
+    type: InteractionSourceType.ENTITY;
+    entity: Entity<any>;
+}
+
+export type InteractionSource =
+    | InteractionSourcePlayer
+    | InteractionSourceEntity;

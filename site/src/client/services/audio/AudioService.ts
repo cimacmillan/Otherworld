@@ -9,13 +9,13 @@ const DISTANCE_RUN_OFF = 1;
 const MIN_PLAY_BETWEEN = 100;
 
 export class AudioService {
-    private camera: Camera;
+    private camera: () => Camera;
 
     constructor(private context: AudioContext) {
         window.AudioContext = window.AudioContext;
     }
 
-    public attachCamera(camera: Camera) {
+    public attachCamera(camera: () => Camera) {
         this.camera = camera;
     }
 
@@ -37,14 +37,15 @@ export class AudioService {
         if (!this.camera || !this.canPlay(audioObject)) {
             return;
         }
-        const difX = sourcePosition[0] - this.camera.position.x;
-        const difY = sourcePosition[1] - this.camera.position.y;
+        const { position, angle } = this.camera();
+        const difX = sourcePosition[0] - position.x;
+        const difY = sourcePosition[1] - position.y;
         const distance = Math.sqrt(difX * difX + difY * difY);
         const distanceGain = Math.min(
             gain / (distance * DISTANCE_RUN_OFF),
             MAX_GAIN
         );
-        const pan = Math.sin(Math.atan2(difX, -difY) - this.camera.angle);
+        const pan = Math.sin(Math.atan2(difX, -difY) - angle);
         return playSound(audioObject, this.context, distanceGain, pan);
     }
 

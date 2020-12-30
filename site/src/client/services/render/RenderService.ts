@@ -19,7 +19,7 @@ export class RenderService implements RenderInterface {
     public particleRenderService: ParticleRenderService;
     private gl: WebGLRenderingContext;
 
-    private camera: Camera;
+    private camera: () => Camera;
 
     public constructor(private resourceManager: ResourceManager) {
         this.backgroundRenderService = new BackgroundRenderService();
@@ -96,12 +96,22 @@ export class RenderService implements RenderInterface {
         this.floorRenderService.draw();
     }
 
-    public attachCamera(camera: Camera) {
+    public attachCamera(camera: () => Camera) {
         this.camera = camera;
     }
 
     private calculateCameraMatrices() {
-        const fieldOfView = (this.camera.fov * Math.PI) / 180; // in radians
+        const {
+            position,
+            angle,
+            height,
+            fov,
+            aspectRatio,
+            zNear,
+            zFar,
+        } = this.camera();
+
+        const fieldOfView = (fov * Math.PI) / 180; // in radians
 
         const projectionMatrix = mat4.create();
         const modelViewMatrix = mat4.create();
@@ -109,17 +119,17 @@ export class RenderService implements RenderInterface {
         mat4.perspective(
             projectionMatrix,
             fieldOfView,
-            this.camera.aspectRatio,
-            this.camera.zNear,
-            this.camera.zFar
+            aspectRatio,
+            zNear,
+            zFar
         );
 
-        mat4.rotateY(modelViewMatrix, modelViewMatrix, this.camera.angle);
+        mat4.rotateY(modelViewMatrix, modelViewMatrix, angle);
 
         mat4.translate(modelViewMatrix, modelViewMatrix, [
-            -this.camera.position.x,
-            -this.camera.height,
-            -this.camera.position.y,
+            -position.x,
+            -height,
+            -position.y,
         ]);
 
         this.screenShakeService.applyToMatrices(modelViewMatrix);

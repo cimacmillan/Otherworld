@@ -16,7 +16,7 @@ import { Entity } from "../../Entity";
 import {
     SpriteRenderState,
     SUFRACE_POSITION_STATE_DEFAULT,
-    SurfacePositionState,
+    SurfacePosition,
 } from "../../state/State";
 import { Item } from "../items/types";
 
@@ -69,13 +69,13 @@ const HoversAnimation = (
 
 const WhenInPlayerVicinity = (
     threshold: number,
-    onEnter: (entity: Entity<SurfacePositionState>) => void,
-    onLeave: (entity: Entity<SurfacePositionState>) => void
+    onEnter: (entity: Entity<SurfacePosition>) => void,
+    onLeave: (entity: Entity<SurfacePosition>) => void
 ) => {
     let entered = false;
     return {
         getInitialState: () => SUFRACE_POSITION_STATE_DEFAULT,
-        update: (entity: Entity<SurfacePositionState>) => {
+        update: (entity: Entity<SurfacePosition>) => {
             const player = entity
                 .getServiceLocator()
                 .getScriptingService()
@@ -174,7 +174,7 @@ export function createItemDrop(
         serviceLocator,
         initialState,
         new SpriteRenderComponent(),
-        new PhysicsComponent(),
+        PhysicsComponent(),
         HoversAnimation(ITEM_SIZE, ITEM_SIZE, ITEM_SIZE_CHANGE),
         WhenInPlayerVicinity(
             ITEM_COLLECT_DISTANCE,

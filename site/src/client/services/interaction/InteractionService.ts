@@ -1,5 +1,4 @@
-import { Entity } from "../../engine/Entity";
-import { SurfacePositionState } from "../../engine/state/State";
+import { SurfacePosition } from "../../engine/state/State";
 import { Vector2D } from "../../types";
 import { ConsistentArray } from "../../util/array/ConsistentArray";
 import { InteractionSource, InteractionType } from "./InteractionType";
@@ -8,8 +7,8 @@ type InteractionEntity = InteractionRegistration;
 
 export interface InteractionRegistration {
     onInteract?: (source: InteractionSource) => void;
-    getPosition: () => SurfacePositionState;
-    entity?: Entity<any>;
+    getPosition: () => SurfacePosition;
+    source: InteractionSource;
 }
 
 interface InteractionInfo {
