@@ -156,6 +156,8 @@ function getCategoryColour(category: ItemCategory): TextColour {
             return TextColour.YELLOW;
         case ItemCategory.PRECIOUS:
             return TextColour.GOLD;
+        case ItemCategory.KEY:
+            return TextColour.GOLD;
     }
 }
 
@@ -186,7 +188,6 @@ function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
         case ItemCategory.CONSUMABLE:
             return row([
                 // <SpriteImageComponent
-                //     serviceLocator={serviceLocator}
                 //     spriteSheet={SpriteSheets.UI}
                 //     sprite={UISPRITES.ITEM_FINGER}
                 //     style={{

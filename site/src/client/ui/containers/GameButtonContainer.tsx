@@ -1,7 +1,6 @@
 import React = require("react");
 import { PanelImageMap } from "../../resources/Types";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { GamePanelComponent } from "../components/GamePanelComponent";
 import { Colours } from "../../resources/design/Colour";
 import { Spacing } from "../../resources/design/Spacing";
 

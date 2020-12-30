@@ -5,14 +5,17 @@ import { GameAnimation } from "../../util/animation/GameAnimation";
 import { animation } from "../../util/animation/Animations";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { TextComponent, TextFont, TextSize, TextColour } from "./TextComponent";
+import { useServiceLocator } from "../effects/GameEffect";
+import { SpriteSheets } from "../../resources/manifests/Sprites";
+import { Colours } from "../../resources/design/Colour";
+import {
+    INVENTORY_BORDER_RADIUS,
+    INVENTORY_WIDTH,
+} from "../containers/InventoryContainer";
 
-const INVENTORY_ITEM_SIZE = 48;
-const INVENTORY_PANEL_SIZE = 64;
-const INVENTORY_ITEM_SIZE_INCREASE = 8;
-const INVENTORY_ITEM_SIZE_SPEED = 200;
+const INVENTORY_ITEM_ICON_SIZE = 32;
 
 interface InventoryItemComponentProps {
-    serviceLocator: ServiceLocator;
     itemMetadata: ItemMetadata;
     style: React.CSSProperties;
     onMouseEnter: () => void;
@@ -23,9 +26,10 @@ interface InventoryItemComponentProps {
 export const InventoryItemComponent: React.FunctionComponent<InventoryItemComponentProps> = (
     props
 ) => {
-    const { serviceLocator, itemMetadata, style } = props;
+    const { itemMetadata, style } = props;
     const { item, count } = itemMetadata;
 
+    const serviceLocator = useServiceLocator();
     const [hover, setHover] = React.useState(false);
     const [size, setSize] = React.useState(0);
     const [sizeAnimation, setSizeAnimation] = React.useState<
@@ -33,100 +37,48 @@ export const InventoryItemComponent: React.FunctionComponent<InventoryItemCompon
     >(undefined);
 
     const onMouseEnter = () => {
-        setHover(true);
-        if (sizeAnimation) {
-            sizeAnimation.stop();
-        }
-        const anim = animation(setSize)
-            .driven(false)
-            .speed(INVENTORY_ITEM_SIZE_SPEED)
-            .start();
-        setSizeAnimation(anim);
         props.onMouseEnter();
-    };
-    const onMouseLeave = () => {
-        setHover(false);
-        if (sizeAnimation) {
-            sizeAnimation.stop();
-        }
-        const anim = animation((x) => setSize(1 - x))
-            .driven(false)
-            .speed(INVENTORY_ITEM_SIZE_SPEED)
-            .start();
-        setSizeAnimation(anim);
-        props.onMouseLeave();
+        setHover(true);
     };
 
-    const sizeOffset = size * INVENTORY_ITEM_SIZE_INCREASE;
-    const numberOffset = INVENTORY_PANEL_SIZE / 8;
+    const onMouseLeave = () => {
+        props.onMouseLeave();
+        setHover(false);
+    };
+
+    const nameString = item.name + (count > 1 ? ` (${count})` : ``);
 
     return (
         <div
             style={{
-                width: INVENTORY_PANEL_SIZE,
-                height: INVENTORY_PANEL_SIZE,
+                display: "flex",
+                // width: INVENTORY_WIDTH,
+                borderRadius: INVENTORY_BORDER_RADIUS,
+                background: hover ? Colours.HOVER_GREY : Colours.DESELCT_GREY,
+                paddingLeft: 8,
                 ...style,
             }}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             onClick={props.onClick}
         >
-            <div
+            <SpriteImageComponent
+                sprite={item.spriteIcon}
+                spriteSheet={SpriteSheets.SPRITE}
                 style={{
-                    position: "absolute",
-                    width: INVENTORY_PANEL_SIZE,
-                    height: INVENTORY_PANEL_SIZE,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    width: INVENTORY_ITEM_ICON_SIZE,
+                    height: INVENTORY_ITEM_ICON_SIZE,
                 }}
-            >
-                {/* <SpriteImageComponent
-                    serviceLocator={serviceLocator}
-                    sprite={
-                        hover
-                            ? UISPRITES.ITEM_PANEL_HOVER
-                            : UISPRITES.ITEM_PANEL
-                    }
-                    spriteSheet={SpriteSheets.UI}
-                    style={{
-                        position: "absolute",
-                        width: INVENTORY_PANEL_SIZE,
-                        height: INVENTORY_PANEL_SIZE,
-                    }}
-                />
-                <SpriteImageComponent
-                    serviceLocator={serviceLocator}
-                    sprite={item.spriteIcon}
-                    spriteSheet={SpriteSheets.SPRITE}
-                    style={{
-                        position: "absolute",
-                        width: INVENTORY_ITEM_SIZE + sizeOffset,
-                        height: INVENTORY_ITEM_SIZE + sizeOffset,
-                    }}
-                /> */}
-            </div>
-            <div
+            />
+            <TextComponent
+                text={nameString}
                 style={{
-                    position: "absolute",
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    alignItems: "flex-end",
-                    width: INVENTORY_PANEL_SIZE,
-                    height: INVENTORY_PANEL_SIZE,
-                    pointerEvents: "none",
+                    paddingLeft: 8,
                 }}
-            >
-                <TextComponent
-                    text={`${count}`}
-                    font={TextFont.REGULAR}
-                    size={TextSize.SMALL}
-                    colour={TextColour.LIGHT}
-                    style={{
-                        transform: `translate(${numberOffset}px, ${numberOffset}px)`,
-                    }}
-                />
-            </div>
+                font={TextFont.REGULAR}
+                size={TextSize.SMALL}
+                colour={TextColour.LIGHT}
+            />
         </div>
     );
 };

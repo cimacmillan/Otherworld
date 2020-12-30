@@ -30,6 +30,12 @@ export const CloseInventory: CommandCreator = (
     });
 };
 
+export const PlayerUseItemFromInventory = (serviceLocator: ServiceLocator) => (
+    item: Item
+) => {
+    console.log("Used item from inventory ", item);
+};
+
 export const PlayerPickUpItem = (serviceLocator: ServiceLocator) => (
     item: Item
 ) => {

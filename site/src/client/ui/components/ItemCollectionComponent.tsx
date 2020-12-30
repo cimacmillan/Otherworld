@@ -99,7 +99,6 @@ export const ItemCollectionComponent: React.FunctionComponent<ItemCollectionComp
                     <></>
                 )}
                 <SpriteImageComponent
-                    serviceLocator={serviceLocator}
                     spriteSheet={SpriteSheets.SPRITE}
                     sprite={sprite}
                     style={{

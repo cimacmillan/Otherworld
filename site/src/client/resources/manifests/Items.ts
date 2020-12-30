@@ -62,6 +62,7 @@ import { Sprites } from "./Sprites";
 
 export enum GameItem {
     GOLD_KEY = "GOLD_KEY",
+    GOLD_KEY_STACKABLE = "GOLD_KEY_STACKABLE",
 }
 
 export type GameItemMap = {
@@ -77,5 +78,14 @@ export const GameItems: GameItemMap = {
         behaviours: [],
         category: ItemCategory.KEY,
         description: "I wonder what it unlocks",
+    },
+    [GameItem.GOLD_KEY_STACKABLE]: {
+        id: GameItem.GOLD_KEY_STACKABLE,
+        spriteIcon: Sprites.ITEM_KEY,
+        stackable: true,
+        name: "Gold Key Stackable",
+        behaviours: [],
+        category: ItemCategory.KEY,
+        description: "I wonder what it doesnt unlocks",
     },
 };

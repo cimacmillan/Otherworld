@@ -1,6 +1,5 @@
 import React = require("react");
 import { connect } from "react-redux";
-import { GamePanelComponent } from "../components/GamePanelComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import {
     TextComponent,

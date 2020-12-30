@@ -1,7 +1,6 @@
 import { ViewportComponent } from "../components/ViewportComponent";
 import { DOM_WIDTH, DOM_HEIGHT } from "../../Config";
 import React = require("react");
-import { GamePanelComponent } from "../components/GamePanelComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import {
     ShadowComponentStyle,

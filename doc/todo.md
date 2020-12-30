@@ -23,9 +23,9 @@ TODO ladder sprite
 
 
 ### Gameplay
-TODO inventory data and querier
 TODO Particle effects on door open
 TODO Create player from map coordinate milestone 2?
+TODO Key hints
 
 
 ### Refactoring 
