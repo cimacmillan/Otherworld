@@ -3,10 +3,8 @@
 
 First level where player unlocks door to get key which opens another door with a ladder in it
 
-### UI
-
-TODO Add inventory list component to show key
-TODO Change item pick up to be more minimal, smaller
+### UI 
+TODO tutorial key hints
 
 ### Audio
 
@@ -24,8 +22,6 @@ TODO ladder sprite
 
 ### Gameplay
 TODO Particle effects on door open
-TODO Create player from map coordinate milestone 2?
-TODO Key hints
 
 
 ### Refactoring 
@@ -33,6 +29,11 @@ TODO vector class with operations and statics
 TODO Simplify wall and floor state types (get coords from sprite ID)
 
 
+
+
+
 ### Design
 
 Milestone 2? 
+* Destroy key on door use 
+* Item removed hint
