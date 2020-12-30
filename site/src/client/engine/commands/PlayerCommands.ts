@@ -1,8 +1,5 @@
 import { ServiceLocator } from "../../services/ServiceLocator";
-import {
-    TurnDirection,
-    WalkDirection,
-} from "../events/TravelEvents";
+import { TurnDirection, WalkDirection } from "../events/TravelEvents";
 import { CommandCreator } from "./Command";
 
 export const Walk: CommandCreator = (serviceLocator: ServiceLocator) => (

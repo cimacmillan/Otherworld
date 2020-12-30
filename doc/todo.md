@@ -25,11 +25,11 @@ TODO ladder sprite
 ### Gameplay
 TODO inventory data and querier
 TODO Particle effects on door open
+TODO Create player from map coordinate milestone 2?
 
 
 ### Refactoring 
 TODO vector class with operations and statics
-TODO Remove circular dependencies
 TODO Simplify wall and floor state types (get coords from sprite ID)
 
 

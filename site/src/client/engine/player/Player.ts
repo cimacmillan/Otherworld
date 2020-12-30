@@ -20,15 +20,10 @@ import { vec } from "../../util/math/Vector";
 import { ActionDelay } from "../../util/time/ActionDelay";
 import { fpsNorm } from "../../util/time/GlobalFPSController";
 import { InteractionStateType } from "../components/core/InteractionComponent";
-import {
-    PhysicsStateType,
-} from "../components/core/PhysicsComponent";
+import { PhysicsStateType } from "../components/core/PhysicsComponent";
 import { Entity } from "../Entity";
 import { PlayerEventType } from "../events/PlayerEvents";
-import {
-    TurnDirection,
-    WalkDirection,
-} from "../events/TravelEvents";
+import { TurnDirection, WalkDirection } from "../events/TravelEvents";
 import { getEmptyInventory, Inventory } from "../scripting/items/types";
 import { CameraState, HealthState } from "../state/State";
 
@@ -41,7 +36,6 @@ type InternalEntityState = PhysicsStateType & HealthState & CameraState;
 export interface PlayerSerialisation {}
 
 export class Player {
-
     public inventory: Inventory = getEmptyInventory();
 
     public surface: PhysicsStateType;
