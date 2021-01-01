@@ -1,23 +1,12 @@
+import { isEqual } from "lodash";
 import React = require("react");
+
 import { DOM_HEIGHT, DOM_WIDTH } from "../../Config";
-import { KeyHintComponent } from "../components/KeyHintComponent";
-import { ServiceLocator } from "../../services/ServiceLocator";
-import { ViewportComponent } from "../components/ViewportComponent";
-import {
-    ShadowComponentStyle,
-    ShadowComponentStyleSmall,
-    ShadowComponentStyleAlpha,
-} from "../components/ShadowComponent";
 import { ProcedureService } from "../../services/jobs/ProcedureService";
-import {
-    TextComponent,
-    TextFont,
-    TextSize,
-    TextColour,
-} from "../components/TextComponent";
+import { KeyHintComponent } from "../components/KeyHintComponent";
+import { ShadowComponentStyleAlpha } from "../components/ShadowComponent";
 import { useGlobalState } from "../effects/GlobalState";
 import { KeyHint } from "../reducers/KeyHintReducer";
-import { isEqual } from "lodash";
 
 export interface KeyHintsContainerProps {}
 
@@ -32,6 +21,7 @@ export interface KeyHintInstanceMap {
 
 const clickSpeed = 500;
 const initialState = {} as KeyHintInstanceMap;
+const Y_POS_RATIO = 0.7;
 
 export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> = (
     props
@@ -84,7 +74,8 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
         const keyHint = keyHints[key].keyHint;
         return (
             <KeyHintComponent
-                keyCode={keyHint.key}
+                key={collapse([...keyHint.keys, keyHint.hint])}
+                keyCode={keyHint.keys}
                 selected={keyDown}
                 text={keyHint.hint}
                 style={{
@@ -104,12 +95,16 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                marginTop: DOM_HEIGHT * 0.5,
+                marginTop: DOM_HEIGHT * Y_POS_RATIO,
                 width: DOM_WIDTH,
-                height: DOM_HEIGHT * 0.5,
+                height: DOM_HEIGHT * (1.0 - Y_POS_RATIO),
             }}
         >
             {keyComponents}
         </div>
     );
+};
+
+const collapse = (st: string[]): string => {
+    return st.reduce((prev, current) => prev + current, "");
 };

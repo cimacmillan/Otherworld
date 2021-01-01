@@ -25,10 +25,10 @@ export const PlayModeContainer: React.FunctionComponent<PlayModeContainerProps> 
             <HealthBarComponent />
             <WeaponComponent />
             <ScoreContainer />
-            <KeyHintsContainer />
             <ItemCollectionContainer />
             <InventoryContainer />
             <MiniGameContainer />
+            <KeyHintsContainer />
         </>
     );
 };

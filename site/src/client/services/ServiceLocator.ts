@@ -1,4 +1,5 @@
 import { ScriptingService } from "../engine/scripting/ScriptingService";
+import { TutorialService } from "../engine/scripting/TutorialService";
 import { World } from "../engine/World";
 import { Game } from "../Game";
 import { ResourceManager } from "../resources/ResourceManager";
@@ -22,7 +23,8 @@ export class ServiceLocator {
         private inputService: InputService,
         private physicsService: PhysicsService,
         private interactionService: InteractionService,
-        private serialisationService: SerialisationService
+        private serialisationService: SerialisationService,
+        private tutorialService: TutorialService
     ) {}
 
     public getGame() {
@@ -67,5 +69,9 @@ export class ServiceLocator {
 
     public getSerialisationService() {
         return this.serialisationService;
+    }
+
+    public getTutorialService() {
+        return this.tutorialService;
     }
 }

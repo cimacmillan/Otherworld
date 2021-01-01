@@ -3,8 +3,6 @@
 
 First level where player unlocks door to get key which opens another door with a ladder in it
 
-### UI 
-TODO tutorial key hints
 
 ### Audio
 
@@ -35,3 +33,4 @@ Milestone 2?
 * Destroy key on door use 
 * Item removed hint
 * NPC dialog 
+* Inventory container moved into menu tabs 

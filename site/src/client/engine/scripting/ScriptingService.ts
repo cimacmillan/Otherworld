@@ -94,6 +94,8 @@ export class ScriptingService {
             .getRenderService()
             .attachCamera(() => this.player.getCamera());
 
+        this.serviceLocator.getTutorialService().onStart();
+
         // world.addEntity(player);
         for (let i = 1; i < entity.length; i++) {
             world.addEntity(entity[i]);
@@ -105,5 +107,6 @@ export class ScriptingService {
     public bootstrapInitialContent() {
         const bootstrapInfo = bootstrap(this.serviceLocator);
         this.player = bootstrapInfo.player;
+        this.serviceLocator.getTutorialService().onStart();
     }
 }

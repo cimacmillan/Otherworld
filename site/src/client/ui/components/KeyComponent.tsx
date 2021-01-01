@@ -17,8 +17,8 @@ interface KeyComponentProps {
     style: React.CSSProperties;
 }
 
-const KEY_CONTAINER_WIDTH = 64;
-const KEY_CONTAINER_HEIGHT = 64;
+const KEY_CONTAINER_WIDTH = 56;
+const KEY_CONTAINER_HEIGHT = 56;
 const KEY_WIDTH = 48;
 const KEY_HEIGHT = 48;
 export const SELECTED_TEXT_OFFSET = 4;
