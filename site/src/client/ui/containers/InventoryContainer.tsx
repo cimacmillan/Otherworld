@@ -128,9 +128,22 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                             width: INVENTORY_WIDTH,
                             height: INVENTORY_HEIGHT,
                             opacity: fade,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "flex-start",
                             ...ShadowComponentStyle(),
                         }}
                     >
+                        <TextComponent
+                            text={"Inventory"}
+                            size={TextSize.SMALL}
+                            style={{
+                                paddingLeft: 8,
+                                paddingRight: 8,
+                                background: Colours.DESELCT_GREY,
+                                borderRadius: `${INVENTORY_BORDER_RADIUS}px ${INVENTORY_BORDER_RADIUS}px 0px 0px`,
+                            }}
+                        />
                         <div
                             style={{
                                 width: INVENTORY_WIDTH,
@@ -139,7 +152,7 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                                 flexDirection: "column",
                                 overflowY: "scroll",
                                 background: Colours.DESELCT_GREY,
-                                borderRadius: INVENTORY_BORDER_RADIUS,
+                                borderRadius: `0px ${INVENTORY_BORDER_RADIUS}px ${INVENTORY_BORDER_RADIUS}px ${INVENTORY_BORDER_RADIUS}px`,
                             }}
                         >
                             <InventoryItems

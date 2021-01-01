@@ -26,12 +26,12 @@ export enum TextShadow {
 }
 
 export interface TextComponentProps {
-    text: string;
-    style: React.CSSProperties;
+    text?: string;
+    style?: React.CSSProperties;
 
-    font: TextFont;
-    size: TextSize;
-    colour: TextColour;
+    font?: TextFont;
+    size?: TextSize;
+    colour?: TextColour;
     shadow?: TextShadow;
 
     clickable?: () => void;
@@ -39,9 +39,24 @@ export interface TextComponentProps {
 
 const ignoreFont = ["←", "→"];
 
+const getPropsOrDefault = (
+    props: Partial<TextComponentProps>
+): TextComponentProps => {
+    return {
+        text: "Default",
+        style: {},
+        font: TextFont.REGULAR,
+        size: TextSize.MED,
+        colour: TextColour.LIGHT,
+        ...props,
+    };
+};
+
 export const TextComponent: React.FunctionComponent<TextComponentProps> = (
-    props
+    props_
 ) => {
+    const props = getPropsOrDefault(props_);
+
     const shouldBeIgnored = ignoreFont.find((ignore) => ignore === props.text);
     const fontFamily = shouldBeIgnored
         ? {}

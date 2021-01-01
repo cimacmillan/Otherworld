@@ -29,11 +29,9 @@ TODO vector class with operations and statics
 TODO Simplify wall and floor state types (get coords from sprite ID)
 
 
-
-
-
 ### Design
 
 Milestone 2? 
 * Destroy key on door use 
 * Item removed hint
+* NPC dialog 
