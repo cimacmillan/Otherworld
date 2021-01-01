@@ -1,13 +1,16 @@
 import { PhysicsStateType } from "../../engine/components/core/PhysicsComponent";
-import { Entity } from "../../engine/Entity";
 import { Vector2D } from "../../types";
 import { ConsistentArray } from "../../util/array/ConsistentArray";
 import { vec } from "../../util/math";
 
-export interface PhysicsEntity {
-    entity: Entity<PhysicsStateType>;
+export interface PhysicsRegistration {
     collidesEntities: boolean;
     collidesWalls: boolean;
+    setHeight: (height: number) => void;
+    setHeightVelocity: (heightVelocity: number) => void;
+    setVelocity: (x: number, y: number) => void;
+    setPosition: (x: number, y: number) => void;
+    getPhysicsInformation: () => PhysicsStateType;
 }
 
 export interface PhysicsBoundary {
@@ -20,7 +23,7 @@ const GRAVITY_CONSTANT = 0.01;
 const GRAVITY_LIMIT = 0.01;
 
 export class PhysicsService {
-    private entities: ConsistentArray<PhysicsEntity>;
+    private entities: ConsistentArray<PhysicsRegistration>;
     private boundaries: ConsistentArray<PhysicsBoundary>;
 
     public constructor() {
@@ -28,11 +31,11 @@ export class PhysicsService {
         this.boundaries = new ConsistentArray();
     }
 
-    public registerPhysicsEntity(entity: PhysicsEntity) {
+    public registerPhysicsEntity(entity: PhysicsRegistration) {
         this.entities.add(entity);
     }
 
-    public unregisterPhysicsEntity(entity: PhysicsEntity) {
+    public unregisterPhysicsEntity(entity: PhysicsRegistration) {
         this.entities.remove(entity);
     }
 
@@ -63,8 +66,14 @@ export class PhysicsService {
         this.moveEntities(array);
     }
 
-    private calculateEntityGravityCollisionImpulse(entity: PhysicsEntity) {
-        const { height, heightVelocity } = entity.entity.getState();
+    private calculateEntityGravityCollisionImpulse(
+        entity: PhysicsRegistration
+    ) {
+        const {
+            height,
+            heightVelocity,
+            elastic,
+        } = entity.getPhysicsInformation();
 
         let newVelocity = heightVelocity;
 
@@ -74,22 +83,22 @@ export class PhysicsService {
 
         if (height < 0 && newVelocity < 0) {
             newVelocity = Math.abs(newVelocity);
-            entity.entity.getState().height = 0;
-            newVelocity = newVelocity * entity.entity.getState().elastic;
+            entity.setHeight(0);
+            newVelocity = newVelocity * elastic;
         }
 
-        entity.entity.getState().heightVelocity = newVelocity;
+        entity.setHeightVelocity(newVelocity);
     }
 
     private calculateEntityBoundaryCollisionImpulse(
-        entity: PhysicsEntity,
+        entity: PhysicsRegistration,
         boundaries: PhysicsBoundary[]
     ) {
         if (!entity.collidesWalls) {
             return;
         }
 
-        const state = entity.entity.getState();
+        const state = entity.getPhysicsInformation();
         for (const boundary of boundaries) {
             const x1 = boundary.start.x;
             const y1 = boundary.start.y;
@@ -138,10 +147,10 @@ export class PhysicsService {
     }
 
     private calculateEntityCollisionImpulse(
-        entity: PhysicsEntity,
-        entities: PhysicsEntity[]
+        entity: PhysicsRegistration,
+        entities: PhysicsRegistration[]
     ) {
-        const state = entity.entity.getState();
+        const state = entity.getPhysicsInformation();
         const posA = state.position;
         const radiusA = state.radius;
 
@@ -157,7 +166,7 @@ export class PhysicsService {
             ) {
                 continue;
             }
-            const bState = b.entity.getState();
+            const bState = b.getPhysicsInformation();
             const posB = bState.position;
             const radiusB = bState.radius;
             const diffX = posB.x - posA.x;
@@ -184,21 +193,16 @@ export class PhysicsService {
         }
 
         if (finalImpulse.x !== 0 || finalImpulse.y !== 0) {
-            entity.entity.setState(
-                {
-                    velocity: {
-                        x: state.velocity.x + finalImpulse.x,
-                        y: state.velocity.y + finalImpulse.y,
-                    },
-                },
-                false
+            entity.setVelocity(
+                state.velocity.x + finalImpulse.x,
+                state.velocity.y + finalImpulse.y
             );
         }
     }
 
-    private moveEntities(entities: PhysicsEntity[]) {
+    private moveEntities(entities: PhysicsRegistration[]) {
         for (const entity of entities) {
-            const state = entity.entity.getState();
+            const state = entity.getPhysicsInformation();
 
             const newPosX = state.position.x + state.velocity.x;
             const newPosY = state.position.y + state.velocity.y;
@@ -207,20 +211,9 @@ export class PhysicsService {
             const newVelocityX = state.velocity.x * state.friction;
             const newVelocityY = state.velocity.y * state.friction;
 
-            entity.entity.setState(
-                {
-                    position: {
-                        x: newPosX,
-                        y: newPosY,
-                    },
-                    velocity: {
-                        x: newVelocityX,
-                        y: newVelocityY,
-                    },
-                    height: newHeight,
-                },
-                false
-            );
+            entity.setPosition(newPosX, newPosY);
+            entity.setVelocity(newVelocityX, newVelocityY);
+            entity.setHeight(newHeight);
         }
     }
 }

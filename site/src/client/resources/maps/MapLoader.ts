@@ -1,5 +1,4 @@
 import { Entity } from "../../engine/Entity";
-import { BaseState } from "../../engine/state/State";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { getHexFromRGB } from "../../util/math/UI";
 import { MapLayerConverter } from "./MapLayerConverters";
@@ -63,7 +62,7 @@ function loadPixel(
         metadata,
     });
 
-    const addEntity = (entity: Entity<BaseState>) => {
+    const addEntity = (entity: Entity<any>) => {
         serviceLocator.getWorld().addEntity(entity);
     };
 

@@ -36,6 +36,7 @@
         "express": "^4.17.1",
         "gl-matrix": "^3.2.1",
         "lodash": "^4.17.20",
+        "madge": "^3.12.0",
         "nodemon": "^1.19.3",
         "npm-watch": "^0.6.0",
         "react": "^16.10.2",
@@ -60,7 +61,8 @@
         "full-rebuild": "npm run-script clean && npm run-script build && npm run-script pack && npm run-script server",
         "test-unit": "npx jest site/src/",
         "test": "npm run-script test-unit",
-        "lint": "npx prettier --write site/src && tslint --project tsconfig.json --fix -c tslint.json 'site/src/**/*.ts' && git add ."
+        "lint": "npx prettier --write site/src && tslint --project tsconfig.json --fix -c tslint.json 'site/src/**/*.ts' && git add .",
+        "circular": "npx madge --circular site/src/**/*"
     },
     "pre-commit": [
         "lint",

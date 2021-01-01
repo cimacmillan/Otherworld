@@ -1,7 +1,6 @@
 import { ViewportComponent } from "../components/ViewportComponent";
 import { DOM_WIDTH, DOM_HEIGHT } from "../../Config";
 import React = require("react");
-import { GamePanelComponent } from "../components/GamePanelComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import {
     ShadowComponentStyle,
@@ -20,10 +19,9 @@ import { GameItems } from "../../resources/manifests/Items";
 import { useGlobalState, useDispatchListener } from "../effects/GlobalState";
 import { Actions } from "../actions/Actions";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
+import { useServiceLocator } from "../effects/GameEffect";
 
-export interface ItemCollectionContainerProps {
-    serviceLocator: ServiceLocator;
-}
+export interface ItemCollectionContainerProps {}
 
 interface ItemListMetadata {
     key: number;
@@ -37,7 +35,7 @@ const keyLimit = 10000;
 export const ItemCollectionContainer: React.FunctionComponent<ItemCollectionContainerProps> = (
     props
 ) => {
-    const { serviceLocator } = props;
+    const serviceLocator = useServiceLocator();
     const [itemList, setItemList] = React.useState([] as ItemListMetadata[]);
 
     const addItem = (item: Item) => {

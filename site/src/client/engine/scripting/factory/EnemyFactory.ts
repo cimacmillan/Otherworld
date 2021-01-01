@@ -1,4 +1,4 @@
-import { Sprites, SpriteSheets } from "../../../resources/manifests/Resources";
+import { Sprites, SpriteSheets } from "../../../resources/manifests/Sprites";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { animation } from "../../../util/animation/Animations";
 import {
@@ -8,12 +8,12 @@ import {
 import { SpriteRenderComponent } from "../../components/core/SpriteRenderComponent";
 import { AnimationComponent } from "../../components/util/AnimationComponent";
 import { Entity } from "../../Entity";
-import { BaseState, SpriteRenderState } from "../../state/State";
+import { SpriteRenderState } from "../../state/State";
 
-export type SlimeState = BaseState & SpriteRenderState & PhysicsState;
+export type SlimeState = SpriteRenderState & PhysicsState;
 
 const SpriteSizeWobbles = (wobble: number, wobbleSpeed: number) => {
-    const func = (entity: Entity<BaseState & SpriteRenderState>) => {
+    const func = (entity: Entity<SpriteRenderState>) => {
         const { spriteWidth, spriteHeight } = entity.getState();
         return animation((x: number) => {
             const sin = Math.sin(x * Math.PI * 2) * wobble;
@@ -25,7 +25,7 @@ const SpriteSizeWobbles = (wobble: number, wobbleSpeed: number) => {
             .looping()
             .speed(wobbleSpeed);
     };
-    return AnimationComponent<BaseState & SpriteRenderState>(func);
+    return AnimationComponent<SpriteRenderState>(func);
 };
 
 export function createSlime(
@@ -37,7 +37,7 @@ export function createSlime(
         serviceLocator,
         state,
         new SpriteRenderComponent(),
-        new PhysicsComponent(),
+        PhysicsComponent(),
         SpriteSizeWobbles(0.1, 500)
     );
 }
@@ -53,8 +53,6 @@ export function getSlimeState(
         .getResourceManager()
         .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(Sprites.SLIME);
     return {
-        exists: true,
-        shouldRender: true,
         textureCoordinate,
         spriteWidth: 1,
         spriteHeight: 1,

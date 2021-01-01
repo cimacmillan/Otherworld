@@ -1,8 +1,11 @@
-import { PhysicsEntity } from "../../../services/physics/PhysicsService";
+import { PhysicsRegistration } from "../../../services/physics/PhysicsService";
 import { Vector2D } from "../../../types";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import { BaseState, SurfacePositionState } from "../../state/State";
+import {
+    SUFRACE_POSITION_STATE_DEFAULT,
+    SurfacePosition,
+} from "../../state/State";
 
 export interface PhysicsState {
     velocity: Vector2D;
@@ -15,29 +18,53 @@ export interface PhysicsState {
     collidesWalls: boolean;
 }
 
-export type PhysicsStateType = BaseState & SurfacePositionState & PhysicsState;
+export const PHYSICS_STATE_DEFAULT: PhysicsState = {
+    velocity: {
+        x: 0,
+        y: 0,
+    },
+    heightVelocity: 0,
+    friction: 0.9,
+    mass: 1,
+    elastic: 0.9,
+    collidesEntities: true,
+    collidesWalls: true,
+};
 
-export class PhysicsComponent<T extends PhysicsStateType>
-    implements EntityComponent<T> {
-    private physicsEntity: PhysicsEntity;
+export type PhysicsStateType = SurfacePosition & PhysicsState;
 
-    public onCreate(entity: Entity<PhysicsStateType>) {
-        const { collidesEntities, collidesWalls } = entity.getState();
-        this.physicsEntity = {
-            entity,
-            collidesEntities,
-            collidesWalls,
-        };
-        entity
-            .getServiceLocator()
-            .getPhysicsService()
-            .registerPhysicsEntity(this.physicsEntity);
-    }
+export const PhysicsComponent = (): EntityComponent<PhysicsStateType> => {
+    let physicsRegistration: PhysicsRegistration;
 
-    public onDestroy(entity: Entity<PhysicsStateType>) {
-        entity
-            .getServiceLocator()
-            .getPhysicsService()
-            .unregisterPhysicsEntity(this.physicsEntity);
-    }
-}
+    return {
+        getInitialState: () => {
+            return {
+                ...SUFRACE_POSITION_STATE_DEFAULT,
+                ...PHYSICS_STATE_DEFAULT,
+            };
+        },
+        onCreate: (entity: Entity<PhysicsStateType>) => {
+            const { collidesEntities, collidesWalls } = entity.getState();
+            physicsRegistration = {
+                collidesWalls,
+                collidesEntities,
+                setHeight: (height: number) => entity.setState({ height }),
+                setHeightVelocity: (heightVelocity: number) =>
+                    entity.setState({ heightVelocity }),
+                setVelocity: (x, y) => entity.setState({ velocity: { x, y } }),
+                setPosition: (x, y) => entity.setState({ position: { x, y } }),
+                getPhysicsInformation: () => entity.getState(),
+            };
+            entity
+                .getServiceLocator()
+                .getPhysicsService()
+                .registerPhysicsEntity(physicsRegistration);
+        },
+        onDestroy: (entity: Entity<PhysicsStateType>) => {
+            entity
+                .getServiceLocator()
+                .getPhysicsService()
+                .unregisterPhysicsEntity(physicsRegistration);
+        },
+    };
+};

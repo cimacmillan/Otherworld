@@ -1,16 +1,8 @@
 import { SCENERY_PIXEL_DENSITY } from "../../../Config";
-import { SpriteSheets } from "../../../resources/manifests/Resources";
-import {
-    InteractionSource,
-    InteractionType,
-} from "../../../services/interaction/InteractionType";
+import { SpriteSheets } from "../../../resources/manifests/Sprites";
 import { Floor, Wall } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
-import { LockpickGameConfiguration } from "../../../ui/containers/minigame/LockPickContainer";
-import { animation } from "../../../util/animation/Animations";
-import { vec } from "../../../util/math/Vector";
-import { OpenLockpickingChallenge } from "../../commands/MiniGameCommands";
 import {
     BoundaryComponent,
     BoundaryStateType,
@@ -19,28 +11,13 @@ import {
     FloorRenderComponent,
     FloorStateType,
 } from "../../components/core/FloorRenderComponent";
-import {
-    InteractionComponent,
-    InteractionStateType,
-} from "../../components/core/InteractionComponent";
-import {
-    SpriteRenderComponent,
-    SpriteStateType,
-} from "../../components/core/SpriteRenderComponent";
+import { SpriteRenderComponent } from "../../components/core/SpriteRenderComponent";
 import {
     WallRenderComponent,
     WallStateType,
 } from "../../components/core/WallRenderComponent";
-import { AnimationComponent } from "../../components/util/AnimationComponent";
-import { JoinComponent } from "../../components/util/JoinComponent";
-import {
-    SwitchComponent,
-    SwitchComponents,
-} from "../../components/util/SwitchComponent";
 import { Entity } from "../../Entity";
-import { EntityComponent } from "../../EntityComponent";
-import { GameEvent } from "../../events/Event";
-import { LockpickingResult } from "../../events/MiniGameEvents";
+import { SpriteRenderState } from "../../state/State";
 
 export function createStaticFloor(
     serviceLocator: ServiceLocator,
@@ -80,7 +57,6 @@ export function createStaticFloor(
         floorState: {
             floor,
         },
-        exists: false,
     };
 
     return new Entity<FloorStateType>(
@@ -110,7 +86,6 @@ export function createStaticWall(
     );
 
     const initialState: WallStateType & BoundaryStateType = {
-        exists: false,
         boundaryState: {
             boundary: {
                 start,
@@ -144,20 +119,18 @@ export function createStaticSprite(
         .getResourceManager()
         .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(spriteString);
 
-    const initialState: SpriteStateType = {
+    const initialState: SpriteRenderState = {
         yOffset: 0,
-        exists: true,
         position,
         height,
         radius: 0,
         angle: 0,
-        shouldRender: true,
         textureCoordinate: sprite.textureCoordinate,
         spriteWidth,
         spriteHeight,
     };
 
-    return new Entity<SpriteStateType>(
+    return new Entity<SpriteRenderState>(
         undefined,
         serviceLocator,
         initialState,
@@ -183,7 +156,7 @@ export const createBlock = (
     ];
 };
 
-const createWallType = (
+export const createWallType = (
     serviceLocator: ServiceLocator,
     spriteString: string,
     start: Vector2D,
@@ -222,132 +195,4 @@ const createWallType = (
         repeatWidth: sprite.textureCoordinate.textureWidth,
         repeatHeight: sprite.textureCoordinate.textureHeight,
     };
-};
-
-const onInteractedWith = <T extends InteractionStateType>(
-    type: InteractionType,
-    callback: (entity: Entity<T>, source: InteractionSource) => void
-): EntityComponent<T> => {
-    return {
-        onEvent: (entity: Entity<T>, event: GameEvent) => {
-            if (event.type === type) {
-                callback(entity, event.source);
-            }
-        },
-    };
-};
-
-enum DoorOpenState {
-    OPEN = "OPEN",
-    CLOSED = "CLOSED",
-}
-
-interface DoorState {
-    open: DoorOpenState;
-}
-
-type DoorStateType = WallStateType &
-    BoundaryStateType &
-    InteractionStateType &
-    DoorState;
-
-export const createDoor = (
-    serviceLocator: ServiceLocator,
-    x: number,
-    y: number,
-    spriteString: string,
-    configuration: LockpickGameConfiguration,
-    horizontal: boolean = true
-) => {
-    const start = horizontal ? { x, y: y + 0.5 } : { x: x + 0.5, y: y + 1 };
-    const end = horizontal ? { x: x + 1, y: y + 0.5 } : { x: x + 0.5, y };
-    const collides = true;
-
-    const wall: Wall = createWallType(serviceLocator, spriteString, start, end);
-
-    const initialState = {
-        exists: false,
-        boundaryState: {
-            boundary: {
-                start,
-                end,
-            },
-            collides,
-        },
-        wallState: {
-            wall,
-        },
-        position: vec.vec_mult_scalar(vec.vec_add(start, end), 0.5),
-        height: 0,
-        yOffset: 0,
-        radius: 0.5,
-        angle: 0,
-        interactable: {
-            [InteractionType.INTERACT]: true,
-        },
-        open: DoorOpenState.CLOSED,
-    };
-
-    // TODO emit particles here
-    const doorSwitch: SwitchComponents = {
-        ["OPEN"]: AnimationComponent<DoorStateType>(
-            (entity: Entity<DoorStateType>) => {
-                return animation((x: number) => {
-                    const offsetVal = 0.9 * x + Math.random() * 0.06;
-                    const offset = horizontal
-                        ? {
-                              x: offsetVal,
-                              y: 0,
-                          }
-                        : {
-                              x: 0,
-                              y: -offsetVal,
-                          };
-                    const newStart = vec.vec_sub(start, offset);
-                    const newEnd = vec.vec_sub(end, offset);
-
-                    const newWall = createWallType(
-                        serviceLocator,
-                        spriteString,
-                        newStart,
-                        newEnd
-                    );
-
-                    entity.setState({
-                        wallState: {
-                            wall: newWall,
-                        },
-                    });
-                }).speed(2000);
-            }
-        ),
-        ["CLOSED"]: JoinComponent<DoorStateType>([
-            new BoundaryComponent(),
-            new InteractionComponent(),
-            onInteractedWith(InteractionType.INTERACT, (ent, source) => {
-                OpenLockpickingChallenge(serviceLocator)(
-                    (result: LockpickingResult) => {
-                        ent.setState({
-                            open: result
-                                ? DoorOpenState.OPEN
-                                : DoorOpenState.CLOSED,
-                        });
-                    },
-                    configuration
-                );
-            }),
-        ]),
-    };
-
-    return new Entity<DoorStateType>(
-        undefined,
-        serviceLocator,
-        initialState,
-        new WallRenderComponent(),
-        new SwitchComponent(
-            doorSwitch,
-            initialState.open,
-            (ent) => ent.getState().open
-        )
-    );
 };

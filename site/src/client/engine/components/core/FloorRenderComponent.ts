@@ -1,10 +1,11 @@
+import { SCENERY_PIXEL_DENSITY } from "../../../Config";
+import { Sprites, SpriteSheets } from "../../../resources/manifests/Sprites";
 import {
     Floor,
     RenderItem,
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import { BaseState } from "../../state/State";
 
 export interface FloorState {
     floorState: {
@@ -12,11 +13,47 @@ export interface FloorState {
     };
 }
 
-export type FloorStateType = BaseState & FloorState;
+export type FloorStateType = FloorState;
 
-export class FloorRenderComponent<T extends FloorStateType>
-    implements EntityComponent<T> {
+export class FloorRenderComponent implements EntityComponent<FloorStateType> {
     private toRenderRef?: RenderItem;
+
+    public getInitialState = (entity: Entity<FloorStateType>) => {
+        const {
+            textureCoordinate,
+            pixelCoordinate,
+        } = entity
+            .getServiceLocator()
+            .getResourceManager()
+            .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(
+                Sprites.FLOOR
+            );
+
+        const floor: Floor = {
+            startPos: [0, 0],
+            endPos: [1, 1],
+            height: 0,
+            textureX: textureCoordinate.textureX,
+            textureY: textureCoordinate.textureY,
+            textureWidth:
+                (Math.abs(1) *
+                    textureCoordinate.textureWidth *
+                    SCENERY_PIXEL_DENSITY) /
+                pixelCoordinate.textureWidth,
+            textureHeight:
+                (Math.abs(1) *
+                    textureCoordinate.textureHeight *
+                    SCENERY_PIXEL_DENSITY) /
+                pixelCoordinate.textureWidth,
+            repeatWidth: textureCoordinate.textureWidth,
+            repeatHeight: textureCoordinate.textureHeight,
+        };
+        return {
+            floorState: {
+                floor,
+            },
+        };
+    };
 
     public onStateTransition(
         entity: Entity<FloorStateType>,

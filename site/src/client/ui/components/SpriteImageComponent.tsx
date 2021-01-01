@@ -1,9 +1,9 @@
 import React = require("react");
 import { getImagePropsFromSprite } from "../../util/math/UI";
 import { ServiceLocator } from "../../services/ServiceLocator";
+import { useServiceLocator } from "../effects/GameEffect";
 
 export interface SpriteImageComponentProps {
-    serviceLocator: ServiceLocator;
     spriteSheet: string;
     sprite: string;
     style: React.CSSProperties;
@@ -12,8 +12,10 @@ export interface SpriteImageComponentProps {
 export const SpriteImageComponent: React.FunctionComponent<SpriteImageComponentProps> = (
     props
 ) => {
-    const sheet = props.serviceLocator.getResourceManager().manifest
-        .spritesheets[props.spriteSheet];
+    const serviceLocator = useServiceLocator();
+    const sheet = serviceLocator.getResourceManager().manifest.spritesheets[
+        props.spriteSheet
+    ];
     return (
         <div
             style={{

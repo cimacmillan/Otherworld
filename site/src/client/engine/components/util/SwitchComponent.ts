@@ -1,14 +1,12 @@
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { GameEvent } from "../../events/Event";
-import { BaseState } from "../../state/State";
 
 export interface SwitchComponents {
     [key: string]: EntityComponent<any>;
 }
 
-export class SwitchComponent<T extends BaseState>
-    implements EntityComponent<T> {
+export class SwitchComponent<T> implements EntityComponent<T> {
     private newState: string;
 
     constructor(
@@ -17,6 +15,17 @@ export class SwitchComponent<T extends BaseState>
         private getSwitch: (entity: Entity<T>) => string
     ) {
         this.newState = currentState;
+    }
+
+    public getInitialState(entity: Entity<T>): T {
+        let state = {} as T;
+        Object.values(this.components).forEach((component) => {
+            if (!component.getInitialState) {
+                return;
+            }
+            state = { ...state, ...component.getInitialState(entity) };
+        });
+        return state;
     }
 
     public onStateTransition(entity: Entity<T>, from: T, to: T) {

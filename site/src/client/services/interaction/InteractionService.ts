@@ -1,10 +1,15 @@
-import { InteractionStateType } from "../../engine/components/core/InteractionComponent";
-import { Entity } from "../../engine/Entity";
+import { SurfacePosition } from "../../engine/state/State";
 import { Vector2D } from "../../types";
 import { ConsistentArray } from "../../util/array/ConsistentArray";
-import { InteractionType } from "./InteractionType";
+import { InteractionSource, InteractionType } from "./InteractionType";
 
-type InteractionEntity = Entity<InteractionStateType>;
+type InteractionEntity = InteractionRegistration;
+
+export interface InteractionRegistration {
+    onInteract?: (source: InteractionSource) => void;
+    getPosition: () => SurfacePosition;
+    source: InteractionSource;
+}
 
 interface InteractionInfo {
     canInteract: boolean;
@@ -68,7 +73,7 @@ export class InteractionService {
         angle: number,
         range: number
     ): InteractionInfo {
-        const state = entity.getState();
+        const state = entity.getPosition();
 
         const x1 = position.x;
         const y1 = position.y;
@@ -115,17 +120,11 @@ export class InteractionService {
         };
     }
 
-    public registerEntity(
-        entity: Entity<InteractionStateType>,
-        type: InteractionType
-    ) {
+    public registerEntity(entity: InteractionEntity, type: InteractionType) {
         this.interactionMap[type].add(entity);
     }
 
-    public unregisterEntity(
-        entity: Entity<InteractionStateType>,
-        type: InteractionType
-    ) {
+    public unregisterEntity(entity: InteractionEntity, type: InteractionType) {
         this.interactionMap[type].remove(entity);
     }
 }

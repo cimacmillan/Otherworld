@@ -5,9 +5,7 @@ import { ProcedureService } from "../../services/jobs/ProcedureService";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Entity } from "../Entity";
 import { Player } from "../player/Player";
-import { BaseState } from "../state/State";
 import { bootstrap } from "./Bootstrap";
-import { InventoryService } from "./items/InventoryService";
 
 /**
  * Service for quick commands that usually take more lines, eg
@@ -15,8 +13,6 @@ import { InventoryService } from "./items/InventoryService";
  * GameScriptingService.getPlayer().damage();
  */
 export class ScriptingService {
-    public inventoryService: InventoryService;
-
     private game: Game;
     private serviceLocator: ServiceLocator;
 
@@ -29,7 +25,6 @@ export class ScriptingService {
 
     public init(serviceLocator: ServiceLocator) {
         this.serviceLocator = serviceLocator;
-        this.inventoryService = new InventoryService(serviceLocator);
     }
 
     public getPlayer() {
@@ -80,7 +75,7 @@ export class ScriptingService {
 
     public bootsrapDeserialisedContent(
         player: Player,
-        entity: Array<Entity<BaseState>>
+        entity: Array<Entity<any>>
     ) {
         const world = this.serviceLocator.getWorld();
         const entityArray = world.getEntityArray();
@@ -92,9 +87,12 @@ export class ScriptingService {
         this.player = player;
         // world.addEntity(this.player);
 
-        const camera = this.player.getCamera();
-        this.serviceLocator.getAudioService().attachCamera(camera);
-        this.serviceLocator.getRenderService().attachCamera(camera);
+        this.serviceLocator
+            .getAudioService()
+            .attachCamera(() => this.player.getCamera());
+        this.serviceLocator
+            .getRenderService()
+            .attachCamera(() => this.player.getCamera());
 
         // world.addEntity(player);
         for (let i = 1; i < entity.length; i++) {

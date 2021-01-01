@@ -2,10 +2,9 @@ import { ConsistentArray } from "../util/array/ConsistentArray";
 import { Entity } from "./Entity";
 import { EntityEventType } from "./events/EntityEvents";
 import { GameEvent } from "./events/Event";
-import { BaseState } from "./state/State";
 
 export class World {
-    private entityArray: ConsistentArray<Entity<BaseState>>;
+    private entityArray: ConsistentArray<Entity<any>>;
     private worldDispatch: (event: GameEvent) => void;
 
     public constructor(worldDispatch: (event: GameEvent) => void) {
@@ -13,7 +12,7 @@ export class World {
     }
 
     public init() {
-        this.entityArray = new ConsistentArray<Entity<BaseState>>();
+        this.entityArray = new ConsistentArray<Entity<any>>();
     }
 
     public update() {
@@ -23,11 +22,11 @@ export class World {
         }
     }
 
-    public addEntity(entity: Entity<BaseState>, force?: boolean) {
+    public addEntity(entity: Entity<any>, force?: boolean) {
         this.entityArray.add(entity);
     }
 
-    public removeEntity(entity: Entity<BaseState>, force?: boolean) {
+    public removeEntity(entity: Entity<any>, force?: boolean) {
         this.entityArray.remove(entity);
     }
 

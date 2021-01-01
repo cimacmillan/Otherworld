@@ -1,5 +1,4 @@
 import { Entity } from "../../engine/Entity";
-import { BaseState } from "../../engine/state/State";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { MapLayerConverterDefault } from "./converter/DefaultLayerConverter";
 import { MapMetadataObject } from "./MapShema";
@@ -30,4 +29,4 @@ export interface MapLayerGenerationArguments {
 
 export type MapLayerConverter = (
     args: MapLayerGenerationArguments
-) => Array<Entity<BaseState>> | Entity<BaseState>;
+) => Array<Entity<any>> | Entity<any>;

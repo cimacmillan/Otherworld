@@ -12,7 +12,6 @@ import { Colours } from "../../resources/design/Colour";
 import { Spacing } from "../../resources/design/Spacing";
 
 interface KeyComponentProps {
-    serviceLocator: ServiceLocator;
     keyCode: string;
     selected: boolean;
     style: React.CSSProperties;

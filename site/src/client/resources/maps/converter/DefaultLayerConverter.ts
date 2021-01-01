@@ -1,12 +1,15 @@
 import {
+    createDoor,
+    createLockedDoor,
+} from "../../../engine/scripting/factory/DoorFactory";
+import {
     createSlime,
     getSlimeState,
 } from "../../../engine/scripting/factory/EnemyFactory";
-import {
-    createBlock,
-    createDoor,
-} from "../../../engine/scripting/factory/SceneryFactory";
-import { Sprites } from "../../manifests/Resources";
+import { createItemDrop } from "../../../engine/scripting/factory/ItemFactory";
+import { createBlock } from "../../../engine/scripting/factory/SceneryFactory";
+import { GameItem, GameItems } from "../../manifests/Items";
+import { Sprites } from "../../manifests/Sprites";
 import {
     MapLayerConverter,
     MapLayerGenerationArguments,
@@ -28,14 +31,30 @@ export const MapLayerConverterDefault: MapLayerConverter = (
         case "ff0000":
             return createBlock(serviceLocator, x, y, Sprites.WALL);
         case "00ff00":
-            return createDoor(
-                serviceLocator,
-                x,
-                y,
-                Sprites.CELL,
-                metadata.configuration,
-                metadata.horizontal
-            );
+            if (metadata.configuration) {
+                return createLockedDoor({
+                    serviceLocator,
+                    x,
+                    y,
+                    spriteString: Sprites.CELL,
+                    configuration: metadata.configuration,
+                    horizontal: metadata.horizontal,
+                    keyId: metadata.keyId,
+                });
+            } else {
+                return createDoor(
+                    serviceLocator,
+                    x,
+                    y,
+                    Sprites.CELL,
+                    metadata.horizontal
+                );
+            }
+        case "ffff00":
+            return createItemDrop(serviceLocator, {
+                item: GameItems[metadata.id as GameItem],
+                position: { x: x + 0.5, y: y + 0.5 },
+            });
     }
 
     return [];

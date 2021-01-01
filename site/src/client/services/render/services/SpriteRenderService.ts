@@ -260,7 +260,7 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         this.translations[t1i + 16] = y;
         this.translations[t1i + 17] = z;
 
-        const floatCorrection = 0.001;
+        const floatCorrection = 0.0001;
         const texX = sprite.texture.textureX + floatCorrection;
         const texY = sprite.texture.textureY + floatCorrection;
         const texWidth = sprite.texture.textureWidth - floatCorrection;

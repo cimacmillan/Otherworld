@@ -13,32 +13,32 @@ import {
 import { useDispatchListener, useGlobalState } from "../effects/GlobalState";
 import { Actions } from "../actions/Actions";
 import { PlayerEventType } from "../../engine/events/PlayerEvents";
-import { GamePanelComponent } from "../components/GamePanelComponent";
 import { ShadowComponentStyle } from "../components/ShadowComponent";
 import { SpriteImageComponent } from "../components/SpriteImageComponent";
-import { ItemMetadata } from "../../engine/scripting/items/types";
+import { Item, ItemMetadata } from "../../engine/scripting/items/types";
 import { GameItems } from "../../resources/manifests/Items";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { chunk } from "lodash";
 import { InventoryItemComponent } from "../components/InventoryItemComponent";
 import { TooltipComponent, TooltipType } from "../components/TooltipComponent";
 import { Vector2D } from "../../types";
+import { useServiceLocator } from "../effects/GameEffect";
+import { Colours } from "../../resources/design/Colour";
+import { PlayerUseItemFromInventory } from "../../engine/commands/InventoryCommands";
 
 const FADE_IN = 200;
-const WIDTH = 520;
-const HEIGHT = 312;
-const ITEM_GRID_WIDTH = 7;
+export const INVENTORY_WIDTH = 520;
+export const INVENTORY_HEIGHT = 312;
+export const INVENTORY_BORDER_RADIUS = 8;
 
-export interface InventoryContainerProps {
-    serviceLocator: ServiceLocator;
-}
+export interface InventoryContainerProps {}
 
 export const InventoryContainer: React.FunctionComponent<InventoryContainerProps> = (
     props
 ) => {
     const myRef = React.useRef();
     const getBoundingClientRect = useBoundingclientrect(myRef);
-    const { serviceLocator } = props;
+    const serviceLocator = useServiceLocator();
     const [inventoryShowing, setInventoryShowing] = React.useState(false);
     const [tooltipItem, setTooltipItem] = React.useState<
         ItemMetadata | undefined
@@ -52,11 +52,11 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
     const [state, dispatch] = useGlobalState();
 
     React.useEffect(() => {
-        // const inventoryItems = serviceLocator
-        //     .getScriptingService()
-        //     .getPlayer()
-        //     .getState().inventory.items;
-        // setItems(inventoryItems);
+        const inventoryItems = serviceLocator
+            .getScriptingService()
+            .getPlayer()
+            .getInventory().items;
+        setItems(inventoryItems);
     });
 
     React.useEffect(() => {
@@ -75,62 +75,25 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
         }
     }, [state.inventory.showing]);
 
-    const itemGrid = chunk(items, ITEM_GRID_WIDTH);
-    const inventoryItemLines = itemGrid.map((itemMetadatas: ItemMetadata[]) => (
-        <div
-            style={{
-                display: "flex",
-                flexDirection: "row",
-            }}
-        >
-            {itemMetadatas.map((metadata) => (
-                <InventoryItemComponent
-                    serviceLocator={serviceLocator}
-                    itemMetadata={metadata}
-                    style={{
-                        marginLeft: 10,
-                        marginTop: 10,
-                        cursor: "pointer",
-                    }}
-                    onMouseEnter={() => onSetItemTooltip(metadata)}
-                    onMouseLeave={() =>
-                        tooltipItem === metadata && onSetItemTooltip(undefined)
-                    }
-                    onClick={() => {
-                        // const itemAmount = serviceLocator
-                        //     .getScriptingService()
-                        //     .getPlayer()
-                        //     .getState().inventory.items.length;
-                        // serviceLocator
-                        //     .getScriptingService()
-                        //     .inventoryService.useItemFromInventory(
-                        //         serviceLocator
-                        //             .getScriptingService()
-                        //             .getPlayer(),
-                        //         metadata
-                        //     );
-                        // const inventoryItems = serviceLocator
-                        //     .getScriptingService()
-                        //     .getPlayer()
-                        //     .getState().inventory.items;
-                        // setItems(inventoryItems);
-                        // if (
-                        //     serviceLocator
-                        //         .getScriptingService()
-                        //         .getPlayer()
-                        //         .getState().inventory.items.length !==
-                        //     itemAmount
-                        // ) {
-                        //     onSetItemTooltip(undefined);
-                        // }
-                    }}
-                />
-            ))}
-        </div>
-    ));
-
     const onSetItemTooltip = (itemMetadata: ItemMetadata | undefined) => {
         setTooltipItem(itemMetadata);
+    };
+
+    const onItemUsed = (itemMetadata: ItemMetadata | undefined) => {
+        const { item, count } = itemMetadata;
+        const itemAmount = serviceLocator
+            .getScriptingService()
+            .getPlayer()
+            .getInventory().items.length;
+        PlayerUseItemFromInventory(serviceLocator)(item);
+        const inventoryItems = serviceLocator
+            .getScriptingService()
+            .getPlayer()
+            .getInventory().items;
+        setItems(inventoryItems);
+        if (inventoryItems.length !== itemAmount) {
+            onSetItemTooltip(undefined);
+        }
     };
 
     return (
@@ -160,26 +123,52 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                 }}
             >
                 {inventoryShowing && (
-                    <GamePanelComponent
-                        serviceLocator={props.serviceLocator}
-                        width={WIDTH}
-                        height={HEIGHT}
+                    <div
                         style={{
+                            width: INVENTORY_WIDTH,
+                            height: INVENTORY_HEIGHT,
                             opacity: fade,
-                            ...ShadowComponentStyle(),
-                        }}
-                        childStyle={{
                             display: "flex",
                             flexDirection: "column",
-                            overflowY: "scroll",
+                            alignItems: "flex-start",
+                            ...ShadowComponentStyle(),
                         }}
                     >
-                        {inventoryItemLines}
-                    </GamePanelComponent>
+                        <TextComponent
+                            text={"Inventory"}
+                            size={TextSize.SMALL}
+                            style={{
+                                paddingLeft: 8,
+                                paddingRight: 8,
+                                background: Colours.DESELCT_GREY,
+                                borderRadius: `${INVENTORY_BORDER_RADIUS}px ${INVENTORY_BORDER_RADIUS}px 0px 0px`,
+                            }}
+                        />
+                        <div
+                            style={{
+                                width: INVENTORY_WIDTH,
+                                height: INVENTORY_HEIGHT,
+                                display: "flex",
+                                flexDirection: "column",
+                                overflowY: "scroll",
+                                background: Colours.DESELCT_GREY,
+                                borderRadius: `0px ${INVENTORY_BORDER_RADIUS}px ${INVENTORY_BORDER_RADIUS}px ${INVENTORY_BORDER_RADIUS}px`,
+                            }}
+                        >
+                            <InventoryItems
+                                items={items}
+                                onMouseEnter={(item) => onSetItemTooltip(item)}
+                                onMouseLeave={(item) =>
+                                    onSetItemTooltip(undefined)
+                                }
+                                onClick={(item) => onItemUsed(item)}
+                            />
+                        </div>
+                    </div>
                 )}
                 {tooltipItem && inventoryShowing && (
                     <TooltipComponent
-                        serviceLocator={props.serviceLocator}
+                        serviceLocator={serviceLocator}
                         context={{
                             type: TooltipType.ITEM,
                             itemMetadata: tooltipItem,
@@ -188,6 +177,33 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                     />
                 )}
             </ViewportComponent>
+        </div>
+    );
+};
+
+const InventoryItems: React.FunctionComponent<{
+    items: ItemMetadata[];
+    onMouseEnter: (item: ItemMetadata) => void;
+    onMouseLeave: (item: ItemMetadata) => void;
+    onClick: (item: ItemMetadata) => void;
+}> = (props) => {
+    return (
+        <div>
+            {props.items.map((item) => (
+                <InventoryItemComponent
+                    itemMetadata={item}
+                    style={{
+                        marginLeft: 8,
+                        marginTop: 8,
+                        marginRight: 8,
+                        marginBottom: 8,
+                        cursor: "pointer",
+                    }}
+                    onMouseEnter={() => props.onMouseEnter(item)}
+                    onMouseLeave={() => props.onMouseLeave(item)}
+                    onClick={() => props.onClick(item)}
+                />
+            ))}
         </div>
     );
 };

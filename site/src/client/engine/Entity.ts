@@ -1,23 +1,22 @@
 import { ServiceLocator } from "../services/ServiceLocator";
 import { EntityComponent } from "./EntityComponent";
-import { EntityEventType } from "./events/EntityEvents";
+import { EntityEventType, StateTransitionEvent } from "./events/EntityEvents";
 import { GameEvent } from "./events/Event";
 import { EntitySerial } from "./scripting/factory/Serial";
-import { BaseState } from "./state/State";
 
-export class Entity<State extends BaseState> {
-    private components: Array<EntityComponent<State>>;
+export class Entity<State> {
+    private components: Array<EntityComponent<Partial<State>>>;
     private newState: State;
     private shouldEmit: boolean = false;
 
     constructor(
         public serial: EntitySerial = EntitySerial.NULL,
         private serviceLocator: ServiceLocator,
-        private state: State,
-        ...components: Array<EntityComponent<State>>
+        private state: Partial<State>,
+        ...components: Array<EntityComponent<Partial<State>>>
     ) {
         this.components = components;
-        this.newState = state;
+        this.newState = this.farmStateFromComponents(state);
     }
 
     public getState() {
@@ -55,11 +54,12 @@ export class Entity<State extends BaseState> {
             // Helper so I don't repeat the same code
             switch (event.type) {
                 case EntityEventType.STATE_TRANSITION:
+                    const transition = event as StateTransitionEvent<State>;
                     this.components[x].onStateTransition &&
                         this.components[x].onStateTransition(
                             this,
-                            event.payload.from as State,
-                            event.payload.to as State
+                            transition.payload.from as State,
+                            transition.payload.to as State
                         );
                     break;
                 case EntityEventType.ENTITY_CREATED:
@@ -84,5 +84,20 @@ export class Entity<State extends BaseState> {
 
     public getComponents() {
         return this.components;
+    }
+
+    public delete() {
+        this.serviceLocator.getWorld().removeEntity(this);
+    }
+
+    private farmStateFromComponents(override: Partial<State>): State {
+        let state = {} as State;
+        this.components.forEach((component) => {
+            if (!component.getInitialState) {
+                return;
+            }
+            state = { ...state, ...component.getInitialState(this) };
+        });
+        return { ...state, ...override };
     }
 }

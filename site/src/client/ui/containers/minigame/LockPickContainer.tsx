@@ -77,6 +77,7 @@ export const LockPickContainer: React.FunctionComponent<LockPickContainerProps> 
             style={{}}
             colourPrimary={Colours.LOCK_GOLD}
             colourSecondary={Colours.LOCK_GOLD_DARK}
+            colourBackground={Colours.LOCK_GOLD_DARKER}
         />
     );
 };

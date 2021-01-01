@@ -1,6 +1,6 @@
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Entity } from "../../Entity";
-import { BaseState, HealthState } from "../../state/State";
+import { HealthState } from "../../state/State";
 import { HealsPlayerBehaviour } from "./behaviours/HealsPlayer";
 import { MakesNoiseWhenConsumedComponent } from "./behaviours/MakesNoiseWhenConsumed";
 import { join, joinOR } from "./helper";
@@ -13,7 +13,7 @@ interface ItemBehaviour {
 
 export interface ConsumeArgs {
     serviceLocator: ServiceLocator;
-    entity: Entity<HealthState & BaseState>;
+    entity: Entity<HealthState & any>;
 }
 
 export type ItemBehaviourImplementation<T> = (
