@@ -15,7 +15,7 @@ import { CompositeAnimation } from "../../util/animation/CompositeAnimation";
 import { animation, sin } from "../../util/animation/Animations";
 
 interface KeyHintComponent {
-    keyCode: string;
+    keyCode: string[];
     selected: boolean;
     text: string;
     style: React.CSSProperties;
@@ -69,20 +69,21 @@ export const KeyHintComponent: React.FunctionComponent<KeyHintComponent> = (
         }
     }, [props.fade]);
 
+    const keyComponent = props.keyCode.map((code) => (
+        <KeyComponent keyCode={code} selected={props.selected} style={{}} />
+    ));
+
     return (
         <div
             style={{
                 ...props.style,
                 display: "flex",
+                alignItems: "center",
                 marginTop: -fadeOffset * yFade,
                 opacity: 1 - fadeOffset,
             }}
         >
-            <KeyComponent
-                keyCode={props.keyCode}
-                selected={props.selected}
-                style={{}}
-            />
+            {keyComponent}
             <TextComponent
                 text={props.text}
                 font={TextFont.REGULAR}

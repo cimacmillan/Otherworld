@@ -2,23 +2,24 @@ import { GameEventSource } from "../../services/EventRouter";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { KeyHintContainerActionType } from "../../ui/actions/KeyHintActions";
 
-let HINT_ID = 0;
+let HINT_ID = 1;
 
-export const RegisterUIHint = (serviceLocator: ServiceLocator) => (
-    code: string,
-    hint: string
-): number => {
+export const RegisterKeyHint = (serviceLocator: ServiceLocator) => (arg: {
+    code: string[];
+    hint: string;
+}): number => {
     HINT_ID++;
+    const { code, hint } = arg;
     serviceLocator.getEventRouter().routeEvent(GameEventSource.WORLD, {
         type: KeyHintContainerActionType.ADD_KEY_HINT,
         id: `${HINT_ID}`,
-        key: code,
+        keys: code,
         hint,
     });
     return HINT_ID;
 };
 
-export const DeregisterUIHint = (serviceLocator: ServiceLocator) => (
+export const DeregisterKeyHint = (serviceLocator: ServiceLocator) => (
     hintId: number
 ) => {
     serviceLocator.getEventRouter().routeEvent(GameEventSource.WORLD, {

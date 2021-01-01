@@ -7,7 +7,7 @@ import { animation } from "../../../util/animation/Animations";
 import { vec } from "../../../util/math";
 import { DoesPlayerHaveItem } from "../../commands/InventoryCommands";
 import { OpenLockpickingChallenge } from "../../commands/MiniGameCommands";
-import { DeregisterUIHint, RegisterUIHint } from "../../commands/UICommands";
+import { DeregisterKeyHint, RegisterKeyHint } from "../../commands/UICommands";
 import {
     BoundaryComponent,
     BoundaryStateType,
@@ -125,21 +125,21 @@ export const createDoor = (
                         open: DoorOpenState.OPEN,
                     });
                     if (interactHintId !== undefined) {
-                        DeregisterUIHint(serviceLocator)(interactHintId);
+                        DeregisterKeyHint(serviceLocator)(interactHintId);
                     }
                 }
             ),
             onCanBeInteractedWithByPlayer(
                 InteractionType.INTERACT,
                 () => {
-                    interactHintId = RegisterUIHint(serviceLocator)(
-                        "E",
-                        "Open Door"
-                    );
+                    interactHintId = RegisterKeyHint(serviceLocator)({
+                        code: ["E"],
+                        hint: "Open Door",
+                    });
                 },
                 () => {
                     if (interactHintId !== undefined) {
-                        DeregisterUIHint(serviceLocator)(interactHintId);
+                        DeregisterKeyHint(serviceLocator)(interactHintId);
                     }
                 }
             ),
@@ -266,7 +266,7 @@ export const createLockedDoor = (args: LockedDoorConfig) => {
                         );
                     }
                     if (interactHintId !== undefined) {
-                        DeregisterUIHint(serviceLocator)(interactHintId);
+                        DeregisterKeyHint(serviceLocator)(interactHintId);
                     }
                 }
             ),
@@ -274,20 +274,20 @@ export const createLockedDoor = (args: LockedDoorConfig) => {
                 InteractionType.INTERACT,
                 () => {
                     if (keyId && DoesPlayerHaveItem(serviceLocator, keyId)) {
-                        interactHintId = RegisterUIHint(serviceLocator)(
-                            "E",
-                            "Unlock Door"
-                        );
+                        interactHintId = RegisterKeyHint(serviceLocator)({
+                            code: ["E"],
+                            hint: "Unlock Door",
+                        });
                     } else {
-                        interactHintId = RegisterUIHint(serviceLocator)(
-                            "E",
-                            "Lockpick Door"
-                        );
+                        interactHintId = RegisterKeyHint(serviceLocator)({
+                            code: ["E"],
+                            hint: "Lockpick Door",
+                        });
                     }
                 },
                 () => {
                     if (interactHintId !== undefined) {
-                        DeregisterUIHint(serviceLocator)(interactHintId);
+                        DeregisterKeyHint(serviceLocator)(interactHintId);
                     }
                 }
             ),

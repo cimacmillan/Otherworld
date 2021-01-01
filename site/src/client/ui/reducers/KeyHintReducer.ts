@@ -8,7 +8,7 @@ export interface KeyHintUIState {
 }
 
 export interface KeyHint {
-    key: string;
+    keys: string[];
     hint: string;
 }
 
@@ -26,7 +26,7 @@ export const keyHintReducer = (
                 keyHints: {
                     ...state.keyHints,
                     [action.id]: {
-                        key: action.key,
+                        keys: action.keys,
                         hint: action.hint,
                     },
                 },

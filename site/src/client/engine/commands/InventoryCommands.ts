@@ -8,11 +8,16 @@ import {
     ItemDropArguments,
 } from "../scripting/factory/ItemFactory";
 import { Inventory, Item } from "../scripting/items/types";
+import { TutorialServiceEvent } from "../scripting/TutorialService";
 import { CommandCreator } from "./Command";
 
 export const OpenInventory: CommandCreator = (
     serviceLocator: ServiceLocator
 ) => () => {
+    serviceLocator
+        .getTutorialService()
+        .onEvent(TutorialServiceEvent.OPEN_INVENTORY);
+
     serviceLocator.getGame().setUpdateWorld(false);
     serviceLocator.getInputService().setInputState(InputState.INVENTORY);
     serviceLocator.getEventRouter().routeEvent(GameEventSource.INPUT, {
@@ -23,6 +28,10 @@ export const OpenInventory: CommandCreator = (
 export const CloseInventory: CommandCreator = (
     serviceLocator: ServiceLocator
 ) => () => {
+    serviceLocator
+        .getTutorialService()
+        .onEvent(TutorialServiceEvent.CLOSE_INVENTORY);
+
     serviceLocator.getGame().setUpdateWorld(true);
     serviceLocator.getInputService().setInputState(InputState.DEFAULT);
     serviceLocator.getEventRouter().routeEvent(GameEventSource.INPUT, {
@@ -45,6 +54,9 @@ export const PlayerPickUpItem = (serviceLocator: ServiceLocator) => (
             item,
         },
     });
+    serviceLocator
+        .getTutorialService()
+        .onEvent(TutorialServiceEvent.PICKED_UP_ITEM);
     const playerInventory = serviceLocator
         .getScriptingService()
         .getPlayer()

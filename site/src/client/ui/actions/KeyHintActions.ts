@@ -6,7 +6,7 @@ export enum KeyHintContainerActionType {
 interface AddKeyHint {
     type: KeyHintContainerActionType.ADD_KEY_HINT;
     id: string;
-    key: string;
+    keys: string[];
     hint: string;
 }
 

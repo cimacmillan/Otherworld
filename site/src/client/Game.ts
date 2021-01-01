@@ -1,6 +1,7 @@
 import { HEIGHT, IS_DEV_MODE, TARGET_MILLIS, VERSION, WIDTH } from "./Config";
 import { GameEvent, RootEventType } from "./engine/events/Event";
 import { ScriptingService } from "./engine/scripting/ScriptingService";
+import { TutorialService } from "./engine/scripting/TutorialService";
 import { World } from "./engine/World";
 import { ResourceManager } from "./resources/ResourceManager";
 import { AudioService } from "./services/audio/AudioService";
@@ -61,6 +62,8 @@ export class Game {
 
         const serialisationService = new SerialisationService();
 
+        const tutorialService = new TutorialService();
+
         this.serviceLocator = new ServiceLocator(
             this,
             resourceManager,
@@ -72,13 +75,15 @@ export class Game {
             inputService,
             new PhysicsService(),
             interactionService,
-            serialisationService
+            serialisationService,
+            new TutorialService()
         );
 
         this.serviceLocator.getSerialisationService().init(this.serviceLocator);
         this.serviceLocator.getInputService().init(this.serviceLocator);
         this.serviceLocator.getRenderService().init(screen.getOpenGL());
         this.serviceLocator.getWorld().init();
+        this.serviceLocator.getTutorialService().init(this.serviceLocator);
 
         this.serviceLocator.getScriptingService().init(this.serviceLocator);
 
