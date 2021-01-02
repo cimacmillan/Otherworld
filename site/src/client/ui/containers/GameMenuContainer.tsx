@@ -85,7 +85,7 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
                 </GameButtonContainer>
 
                 <TextComponent
-                    text={"Copyright © 2020 Callum Macmillan"}
+                    text={"Copyright \u00a9 2020 Callum Macmillan"}
                     style={{
                         marginTop: 100,
                     }}

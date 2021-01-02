@@ -22,7 +22,7 @@ const HINTS = {
         hint: "Walk",
     },
     turn: {
-        code: ["←", "→"],
+        code: ["\u2190", "\u2192"],
         hint: "Turn",
     },
     inventory: {
