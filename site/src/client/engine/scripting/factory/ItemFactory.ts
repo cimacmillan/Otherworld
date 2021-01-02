@@ -20,7 +20,7 @@ import {
 } from "../../state/State";
 import { Item } from "../items/types";
 
-const ITEM_SIZE = 0.8;
+const ITEM_SIZE = 0.4;
 const ITEM_SPEED = 0.1;
 const ITEM_SPAWN_RADIUS = 0.1;
 

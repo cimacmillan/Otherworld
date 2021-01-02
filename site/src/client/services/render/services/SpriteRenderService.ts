@@ -204,10 +204,10 @@ export class SpriteRenderService implements RenderItemInterface<Sprite> {
         const tex = index * 2 * 3 * 2;
         const col = index * 2 * 3 * 4;
 
-        const halfWidth = sprite.size[0] / 2;
-        const halfHeight = sprite.size[1] / 2;
+        const halfWidth = sprite.size[0];
+        const halfHeight = sprite.size[1];
         const x = sprite.position[0] * 2;
-        const y = sprite.height;
+        const y = sprite.height * 2;
         const z = sprite.position[1] * 2;
 
         this.positions[t1i] = -halfWidth;

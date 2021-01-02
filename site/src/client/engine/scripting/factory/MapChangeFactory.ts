@@ -18,8 +18,8 @@ export const createLadder = (
         height: 0,
         radius: 1,
         angle: 0,
-        spriteWidth: 2,
-        spriteHeight: 2,
+        spriteWidth: 1,
+        spriteHeight: 1,
         textureCoordinate: serviceLocator
             .getResourceManager()
             .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(spriteString)
