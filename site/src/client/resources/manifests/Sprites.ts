@@ -10,6 +10,7 @@ export enum Sprites {
     WALL = "WALL",
     CELL = "CELL",
     ITEM_KEY = "ITEM_KEY",
+    LADDER = "LADDER",
 }
 
 export const sprites = new SpriteSheetManifestBuilder(
@@ -22,3 +23,4 @@ tenSprite(Sprites.SLIME, 390, 10);
 tenSprite(Sprites.WALL, 90, 150);
 tenSprite(Sprites.CELL, 100, 150);
 tenSprite(Sprites.ITEM_KEY, 540, 160);
+tenSprite(Sprites.LADDER, 110, 160);

@@ -3,9 +3,6 @@
 
 First level where player unlocks door to get key which opens another door with a ladder in it
 
-### Server 
-TODO Static site hosting
-
 ### Audio
 
 TODO Walking / steps audio 
@@ -15,13 +12,9 @@ TODO Item collect audio
 TODO Key use audio
 TODO Map transition audio
 
-
-### Art
-TODO ladder sprite
-
-
 ### Gameplay
 TODO Particle effects on door open
+TODO render hole in floor
 
 
 ### Refactoring 

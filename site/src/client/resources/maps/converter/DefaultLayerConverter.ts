@@ -7,6 +7,7 @@ import {
     getSlimeState,
 } from "../../../engine/scripting/factory/EnemyFactory";
 import { createItemDrop } from "../../../engine/scripting/factory/ItemFactory";
+import { createLadder } from "../../../engine/scripting/factory/MapChangeFactory";
 import { createBlock } from "../../../engine/scripting/factory/SceneryFactory";
 import { GameItem, GameItems } from "../../manifests/Items";
 import { Sprites } from "../../manifests/Sprites";
@@ -55,6 +56,8 @@ export const MapLayerConverterDefault: MapLayerConverter = (
                 item: GameItems[metadata.id as GameItem],
                 position: { x: x + 0.5, y: y + 0.5 },
             });
+        case "ff00f2":
+            return createLadder(serviceLocator, x, y, Sprites.LADDER);
     }
 
     return [];
