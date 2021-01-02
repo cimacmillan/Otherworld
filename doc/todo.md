@@ -3,6 +3,8 @@
 
 First level where player unlocks door to get key which opens another door with a ladder in it
 
+### Server 
+TODO Static site hosting
 
 ### Audio
 

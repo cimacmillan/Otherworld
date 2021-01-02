@@ -3,23 +3,21 @@ import HttpException from "./errors/HttpException";
 
 const PROCESS_DIRECTORY: string = process.cwd();
 const INDEX_DIRECTORY: string = `${PROCESS_DIRECTORY}/site/public/`;
-const STATIC_DIRECTORY: string = `${PROCESS_DIRECTORY}/site/public/static/`;
 
 console.log("Process Directory: ", PROCESS_DIRECTORY);
 console.log("Index Directory: ", INDEX_DIRECTORY);
-console.log("Static Directory: ", STATIC_DIRECTORY);
 
 const app = Express();
 
-app.use(Express.static(STATIC_DIRECTORY));
+app.use(Express.static(INDEX_DIRECTORY));
 
-app.get("/", (req: Express.Request, res: Express.Response) => {
-    try {
-        res.sendFile(INDEX_DIRECTORY + "home.html", INDEX_DIRECTORY);
-    } catch (err) {
-        console.log(err);
-    }
-});
+// app.get("/", (req: Express.Request, res: Express.Response) => {
+//     try {
+//         res.sendFile(INDEX_DIRECTORY + "index.html", INDEX_DIRECTORY);
+//     } catch (err) {
+//         console.log(err);
+//     }
+// });
 
 app.use(function (
     err: HttpException,
