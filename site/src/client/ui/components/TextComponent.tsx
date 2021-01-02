@@ -37,7 +37,7 @@ export interface TextComponentProps {
     clickable?: () => void;
 }
 
-const ignoreFont = ["←", "→"];
+const ignoreFont = [""];
 
 const getPropsOrDefault = (
     props: Partial<TextComponentProps>
