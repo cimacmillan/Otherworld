@@ -60,7 +60,8 @@ export class Player {
         this.interactDelay = new ActionDelay(300);
 
         this.surface = {
-            position: { x: 31.5, y: 31.5 },
+            position: { x: 40.5, y: 30.5 },
+            // position: { x: 31.5, y: 31.5 },
             height: 0,
             angle: 0,
             yOffset: 0,

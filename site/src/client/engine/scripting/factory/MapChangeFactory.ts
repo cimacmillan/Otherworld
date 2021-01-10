@@ -1,5 +1,9 @@
 import { Sprites } from "../../../resources/manifests/Sprites";
+import { InteractionType } from "../../../services/interaction/InteractionType";
 import { ServiceLocator } from "../../../services/ServiceLocator";
+import {
+    withInteractionHint,
+} from "../../components/core/InteractionComponent";
 import { SpriteRenderComponent } from "../../components/core/SpriteRenderComponent";
 import { Entity } from "../../Entity";
 import { SpriteRenderState } from "../../state/State";
@@ -27,6 +31,12 @@ export const createLadder = (
         undefined,
         serviceLocator,
         initialState,
-        SpriteRenderComponent()
+        SpriteRenderComponent(),
+        withInteractionHint(
+            serviceLocator,
+            InteractionType.INTERACT,
+            ["E"],
+            "Climb Ladder"
+        )
     );
 };

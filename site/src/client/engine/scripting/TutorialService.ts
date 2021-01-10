@@ -18,7 +18,7 @@ interface KeyHint {
 
 const HINTS = {
     walk: {
-        code: ["w", "a", "s", "d"],
+        code: ["W", "A", "S", "D"],
         hint: "Walk",
     },
     turn: {
@@ -26,11 +26,11 @@ const HINTS = {
         hint: "Turn",
     },
     inventory: {
-        code: ["i"],
+        code: ["I"],
         hint: "Open Inventory",
     },
     closeInventory: {
-        code: ["i"],
+        code: ["I"],
         hint: "Close Inventory",
     },
 };

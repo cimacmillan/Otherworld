@@ -8,7 +8,10 @@ import {
 } from "../../../engine/scripting/factory/EnemyFactory";
 import { createItemDrop } from "../../../engine/scripting/factory/ItemFactory";
 import { createLadder } from "../../../engine/scripting/factory/MapChangeFactory";
-import { createBlock } from "../../../engine/scripting/factory/SceneryFactory";
+import {
+    createBlock,
+    createStaticFloor,
+} from "../../../engine/scripting/factory/SceneryFactory";
 import { GameItem, GameItems } from "../../manifests/Items";
 import { Sprites } from "../../manifests/Sprites";
 import {
@@ -58,6 +61,40 @@ export const MapLayerConverterDefault: MapLayerConverter = (
             });
         case "ff00f2":
             return createLadder(serviceLocator, x, y, Sprites.LADDER);
+        case "000000":
+            return [
+                createStaticFloor(
+                    serviceLocator,
+                    Sprites.FLOOR,
+                    0,
+                    { x, y },
+                    { x: x + 1, y: y + 1 }
+                ),
+                createStaticFloor(
+                    serviceLocator,
+                    Sprites.FLOOR,
+                    1,
+                    { x, y },
+                    { x: x + 1, y: y + 1 }
+                ),
+            ];
+        case "ffffff":
+            return [
+                createStaticFloor(
+                    serviceLocator,
+                    Sprites.FLOOR_HOLE,
+                    0,
+                    { x, y },
+                    { x: x + 1, y: y + 1 }
+                ),
+                createStaticFloor(
+                    serviceLocator,
+                    Sprites.FLOOR_HOLE,
+                    1,
+                    { x, y },
+                    { x: x + 1, y: y + 1 }
+                ),
+            ];
     }
 
     return [];

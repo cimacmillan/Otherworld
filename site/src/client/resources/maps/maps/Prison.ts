@@ -49,5 +49,10 @@ export const MapPrison: MapSchema = {
                 },
             ],
         },
+        {
+            imageUrl: "map/prison/block/block_floors.png",
+            mapLayerConverter: MapLayerConverterType.DEFAULT,
+            mapMetadata: [],
+        },
     ],
 };

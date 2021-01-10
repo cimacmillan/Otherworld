@@ -4,7 +4,9 @@ import {
     InteractionSourceType,
     InteractionType,
 } from "../../../services/interaction/InteractionType";
+import { ServiceLocator } from "../../../services/ServiceLocator";
 import { throttleCount } from "../../../util/time/Throttle";
+import { DeregisterKeyHint, RegisterKeyHint } from "../../commands/UICommands";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import {
@@ -13,67 +15,7 @@ import {
 } from "../../state/State";
 import { JoinComponent } from "../util/JoinComponent";
 
-type InteractableMap = { [key in InteractionType]?: boolean };
-
 export type InteractionStateType = SurfacePosition;
-
-// export class InteractionComponent
-//     implements EntityComponent<InteractionStateType> {
-//     public getInitialState() {
-//         return {
-//             ...SUFRACE_POSITION_STATE_DEFAULT,
-//             interactable: {},
-//         };
-//     }
-
-//     public onStateTransition(
-//         entity: Entity<InteractionStateType>,
-//         from: InteractionStateType,
-//         to: InteractionStateType
-//     ) {
-//         const fromMap = from.interactable;
-//         const toMap = to.interactable;
-//         for (const type in InteractionType) {
-//             const interactionType = type as InteractionType;
-//             if (fromMap[interactionType] && !toMap[interactionType]) {
-//                 entity
-//                     .getServiceLocator()
-//                     .getInteractionService()
-//                     .unregisterEntity(entity, interactionType);
-//             }
-//             if (!fromMap[interactionType] && toMap[interactionType]) {
-//                 entity
-//                     .getServiceLocator()
-//                     .getInteractionService()
-//                     .registerEntity(entity, interactionType);
-//             }
-//         }
-//     }
-
-//     public onDestroy(entity: Entity<InteractionStateType>) {
-//         for (const type in InteractionType) {
-//             const interactionType = type as InteractionType;
-//             if (entity.getState().interactable[interactionType]) {
-//                 entity
-//                     .getServiceLocator()
-//                     .getInteractionService()
-//                     .unregisterEntity(entity, interactionType);
-//             }
-//         }
-//     }
-
-//     public onCreate(entity: Entity<InteractionStateType>) {
-//         for (const type in InteractionType) {
-//             const interactionType = type as InteractionType;
-//             if (entity.getState().interactable[interactionType]) {
-//                 entity
-//                     .getServiceLocator()
-//                     .getInteractionService()
-//                     .registerEntity(entity, interactionType);
-//             }
-//         }
-//     }
-// }
 
 const registersSelf = (
     type: InteractionType,
@@ -155,4 +97,27 @@ export const onCanBeInteractedWithByPlayer = <T extends InteractionStateType>(
             },
         })),
     ]);
+};
+
+export const withInteractionHint = (
+    serviceLocator: ServiceLocator,
+    type: InteractionType,
+    code: string[],
+    hint: string
+) => {
+    let interactHintId: number | undefined;
+    return onCanBeInteractedWithByPlayer(
+        type,
+        () => {
+            interactHintId = RegisterKeyHint(serviceLocator)({
+                code,
+                hint,
+            });
+        },
+        () => {
+            if (interactHintId !== undefined) {
+                DeregisterKeyHint(serviceLocator)(interactHintId);
+            }
+        }
+    );
 };

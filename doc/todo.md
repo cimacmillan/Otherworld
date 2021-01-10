@@ -14,8 +14,6 @@ TODO Map transition audio
 
 ### Gameplay
 TODO Particle effects on door open
-TODO render hole in floor
-
 
 -------
 
@@ -26,3 +24,5 @@ Milestone 2?
 * Item removed hint
 * NPC dialog 
 * Inventory container moved into menu tabs 
+* TODO quiet entities list(?)
+
