@@ -1,5 +1,5 @@
 import { SCENERY_PIXEL_DENSITY } from "../../../Config";
-import { SpriteSheets } from "../../../resources/manifests/Sprites";
+import { Sprites, SpriteSheets } from "../../../resources/manifests/Sprites";
 import { Floor, Wall } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
@@ -109,23 +109,19 @@ export function createStaticWall(
 
 export function createStaticSprite(
     serviceLocator: ServiceLocator,
-    spriteString: string,
+    sprite: Sprites,
     position: Vector2D,
     height: number,
     spriteWidth: number,
     spriteHeight: number
 ) {
-    const sprite = serviceLocator
-        .getResourceManager()
-        .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(spriteString);
-
     const initialState: SpriteRenderState = {
         yOffset: 0,
         position,
         height,
         radius: 0,
         angle: 0,
-        textureCoordinate: sprite.textureCoordinate,
+        sprite,
         spriteWidth,
         spriteHeight,
     };
@@ -134,7 +130,7 @@ export function createStaticSprite(
         undefined,
         serviceLocator,
         initialState,
-        new SpriteRenderComponent()
+        SpriteRenderComponent()
     );
 }
 

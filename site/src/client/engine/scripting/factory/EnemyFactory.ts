@@ -1,4 +1,4 @@
-import { Sprites, SpriteSheets } from "../../../resources/manifests/Sprites";
+import { Sprites } from "../../../resources/manifests/Sprites";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { animation } from "../../../util/animation/Animations";
 import {
@@ -36,7 +36,7 @@ export function createSlime(
         undefined,
         serviceLocator,
         state,
-        new SpriteRenderComponent(),
+        SpriteRenderComponent(),
         PhysicsComponent(),
         SpriteSizeWobbles(0.1, 500)
     );
@@ -47,13 +47,8 @@ export function getSlimeState(
     x: number,
     y: number
 ): SlimeState {
-    const {
-        textureCoordinate,
-    } = serviceLocator
-        .getResourceManager()
-        .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(Sprites.SLIME);
     return {
-        textureCoordinate,
+        sprite: Sprites.SLIME,
         spriteWidth: 1,
         spriteHeight: 1,
         position: { x, y },

@@ -64,7 +64,7 @@ export class Entity<State> {
                     break;
                 case EntityEventType.ENTITY_CREATED:
                     this.components[x].onCreate &&
-                        this.components[x].onCreate(this);
+                        this.components[x].onCreate(this, true);
                     break;
                 case EntityEventType.ENTITY_DELETED:
                     this.components[x].onDestroy &&

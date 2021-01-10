@@ -46,7 +46,7 @@ export class SwitchComponent<T> implements EntityComponent<T> {
                 currentStateCallback.onDestroy(entity);
             newStateCallback &&
                 newStateCallback.onCreate &&
-                newStateCallback.onCreate(entity);
+                newStateCallback.onCreate(entity, false);
 
             this.currentState = this.newState;
         }
@@ -57,9 +57,11 @@ export class SwitchComponent<T> implements EntityComponent<T> {
             currentStateCallback.update(entity);
     }
 
-    public onCreate(entity: Entity<T>) {
+    public onCreate(entity: Entity<T>, wasEntityCreated?: boolean) {
         const currentState = this.components[this.currentState];
-        currentState && currentState.onCreate && currentState.onCreate(entity);
+        currentState &&
+            currentState.onCreate &&
+            currentState.onCreate(entity, wasEntityCreated);
     }
 
     public onDestroy(entity: Entity<T>) {

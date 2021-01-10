@@ -1,4 +1,4 @@
-import { SpriteSheets } from "../../../resources/manifests/Sprites";
+import { Sprites } from "../../../resources/manifests/Sprites";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { SpriteRenderComponent } from "../../components/core/SpriteRenderComponent";
 import { Entity } from "../../Entity";
@@ -10,7 +10,7 @@ export const createLadder = (
     serviceLocator: ServiceLocator,
     x: number,
     y: number,
-    spriteString: string
+    sprite: Sprites
 ) => {
     const initialState: LadderStateType = {
         yOffset: 0,
@@ -20,16 +20,13 @@ export const createLadder = (
         angle: 0,
         spriteWidth: 1,
         spriteHeight: 1,
-        textureCoordinate: serviceLocator
-            .getResourceManager()
-            .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(spriteString)
-            .textureCoordinate,
+        sprite,
     };
 
     return new Entity<LadderStateType>(
         undefined,
         serviceLocator,
         initialState,
-        new SpriteRenderComponent()
+        SpriteRenderComponent()
     );
 };

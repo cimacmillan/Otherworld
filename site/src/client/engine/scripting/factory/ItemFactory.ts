@@ -1,4 +1,3 @@
-import { SpriteSheets } from "../../../resources/manifests/Sprites";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
 import { animation } from "../../../util/animation/Animations";
@@ -154,11 +153,7 @@ export function createItemDrop(
         angle: 0,
         spriteWidth: ITEM_SIZE,
         spriteHeight: ITEM_SIZE,
-        textureCoordinate: serviceLocator
-            .getResourceManager()
-            .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(
-                item.spriteIcon
-            ).textureCoordinate,
+        sprite: item.spriteIcon,
         velocity,
         friction: ITEM_FRICTION,
         mass: ITEM_MASS,
@@ -173,7 +168,7 @@ export function createItemDrop(
         undefined,
         serviceLocator,
         initialState,
-        new SpriteRenderComponent(),
+        SpriteRenderComponent(),
         PhysicsComponent(),
         HoversAnimation(ITEM_SIZE, ITEM_SIZE, ITEM_SIZE_CHANGE),
         WhenInPlayerVicinity(
