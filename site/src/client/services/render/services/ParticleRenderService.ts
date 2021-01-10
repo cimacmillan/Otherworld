@@ -178,7 +178,7 @@ export class ParticleRenderService implements RenderItemInterface<Particle> {
         const halfWidth = sprite.size[0] / 2;
         const halfHeight = sprite.size[1] / 2;
         const x = sprite.position[0] * 2;
-        const y = sprite.height;
+        const y = sprite.height * 2;
         const z = sprite.position[1] * 2;
 
         this.positions[t1i] = -halfWidth;

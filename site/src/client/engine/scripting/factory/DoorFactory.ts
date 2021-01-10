@@ -127,6 +127,15 @@ export const createDoor = (
                     }
                 }
             ),
+            {
+                getInitialState: () => ({}),
+                update: (entity: Entity<DoorStateType>) => {
+                    entity
+                        .getServiceLocator()
+                        .getParticleService()
+                        .addEmitter({});
+                },
+            },
         ]),
     };
 
