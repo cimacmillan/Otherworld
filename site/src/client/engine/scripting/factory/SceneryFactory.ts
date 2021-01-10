@@ -1,6 +1,6 @@
 import { SCENERY_PIXEL_DENSITY } from "../../../Config";
 import { Sprites, SpriteSheets } from "../../../resources/manifests/Sprites";
-import { Floor, Wall } from "../../../services/render/types/RenderInterface";
+import { Floor } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
 import {
@@ -14,7 +14,7 @@ import {
 import { SpriteRenderComponent } from "../../components/core/SpriteRenderComponent";
 import {
     WallRenderComponent,
-    WallStateType,
+    WallState,
 } from "../../components/core/WallRenderComponent";
 import { Entity } from "../../Entity";
 import { SpriteRenderState } from "../../state/State";
@@ -69,23 +69,14 @@ export function createStaticFloor(
 
 export function createStaticWall(
     serviceLocator: ServiceLocator,
-    spriteString: string,
+    sprite: string,
     start: Vector2D,
     end: Vector2D,
     height: number = 1,
     offset: number = 0,
     collides: boolean = true
 ) {
-    const wall = createWallType(
-        serviceLocator,
-        spriteString,
-        start,
-        end,
-        height,
-        offset
-    );
-
-    const initialState: WallStateType & BoundaryStateType = {
+    const initialState: WallState & BoundaryStateType = {
         boundaryState: {
             boundary: {
                 start,
@@ -93,16 +84,18 @@ export function createStaticWall(
             },
             collides,
         },
-        wallState: {
-            wall,
-        },
+        wallSprite: sprite,
+        wallStart: start,
+        wallEnd: end,
+        wallHeight: height,
+        wallOffset: offset,
     };
 
-    return new Entity<WallStateType & BoundaryStateType>(
+    return new Entity<WallState & BoundaryStateType>(
         undefined,
         serviceLocator,
         initialState,
-        new WallRenderComponent(),
+        WallRenderComponent(),
         new BoundaryComponent()
     );
 }
@@ -150,45 +143,4 @@ export const createBlock = (
         createStaticWall(serviceLocator, sprite, vec3, vec4),
         createStaticWall(serviceLocator, sprite, vec4, vec1),
     ];
-};
-
-export const createWallType = (
-    serviceLocator: ServiceLocator,
-    spriteString: string,
-    start: Vector2D,
-    end: Vector2D,
-    height: number = 1,
-    offset: number = 0
-): Wall => {
-    const sprite = serviceLocator
-        .getResourceManager()
-        .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(spriteString);
-
-    const textureWidth =
-        (Math.sqrt(
-            Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2)
-        ) *
-            sprite.textureCoordinate.textureWidth *
-            SCENERY_PIXEL_DENSITY) /
-        sprite.pixelCoordinate.textureWidth;
-    const textureHeight =
-        (sprite.textureCoordinate.textureHeight *
-            height *
-            SCENERY_PIXEL_DENSITY) /
-        sprite.pixelCoordinate.textureHeight;
-
-    return {
-        startPos: [start.x, start.y],
-        endPos: [end.x, end.y],
-        startHeight: height,
-        endHeight: height,
-        startOffset: offset,
-        endOffset: offset,
-        textureX: sprite.textureCoordinate.textureX,
-        textureY: sprite.textureCoordinate.textureY,
-        textureWidth,
-        textureHeight,
-        repeatWidth: sprite.textureCoordinate.textureWidth,
-        repeatHeight: sprite.textureCoordinate.textureHeight,
-    };
 };

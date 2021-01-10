@@ -1,6 +1,5 @@
 import { GameItem } from "../../../resources/manifests/Items";
 import { InteractionType } from "../../../services/interaction/InteractionType";
-import { Wall } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { LockpickGameConfiguration } from "../../../ui/containers/minigame/LockPickContainer";
 import { animation } from "../../../util/animation/Animations";
@@ -19,7 +18,7 @@ import {
 } from "../../components/core/InteractionComponent";
 import {
     WallRenderComponent,
-    WallStateType,
+    WallState,
 } from "../../components/core/WallRenderComponent";
 import { AnimationComponent } from "../../components/util/AnimationComponent";
 import { JoinComponent } from "../../components/util/JoinComponent";
@@ -29,7 +28,6 @@ import {
 } from "../../components/util/SwitchComponent";
 import { Entity } from "../../Entity";
 import { LockpickingResult } from "../../events/MiniGameEvents";
-import { createWallType } from "./SceneryFactory";
 
 enum DoorOpenState {
     OPEN = "OPEN",
@@ -40,7 +38,7 @@ interface DoorState {
     open: DoorOpenState;
 }
 
-type DoorStateType = WallStateType &
+type DoorStateType = WallState &
     BoundaryStateType &
     InteractionStateType &
     DoorState;
@@ -49,17 +47,14 @@ export const createDoor = (
     serviceLocator: ServiceLocator,
     x: number,
     y: number,
-    spriteString: string,
+    sprite: string,
     horizontal: boolean = true
 ) => {
     const start = horizontal ? { x, y: y + 0.5 } : { x: x + 0.5, y: y + 1 };
     const end = horizontal ? { x: x + 1, y: y + 0.5 } : { x: x + 0.5, y };
     const collides = true;
 
-    const wall: Wall = createWallType(serviceLocator, spriteString, start, end);
-
-    const initialState = {
-        exists: false,
+    const initialState: DoorStateType = {
         boundaryState: {
             boundary: {
                 start,
@@ -67,17 +62,14 @@ export const createDoor = (
             },
             collides,
         },
-        wallState: {
-            wall,
-        },
+        wallSprite: sprite,
+        wallStart: start,
+        wallEnd: end,
         position: vec.vec_mult_scalar(vec.vec_add(start, end), 0.5),
         height: 0,
         yOffset: 0,
         radius: 0.5,
         angle: 0,
-        interactable: {
-            [InteractionType.INTERACT]: true,
-        },
         open: DoorOpenState.CLOSED,
     };
 
@@ -101,17 +93,9 @@ export const createDoor = (
                     const newStart = vec.vec_sub(start, offset);
                     const newEnd = vec.vec_sub(end, offset);
 
-                    const newWall = createWallType(
-                        serviceLocator,
-                        spriteString,
-                        newStart,
-                        newEnd
-                    );
-
                     entity.setState({
-                        wallState: {
-                            wall: newWall,
-                        },
+                        wallStart: newStart,
+                        wallEnd: newEnd,
                     });
                 }).speed(2000);
             }
@@ -150,7 +134,7 @@ export const createDoor = (
         undefined,
         serviceLocator,
         initialState,
-        new WallRenderComponent(),
+        WallRenderComponent(),
         new SwitchComponent(
             doorSwitch,
             initialState.open,
@@ -184,10 +168,7 @@ export const createLockedDoor = (args: LockedDoorConfig) => {
     const end = horizontal ? { x: x + 1, y: y + 0.5 } : { x: x + 0.5, y };
     const collides = true;
 
-    const wall: Wall = createWallType(serviceLocator, spriteString, start, end);
-
-    const initialState = {
-        exists: false,
+    const initialState: DoorStateType = {
         boundaryState: {
             boundary: {
                 start,
@@ -195,17 +176,14 @@ export const createLockedDoor = (args: LockedDoorConfig) => {
             },
             collides,
         },
-        wallState: {
-            wall,
-        },
+        wallSprite: spriteString,
+        wallStart: start,
+        wallEnd: end,
         position: vec.vec_mult_scalar(vec.vec_add(start, end), 0.5),
         height: 0,
         yOffset: 0,
         radius: 0.5,
         angle: 0,
-        interactable: {
-            [InteractionType.INTERACT]: true,
-        },
         open: DoorOpenState.CLOSED,
     };
 
@@ -229,17 +207,9 @@ export const createLockedDoor = (args: LockedDoorConfig) => {
                     const newStart = vec.vec_sub(start, offset);
                     const newEnd = vec.vec_sub(end, offset);
 
-                    const newWall = createWallType(
-                        serviceLocator,
-                        spriteString,
-                        newStart,
-                        newEnd
-                    );
-
                     entity.setState({
-                        wallState: {
-                            wall: newWall,
-                        },
+                        wallStart: newStart,
+                        wallEnd: newEnd,
                     });
                 }).speed(2000);
             }
@@ -298,7 +268,7 @@ export const createLockedDoor = (args: LockedDoorConfig) => {
         undefined,
         serviceLocator,
         initialState,
-        new WallRenderComponent(),
+        WallRenderComponent(),
         new SwitchComponent(
             doorSwitch,
             initialState.open,
