@@ -1,6 +1,4 @@
-import { SCENERY_PIXEL_DENSITY } from "../../../Config";
-import { Sprites, SpriteSheets } from "../../../resources/manifests/Sprites";
-import { Floor } from "../../../services/render/types/RenderInterface";
+import { Sprites } from "../../../resources/manifests/Sprites";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
 import {
@@ -26,44 +24,18 @@ export function createStaticFloor(
     start: Vector2D,
     end: Vector2D
 ) {
-    const {
-        textureCoordinate,
-        pixelCoordinate,
-    } = serviceLocator
-        .getResourceManager()
-        .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(spriteString);
-
-    const floor: Floor = {
-        startPos: [start.x, start.y],
-        endPos: [end.x, end.y],
-        height,
-        textureX: textureCoordinate.textureX,
-        textureY: textureCoordinate.textureY,
-        textureWidth:
-            (Math.abs(end.x - start.x) *
-                textureCoordinate.textureWidth *
-                SCENERY_PIXEL_DENSITY) /
-            pixelCoordinate.textureWidth,
-        textureHeight:
-            (Math.abs(end.y - start.y) *
-                textureCoordinate.textureHeight *
-                SCENERY_PIXEL_DENSITY) /
-            pixelCoordinate.textureWidth,
-        repeatWidth: textureCoordinate.textureWidth,
-        repeatHeight: textureCoordinate.textureHeight,
-    };
-
     const initialState: FloorStateType = {
-        floorState: {
-            floor,
-        },
+        floorStart: start,
+        floorEnd: end,
+        floorSprite: spriteString,
+        floorHeight: height,
     };
 
     return new Entity<FloorStateType>(
         undefined,
         serviceLocator,
         initialState,
-        new FloorRenderComponent()
+        FloorRenderComponent()
     );
 }
 

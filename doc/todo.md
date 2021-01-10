@@ -16,8 +16,8 @@ TODO Map transition audio
 TODO Particle effects on door open
 TODO render hole in floor
 
-### Refactoring 
-TODO Simplify wall and floor state types (get coords from sprite ID)
+
+-------
 
 ### Design
 
