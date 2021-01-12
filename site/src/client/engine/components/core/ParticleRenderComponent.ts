@@ -1,5 +1,5 @@
 import {
-    Particle,
+    ParticleRender,
     RenderItem,
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
@@ -55,11 +55,10 @@ export const ParticleRenderComponent = (): EntityComponent<ParticleState> => {
     };
 };
 
-function mapParticleStateToParticle(state: ParticleState): Particle {
+function mapParticleStateToParticle(state: ParticleState): ParticleRender {
     return {
-        position: [state.position.x, state.position.y],
+        position: [state.position.x, state.height, state.position.y],
         size: [state.particleWidth, state.particleHeight],
-        height: state.height,
         r: state.r,
         g: state.g,
         b: state.b,

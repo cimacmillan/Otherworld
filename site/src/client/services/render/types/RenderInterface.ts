@@ -10,10 +10,9 @@ export interface Sprite {
     shade: SpriteShadeOverride;
 }
 
-export interface Particle {
-    position: glm.vec2;
+export interface ParticleRender {
+    position: glm.vec3;
     size: glm.vec2;
-    height: number;
     r: number;
     g: number;
     b: number;

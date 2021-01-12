@@ -129,11 +129,29 @@ export const createDoor = (
             ),
             {
                 getInitialState: () => ({}),
-                update: (entity: Entity<DoorStateType>) => {
+                onCreate: (entity: Entity<DoorStateType>) => {
                     entity
                         .getServiceLocator()
                         .getParticleService()
-                        .addEmitter({});
+                        .addEmitter({
+                            rate: 0.1,
+                            createParticle: () => {
+                                const x = Math.random() - 0.5;
+                                const y = Math.random() - 0.5;
+                                return {
+                                    life: 60,
+                                    render: (i: number) => {
+                                        return {
+                                            position: [31.5 + x, 0.5 + y, 30.5],
+                                            size: [0.1, 0.1],
+                                            r: i,
+                                            g: 1 - i,
+                                            b: 0,
+                                        };
+                                    },
+                                };
+                            },
+                        });
                 },
             },
         ]),

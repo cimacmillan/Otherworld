@@ -2,17 +2,18 @@ import { mat4 } from "gl-matrix";
 import { ISyncedArrayRef, SyncedArray } from "../../../util/array/SyncedArray";
 import { compileParticleShader } from "../shaders/Shaders";
 import { CompiledShader } from "../shaders/types";
-import { Particle } from "../types/RenderInterface";
+import { ParticleRender } from "../types/RenderInterface";
 import { RenderItem, RenderItemInterface } from "../types/RenderItemInterface";
 import {
     BackgroundRenderService,
     BackgroundShaderPositions,
 } from "./BackgroundRenderService";
 
-export class ParticleRenderService implements RenderItemInterface<Particle> {
+export class ParticleRenderService
+    implements RenderItemInterface<ParticleRender> {
     private gl: WebGLRenderingContext;
 
-    private particleArray: SyncedArray<Particle>;
+    private particleArray: SyncedArray<ParticleRender>;
 
     private shader: CompiledShader;
 
@@ -39,12 +40,14 @@ export class ParticleRenderService implements RenderItemInterface<Particle> {
         this.backgroundShaderPositions = this.shader.uniform as any;
 
         this.particleArray = new SyncedArray({
-            onReconstruct: (array: Array<ISyncedArrayRef<Particle>>) =>
+            onReconstruct: (array: Array<ISyncedArrayRef<ParticleRender>>) =>
                 this.onArrayReconstruct(gl, array),
-            onUpdate: (array: Array<ISyncedArrayRef<Particle>>) =>
+            onUpdate: (array: Array<ISyncedArrayRef<ParticleRender>>) =>
                 this.onArrayUpdate(gl),
-            onInjection: (index: number, ref: ISyncedArrayRef<Particle>) =>
-                this.onInjection(index, ref.obj),
+            onInjection: (
+                index: number,
+                ref: ISyncedArrayRef<ParticleRender>
+            ) => this.onInjection(index, ref.obj),
         });
 
         this.positionBuffer = gl.createBuffer();
@@ -119,13 +122,13 @@ export class ParticleRenderService implements RenderItemInterface<Particle> {
         this.gl.drawArrays(this.gl.TRIANGLES, 0, vertexCount);
     }
 
-    public createItem(param: Particle) {
+    public createItem(param: ParticleRender) {
         return {
             renderId: this.particleArray.createItem(param),
         };
     }
 
-    public updateItem(ref: RenderItem, param: Partial<Particle>) {
+    public updateItem(ref: RenderItem, param: Partial<ParticleRender>) {
         this.particleArray.updateItem(ref.renderId, param);
     }
 
@@ -140,7 +143,7 @@ export class ParticleRenderService implements RenderItemInterface<Particle> {
 
     private onArrayReconstruct(
         gl: WebGLRenderingContext,
-        array: Array<ISyncedArrayRef<Particle>>
+        array: Array<ISyncedArrayRef<ParticleRender>>
     ) {
         const length = array.length;
 
@@ -170,7 +173,7 @@ export class ParticleRenderService implements RenderItemInterface<Particle> {
         gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW);
     }
 
-    private onInjection(index: number, sprite: Particle) {
+    private onInjection(index: number, sprite: ParticleRender) {
         const t1i = index * 2 * 3 * 3;
         const tex = index * 2 * 3 * 2;
         const col = index * 2 * 3 * 3;
@@ -178,8 +181,8 @@ export class ParticleRenderService implements RenderItemInterface<Particle> {
         const halfWidth = sprite.size[0] / 2;
         const halfHeight = sprite.size[1] / 2;
         const x = sprite.position[0] * 2;
-        const y = sprite.height * 2;
-        const z = sprite.position[1] * 2;
+        const y = sprite.position[1] * 2;
+        const z = sprite.position[2] * 2;
 
         this.positions[t1i] = -halfWidth;
         this.positions[t1i + 1] = halfHeight;
