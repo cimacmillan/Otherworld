@@ -17,17 +17,6 @@ export class SwitchComponent<T> implements EntityComponent<T> {
         this.newState = currentState;
     }
 
-    public getInitialState(entity: Entity<T>): T {
-        let state = {} as T;
-        Object.values(this.components).forEach((component) => {
-            if (!component.getInitialState) {
-                return;
-            }
-            state = { ...state, ...component.getInitialState(entity) };
-        });
-        return state;
-    }
-
     public onStateTransition(entity: Entity<T>, from: T, to: T) {
         const currentStateCallback = this.components[this.currentState];
         currentStateCallback &&
@@ -46,7 +35,7 @@ export class SwitchComponent<T> implements EntityComponent<T> {
                 currentStateCallback.onDestroy(entity);
             newStateCallback &&
                 newStateCallback.onCreate &&
-                newStateCallback.onCreate(entity);
+                newStateCallback.onCreate(entity, false);
 
             this.currentState = this.newState;
         }
@@ -57,9 +46,11 @@ export class SwitchComponent<T> implements EntityComponent<T> {
             currentStateCallback.update(entity);
     }
 
-    public onCreate(entity: Entity<T>) {
+    public onCreate(entity: Entity<T>, wasEntityCreated?: boolean) {
         const currentState = this.components[this.currentState];
-        currentState && currentState.onCreate && currentState.onCreate(entity);
+        currentState &&
+            currentState.onCreate &&
+            currentState.onCreate(entity, wasEntityCreated);
     }
 
     public onDestroy(entity: Entity<T>) {

@@ -12,8 +12,6 @@ export function loadImage(url: string): Promise<HTMLImageElement> {
         image.onload = function () {
             resolve(image);
         };
-        console.log(window.location);
-        console.log(url);
         image.src = url;
     });
 }

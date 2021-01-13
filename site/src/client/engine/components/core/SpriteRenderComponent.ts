@@ -1,3 +1,4 @@
+import { SpriteSheets } from "../../../resources/manifests/Sprites";
 import {
     RenderItem,
     Sprite,
@@ -6,7 +7,6 @@ import {
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import {
-    DEFAULT_SPRITE_RENDER_STATE,
     SpriteRenderState,
 } from "../../state/State";
 
@@ -17,50 +17,53 @@ const DEFAULT_SHADE_OVERRIDE: SpriteShadeOverride = {
     intensity: 0,
 };
 
-export class SpriteRenderComponent
-    implements EntityComponent<SpriteRenderState> {
-    private toRenderRef?: RenderItem;
-    private sprite: Sprite;
-
-    public getInitialState = (): SpriteRenderState =>
-        DEFAULT_SPRITE_RENDER_STATE;
-
-    public update(entity: Entity<SpriteRenderState>): void {
-        const state = entity.getState();
-        this.sprite = this.getSpriteFromState(state);
-
-        entity
+function getSpriteFromState(entity: Entity<SpriteRenderState>): Sprite {
+    const {
+        position,
+        sprite,
+        spriteWidth,
+        spriteHeight,
+        height,
+        shade,
+    } = entity.getState();
+    return {
+        position: [position.x, position.y],
+        size: [spriteWidth, spriteHeight],
+        height: height + spriteHeight / 2,
+        texture: entity
             .getServiceLocator()
-            .getRenderService()
-            .spriteRenderService.updateItem(this.toRenderRef, this.sprite);
-    }
+            .getResourceManager()
+            .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(sprite)
+            .textureCoordinate,
+        shade: shade || DEFAULT_SHADE_OVERRIDE,
+    };
+}
 
-    public onCreate(entity: Entity<SpriteRenderState>): void {
-        this.toRenderRef = entity
-            .getServiceLocator()
-            .getRenderService()
-            .spriteRenderService.createItem(
-                this.getSpriteFromState(entity.getState())
-            );
-    }
+export const SpriteRenderComponent = (): EntityComponent<SpriteRenderState> => {
+    let toRenderRef: RenderItem;
 
-    public onDestroy(entity: Entity<SpriteRenderState>) {
-        if (this.toRenderRef) {
+    return {
+        onCreate: (entity: Entity<SpriteRenderState>) => {
+            toRenderRef = entity
+                .getServiceLocator()
+                .getRenderService()
+                .spriteRenderService.createItem(getSpriteFromState(entity));
+        },
+        update: (entity: Entity<SpriteRenderState>) => {
+            const sprite = getSpriteFromState(entity);
             entity
                 .getServiceLocator()
                 .getRenderService()
-                .spriteRenderService.freeItem(this.toRenderRef);
-            this.toRenderRef = undefined;
-        }
-    }
-
-    private getSpriteFromState(state: SpriteRenderState): Sprite {
-        return {
-            position: [state.position.x, state.position.y],
-            size: [state.spriteWidth, state.spriteHeight],
-            height: state.height + state.spriteHeight / 2,
-            texture: state.textureCoordinate,
-            shade: state.shade || DEFAULT_SHADE_OVERRIDE,
-        };
-    }
-}
+                .spriteRenderService.updateItem(toRenderRef, sprite);
+        },
+        onDestroy: (entity: Entity<SpriteRenderState>) => {
+            if (toRenderRef) {
+                entity
+                    .getServiceLocator()
+                    .getRenderService()
+                    .spriteRenderService.freeItem(toRenderRef);
+                toRenderRef = undefined;
+            }
+        },
+    };
+};

@@ -12,7 +12,6 @@ export function AnimationComponent<T>(
 ): EntityComponent<T> {
     let animation: GameAnimation | CompositeAnimation;
     return {
-        getInitialState: () => undefined,
         onCreate: (entity: Entity<T>) => {
             animation = createAnimation(entity);
             animation.start();

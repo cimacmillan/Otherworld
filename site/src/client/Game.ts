@@ -9,6 +9,7 @@ import { EventRouter, GameEventSource } from "./services/EventRouter";
 import { InputService, InputState } from "./services/input/InputService";
 import { InteractionService } from "./services/interaction/InteractionService";
 import { ProcedureService } from "./services/jobs/ProcedureService";
+import { ParticleService } from "./services/particle/ParticleService";
 import { PhysicsService } from "./services/physics/PhysicsService";
 import { RenderService, ScreenBuffer } from "./services/render";
 import { SerialisationListeners } from "./services/serialisation/Listeners";
@@ -76,7 +77,8 @@ export class Game {
             new PhysicsService(),
             interactionService,
             serialisationService,
-            new TutorialService()
+            tutorialService,
+            new ParticleService()
         );
 
         this.serviceLocator.getSerialisationService().init(this.serviceLocator);
@@ -84,7 +86,7 @@ export class Game {
         this.serviceLocator.getRenderService().init(screen.getOpenGL());
         this.serviceLocator.getWorld().init();
         this.serviceLocator.getTutorialService().init(this.serviceLocator);
-
+        this.serviceLocator.getParticleService().init(this.serviceLocator);
         this.serviceLocator.getScriptingService().init(this.serviceLocator);
 
         this.storage = new GameStorage();
@@ -177,6 +179,7 @@ export class Game {
             this.serviceLocator.getWorld().update();
             this.serviceLocator.getPhysicsService().update();
             this.serviceLocator.getInteractionService().update();
+            this.serviceLocator.getParticleService().update();
             ProcedureService.gameUpdate();
         }
     };
@@ -200,6 +203,10 @@ export class Game {
                     this.serviceLocator.getWorld().getEntityArray().getArray()
                         .length
                 } Intervals ${result.intervals} Timeouts ${result.timeouts}
+                Particles ${
+                    this.serviceLocator.getParticleService().getParticles()
+                        .length
+                }
                 `
             );
             this.uiListener &&

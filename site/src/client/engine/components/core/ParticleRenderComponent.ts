@@ -1,11 +1,10 @@
 import {
-    Particle,
+    ParticleRender,
     RenderItem,
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import {
-    SUFRACE_POSITION_STATE_DEFAULT,
     SurfacePosition,
 } from "../../state/State";
 
@@ -21,14 +20,6 @@ export const ParticleRenderComponent = (): EntityComponent<ParticleState> => {
     let renderItem: RenderItem | undefined;
 
     return {
-        getInitialState: () => ({
-            ...SUFRACE_POSITION_STATE_DEFAULT,
-            particleWidth: 1,
-            particleHeight: 1,
-            r: 1,
-            g: 1,
-            b: 1,
-        }),
         onCreate: (entity: Entity<ParticleState>) => {
             renderItem = entity
                 .getServiceLocator()
@@ -55,11 +46,10 @@ export const ParticleRenderComponent = (): EntityComponent<ParticleState> => {
     };
 };
 
-function mapParticleStateToParticle(state: ParticleState): Particle {
+function mapParticleStateToParticle(state: ParticleState): ParticleRender {
     return {
-        position: [state.position.x, state.position.y],
+        position: [state.position.x, state.height, state.position.y],
         size: [state.particleWidth, state.particleHeight],
-        height: state.height,
         r: state.r,
         g: state.g,
         b: state.b,

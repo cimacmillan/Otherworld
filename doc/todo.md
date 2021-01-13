@@ -3,9 +3,6 @@
 
 First level where player unlocks door to get key which opens another door with a ladder in it
 
-### Server 
-TODO Static site hosting
-
 ### Audio
 
 TODO Walking / steps audio 
@@ -16,18 +13,7 @@ TODO Key use audio
 TODO Map transition audio
 
 
-### Art
-TODO ladder sprite
-
-
-### Gameplay
-TODO Particle effects on door open
-
-
-### Refactoring 
-TODO vector class with operations and statics
-TODO Simplify wall and floor state types (get coords from sprite ID)
-
+-------
 
 ### Design
 
@@ -36,3 +22,6 @@ Milestone 2?
 * Item removed hint
 * NPC dialog 
 * Inventory container moved into menu tabs 
+* TODO quiet entities list(?)
+* Move to vec3
+

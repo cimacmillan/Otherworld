@@ -7,6 +7,7 @@ import { AudioService } from "./audio/AudioService";
 import { EventRouter } from "./EventRouter";
 import { InputService } from "./input/InputService";
 import { InteractionService } from "./interaction/InteractionService";
+import { ParticleService } from "./particle/ParticleService";
 import { PhysicsService } from "./physics/PhysicsService";
 import { RenderService } from "./render";
 import { SerialisationService } from "./serialisation/SerialisationService";
@@ -24,7 +25,8 @@ export class ServiceLocator {
         private physicsService: PhysicsService,
         private interactionService: InteractionService,
         private serialisationService: SerialisationService,
-        private tutorialService: TutorialService
+        private tutorialService: TutorialService,
+        private particleService: ParticleService
     ) {}
 
     public getGame() {
@@ -73,5 +75,9 @@ export class ServiceLocator {
 
     public getTutorialService() {
         return this.tutorialService;
+    }
+
+    public getParticleService() {
+        return this.particleService;
     }
 }

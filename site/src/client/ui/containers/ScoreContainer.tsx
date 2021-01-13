@@ -11,7 +11,10 @@ import { GameAnimation } from "../../util/animation/GameAnimation";
 import { animation, sin } from "../../util/animation/Animations";
 import { Actions } from "../actions/Actions";
 import { EnemyEventType } from "../../engine/events/EnemyEvents";
-import { ShadowComponentStyle } from "../components/ShadowComponent";
+import {
+    ShadowComponentStyle,
+    ShadowComponentStyleAlpha,
+} from "../components/ShadowComponent";
 
 export const ScoreContainer: React.FunctionComponent = (props) => {
     const [state, dispatch] = useGlobalState();
@@ -47,14 +50,14 @@ export const ScoreContainer: React.FunctionComponent = (props) => {
             }}
         >
             <TextComponent
-                text={`${state.gameStart.fps}`}
+                text={`Under Construction`}
                 font={TextFont.REGULAR}
-                size={TextSize.MED}
+                size={TextSize.SMALL}
                 colour={TextColour.LIGHT}
                 style={{
                     transform,
                     transformOrigin: "top center",
-                    ...ShadowComponentStyle(),
+                    ...ShadowComponentStyleAlpha(),
                 }}
             />
         </div>
