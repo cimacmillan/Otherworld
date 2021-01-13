@@ -7,7 +7,6 @@ import {
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import {
-    DEFAULT_SPRITE_RENDER_STATE,
     SpriteRenderState,
 } from "../../state/State";
 
@@ -44,7 +43,6 @@ export const SpriteRenderComponent = (): EntityComponent<SpriteRenderState> => {
     let toRenderRef: RenderItem;
 
     return {
-        getInitialState: () => DEFAULT_SPRITE_RENDER_STATE,
         onCreate: (entity: Entity<SpriteRenderState>) => {
             toRenderRef = entity
                 .getServiceLocator()

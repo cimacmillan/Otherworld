@@ -6,16 +6,6 @@ export function JoinComponent<T>(
     components: Array<EntityComponent<Partial<T>>>
 ): EntityComponent<T> {
     return {
-        getInitialState: (entity: Entity<T>) => {
-            let state = {} as T;
-            components.forEach((component) => {
-                if (!component.getInitialState) {
-                    return;
-                }
-                state = { ...state, ...component.getInitialState(entity) };
-            });
-            return state;
-        },
         update: (entity: Entity<T>) =>
             components.forEach(
                 (component) => component.update && component.update(entity)

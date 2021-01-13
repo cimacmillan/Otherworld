@@ -203,6 +203,10 @@ export class Game {
                     this.serviceLocator.getWorld().getEntityArray().getArray()
                         .length
                 } Intervals ${result.intervals} Timeouts ${result.timeouts}
+                Particles ${
+                    this.serviceLocator.getParticleService().getParticles()
+                        .length
+                }
                 `
             );
             this.uiListener &&

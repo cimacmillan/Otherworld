@@ -12,11 +12,11 @@ export class Entity<State> {
     constructor(
         public serial: EntitySerial = EntitySerial.NULL,
         private serviceLocator: ServiceLocator,
-        private state: Partial<State>,
+        private state: State,
         ...components: Array<EntityComponent<Partial<State>>>
     ) {
         this.components = components;
-        this.newState = this.farmStateFromComponents(state);
+        this.newState = state;
     }
 
     public getState() {
@@ -88,16 +88,5 @@ export class Entity<State> {
 
     public delete() {
         this.serviceLocator.getWorld().removeEntity(this);
-    }
-
-    private farmStateFromComponents(override: Partial<State>): State {
-        let state = {} as State;
-        this.components.forEach((component) => {
-            if (!component.getInitialState) {
-                return;
-            }
-            state = { ...state, ...component.getInitialState(this) };
-        });
-        return { ...state, ...override };
     }
 }

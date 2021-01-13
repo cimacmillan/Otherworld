@@ -12,8 +12,6 @@ TODO Item collect audio
 TODO Key use audio
 TODO Map transition audio
 
-### Gameplay
-TODO Particle effects on door open
 
 -------
 
@@ -25,4 +23,5 @@ Milestone 2?
 * NPC dialog 
 * Inventory container moved into menu tabs 
 * TODO quiet entities list(?)
+* Move to vec3
 

@@ -10,7 +10,6 @@ import { DeregisterKeyHint, RegisterKeyHint } from "../../commands/UICommands";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import {
-    SUFRACE_POSITION_STATE_DEFAULT,
     SurfacePosition,
 } from "../../state/State";
 import { JoinComponent } from "../util/JoinComponent";
@@ -22,7 +21,6 @@ const registersSelf = (
     registration: (entity: Entity<SurfacePosition>) => InteractionRegistration
 ): EntityComponent<SurfacePosition> => {
     return {
-        getInitialState: () => SUFRACE_POSITION_STATE_DEFAULT,
         onCreate: (entity: Entity<SurfacePosition>) => {
             entity
                 .getServiceLocator()
@@ -86,7 +84,6 @@ export const onCanBeInteractedWithByPlayer = <T extends InteractionStateType>(
 
     return JoinComponent<SurfacePosition>([
         {
-            getInitialState: () => SUFRACE_POSITION_STATE_DEFAULT,
             update: throttleCount(onUpdate, 5),
         },
         registersSelf(type, (entity: Entity<T>) => ({

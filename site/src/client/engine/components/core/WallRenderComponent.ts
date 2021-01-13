@@ -1,5 +1,5 @@
 import { SCENERY_PIXEL_DENSITY } from "../../../Config";
-import { Sprites, SpriteSheets } from "../../../resources/manifests/Sprites";
+import { SpriteSheets } from "../../../resources/manifests/Sprites";
 import {
     RenderItem,
     Wall,
@@ -20,11 +20,6 @@ export interface WallState {
 export const WallRenderComponent = (): EntityComponent<WallState> => {
     let toRenderRef: RenderItem;
     return {
-        getInitialState: () => ({
-            wallSprite: Sprites.CELL,
-            wallStart: { x: 0, y: 0 },
-            wallEnd: { x: 1, y: 0 },
-        }),
         onCreate: (entity: Entity<WallState>) => {
             const {
                 wallSprite,

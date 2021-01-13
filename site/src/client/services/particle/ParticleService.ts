@@ -7,13 +7,13 @@ import { ServiceLocator } from "../ServiceLocator";
 
 // }
 
-interface ParticleEmitter {
+export interface ParticleEmitter {
     // How many particles per frame
     rate: number;
     createParticle: () => Particle;
 }
 
-interface Particle {
+export interface Particle {
     // How many frames until death
     life: number;
     render: (x: number) => ParticleRender;
@@ -102,6 +102,10 @@ export class ParticleService {
             .getArray()
             .find((x) => x.emitter === emitter);
         this.emitters.remove(instance);
+    }
+
+    public getParticles() {
+        return this.particles.getArray();
     }
 
     private addParticle(particle: Particle) {
