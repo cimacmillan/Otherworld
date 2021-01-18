@@ -6,9 +6,7 @@ import {
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import {
-    SpriteRenderState,
-} from "../../state/State";
+import { SpriteRenderState } from "../../state/State";
 
 const DEFAULT_SHADE_OVERRIDE: SpriteShadeOverride = {
     r: 0,

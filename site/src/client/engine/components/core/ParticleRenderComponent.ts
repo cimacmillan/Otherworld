@@ -4,9 +4,7 @@ import {
 } from "../../../services/render/types/RenderInterface";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import {
-    SurfacePosition,
-} from "../../state/State";
+import { SurfacePosition } from "../../state/State";
 
 export type ParticleState = SurfacePosition & {
     particleWidth: number;

@@ -26,6 +26,21 @@ export class ResourceManifestBuilder implements ResourceManifest {
     public Map(key: string, map: MapSchema) {
         this.maps[key] = map;
     }
+
+    public Builder(builder: ResourceManifestBuilder) {
+        this.spritesheets = {
+            ...this.spritesheets,
+            ...builder.spritesheets,
+        };
+        this.audio = {
+            ...this.audio,
+            ...builder.audio,
+        };
+        this.maps = {
+            ...this.maps,
+            ...builder.maps,
+        };
+    }
 }
 
 export class SpriteSheetManifestBuilder implements SpriteSheetManifest {

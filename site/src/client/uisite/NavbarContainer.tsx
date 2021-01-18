@@ -12,7 +12,7 @@ export enum NavPage {
     GAME = "Game",
     ABOUT = "About",
     DEEPDIVE = "Deep Dives",
-    ANNOUNCEMENTS = "Announcements",
+    ANNOUNCEMENTS = "Changelog",
 }
 
 interface NavbarContainerProps {
