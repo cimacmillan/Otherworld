@@ -1,8 +1,4 @@
-* *2021-01-20* - Added changelog writing command to the post commit
-* *2021-01-20* - Added changelog writing command to the post commit
-* *2021-01-20* - Writing git changelog to site
-* *2021-01-20* - Added changelog writing command to the post commit
-* *2021-01-18* - Added walking sound
+* *2021-01-20* - Added walking sound and changelog to announcements
 * *2021-01-13* - Added particle effects
 * *2021-01-12* - Added particle emitter
 * *2021-01-10* - Added red particles
