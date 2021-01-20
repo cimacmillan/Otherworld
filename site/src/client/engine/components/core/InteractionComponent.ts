@@ -9,9 +9,7 @@ import { throttleCount } from "../../../util/time/Throttle";
 import { DeregisterKeyHint, RegisterKeyHint } from "../../commands/UICommands";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import {
-    SurfacePosition,
-} from "../../state/State";
+import { SurfacePosition } from "../../state/State";
 import { JoinComponent } from "../util/JoinComponent";
 
 export type InteractionStateType = SurfacePosition;

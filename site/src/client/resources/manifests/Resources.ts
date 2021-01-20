@@ -1,5 +1,6 @@
 import { MapPrison } from "../maps/maps/Prison";
 import { ResourceManifestBuilder } from "../ResourceManifestBuilder";
+import { audios } from "./Audios";
 import { sprites, SpriteSheets } from "./Sprites";
 
 export enum Maps {
@@ -11,5 +12,6 @@ export enum Maps {
 const manifest: ResourceManifestBuilder = new ResourceManifestBuilder();
 manifest.Spritesheet(SpriteSheets.SPRITE, sprites);
 manifest.Map(Maps.PRISON, MapPrison);
+manifest.Builder(audios);
 
 export const defaultManifest = manifest;

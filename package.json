@@ -62,7 +62,8 @@
         "test-unit": "npx jest site/src/",
         "test": "npm run-script test-unit",
         "lint": "npx prettier --write site/src && tslint --project tsconfig.json --fix -c tslint.json 'site/src/**/*.ts' && git add .",
-        "circular": "npx madge --circular site/src/**/*"
+        "circular": "npx madge --circular site/src/**/*",
+        "changelog": "npx git log --pretty=format:\"* *%cs* - %s\" > ./site/public/doc/announcements.md"
     },
     "pre-commit": [
         "lint",

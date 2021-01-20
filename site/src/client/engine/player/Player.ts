@@ -14,11 +14,7 @@ import {
 import { PhysicsRegistration } from "../../services/physics/PhysicsService";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Camera, Vector2D } from "../../types";
-import { animation } from "../../util/animation/Animations";
-import { GameAnimation } from "../../util/animation/GameAnimation";
-import { vec } from "../../util/math/Vector";
 import { ActionDelay } from "../../util/time/ActionDelay";
-import { fpsNorm } from "../../util/time/GlobalFPSController";
 import { InteractionStateType } from "../components/core/InteractionComponent";
 import { PhysicsStateType } from "../components/core/PhysicsComponent";
 import { Entity } from "../Entity";
@@ -26,10 +22,7 @@ import { PlayerEventType } from "../events/PlayerEvents";
 import { TurnDirection, WalkDirection } from "../events/TravelEvents";
 import { getEmptyInventory, Inventory } from "../scripting/items/types";
 import { CameraState, HealthState } from "../state/State";
-
-const WALK_SPEED = 0.02;
-const TURN_SPEED = 0.15;
-const HEAD_BOB_NERF = 0.6;
+import { PlayerMovement } from "./PlayerMovement";
 
 type InternalEntityState = PhysicsStateType & HealthState & CameraState;
 
@@ -37,25 +30,19 @@ export interface PlayerSerialisation {}
 
 export class Player {
     public inventory: Inventory = getEmptyInventory();
-
+    public movement: PlayerMovement;
     public surface: PhysicsStateType;
     private serviceLocator: ServiceLocator;
-    // private entity: Entity<InternalEntityState>;
-    private accumulatedWalk: Vector2D = { x: 0, y: 0 };
-    private accumulatedAngle: number = 0;
     private attackDelay: ActionDelay;
     private interactDelay: ActionDelay;
 
     private killed = false;
-    private headbob: GameAnimation;
-    private headbobOffset = 0;
     private health = 1;
 
     private physicsRegistration: PhysicsRegistration;
 
     public constructor(serviceLocator: ServiceLocator) {
         this.serviceLocator = serviceLocator;
-
         this.attackDelay = new ActionDelay(300);
         this.interactDelay = new ActionDelay(300);
 
@@ -75,16 +62,14 @@ export class Player {
             collidesWalls: true,
         };
 
+        this.movement = new PlayerMovement(
+            this.serviceLocator,
+            () => this.surface,
+            (vec: Vector2D) => (this.surface.velocity = vec),
+            (ang: number) => (this.surface.angle = ang)
+        );
+
         this.attackDelay = new ActionDelay(300);
-        this.headbob = animation((x: number) => {
-            const velocity = this.surface.velocity;
-            const speed = vec.vec_distance(velocity);
-            this.headbobOffset =
-                Math.abs(Math.sin(x * Math.PI)) * speed * HEAD_BOB_NERF;
-        })
-            .speed(400)
-            .looping()
-            .start();
         this.serviceLocator.getEventRouter().routeEvent(GameEventSource.WORLD, {
             type: PlayerEventType.PLAYER_INFO_CHANGE,
             payload: {
@@ -111,16 +96,7 @@ export class Player {
     }
 
     public update(): void {
-        this.headbob.tick();
-
-        this.surface.velocity = vec.vec_add(
-            this.surface.velocity,
-            this.accumulatedWalk
-        );
-        this.surface.angle = this.surface.angle + this.accumulatedAngle;
-
-        this.accumulatedAngle = 0;
-        this.accumulatedWalk = { x: 0, y: 0 };
+        this.movement.update();
     }
 
     public onStateTransition(
@@ -139,7 +115,7 @@ export class Player {
     public getCamera(): Camera {
         const { position, height, angle } = this.surface;
         const cameraHeight =
-            height + this.headbobOffset + DEFAULT_PLAYER_HEIGHT;
+            height + this.movement.getHeadbobOffset() + DEFAULT_PLAYER_HEIGHT;
         return {
             position,
             angle,
@@ -187,47 +163,11 @@ export class Player {
     }
 
     public walk(direction: WalkDirection) {
-        const speed = fpsNorm(WALK_SPEED);
-        let camera_add = { x: 0, y: 0 };
-        switch (direction) {
-            case WalkDirection.FORWARD:
-                camera_add = vec.vec_rotate(
-                    { x: 0, y: -speed },
-                    this.surface.angle
-                );
-                break;
-            case WalkDirection.BACK:
-                camera_add = vec.vec_rotate(
-                    { x: 0, y: speed },
-                    this.surface.angle
-                );
-                break;
-            case WalkDirection.LEFT:
-                camera_add = vec.vec_rotate(
-                    { x: -speed, y: 0 },
-                    this.surface.angle
-                );
-                break;
-            case WalkDirection.RIGHT:
-                camera_add = vec.vec_rotate(
-                    { x: speed, y: 0 },
-                    this.surface.angle
-                );
-                break;
-        }
-        this.accumulatedWalk = vec.vec_add(this.accumulatedWalk, camera_add);
+        this.movement.walk(direction);
     }
 
     public turn(direction: TurnDirection) {
-        const speed = fpsNorm(TURN_SPEED);
-        switch (direction) {
-            case TurnDirection.ANTICLOCKWISE:
-                this.accumulatedAngle = this.accumulatedAngle - speed / 3;
-                break;
-            case TurnDirection.CLOCKWISE:
-                this.accumulatedAngle = this.accumulatedAngle + speed / 3;
-                break;
-        }
+        this.movement.turn(direction);
     }
 
     private onDamaged(entity: Entity<InternalEntityState>, amount: number) {

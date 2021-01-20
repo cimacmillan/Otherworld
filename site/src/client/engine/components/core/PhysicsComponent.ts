@@ -2,9 +2,7 @@ import { PhysicsRegistration } from "../../../services/physics/PhysicsService";
 import { Vector2D } from "../../../types";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import {
-    SurfacePosition,
-} from "../../state/State";
+import { SurfacePosition } from "../../state/State";
 
 export interface PhysicsState {
     velocity: Vector2D;
