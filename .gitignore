@@ -6,3 +6,4 @@ cypress/screenshots
 cypress/support
 cypress/videos
 site/build
+**/.DS_Store
