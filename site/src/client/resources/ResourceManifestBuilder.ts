@@ -1,3 +1,4 @@
+import { AudioMetadata } from "../services/audio/AudioObject";
 import { MapSchema } from "./maps/MapShema";
 import {
     AnimationManifest,
@@ -19,8 +20,11 @@ export class ResourceManifestBuilder implements ResourceManifest {
         this.spritesheets[key] = manifest;
     }
 
-    public Audio(key: string, audio: string) {
-        this.audio[key] = audio;
+    public Audio(key: string, audio: string, metadata?: AudioMetadata) {
+        this.audio[key] = {
+            url: audio,
+            metadata,
+        };
     }
 
     public Map(key: string, map: MapSchema) {

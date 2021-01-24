@@ -1,6 +1,6 @@
 import { vec2 } from "gl-matrix";
 import { Camera } from "../../types";
-import { AudioObject } from "./AudioObject";
+import { AudioMetadata, AudioObject } from "./AudioObject";
 
 const MIN_GAIN = 0;
 const MAX_GAIN = 1;
@@ -10,6 +10,7 @@ const MIN_PLAY_BETWEEN = 100;
 
 export class AudioService {
     private camera: () => Camera;
+    private currentSong: AudioBufferSourceNode | undefined = undefined;
 
     constructor(private context: AudioContext) {
         window.AudioContext = window.AudioContext;
@@ -27,6 +28,36 @@ export class AudioService {
         if (this.canPlay(audioObject)) {
             return playSound(audioObject, this.context, gain, pan);
         }
+    }
+
+    public playSong(
+        audioObject: AudioObject,
+        gain: number = 1
+    ): AudioBufferSourceNode | undefined {
+        // TODO fade out
+        if (this.currentSong) {
+            this.currentSong.stop();
+        }
+        const gainNode = this.context.createGain();
+        gainNode.gain.setValueAtTime(0, this.context.currentTime);
+
+        let fade = 0;
+        const interval = setInterval(() => {
+            fade += 0.04;
+            if (fade >= 1) {
+                fade = 1;
+                clearInterval(interval);
+            }
+            gainNode.gain.setValueAtTime(fade * gain, this.context.currentTime);
+        }, 60);
+
+        const source = this.context.createBufferSource(); // creates a sound source
+        source.buffer = audioObject.buffer; // tell the source which sound to play
+        source.connect(gainNode).connect(this.context.destination); // connect the source to the context's destination (the speakers)
+        source.start(0); // play the source now
+        this.currentSong = source;
+        this.currentSong.loop = true;
+        return this.currentSong;
     }
 
     public play3D(
@@ -67,7 +98,8 @@ export class AudioService {
 
 export function loadSound(
     url: string,
-    context: AudioContext
+    context: AudioContext,
+    metadata?: AudioMetadata
 ): Promise<AudioObject> {
     return new Promise((resolve) => {
         const request = new XMLHttpRequest();
@@ -81,6 +113,7 @@ export function loadSound(
                 (audioBuffer: AudioBuffer) => {
                     resolve({
                         buffer: audioBuffer,
+                        metadata,
                     });
                 },
                 (e) => console.log(e)

@@ -1,4 +1,5 @@
 import { vec3 } from "gl-matrix";
+import { Audios } from "../../../resources/manifests/Audios";
 import { GameItem } from "../../../resources/manifests/Items";
 import { InteractionType } from "../../../services/interaction/InteractionType";
 import {
@@ -91,6 +92,30 @@ const createDoorDustEmitter = (args: {
     });
 };
 
+export const playsEffect = <T>(
+    audio: Audios,
+    gain: number
+): EntityComponent<T> => {
+    let audioRef: AudioBufferSourceNode;
+    return {
+        onCreate: (entity: Entity<T>) => {
+            audioRef = entity
+                .getServiceLocator()
+                .getAudioService()
+                .play(
+                    entity.getServiceLocator().getResourceManager().manifest
+                        .audio[audio],
+                    gain
+                );
+        },
+        onDestroy: (entity: Entity<T>) => {
+            if (audioRef) {
+                audioRef.stop();
+            }
+        },
+    };
+};
+
 export const doorOpensWithParticles = (
     start: Vector2D,
     end: Vector2D,
@@ -140,6 +165,7 @@ export const doorOpensWithParticles = (
                 }
             ),
             emitsParticles<DoorStateType>(lineEmitter.emitter),
+            playsEffect(Audios.DOOR_OPEN, 0.2),
         ]),
     };
     return new SwitchComponent(
@@ -284,6 +310,13 @@ export const createLockedDoor = (args: LockedDoorConfig) => {
                         ent.setState({
                             open: DoorOpenState.OPENING,
                         });
+                        serviceLocator
+                            .getAudioService()
+                            .play(
+                                serviceLocator.getResourceManager().manifest
+                                    .audio[Audios.DOOR_UNLOCK],
+                                0.5
+                            );
                     } else {
                         OpenLockpickingChallenge(serviceLocator)(
                             (result: LockpickingResult) => {
@@ -292,6 +325,13 @@ export const createLockedDoor = (args: LockedDoorConfig) => {
                                         ? DoorOpenState.OPENING
                                         : DoorOpenState.CLOSED,
                                 });
+                                serviceLocator
+                                    .getAudioService()
+                                    .play(
+                                        serviceLocator.getResourceManager()
+                                            .manifest.audio[Audios.DOOR_UNLOCK],
+                                        0.5
+                                    );
                             },
                             configuration
                         );

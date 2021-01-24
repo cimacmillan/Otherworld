@@ -1,16 +1,6 @@
 
 ### Milestone
 
-First level where player unlocks door to get key which opens another door with a ladder in it
-
-### Audio
-
-TODO Door minigame audio, button click and reset click
-TODO Door open audio
-TODO Item collect audio
-TODO Key use audio
-TODO Map transition audio
-
 
 -------
 
@@ -27,4 +17,6 @@ Milestone 2?
 * Move to vec3
 * Improve headbob
 * Audio metadata with gain apply & BPM
+* Sort out resource manager
+* Item pickup soudn
 

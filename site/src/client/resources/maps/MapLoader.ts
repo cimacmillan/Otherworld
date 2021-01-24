@@ -8,6 +8,7 @@ export function loadMap(serviceLocator: ServiceLocator, gameMap: GameMap) {
     const { layers } = gameMap;
 
     layers.forEach((layer) => loadLayer(serviceLocator, layer));
+    gameMap.onStart(serviceLocator);
 }
 
 function loadLayer(serviceLocator: ServiceLocator, layer: MapLayer) {

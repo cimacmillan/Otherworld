@@ -69,7 +69,6 @@ export class ScriptingService {
         //         ]
         //     );
         this.serviceLocator.getInputService().setInputState(InputState.DEFAULT);
-
         this.game.setUpdateWorld(true);
     }
 

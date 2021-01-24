@@ -1,7 +1,9 @@
+import { ServiceLocator } from "../../services/ServiceLocator";
 import { MapLayerConverter, MapLayerConverterType } from "./MapLayerConverters";
 
 export interface MapSchema {
     layers: MapLayerSchema[];
+    onStart: (serviceLocator: ServiceLocator) => void;
 }
 
 interface MapLayerSchema {
@@ -22,6 +24,7 @@ export interface MapLayerMetadata {
 
 export interface GameMap {
     layers: MapLayer[];
+    onStart: (serviceLocator: ServiceLocator) => void;
 }
 
 export interface MapLayer {
