@@ -58,8 +58,9 @@ export class ResourceManager {
 
         for (const key in manifest.audio) {
             loadedManifest.audio[key] = await loadSound(
-                manifest.audio[key],
-                audio
+                manifest.audio[key].url,
+                audio,
+                manifest.audio[key].metadata
             );
             increment();
         }
@@ -102,6 +103,7 @@ export class ResourceManager {
             const mapSchema = manifest.maps[key];
             loadedManifest.maps[key] = {
                 layers: [],
+                onStart: mapSchema.onStart,
             };
 
             for (const layer of mapSchema.layers) {

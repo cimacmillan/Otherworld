@@ -1,8 +1,9 @@
 import React = require("react");
-import { PanelImageMap } from "../../resources/Types";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Colours } from "../../resources/design/Colour";
 import { Spacing } from "../../resources/design/Spacing";
+import { useServiceLocator } from "../effects/GameEffect";
+import { Audios } from "../../resources/manifests/Audios";
 
 export interface GameButtonContainerProps {
     width: number;
@@ -22,6 +23,7 @@ export const GameButtonContainer: React.FunctionComponent<GameButtonContainerPro
 ) => {
     const [isHovered, setHovered] = React.useState(false);
     const [isDown, setDown] = React.useState(false);
+    const serviceLocator = useServiceLocator();
 
     const { width, height } = props;
 
@@ -39,6 +41,14 @@ export const GameButtonContainer: React.FunctionComponent<GameButtonContainerPro
             onMouseUp={() => {
                 setDown(false);
                 props.onSelect();
+                serviceLocator
+                    .getAudioService()
+                    .play(
+                        serviceLocator.getResourceManager().manifest.audio[
+                            Audios.BUTTON_PRESS
+                        ],
+                        0.4
+                    );
             }}
             style={{
                 width,

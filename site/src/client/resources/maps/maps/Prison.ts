@@ -1,3 +1,5 @@
+import { ServiceLocator } from "../../../services/ServiceLocator";
+import { Audios } from "../../manifests/Audios";
 import { GameItem } from "../../manifests/Items";
 import { MapLayerConverterType } from "../MapLayerConverters";
 import { MapSchema } from "../MapShema";
@@ -55,4 +57,14 @@ export const MapPrison: MapSchema = {
             mapMetadata: [],
         },
     ],
+    onStart: (serviceLocator: ServiceLocator) => {
+        serviceLocator
+            .getAudioService()
+            .playSong(
+                serviceLocator.getResourceManager().manifest.audio[
+                    Audios.SONG_CURIOUS_NOISES
+                ],
+                0.1
+            );
+    },
 };

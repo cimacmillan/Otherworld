@@ -1,4 +1,4 @@
-import { AudioObject } from "../services/audio/AudioObject";
+import { AudioMetadata, AudioObject } from "../services/audio/AudioObject";
 import { GameMap, MapSchema } from "./maps/MapShema";
 import { SpriteSheet } from "./SpriteSheet";
 
@@ -59,29 +59,8 @@ export interface AnimationManifest {
 }
 
 export interface AudioManifest {
-    [key: string]: string;
-}
-
-export interface PanelImageMap {
-    spritesheet: number;
-
-    topLeft: number;
-    topMiddle: number;
-    topRight: number;
-    middleLeft: number;
-    middleMiddle: number;
-    middleRight: number;
-    bottomLeft: number;
-    bottomMiddle: number;
-    bottomRight: number;
-
-    wideLeft: number;
-    wideMiddle: number;
-    wideRight: number;
-
-    thinLeft: number;
-    thinMiddle: number;
-    thinight: number;
-
-    tiny: number;
+    [key: string]: {
+        url: string;
+        metadata?: AudioMetadata;
+    };
 }

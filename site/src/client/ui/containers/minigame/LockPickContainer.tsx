@@ -2,6 +2,8 @@ import { LockMatrixComponent } from "../../components/LockMatrixComponent";
 import React = require("react");
 import { Colours } from "../../../resources/design/Colour";
 import { cloneDeep } from "lodash";
+import { useServiceLocator } from "../../effects/GameEffect";
+import { Audios } from "../../../resources/manifests/Audios";
 
 interface LockPickContainerProps {
     onComplete: () => void;
@@ -41,6 +43,7 @@ const generateSelected = (width: number, height: number) =>
 export const LockPickContainer: React.FunctionComponent<LockPickContainerProps> = (
     props
 ) => {
+    const serviceLocator = useServiceLocator();
     const { width, height, shouldReset } = props.configuration;
     const [selected, setSelected] = React.useState(
         generateSelected(width, height)
@@ -52,6 +55,16 @@ export const LockPickContainer: React.FunctionComponent<LockPickContainerProps> 
 
     const reset = () => {
         setSelected(generateSelected(width, height));
+        if (designated > 0) {
+            serviceLocator
+                .getAudioService()
+                .play(
+                    serviceLocator.getResourceManager().manifest.audio[
+                        Audios.LOCK_BREAK
+                    ],
+                    0.5
+                );
+        }
         setDesignated(0);
     };
 
@@ -62,6 +75,14 @@ export const LockPickContainer: React.FunctionComponent<LockPickContainerProps> 
             newSelected[x][y] = true;
             setSelected(newSelected);
             setDesignated(designated + 1);
+            serviceLocator
+                .getAudioService()
+                .play(
+                    serviceLocator.getResourceManager().manifest.audio[
+                        Audios.LOCK_CLICK
+                    ],
+                    0.5
+                );
             if (designated + 1 >= width * height) {
                 props.onComplete();
             }
