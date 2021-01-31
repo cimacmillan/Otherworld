@@ -41,7 +41,10 @@ export class Player {
 
     private physicsRegistration: PhysicsRegistration;
 
-    public constructor(serviceLocator: ServiceLocator) {
+    public constructor(
+        serviceLocator: ServiceLocator,
+        serialisation?: PlayerSerialisation
+    ) {
         this.serviceLocator = serviceLocator;
         this.attackDelay = new ActionDelay(300);
         this.interactDelay = new ActionDelay(300);
@@ -170,81 +173,13 @@ export class Player {
         this.movement.turn(direction);
     }
 
-    private onDamaged(entity: Entity<InternalEntityState>, amount: number) {
-        entity.setState({ health: entity.getState().health - amount });
-        // entity
-        //     .getServiceLocator()
-        //     .getAudioService()
-        //     .play(
-        //         entity.getServiceLocator().getResourceManager().manifest.audio[
-        //             Audios.PLAYER_HIT
-        //         ]
-        //     );
-        entity
-            .getServiceLocator()
-            .getRenderService()
-            .screenShakeService.shake(1);
-        if (entity.getState().health <= 0 && !this.killed) {
-            entity.emitGlobally({ type: PlayerEventType.PLAYER_KILLED });
-            entity.getServiceLocator().getScriptingService().endGame();
-            this.killed = true;
-        } else if (!this.killed) {
-            entity.emitGlobally({
-                type: PlayerEventType.PLAYER_DAMAGED,
-            });
-        }
+    public serialise(): PlayerSerialisation {
+        return {};
     }
 
-    private onAttack(entity: Entity<InternalEntityState>) {
-        entity.emitGlobally({
-            type: PlayerEventType.PLAYER_ATTACK,
-        });
-
-        // entity
-        //     .getServiceLocator()
-        //     .getAudioService()
-        //     .play(
-        //         entity.getServiceLocator().getResourceManager().manifest.audio[
-        //             Audios.WHOOSH
-        //         ]
-        //     );
-
-        this.attackDelay.onAction();
-        const state = entity.getState();
-        const attacks = entity
-            .getServiceLocator()
-            .getInteractionService()
-            .getInteractables(
-                InteractionType.ATTACK,
-                state.position,
-                state.angle,
-                1.5
-            );
-
-        const hasAttacked = false;
-
-        attacks.forEach((attacked) => {
-            // if (attacked === entity) {
-            //     return;
-            // }
-            // hasAttacked = true;
-            // attacked.emit({
-            //     type: InteractionEventType.ON_DAMAGED,
-            //     payload: {
-            //         amount: 0.4,
-            //         source: state,
-            //     },
-            // });
-        });
-
-        if (hasAttacked) {
-            // entity
-            //     .getServiceLocator()
-            //     .getAudioService()
-            //     .play(
-            //         entity.getServiceLocator().getResourceManager().manifest
-            //             .audio[Audios.SLAM]
-            //     );
-        }
+    public destroy() {
+        this.serviceLocator
+            .getPhysicsService()
+            .unregisterPhysicsEntity(this.physicsRegistration);
     }
 }

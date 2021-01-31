@@ -1,6 +1,14 @@
 
 ### Milestone 2
-Puzzle maps to escape prison?
+Puzzle maps to escape prison
+
+### Doing
+* Tutorial service serialisation
+* Player data serialisation
+* Proper map loader and serialiser
+* New map to test deserialising
+* Build map metadata with builder
+* Fade component that syncs redux and fadeout
 
 ### Polish 
 * Improve head bob to not make noise when standing still (frequency?)
@@ -23,6 +31,8 @@ Puzzle maps to escape prison?
 ### Gameplay
 * Destroy / remove key on door use?
 * Item removed key hint
+* Add some enemies to the game again?
+* Add weapons to the game, with equiped inventory?
 
 ### Refactors
 * Quiet entities list

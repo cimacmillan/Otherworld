@@ -95,6 +95,13 @@ export class TutorialService {
         return {};
     }
 
+    public destroy() {
+        this.deregister(this.walk);
+        this.deregister(this.turn);
+        this.deregister(this.inventory);
+        this.deregister(this.closeInventory);
+    }
+
     private register(hint: KeyHint) {
         return RegisterKeyHint(this.serviceLocator)(hint);
     }

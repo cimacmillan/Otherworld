@@ -1,16 +1,20 @@
 import {
-    createDoor,
-    createLockedDoor,
+    createDoorState,
+    createLockedDoorState,
 } from "../../../engine/scripting/factory/DoorFactory";
 import {
-    createSlime,
     getSlimeState,
 } from "../../../engine/scripting/factory/EnemyFactory";
-import { createItemDrop } from "../../../engine/scripting/factory/ItemFactory";
-import { createLadder } from "../../../engine/scripting/factory/MapChangeFactory";
+import { EntityFactory } from "../../../engine/scripting/factory/EntityFactory";
+import {
+    createItemDropState,
+} from "../../../engine/scripting/factory/ItemFactory";
+import {
+    createLadderState,
+} from "../../../engine/scripting/factory/MapChangeFactory";
 import {
     createBlock,
-    createStaticFloor,
+    createStaticFloorState,
 } from "../../../engine/scripting/factory/SceneryFactory";
 import { GameItem, GameItems } from "../../manifests/Items";
 import { Sprites } from "../../manifests/Sprites";
@@ -27,7 +31,7 @@ export const MapLayerConverterDefault: MapLayerConverter = (
     switch (hex) {
         case "f6757a":
             return [
-                createSlime(
+                EntityFactory.ENEMY_SLIME(
                     serviceLocator,
                     getSlimeState(serviceLocator, x, y)
                 ),
@@ -36,63 +40,76 @@ export const MapLayerConverterDefault: MapLayerConverter = (
             return createBlock(serviceLocator, x, y, Sprites.WALL);
         case "00ff00":
             if (metadata.configuration) {
-                return createLockedDoor({
+                return EntityFactory.DOOR_LOCKED(
                     serviceLocator,
-                    x,
-                    y,
-                    spriteString: Sprites.CELL,
-                    configuration: metadata.configuration,
-                    horizontal: metadata.horizontal,
-                    keyId: metadata.keyId,
-                });
+                    createLockedDoorState({
+                        x,
+                        y,
+                        spriteString: Sprites.CELL,
+                        configuration: metadata.configuration,
+                        horizontal: metadata.horizontal,
+                        keyId: metadata.keyId,
+                    })
+                );
             } else {
-                return createDoor(
+                return EntityFactory.DOOR(
                     serviceLocator,
-                    x,
-                    y,
-                    Sprites.CELL,
-                    metadata.horizontal
+                    createDoorState(x, y, Sprites.CELL, metadata.horizontal)
                 );
             }
         case "ffff00":
-            return createItemDrop(serviceLocator, {
-                item: GameItems[metadata.id as GameItem],
-                position: { x: x + 0.5, y: y + 0.5 },
-            });
+            return EntityFactory.ITEM_DROP(
+                serviceLocator,
+                createItemDropState({
+                    item: GameItems[metadata.id as GameItem],
+                    position: { x: x + 0.5, y: y + 0.5 },
+                })
+            );
         case "ff00f2":
-            return createLadder(serviceLocator, x, y, Sprites.LADDER);
+            return EntityFactory.LADDER(
+                serviceLocator,
+                createLadderState(x, y, Sprites.LADDER)
+            );
         case "000000":
             return [
-                createStaticFloor(
+                EntityFactory.SCENERY_FLOOR(
                     serviceLocator,
-                    Sprites.FLOOR,
-                    0,
-                    { x, y },
-                    { x: x + 1, y: y + 1 }
+                    createStaticFloorState(
+                        Sprites.FLOOR,
+                        0,
+                        { x, y },
+                        { x: x + 1, y: y + 1 }
+                    )
                 ),
-                createStaticFloor(
+                EntityFactory.SCENERY_FLOOR(
                     serviceLocator,
-                    Sprites.FLOOR,
-                    1,
-                    { x, y },
-                    { x: x + 1, y: y + 1 }
+                    createStaticFloorState(
+                        Sprites.FLOOR,
+                        1,
+                        { x, y },
+                        { x: x + 1, y: y + 1 }
+                    )
                 ),
             ];
         case "ffffff":
             return [
-                createStaticFloor(
+                EntityFactory.SCENERY_FLOOR(
                     serviceLocator,
-                    Sprites.FLOOR_HOLE,
-                    0,
-                    { x, y },
-                    { x: x + 1, y: y + 1 }
+                    createStaticFloorState(
+                        Sprites.FLOOR_HOLE,
+                        0,
+                        { x, y },
+                        { x: x + 1, y: y + 1 }
+                    )
                 ),
-                createStaticFloor(
+                EntityFactory.SCENERY_FLOOR(
                     serviceLocator,
-                    Sprites.FLOOR_HOLE,
-                    1,
-                    { x, y },
-                    { x: x + 1, y: y + 1 }
+                    createStaticFloorState(
+                        Sprites.FLOOR_HOLE,
+                        1,
+                        { x, y },
+                        { x: x + 1, y: y + 1 }
+                    )
                 ),
             ];
     }

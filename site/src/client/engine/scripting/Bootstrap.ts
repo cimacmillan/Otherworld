@@ -10,32 +10,10 @@ interface BootstrapInfo {
 }
 
 export function bootstrap(serviceLocator: ServiceLocator): BootstrapInfo {
-    const world = serviceLocator.getWorld();
-
     const player = createPlayer(serviceLocator);
 
     serviceLocator.getAudioService().attachCamera(() => player.getCamera());
     serviceLocator.getRenderService().attachCamera(() => player.getCamera());
-
-    // world.addEntity(
-    //     createStaticFloor(
-    //         serviceLocator,
-    //         Sprites.FLOOR,
-    //         0,
-    //         { x: -100, y: -100 },
-    //         { x: 100, y: 100 }
-    //     )
-    // );
-
-    // world.addEntity(
-    //     createStaticFloor(
-    //         serviceLocator,
-    //         Sprites.FLOOR,
-    //         1,
-    //         { x: -100, y: -100 },
-    //         { x: 100, y: 100 }
-    //     )
-    // );
 
     loadMap(
         serviceLocator,

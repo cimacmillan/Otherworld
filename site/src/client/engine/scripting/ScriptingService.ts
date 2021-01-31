@@ -1,7 +1,6 @@
 import { Game } from "../../Game";
 // import { Audios } from "../../resources/manifests/Types";
 import { InputState } from "../../services/input/InputService";
-import { ProcedureService } from "../../services/jobs/ProcedureService";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Entity } from "../Entity";
 import { Player } from "../player/Player";
@@ -31,34 +30,34 @@ export class ScriptingService {
         return this.player;
     }
 
-    public resetContent() {
-        this.shouldReset = true;
-    }
+    // public resetContent() {
+    //     this.shouldReset = true;
+    // }
 
     public update() {
-        if (this.shouldReset) {
-            this.shouldReset = false;
-            const world = this.serviceLocator.getWorld();
-            const entityArray = world.getEntityArray();
-            for (const entity of entityArray.getArray()) {
-                world.removeEntity(entity);
-            }
-            this.bootstrapInitialContent();
-        }
+        // if (this.shouldReset) {
+        //     this.shouldReset = false;
+        //     const world = this.serviceLocator.getWorld();
+        //     const entityArray = world.getEntityArray();
+        //     for (const entity of entityArray.getArray()) {
+        //         world.removeEntity(entity);
+        //     }
+        //     this.bootstrapInitialContent();
+        // }
     }
 
-    public endGame() {
-        // this.serviceLocator
-        //     .getAudioService()
-        //     .play(
-        //         this.serviceLocator.getResourceManager().manifest.audio[
-        //             Audios.END
-        //         ]
-        //     );
-        this.game.setUpdateWorld(false);
-        this.serviceLocator.getInputService().setInputState(InputState.MENU);
-        ProcedureService.setTimeout(() => this.resetContent(), 1000);
-    }
+    // public endGame() {
+    //     // this.serviceLocator
+    //     //     .getAudioService()
+    //     //     .play(
+    //     //         this.serviceLocator.getResourceManager().manifest.audio[
+    //     //             Audios.END
+    //     //         ]
+    //     //     );
+    //     this.game.setUpdateWorld(false);
+    //     this.serviceLocator.getInputService().setInputState(InputState.MENU);
+    //     ProcedureService.setTimeout(() => this.resetContent(), 1000);
+    // }
 
     public startGame() {
         // this.serviceLocator
@@ -72,17 +71,25 @@ export class ScriptingService {
         this.game.setUpdateWorld(true);
     }
 
-    public bootsrapDeserialisedContent(
-        player: Player,
-        entity: Array<Entity<any>>
-    ) {
+    public offloadWorld() {
         const world = this.serviceLocator.getWorld();
         const entityArray = world.getEntityArray();
         for (const entity of entityArray.getArray()) {
             world.removeEntity(entity);
         }
         world.performSync();
+        if (this.player) {
+            this.player.destroy();
+        }
+        this.serviceLocator.getTutorialService().destroy();
+    }
 
+    public bootsrapDeserialisedContent(
+        player: Player,
+        entity: Array<Entity<any>>
+    ) {
+        this.offloadWorld();
+        const world = this.serviceLocator.getWorld();
         this.player = player;
         // world.addEntity(this.player);
 
@@ -93,7 +100,7 @@ export class ScriptingService {
             .getRenderService()
             .attachCamera(() => this.player.getCamera());
 
-        this.serviceLocator.getTutorialService().onStart();
+        // this.serviceLocator.getTutorialService().onStart();
 
         // world.addEntity(player);
         for (let i = 1; i < entity.length; i++) {

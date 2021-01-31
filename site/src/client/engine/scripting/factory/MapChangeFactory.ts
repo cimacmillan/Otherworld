@@ -8,13 +8,8 @@ import { SpriteRenderState } from "../../state/State";
 
 type LadderStateType = SpriteRenderState;
 
-export const createLadder = (
-    serviceLocator: ServiceLocator,
-    x: number,
-    y: number,
-    sprite: Sprites
-) => {
-    const initialState: LadderStateType = {
+export const createLadderState = (x: number, y: number, sprite: Sprites) => {
+    return {
         yOffset: 0,
         position: { x: x + 0.5, y: y + 0.5 },
         height: 0,
@@ -24,11 +19,15 @@ export const createLadder = (
         spriteHeight: 1,
         sprite,
     };
+};
 
+export const createLadder = (
+    serviceLocator: ServiceLocator,
+    state: LadderStateType
+) => {
     return new Entity<LadderStateType>(
-        undefined,
         serviceLocator,
-        initialState,
+        state,
         SpriteRenderComponent(),
         withInteractionHint(
             serviceLocator,
