@@ -2,16 +2,10 @@ import {
     createDoorState,
     createLockedDoorState,
 } from "../../../engine/scripting/factory/DoorFactory";
-import {
-    getSlimeState,
-} from "../../../engine/scripting/factory/EnemyFactory";
+import { getSlimeState } from "../../../engine/scripting/factory/EnemyFactory";
 import { EntityFactory } from "../../../engine/scripting/factory/EntityFactory";
-import {
-    createItemDropState,
-} from "../../../engine/scripting/factory/ItemFactory";
-import {
-    createLadderState,
-} from "../../../engine/scripting/factory/MapChangeFactory";
+import { createItemDropState } from "../../../engine/scripting/factory/ItemFactory";
+import { createLadderState } from "../../../engine/scripting/factory/MapChangeFactory";
 import {
     createBlock,
     createStaticFloorState,

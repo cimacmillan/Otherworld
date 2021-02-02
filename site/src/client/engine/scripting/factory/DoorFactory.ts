@@ -298,6 +298,8 @@ export const createLockedDoorState = (
         angle: 0,
         open: DoorOpenState.CLOSED,
         horizontal,
+        configuration,
+        keyId,
     };
 };
 

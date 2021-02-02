@@ -26,19 +26,36 @@ import { PlayerMovement } from "./PlayerMovement";
 
 type InternalEntityState = PhysicsStateType & HealthState & CameraState;
 
-export interface PlayerSerialisation {}
+export interface PlayerSerialisation {
+    inventory: Inventory;
+    surface: PhysicsStateType;
+}
+
+const DEFAULT_PLAYER_STATE: PlayerSerialisation = {
+    inventory: getEmptyInventory(),
+    surface: {
+        position: { x: 31.5, y: 31.5 },
+        height: 0,
+        angle: 0,
+        yOffset: 0,
+        radius: DEFAULT_PLAYER_RADIUS,
+        heightVelocity: 0,
+        velocity: { x: 0, y: 0 },
+        friction: 0.8,
+        mass: 1,
+        elastic: 0,
+        collidesEntities: true,
+        collidesWalls: true,
+    },
+};
 
 export class Player {
-    public inventory: Inventory = getEmptyInventory();
+    public state: PlayerSerialisation;
     public movement: PlayerMovement;
-    public surface: PhysicsStateType;
+
     private serviceLocator: ServiceLocator;
-    private attackDelay: ActionDelay;
+
     private interactDelay: ActionDelay;
-
-    private killed = false;
-    private health = 1;
-
     private physicsRegistration: PhysicsRegistration;
 
     public constructor(
@@ -46,52 +63,35 @@ export class Player {
         serialisation?: PlayerSerialisation
     ) {
         this.serviceLocator = serviceLocator;
-        this.attackDelay = new ActionDelay(300);
+        this.state = serialisation || DEFAULT_PLAYER_STATE;
         this.interactDelay = new ActionDelay(300);
-
-        this.surface = {
-            // position: { x: 40.5, y: 30.5 },
-            position: { x: 31.5, y: 31.5 },
-            height: 0,
-            angle: 0,
-            yOffset: 0,
-            radius: DEFAULT_PLAYER_RADIUS,
-            heightVelocity: 0,
-            velocity: { x: 0, y: 0 },
-            friction: 0.8,
-            mass: 1,
-            elastic: 0,
-            collidesEntities: true,
-            collidesWalls: true,
-        };
 
         this.movement = new PlayerMovement(
             this.serviceLocator,
-            () => this.surface,
-            (vec: Vector2D) => (this.surface.velocity = vec),
-            (ang: number) => (this.surface.angle = ang)
+            () => this.state.surface,
+            (vec: Vector2D) => (this.state.surface.velocity = vec),
+            (ang: number) => (this.state.surface.angle = ang)
         );
 
-        this.attackDelay = new ActionDelay(300);
         this.serviceLocator.getEventRouter().routeEvent(GameEventSource.WORLD, {
             type: PlayerEventType.PLAYER_INFO_CHANGE,
             payload: {
-                health: this.health,
+                health: 1,
             },
         });
 
         this.physicsRegistration = {
             collidesEntities: true,
             collidesWalls: true,
-            setHeight: (height: number) => (this.surface.height = height),
+            setHeight: (height: number) => (this.state.surface.height = height),
             setHeightVelocity: (heightVelocity: number) =>
-                (this.surface.heightVelocity = heightVelocity),
+                (this.state.surface.heightVelocity = heightVelocity),
             setVelocity: (x: number, y: number) =>
-                (this.surface.velocity = { x, y }),
+                (this.state.surface.velocity = { x, y }),
             setPosition: (x: number, y: number) => {
-                this.surface.position = { x, y };
+                this.state.surface.position = { x, y };
             },
-            getPhysicsInformation: () => this.surface,
+            getPhysicsInformation: () => this.state.surface,
         };
         this.serviceLocator
             .getPhysicsService()
@@ -116,7 +116,7 @@ export class Player {
     }
 
     public getCamera(): Camera {
-        const { position, height, angle } = this.surface;
+        const { position, height, angle } = this.state.surface;
         const cameraHeight =
             height + this.movement.getHeadbobOffset() + DEFAULT_PLAYER_HEIGHT;
         return {
@@ -131,11 +131,11 @@ export class Player {
     }
 
     public getPositon() {
-        return this.surface.position;
+        return this.state.surface.position;
     }
 
     public getInventory() {
-        return this.inventory;
+        return this.state.inventory;
     }
 
     public interact() {
@@ -143,7 +143,7 @@ export class Player {
             return;
         }
         this.interactDelay.onAction();
-        const state = this.surface;
+        const state = this.state.surface;
         const interacts = this.serviceLocator
             .getInteractionService()
             .getInteractables(
@@ -174,7 +174,7 @@ export class Player {
     }
 
     public serialise(): PlayerSerialisation {
-        return {};
+        return this.state;
     }
 
     public destroy() {

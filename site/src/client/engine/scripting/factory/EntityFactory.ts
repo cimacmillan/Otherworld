@@ -1,6 +1,6 @@
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Entity } from "../../Entity";
-import { createDoor } from "./DoorFactory";
+import { createDoor, createLockedDoor } from "./DoorFactory";
 import { createSlime } from "./EnemyFactory";
 import { createItemDrop } from "./ItemFactory";
 import { createLadder } from "./MapChangeFactory";
@@ -47,7 +47,7 @@ const entityFactory: Record<EntityType, EntityCreationFunction> = {
         throw new Error("Entity type is null");
     },
     [EntityType.DOOR]: createDoor,
-    [EntityType.DOOR_LOCKED]: createDoor,
+    [EntityType.DOOR_LOCKED]: createLockedDoor,
     [EntityType.ENEMY_SLIME]: createSlime,
     [EntityType.ITEM_DROP]: createItemDrop,
     [EntityType.LADDER]: createLadder,

@@ -5,7 +5,10 @@ import {
     EntityFactory,
     EntityType,
 } from "../../engine/scripting/factory/EntityFactory";
-import { State, store } from "../../ui/State";
+import {
+    TutorialSerialisation,
+} from "../../engine/scripting/TutorialService";
+import { store } from "../../ui/State";
 import { ServiceLocator } from "../ServiceLocator";
 import { Serialisable } from "./Serialisable";
 
@@ -20,7 +23,19 @@ export interface SerialisationObject {
         entities: SerialisedEntity[];
         player: PlayerSerialisation;
     };
-    uiState: State;
+    services: {
+        tutorial: TutorialSerialisation;
+    };
+}
+
+export interface DeserialisedObject {
+    world: {
+        entities: Array<Entity<any>>;
+        player: Player;
+    };
+    services: {
+        tutorial: TutorialSerialisation;
+    };
 }
 
 export class SerialisationService implements Serialisable<SerialisationObject> {
@@ -46,6 +61,9 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
                 entities: entities.slice(1, entities.length),
             },
             uiState,
+            services: {
+                tutorial: this.serviceLocator.getTutorialService().serialise(),
+            },
         };
         return serialisation;
     }
@@ -55,14 +73,24 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
             this.deserialiseEntity(ent)
         );
         const player = this.deserialisePlayer(data.world.player);
+        const deserialisedObject: DeserialisedObject = {
+            world: {
+                entities: deserialisedEntities,
+                player,
+            },
+            services: {
+                tutorial: data.services.tutorial,
+            },
+        };
+
         this.serviceLocator
             .getScriptingService()
-            .bootsrapDeserialisedContent(player, deserialisedEntities);
+            .bootsrapDeserialisedContent(deserialisedObject);
         // store.next(data.uiState);
     }
 
     public deserialisePlayer(player: PlayerSerialisation): Player {
-        return new Player(this.serviceLocator);
+        return new Player(this.serviceLocator, player);
     }
 
     public deserialiseEntity(entity: SerialisedEntity): Entity<any> {

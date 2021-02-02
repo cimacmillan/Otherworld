@@ -28,31 +28,32 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
 ) => {
     const [state, dispatch] = useGlobalState();
     const [keyDown, setKeyDown] = React.useState(false);
-    const [keyHints, setKeyHints] = React.useState(initialState);
+    // const [keyHints, setKeyHints] = React.useState(initialState);
+    const keyHints = state.keyHints.keyHints;
 
-    React.useEffect(() => {
-        const newKeyHints = {} as KeyHintInstanceMap;
-        Object.entries(keyHints).forEach(([key, value]) => {
-            newKeyHints[key] = {
-                keyHint: value.keyHint,
-                shouldBeShown: false,
-            };
-        });
-        Object.entries(state.keyHints.keyHints).forEach(([key, value]) => {
-            newKeyHints[key] = {
-                keyHint: value,
-                shouldBeShown: true,
-            };
-        });
-        if (!isEqual(keyHints, newKeyHints)) {
-            setKeyHints(newKeyHints);
-        }
-    });
+    // React.useEffect(() => {
+    //     const newKeyHints = {} as KeyHintInstanceMap;
+    //     Object.entries(keyHints).forEach(([key, value]) => {
+    //         newKeyHints[key] = {
+    //             keyHint: value.keyHint,
+    //             shouldBeShown: false,
+    //         };
+    //     });
+    //     Object.entries(state.keyHints.keyHints).forEach(([key, value]) => {
+    //         newKeyHints[key] = {
+    //             keyHint: value,
+    //             shouldBeShown: true,
+    //         };
+    //     });
+    //     if (!isEqual(keyHints, newKeyHints)) {
+    //         setKeyHints(newKeyHints);
+    //     }
+    // });
 
     const removeKeyHint = (key: string) => {
-        const newKeyHints = { ...keyHints };
-        delete newKeyHints[key];
-        setKeyHints(newKeyHints);
+        // const newKeyHints = { ...keyHints };
+        // delete newKeyHints[key];
+        // setKeyHints(newKeyHints);
     };
 
     // const { keyHints } = state.keyHints;
@@ -71,7 +72,7 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
     }
 
     const keyComponents = keys.map((key) => {
-        const keyHint = keyHints[key].keyHint;
+        const keyHint = keyHints[key];
         return (
             <KeyHintComponent
                 key={collapse([...keyHint.keys, keyHint.hint])}
@@ -81,7 +82,7 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
                 style={{
                     ...ShadowComponentStyleAlpha(),
                 }}
-                fade={!keyHints[key].shouldBeShown}
+                fade={false}
                 onFadeComplete={() => removeKeyHint(key)}
             />
         );

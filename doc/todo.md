@@ -3,8 +3,6 @@
 Puzzle maps to escape prison
 
 ### Doing
-* Tutorial service serialisation
-* Player data serialisation
 * Proper map loader and serialiser
 * New map to test deserialising
 * Build map metadata with builder
