@@ -14,63 +14,29 @@ import { GameAnimation } from "../../util/animation/GameAnimation";
 import { CompositeAnimation } from "../../util/animation/CompositeAnimation";
 import { animation, sin } from "../../util/animation/Animations";
 
-interface KeyHintComponent {
+export interface KeyHintComponentProps {
     keyCode: string[];
     selected: boolean;
     text: string;
     style: React.CSSProperties;
-    fade: boolean;
-    onFadeComplete: () => void;
+    x: number;
 }
 
 const yFade = 64;
-const fadeSpeed = 200;
-const initialFade: GameAnimation | undefined = undefined;
 
-export const KeyHintComponent: React.FunctionComponent<KeyHintComponent> = (
+export const KeyHintComponent: React.FunctionComponent<KeyHintComponentProps> = (
     props
 ) => {
+    const { x } = props;
     const offset = props.selected ? SELECTED_TEXT_OFFSET : 0;
-    const [fadeOffset, setFadeOffset] = React.useState(1);
-    const [fadeOutAnimation, setFadeOutAnimation] = React.useState(initialFade);
-    const [fadeInAnimation, setFadeInAnimation] = React.useState(initialFade);
-
-    React.useEffect(() => {
-        setFadeOutAnimation(
-            animation((x: number) => setFadeOffset(x))
-                .tween(sin)
-                .speed(fadeSpeed)
-                .whenDone(props.onFadeComplete)
-                .driven(false)
-        );
-    }, []);
-
-    React.useEffect(() => {
-        const fadeIn = animation((x: number) => setFadeOffset(1 - x))
-            .tween(sin)
-            .speed(fadeSpeed)
-            .driven(false)
-            .start();
-        setFadeInAnimation(fadeIn);
-    }, []);
-
-    React.useEffect(() => {
-        if (fadeOutAnimation) {
-            setFadeOutAnimation(
-                fadeOutAnimation.whenDone(props.onFadeComplete)
-            );
-        }
-    }, [props.onFadeComplete]);
-
-    React.useEffect(() => {
-        if (props.fade && fadeOutAnimation) {
-            fadeInAnimation.stop();
-            fadeOutAnimation.start();
-        }
-    }, [props.fade]);
 
     const keyComponent = props.keyCode.map((code) => (
-        <KeyComponent keyCode={code} selected={props.selected} style={{}} />
+        <KeyComponent
+            key={code}
+            keyCode={code}
+            selected={props.selected}
+            style={{}}
+        />
     ));
 
     return (
@@ -79,8 +45,8 @@ export const KeyHintComponent: React.FunctionComponent<KeyHintComponent> = (
                 ...props.style,
                 display: "flex",
                 alignItems: "center",
-                marginTop: -fadeOffset * yFade,
-                opacity: 1 - fadeOffset,
+                marginTop: x * yFade,
+                opacity: 1 - Math.abs(x),
             }}
         >
             {keyComponent}

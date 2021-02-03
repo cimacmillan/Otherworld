@@ -15,43 +15,71 @@ interface FadeComponentProps {
     startingShown?: boolean;
     fadeInSpeed?: number;
     fadeOutSpeed?: number;
+    onFadeIn?: () => void;
+    onFadeOut?: () => void;
+    render: (x: number, fadingIn: boolean) => React.ReactElement;
 }
 
-export const FadeComponent: React.FunctionComponent<FadeComponentProps> = (
-    props
-) => {
-    let initialOpacity = props.shouldShow ? 1 : 0;
-    if (props.startingShown !== undefined) {
-        initialOpacity = props.startingShown ? 1 : 0;
-    }
-    const [opacity, setOpacity] = React.useState(initialOpacity);
+interface FadeComponentState {
+    opacity: number;
+}
 
-    React.useEffect(() => {
-        const fade = animation(setOpacity)
-            .speed(props.shouldShow ? props.fadeInSpeed : props.fadeOutSpeed)
-            .tween(interpolate(opacity, props.shouldShow ? 1 : 0))
-            .driven(false)
-            .start();
+export class FadeComponent extends React.Component<
+    FadeComponentProps,
+    FadeComponentState
+> {
+    private currentAnimation: GameAnimation = null;
+    public constructor(props: FadeComponentProps) {
+        super(props);
+        let opacity = props.shouldShow ? 1 : 0;
+        if (props.startingShown !== undefined) {
+            opacity = props.startingShown ? 1 : 0;
+        }
 
-        return () => {
-            fade.stop();
+        this.state = {
+            opacity,
         };
-    }, [props.shouldShow]);
-
-    if (opacity === 0) {
-        return <></>;
     }
 
-    return (
-        <div
-            style={{
-                opacity: opacity,
-                width: "100%",
-                height: "100%",
-                position: "absolute",
-            }}
-        >
-            {props.children}
-        </div>
-    );
-};
+    public componentDidMount() {
+        this.setAnimation();
+    }
+
+    public componentDidUpdate(prevProps: FadeComponentProps) {
+        if (prevProps.shouldShow !== this.props.shouldShow) {
+            this.setAnimation();
+        }
+    }
+
+    public setAnimation() {
+        if (this.currentAnimation) {
+            this.currentAnimation.stop();
+        }
+        this.currentAnimation = animation((x) => this.setState({ opacity: x }))
+            .speed(
+                this.props.shouldShow
+                    ? this.props.fadeInSpeed
+                    : this.props.fadeOutSpeed
+            )
+            .tween(
+                interpolate(this.state.opacity, this.props.shouldShow ? 1 : 0)
+            )
+            .driven(false)
+            .start()
+            .whenDone(() =>
+                this.props.shouldShow
+                    ? this.props.onFadeIn && this.props.onFadeIn()
+                    : this.props.onFadeOut && this.props.onFadeOut()
+            );
+    }
+
+    public componentWillUnmount() {
+        this.currentAnimation.stop();
+    }
+
+    public render() {
+        return (
+            <>{this.props.render(this.state.opacity, this.props.shouldShow)}</>
+        );
+    }
+}

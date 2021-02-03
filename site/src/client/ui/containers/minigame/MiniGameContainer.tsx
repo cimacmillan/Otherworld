@@ -40,45 +40,50 @@ export const MiniGameContainer: React.FunctionComponent<MiniGameContainerProps> 
             shouldShow={state.minigame.visible}
             fadeInSpeed={200}
             fadeOutSpeed={200}
-        >
-            <div
-                style={{
-                    width: DOM_WIDTH,
-                    height: DOM_HEIGHT,
-                    position: "absolute",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    ...ShadowComponentStyle(),
-                }}
-            >
-                <LockPickContainer
-                    configuration={state.minigame.configuration}
-                    onComplete={() => onComplete(true)}
-                />
+            render={(x: number) => {
+                if (x === 0) return <></>;
+                return (
+                    <div
+                        style={{
+                            width: DOM_WIDTH,
+                            height: DOM_HEIGHT,
+                            position: "absolute",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            opacity: x,
+                            ...ShadowComponentStyle(),
+                        }}
+                    >
+                        <LockPickContainer
+                            configuration={state.minigame.configuration}
+                            onComplete={() => onComplete(true)}
+                        />
 
-                <GameButtonContainer
-                    width={140}
-                    height={46}
-                    style={{}}
-                    childStyle={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                    onSelect={() => onComplete(false)}
-                >
-                    <TextComponent
-                        text={"Give Up"}
-                        style={{}}
-                        font={TextFont.REGULAR}
-                        size={TextSize.SMALL}
-                        colour={TextColour.LIGHT}
-                    />
-                </GameButtonContainer>
-            </div>
-        </FadeComponent>
+                        <GameButtonContainer
+                            width={140}
+                            height={46}
+                            style={{}}
+                            childStyle={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                            onSelect={() => onComplete(false)}
+                        >
+                            <TextComponent
+                                text={"Give Up"}
+                                style={{}}
+                                font={TextFont.REGULAR}
+                                size={TextSize.SMALL}
+                                colour={TextColour.LIGHT}
+                            />
+                        </GameButtonContainer>
+                    </div>
+                );
+            }}
+        />
     );
 };

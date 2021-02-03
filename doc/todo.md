@@ -6,7 +6,6 @@ Puzzle maps to escape prison
 * Proper map loader and serialiser
 * New map to test deserialising
 * Build map metadata with builder
-* Fade component that syncs redux and fadeout
 
 ### Polish 
 * Improve head bob to not make noise when standing still (frequency?)

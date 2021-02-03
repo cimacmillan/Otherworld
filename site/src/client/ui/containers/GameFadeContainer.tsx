@@ -19,15 +19,21 @@ export const GameFadeContainer: React.FunctionComponent<GameFadeContainerProps> 
             shouldShow={state.gameStart.showingFade}
             fadeInSpeed={1000}
             fadeOutSpeed={300}
-        >
-            <div
-                style={{
-                    width: DOM_WIDTH,
-                    height: DOM_HEIGHT,
-                    position: "absolute",
-                    backgroundColor: "#000000",
-                }}
-            />
-        </FadeComponent>
+            render={(x) =>
+                x === 0 ? (
+                    <></>
+                ) : (
+                    <div
+                        style={{
+                            width: DOM_WIDTH,
+                            height: DOM_HEIGHT,
+                            position: "absolute",
+                            backgroundColor: "#000000",
+                            opacity: x,
+                        }}
+                    />
+                )
+            }
+        ></FadeComponent>
     );
 };

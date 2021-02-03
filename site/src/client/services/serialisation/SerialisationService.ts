@@ -5,9 +5,7 @@ import {
     EntityFactory,
     EntityType,
 } from "../../engine/scripting/factory/EntityFactory";
-import {
-    TutorialSerialisation,
-} from "../../engine/scripting/TutorialService";
+import { TutorialSerialisation } from "../../engine/scripting/TutorialService";
 import { store } from "../../ui/State";
 import { ServiceLocator } from "../ServiceLocator";
 import { Serialisable } from "./Serialisable";
