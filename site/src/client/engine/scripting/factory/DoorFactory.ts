@@ -47,12 +47,23 @@ enum DoorOpenState {
 
 interface DoorState {
     open: DoorOpenState;
+    horizontal: boolean;
+}
+
+interface LockedDoorState extends DoorState {
+    keyId?: GameItem;
+    configuration?: LockpickGameConfiguration;
 }
 
 type DoorStateType = WallState &
     BoundaryStateType &
     InteractionStateType &
     DoorState;
+
+type LockedDoorStateType = WallState &
+    BoundaryStateType &
+    InteractionStateType &
+    LockedDoorState;
 
 export const emitsParticles = <T>(
     emitter: ParticleEmitter
@@ -175,18 +186,16 @@ export const doorOpensWithParticles = (
     );
 };
 
-export const createDoor = (
-    serviceLocator: ServiceLocator,
+export const createDoorState = (
     x: number,
     y: number,
     sprite: string,
     horizontal: boolean = true
-) => {
+): DoorStateType => {
     const start = horizontal ? { x, y: y + 0.5 } : { x: x + 0.5, y: y + 1 };
     const end = horizontal ? { x: x + 1, y: y + 0.5 } : { x: x + 0.5, y };
     const collides = true;
-
-    const initialState: DoorStateType = {
+    return {
         boundaryState: {
             boundary: {
                 start,
@@ -203,11 +212,16 @@ export const createDoor = (
         radius: 0.5,
         angle: 0,
         open: DoorOpenState.CLOSED,
+        horizontal,
     };
+};
 
+export const createDoor = (
+    serviceLocator: ServiceLocator,
+    state: DoorStateType
+) => {
+    const { horizontal, wallStart, wallEnd, open } = state;
     let interactHintId: number | undefined;
-
-    // TODO emit particles here
     const doorSwitch: SwitchComponents = {
         ["CLOSED"]: JoinComponent<DoorStateType>([
             new BoundaryComponent(),
@@ -240,21 +254,15 @@ export const createDoor = (
     };
 
     return new Entity<DoorStateType>(
-        undefined,
         serviceLocator,
-        initialState,
+        state,
         WallRenderComponent(),
-        new SwitchComponent(
-            doorSwitch,
-            initialState.open,
-            (ent) => ent.getState().open
-        ),
-        doorOpensWithParticles(start, end, horizontal, initialState.open)
+        new SwitchComponent(doorSwitch, open, (ent) => ent.getState().open),
+        doorOpensWithParticles(wallStart, wallEnd, horizontal, open)
     );
 };
 
 interface LockedDoorConfig {
-    serviceLocator: ServiceLocator;
     x: number;
     y: number;
     spriteString: string;
@@ -263,22 +271,16 @@ interface LockedDoorConfig {
     keyId?: GameItem;
 }
 
-export const createLockedDoor = (args: LockedDoorConfig) => {
-    const {
-        serviceLocator,
-        x,
-        y,
-        spriteString,
-        configuration,
-        horizontal,
-        keyId,
-    } = args;
+export const createLockedDoorState = (
+    args: LockedDoorConfig
+): LockedDoorStateType => {
+    const { x, y, spriteString, configuration, horizontal, keyId } = args;
 
     const start = horizontal ? { x, y: y + 0.5 } : { x: x + 0.5, y: y + 1 };
     const end = horizontal ? { x: x + 1, y: y + 0.5 } : { x: x + 0.5, y };
     const collides = true;
 
-    const initialState: DoorStateType = {
+    return {
         boundaryState: {
             boundary: {
                 start,
@@ -295,7 +297,24 @@ export const createLockedDoor = (args: LockedDoorConfig) => {
         radius: 0.5,
         angle: 0,
         open: DoorOpenState.CLOSED,
+        horizontal,
+        configuration,
+        keyId,
     };
+};
+
+export const createLockedDoor = (
+    serviceLocator: ServiceLocator,
+    state: LockedDoorStateType
+) => {
+    const {
+        horizontal,
+        wallStart,
+        wallEnd,
+        configuration,
+        keyId,
+        open,
+    } = state;
 
     let interactHintId: number | undefined;
 
@@ -366,15 +385,10 @@ export const createLockedDoor = (args: LockedDoorConfig) => {
     };
 
     return new Entity<DoorStateType>(
-        undefined,
         serviceLocator,
-        initialState,
+        state,
         WallRenderComponent(),
-        new SwitchComponent(
-            doorSwitch,
-            initialState.open,
-            (ent) => ent.getState().open
-        ),
-        doorOpensWithParticles(start, end, horizontal, initialState.open)
+        new SwitchComponent(doorSwitch, open, (ent) => ent.getState().open),
+        doorOpensWithParticles(wallStart, wallEnd, horizontal, open)
     );
 };

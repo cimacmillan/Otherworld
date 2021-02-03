@@ -1,9 +1,18 @@
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { DeregisterKeyHint, RegisterKeyHint } from "../commands/UICommands";
 
-interface TutorialSerialisation {}
+export interface TutorialSerialisation {
+    movement: "WALKING" | "TURNING" | "DONE";
+    inventory: "NONE" | "OPENED" | "CLOSED" | "DONE";
+}
+
+const DEFAULT_STATE: TutorialSerialisation = {
+    movement: "WALKING",
+    inventory: "NONE",
+};
 
 export enum TutorialServiceEvent {
+    START,
     WALK,
     TURN,
     OPEN_INVENTORY,
@@ -14,9 +23,10 @@ export enum TutorialServiceEvent {
 interface KeyHint {
     code: string[];
     hint: string;
+    id?: number;
 }
 
-const HINTS = {
+const HINTS: Record<string, KeyHint> = {
     walk: {
         code: ["W", "A", "S", "D"],
         hint: "Walk",
@@ -37,12 +47,14 @@ const HINTS = {
 
 export class TutorialService {
     private serviceLocator: ServiceLocator;
-    private walk: number = undefined;
-    private turn: number = undefined;
+    private state: TutorialSerialisation;
 
-    private hasUsedInventory = false;
-    private inventory: number = undefined;
-    private closeInventory: number = undefined;
+    // private walk: number = undefined;
+    // private turn: number = undefined;
+
+    // private hasUsedInventory = false;
+    // private inventory: number = undefined;
+    // private closeInventory: number = undefined;
 
     public constructor() {}
 
@@ -51,55 +63,85 @@ export class TutorialService {
     }
 
     public onStart(serial?: TutorialSerialisation) {
-        this.walk = this.register(HINTS.walk);
+        this.state = serial || DEFAULT_STATE;
+        this.onEvent(TutorialServiceEvent.START);
+        // this.walk = this.register(HINTS.walk);
     }
 
     public onEvent(event: TutorialServiceEvent) {
         switch (event) {
+            case TutorialServiceEvent.START:
+                if (this.state.movement === "WALKING") {
+                    this.register(HINTS.walk);
+                }
+                if (this.state.movement === "TURNING") {
+                    this.register(HINTS.turn);
+                }
+                if (this.state.inventory === "OPENED") {
+                    this.register(HINTS.inventory);
+                }
+                if (this.state.inventory === "CLOSED") {
+                    this.state.inventory = "OPENED";
+                    this.register(HINTS.inventory);
+                }
+                break;
             case TutorialServiceEvent.WALK:
-                if (this.walk) {
-                    this.deregister(this.walk);
-                    this.turn = this.register(HINTS.turn);
-                    this.walk = undefined;
+                if (this.state.movement === "WALKING") {
+                    this.deregister(HINTS.walk);
+                    this.register(HINTS.turn);
+                    this.state.movement = "TURNING";
                 }
                 break;
             case TutorialServiceEvent.TURN:
-                if (this.turn) {
-                    this.deregister(this.turn);
-                    this.turn = undefined;
+                if (this.state.movement === "TURNING") {
+                    this.deregister(HINTS.turn);
+                    this.state.movement = "DONE";
                 }
                 break;
             case TutorialServiceEvent.PICKED_UP_ITEM:
-                if (this.hasUsedInventory === false) {
-                    this.inventory = this.register(HINTS.inventory);
+                if (this.state.inventory === "NONE") {
+                    this.register(HINTS.inventory);
+                    this.state.inventory = "OPENED";
                 }
                 break;
             case TutorialServiceEvent.OPEN_INVENTORY:
-                if (this.inventory) {
-                    this.hasUsedInventory = true;
-                    this.deregister(this.inventory);
-                    this.inventory = undefined;
-                    this.closeInventory = this.register(HINTS.closeInventory);
+                if (this.state.inventory === "OPENED") {
+                    this.deregister(HINTS.inventory);
+                    this.register(HINTS.closeInventory);
+                    this.state.inventory = "CLOSED";
                 }
                 break;
             case TutorialServiceEvent.CLOSE_INVENTORY:
-                if (this.closeInventory) {
-                    this.deregister(this.closeInventory);
-                    this.closeInventory = undefined;
+                if (this.state.inventory === "CLOSED") {
+                    this.deregister(HINTS.closeInventory);
+                    this.state.inventory = "DONE";
                 }
                 break;
         }
     }
 
-    public deserialise(): TutorialSerialisation {
-        return {};
+    public serialise(): TutorialSerialisation {
+        return this.state;
+    }
+
+    public destroy() {
+        for (const key in HINTS) {
+            this.deregister(HINTS[key]);
+        }
     }
 
     private register(hint: KeyHint) {
-        return RegisterKeyHint(this.serviceLocator)(hint);
+        if (hint.id) {
+            return;
+        }
+        hint.id = RegisterKeyHint(this.serviceLocator)(hint);
     }
 
-    private deregister(id: number) {
-        DeregisterKeyHint(this.serviceLocator)(id);
+    private deregister(hint: KeyHint) {
+        if (!hint.id) {
+            return;
+        }
+        DeregisterKeyHint(this.serviceLocator)(hint.id);
+        hint.id = undefined;
     }
 }

@@ -3,8 +3,9 @@ import { GameEventSource } from "../../services/EventRouter";
 import { InputState } from "../../services/input/InputService";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { PlayerEventType } from "../events/PlayerEvents";
+import { EntityFactory } from "../scripting/factory/EntityFactory";
 import {
-    createItemDrop,
+    createItemDropState,
     ItemDropArguments,
 } from "../scripting/factory/ItemFactory";
 import { Inventory, Item } from "../scripting/items/types";
@@ -96,7 +97,10 @@ export const DropItem = (
     serviceLocator: ServiceLocator,
     item: ItemDropArguments
 ) => {
-    const itemEntity = createItemDrop(serviceLocator, item);
+    const itemEntity = EntityFactory.ITEM_DROP(
+        serviceLocator,
+        createItemDropState(item)
+    );
     serviceLocator.getWorld().addEntity(itemEntity);
 };
 

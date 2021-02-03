@@ -16,31 +16,34 @@ import {
 } from "../../components/core/WallRenderComponent";
 import { Entity } from "../../Entity";
 import { SpriteRenderState } from "../../state/State";
+import { EntityFactory } from "./EntityFactory";
 
-export function createStaticFloor(
-    serviceLocator: ServiceLocator,
+export function createStaticFloorState(
     spriteString: string,
     height: number,
     start: Vector2D,
     end: Vector2D
 ) {
-    const initialState: FloorStateType = {
+    return {
         floorStart: start,
         floorEnd: end,
         floorSprite: spriteString,
         floorHeight: height,
     };
+}
 
+export function createStaticFloor(
+    serviceLocator: ServiceLocator,
+    state: FloorStateType
+) {
     return new Entity<FloorStateType>(
-        undefined,
         serviceLocator,
-        initialState,
+        state,
         FloorRenderComponent()
     );
 }
 
-export function createStaticWall(
-    serviceLocator: ServiceLocator,
+export function createStaticWallState(
     sprite: string,
     start: Vector2D,
     end: Vector2D,
@@ -48,7 +51,7 @@ export function createStaticWall(
     offset: number = 0,
     collides: boolean = true
 ) {
-    const initialState: WallState & BoundaryStateType = {
+    return {
         boundaryState: {
             boundary: {
                 start,
@@ -62,25 +65,28 @@ export function createStaticWall(
         wallHeight: height,
         wallOffset: offset,
     };
+}
 
+export function createStaticWall(
+    serviceLocator: ServiceLocator,
+    state: WallState & BoundaryStateType
+) {
     return new Entity<WallState & BoundaryStateType>(
-        undefined,
         serviceLocator,
-        initialState,
+        state,
         WallRenderComponent(),
         new BoundaryComponent()
     );
 }
 
-export function createStaticSprite(
-    serviceLocator: ServiceLocator,
+export function createStaticSpriteState(
     sprite: Sprites,
     position: Vector2D,
     height: number,
     spriteWidth: number,
     spriteHeight: number
 ) {
-    const initialState: SpriteRenderState = {
+    return {
         yOffset: 0,
         position,
         height,
@@ -90,11 +96,15 @@ export function createStaticSprite(
         spriteWidth,
         spriteHeight,
     };
+}
 
+export function createStaticSprite(
+    serviceLocator: ServiceLocator,
+    state: SpriteRenderState
+) {
     return new Entity<SpriteRenderState>(
-        undefined,
         serviceLocator,
-        initialState,
+        state,
         SpriteRenderComponent()
     );
 }
@@ -110,9 +120,21 @@ export const createBlock = (
     const vec3 = { x: x + 1, y: y + 1 };
     const vec4 = { x, y: y + 1 };
     return [
-        createStaticWall(serviceLocator, sprite, vec1, vec2),
-        createStaticWall(serviceLocator, sprite, vec2, vec3),
-        createStaticWall(serviceLocator, sprite, vec3, vec4),
-        createStaticWall(serviceLocator, sprite, vec4, vec1),
+        EntityFactory.SCENERY_WALL(
+            serviceLocator,
+            createStaticWallState(sprite, vec1, vec2)
+        ),
+        EntityFactory.SCENERY_WALL(
+            serviceLocator,
+            createStaticWallState(sprite, vec2, vec3)
+        ),
+        EntityFactory.SCENERY_WALL(
+            serviceLocator,
+            createStaticWallState(sprite, vec3, vec4)
+        ),
+        EntityFactory.SCENERY_WALL(
+            serviceLocator,
+            createStaticWallState(sprite, vec4, vec1)
+        ),
     ];
 };

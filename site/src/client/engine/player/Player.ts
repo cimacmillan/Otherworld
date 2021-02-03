@@ -26,69 +26,72 @@ import { PlayerMovement } from "./PlayerMovement";
 
 type InternalEntityState = PhysicsStateType & HealthState & CameraState;
 
-export interface PlayerSerialisation {}
+export interface PlayerSerialisation {
+    inventory: Inventory;
+    surface: PhysicsStateType;
+}
+
+const DEFAULT_PLAYER_STATE: PlayerSerialisation = {
+    inventory: getEmptyInventory(),
+    surface: {
+        position: { x: 31.5, y: 31.5 },
+        height: 0,
+        angle: 0,
+        yOffset: 0,
+        radius: DEFAULT_PLAYER_RADIUS,
+        heightVelocity: 0,
+        velocity: { x: 0, y: 0 },
+        friction: 0.8,
+        mass: 1,
+        elastic: 0,
+        collidesEntities: true,
+        collidesWalls: true,
+    },
+};
 
 export class Player {
-    public inventory: Inventory = getEmptyInventory();
+    public state: PlayerSerialisation;
     public movement: PlayerMovement;
-    public surface: PhysicsStateType;
+
     private serviceLocator: ServiceLocator;
-    private attackDelay: ActionDelay;
+
     private interactDelay: ActionDelay;
-
-    private killed = false;
-    private health = 1;
-
     private physicsRegistration: PhysicsRegistration;
 
-    public constructor(serviceLocator: ServiceLocator) {
+    public constructor(
+        serviceLocator: ServiceLocator,
+        serialisation?: PlayerSerialisation
+    ) {
         this.serviceLocator = serviceLocator;
-        this.attackDelay = new ActionDelay(300);
+        this.state = serialisation || DEFAULT_PLAYER_STATE;
         this.interactDelay = new ActionDelay(300);
-
-        this.surface = {
-            // position: { x: 40.5, y: 30.5 },
-            position: { x: 31.5, y: 31.5 },
-            height: 0,
-            angle: 0,
-            yOffset: 0,
-            radius: DEFAULT_PLAYER_RADIUS,
-            heightVelocity: 0,
-            velocity: { x: 0, y: 0 },
-            friction: 0.8,
-            mass: 1,
-            elastic: 0,
-            collidesEntities: true,
-            collidesWalls: true,
-        };
 
         this.movement = new PlayerMovement(
             this.serviceLocator,
-            () => this.surface,
-            (vec: Vector2D) => (this.surface.velocity = vec),
-            (ang: number) => (this.surface.angle = ang)
+            () => this.state.surface,
+            (vec: Vector2D) => (this.state.surface.velocity = vec),
+            (ang: number) => (this.state.surface.angle = ang)
         );
 
-        this.attackDelay = new ActionDelay(300);
         this.serviceLocator.getEventRouter().routeEvent(GameEventSource.WORLD, {
             type: PlayerEventType.PLAYER_INFO_CHANGE,
             payload: {
-                health: this.health,
+                health: 1,
             },
         });
 
         this.physicsRegistration = {
             collidesEntities: true,
             collidesWalls: true,
-            setHeight: (height: number) => (this.surface.height = height),
+            setHeight: (height: number) => (this.state.surface.height = height),
             setHeightVelocity: (heightVelocity: number) =>
-                (this.surface.heightVelocity = heightVelocity),
+                (this.state.surface.heightVelocity = heightVelocity),
             setVelocity: (x: number, y: number) =>
-                (this.surface.velocity = { x, y }),
+                (this.state.surface.velocity = { x, y }),
             setPosition: (x: number, y: number) => {
-                this.surface.position = { x, y };
+                this.state.surface.position = { x, y };
             },
-            getPhysicsInformation: () => this.surface,
+            getPhysicsInformation: () => this.state.surface,
         };
         this.serviceLocator
             .getPhysicsService()
@@ -113,7 +116,7 @@ export class Player {
     }
 
     public getCamera(): Camera {
-        const { position, height, angle } = this.surface;
+        const { position, height, angle } = this.state.surface;
         const cameraHeight =
             height + this.movement.getHeadbobOffset() + DEFAULT_PLAYER_HEIGHT;
         return {
@@ -128,11 +131,11 @@ export class Player {
     }
 
     public getPositon() {
-        return this.surface.position;
+        return this.state.surface.position;
     }
 
     public getInventory() {
-        return this.inventory;
+        return this.state.inventory;
     }
 
     public interact() {
@@ -140,7 +143,7 @@ export class Player {
             return;
         }
         this.interactDelay.onAction();
-        const state = this.surface;
+        const state = this.state.surface;
         const interacts = this.serviceLocator
             .getInteractionService()
             .getInteractables(
@@ -170,81 +173,13 @@ export class Player {
         this.movement.turn(direction);
     }
 
-    private onDamaged(entity: Entity<InternalEntityState>, amount: number) {
-        entity.setState({ health: entity.getState().health - amount });
-        // entity
-        //     .getServiceLocator()
-        //     .getAudioService()
-        //     .play(
-        //         entity.getServiceLocator().getResourceManager().manifest.audio[
-        //             Audios.PLAYER_HIT
-        //         ]
-        //     );
-        entity
-            .getServiceLocator()
-            .getRenderService()
-            .screenShakeService.shake(1);
-        if (entity.getState().health <= 0 && !this.killed) {
-            entity.emitGlobally({ type: PlayerEventType.PLAYER_KILLED });
-            entity.getServiceLocator().getScriptingService().endGame();
-            this.killed = true;
-        } else if (!this.killed) {
-            entity.emitGlobally({
-                type: PlayerEventType.PLAYER_DAMAGED,
-            });
-        }
+    public serialise(): PlayerSerialisation {
+        return this.state;
     }
 
-    private onAttack(entity: Entity<InternalEntityState>) {
-        entity.emitGlobally({
-            type: PlayerEventType.PLAYER_ATTACK,
-        });
-
-        // entity
-        //     .getServiceLocator()
-        //     .getAudioService()
-        //     .play(
-        //         entity.getServiceLocator().getResourceManager().manifest.audio[
-        //             Audios.WHOOSH
-        //         ]
-        //     );
-
-        this.attackDelay.onAction();
-        const state = entity.getState();
-        const attacks = entity
-            .getServiceLocator()
-            .getInteractionService()
-            .getInteractables(
-                InteractionType.ATTACK,
-                state.position,
-                state.angle,
-                1.5
-            );
-
-        const hasAttacked = false;
-
-        attacks.forEach((attacked) => {
-            // if (attacked === entity) {
-            //     return;
-            // }
-            // hasAttacked = true;
-            // attacked.emit({
-            //     type: InteractionEventType.ON_DAMAGED,
-            //     payload: {
-            //         amount: 0.4,
-            //         source: state,
-            //     },
-            // });
-        });
-
-        if (hasAttacked) {
-            // entity
-            //     .getServiceLocator()
-            //     .getAudioService()
-            //     .play(
-            //         entity.getServiceLocator().getResourceManager().manifest
-            //             .audio[Audios.SLAM]
-            //     );
-        }
+    public destroy() {
+        this.serviceLocator
+            .getPhysicsService()
+            .unregisterPhysicsEntity(this.physicsRegistration);
     }
 }

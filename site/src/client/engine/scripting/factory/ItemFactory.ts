@@ -125,10 +125,7 @@ const AttractedToPosition = (
     };
 };
 
-export function createItemDrop(
-    serviceLocator: ServiceLocator,
-    arg: ItemDropArguments
-) {
+export function createItemDropState(arg: ItemDropArguments) {
     const { item, position } = arg;
 
     const angle = Math.random() * 2 * Math.PI;
@@ -144,7 +141,7 @@ export function createItemDrop(
         vec.vec_mult_scalar(posDiff, ITEM_SPAWN_RADIUS)
     );
 
-    const initialState: ItemStateType = {
+    return {
         yOffset: 0,
         position: newPosition,
         height: 0,
@@ -163,11 +160,15 @@ export function createItemDrop(
         item: arg.item,
         attracting: "false",
     };
+}
 
+export function createItemDrop(
+    serviceLocator: ServiceLocator,
+    state: ItemStateType
+) {
     return new Entity<ItemStateType>(
-        undefined,
         serviceLocator,
-        initialState,
+        state,
         SpriteRenderComponent(),
         PhysicsComponent(),
         HoversAnimation(ITEM_SIZE, ITEM_SIZE, ITEM_SIZE_CHANGE),

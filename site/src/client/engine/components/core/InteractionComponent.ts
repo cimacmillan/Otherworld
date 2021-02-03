@@ -83,6 +83,7 @@ export const onCanBeInteractedWithByPlayer = <T extends InteractionStateType>(
     return JoinComponent<SurfacePosition>([
         {
             update: throttleCount(onUpdate, 5),
+            onDestroy: onLeave,
         },
         registersSelf(type, (entity: Entity<T>) => ({
             getPosition: () => entity.getState(),

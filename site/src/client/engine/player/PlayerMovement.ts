@@ -113,4 +113,6 @@ export class PlayerMovement {
     public getHeadbobOffset(): number {
         return this.headbobOffset;
     }
+
+    public destroy() {}
 }

@@ -2,21 +2,26 @@ import { ServiceLocator } from "../services/ServiceLocator";
 import { EntityComponent } from "./EntityComponent";
 import { EntityEventType, StateTransitionEvent } from "./events/EntityEvents";
 import { GameEvent } from "./events/Event";
-import { EntitySerial } from "./scripting/factory/Serial";
+import { EntityType } from "./scripting/factory/EntityFactory";
 
 export class Entity<State> {
+    public type: EntityType = EntityType.NULL;
     private components: Array<EntityComponent<Partial<State>>>;
     private newState: State;
     private shouldEmit: boolean = false;
 
     constructor(
-        public serial: EntitySerial = EntitySerial.NULL,
         private serviceLocator: ServiceLocator,
         private state: State,
         ...components: Array<EntityComponent<Partial<State>>>
     ) {
         this.components = components;
         this.newState = state;
+    }
+
+    public withType(type: EntityType) {
+        this.type = type;
+        return this;
     }
 
     public getState() {

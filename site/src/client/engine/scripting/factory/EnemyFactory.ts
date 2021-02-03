@@ -33,7 +33,6 @@ export function createSlime(
     state: SlimeState
 ): Entity<SlimeState> {
     return new Entity<SlimeState>(
-        undefined,
         serviceLocator,
         state,
         SpriteRenderComponent(),
