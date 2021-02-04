@@ -23,7 +23,8 @@ export interface KeyHintInstanceMap {
     [id: string]: KeyHintInstance;
 }
 
-const Y_POS_RATIO = 0.8;
+const Y_POS_RATIO = 0.7;
+const FADE_TIME = 200;
 
 export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> = (
     props
@@ -43,13 +44,30 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
         };
     });
 
+    React.useEffect(() => {
+        const timeout = ProcedureService.setTimeout(
+            () => setKeyDown(!keyDown),
+            500
+        );
+        return () => ProcedureService.clearTimeout(timeout);
+    }, [keyDown]);
+
     const render = (
         props: KeyHintComponentProps,
         x: number,
         fadingIn: boolean
     ) => {
         const val = fadingIn ? -1 + x : 1 - x;
-        return <KeyHintComponent {...props} x={val} />;
+        return (
+            <KeyHintComponent
+                {...props}
+                style={{
+                    height: (1 - Math.abs(val)) * 64,
+                    opacity: 1 - Math.abs(val),
+                }}
+                selected={keyDown}
+            />
+        );
     };
 
     return (
@@ -58,7 +76,7 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
                 position: "absolute",
                 display: "flex",
                 flexDirection: "column",
-                // justifyContent: "center",
+                justifyContent: "center",
                 alignItems: "center",
                 marginTop: DOM_HEIGHT * Y_POS_RATIO,
                 width: DOM_WIDTH,
@@ -66,8 +84,8 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
             }}
         >
             <AnimationGroupContainer
-                fadeInMs={200}
-                fadeOutMs={200}
+                fadeInMs={FADE_TIME}
+                fadeOutMs={FADE_TIME}
                 list={keyComponentsProps}
                 render={render}
             />
