@@ -2,10 +2,6 @@
 ### Milestone 2
 Puzzle maps to escape prison
 
-### Doing
-* Proper map loader and serialiser
-* New map to test deserialising
-
 ### Polish 
 * Improve head bob to not make noise when standing still (frequency?)
 

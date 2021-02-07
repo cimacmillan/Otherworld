@@ -93,7 +93,7 @@ export class ScriptingService {
 
         this.serviceLocator.getMapService().goToMap({
             mapId: Maps.PRISON,
-            // destination: { x: 31.5, y: 31.5, angle: 0}
+            destination: { x: 31.5, y: 31.5, angle: 0 },
         });
 
         this.serviceLocator.getTutorialService().onStart();

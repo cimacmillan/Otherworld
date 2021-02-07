@@ -54,6 +54,7 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
 
     public serialise(): SerialisationObject {
         const uiState = store.getValue();
+        this.serviceLocator.getMapService().syncMapData();
         const mapData = this.serviceLocator.getMapService().getMapData();
         const serialisedMapData = Object.entries(mapData).reduce(
             (prev, currentValue) => {

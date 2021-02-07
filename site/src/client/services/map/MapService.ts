@@ -33,15 +33,31 @@ export class MapService {
 
     public goToMap(dest: MapDestination) {
         const { mapId, destination } = dest;
+
+        // Save the current map entites to map data
+        if (this.currentMap) {
+            this.syncMapData();
+        }
+        this.currentMap = mapId;
+        this.currentMapData = this.getMapData();
+        this.serviceLocator.getScriptingService().offloadEntities();
         const map = this.serviceLocator.getResourceManager().manifest.maps[
             mapId
         ];
 
-        console.log("Go to map", dest);
+        // console.log("Go to map", dest, this.currentMapData);
 
-        this.serviceLocator.getScriptingService().offloadEntities();
-
-        loadMap(this.serviceLocator, map);
+        if (this.currentMapData[dest.mapId]) {
+            const { entities } = this.currentMapData[dest.mapId];
+            entities.forEach((ent) =>
+                this.serviceLocator.getWorld().addEntity(ent)
+            );
+        } else {
+            const entities = loadMap(this.serviceLocator, map);
+            entities.forEach((ent) =>
+                this.serviceLocator.getWorld().addEntity(ent)
+            );
+        }
 
         const player = this.serviceLocator.getScriptingService().getPlayer();
 
@@ -51,22 +67,28 @@ export class MapService {
             player.setAngle(angle);
         }
 
-        this.currentMap = mapId;
+        map.onStart(this.serviceLocator);
     }
 
     public getCurrentMap(): Maps {
         return this.currentMap;
     }
 
-    public getMapData(): MapData {
-        return {
+    public syncMapData() {
+        this.currentMapData = {
             ...this.currentMapData,
-            [this.getCurrentMap()]: {
-                entities: this.serviceLocator
-                    .getWorld()
-                    .getEntityArray()
-                    .getArray(),
+            [this.currentMap]: {
+                entities: [
+                    ...this.serviceLocator
+                        .getWorld()
+                        .getEntityArray()
+                        .getArray(),
+                ],
             },
         };
+    }
+
+    public getMapData(): MapData {
+        return this.currentMapData;
     }
 }
