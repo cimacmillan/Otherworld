@@ -128,9 +128,12 @@ export class Game {
 
             if (compatibleSave) {
                 console.log("Loading save game...", compatibleSave);
-                this.serviceLocator
+                const deserialised = this.serviceLocator
                     .getSerialisationService()
                     .deserialise(compatibleSave);
+                this.serviceLocator
+                    .getScriptingService()
+                    .bootsrapDeserialisedContent(deserialised);
                 this.setUpdateWorld(true);
                 this.serviceLocator
                     .getInputService()

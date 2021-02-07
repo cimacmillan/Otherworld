@@ -1,6 +1,7 @@
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Audios } from "../../manifests/Audios";
 import { GameItem } from "../../manifests/Items";
+import { Maps } from "../../manifests/Maps";
 import { MapLayerConverterType } from "../MapLayerConverters";
 import { MapMetadataBuilder } from "../MapMetadataBuilder";
 import { MapSchema } from "../MapShema";
@@ -29,6 +30,15 @@ mapMetadata
     });
 
 mapMetadata.at(31, 25).withItem(GameItem.GOLD_KEY);
+
+mapMetadata.at(40, 28).withDestination({
+    mapId: Maps.CELLAR,
+    destination: {
+        x: 3,
+        y: 3,
+        angle: 0,
+    },
+});
 
 export const MapPrison: MapSchema = {
     layers: [

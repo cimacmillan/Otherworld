@@ -1,3 +1,4 @@
+import { MapDestination } from "../../services/map/MapService";
 import { LockpickGameConfiguration } from "../../ui/containers/minigame/LockPickContainer";
 import { GameItem } from "../manifests/Items";
 import { MapLayerMetadata, MapMetadataObject } from "./MapShema";
@@ -45,6 +46,11 @@ export class MapMetadataItemBuilder {
 
     public withItem(id: GameItem) {
         this.data = { ...this.data, id };
+        return this;
+    }
+
+    public withDestination(destination: MapDestination) {
+        this.data = { ...this.data, destination };
         return this;
     }
 }

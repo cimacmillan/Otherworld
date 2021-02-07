@@ -7,6 +7,7 @@ import {
 } from "../../engine/scripting/factory/EntityFactory";
 import { TutorialSerialisation } from "../../engine/scripting/TutorialService";
 import { store } from "../../ui/State";
+import { MapData } from "../map/MapService";
 import { ServiceLocator } from "../ServiceLocator";
 import { Serialisable } from "./Serialisable";
 
@@ -18,7 +19,12 @@ interface SerialisedEntity {
 export interface SerialisationObject {
     version: string;
     world: {
-        entities: SerialisedEntity[];
+        maps: {
+            [key: string]: {
+                entities: SerialisedEntity[];
+            };
+        };
+        currentMap: string;
         player: PlayerSerialisation;
     };
     services: {
@@ -28,7 +34,8 @@ export interface SerialisationObject {
 
 export interface DeserialisedObject {
     world: {
-        entities: Array<Entity<any>>;
+        maps: MapData;
+        currentMap: string;
         player: Player;
     };
     services: {
@@ -47,7 +54,19 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
 
     public serialise(): SerialisationObject {
         const uiState = store.getValue();
-        const entities = this.serialiseEntities();
+        const mapData = this.serviceLocator.getMapService().getMapData();
+        const serialisedMapData = Object.entries(mapData).reduce(
+            (prev, currentValue) => {
+                const [key, value] = currentValue;
+                return {
+                    ...prev,
+                    [key]: {
+                        entities: this.serialiseEntities(value.entities),
+                    },
+                };
+            },
+            {} as any
+        );
 
         const serialisation = {
             version: VERSION,
@@ -56,7 +75,8 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
                     .getScriptingService()
                     .getPlayer()
                     .serialise(),
-                entities: entities.slice(1, entities.length),
+                maps: serialisedMapData,
+                currentMap: this.serviceLocator.getMapService().getCurrentMap(),
             },
             uiState,
             services: {
@@ -66,14 +86,23 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
         return serialisation;
     }
 
-    public deserialise(data: SerialisationObject) {
-        const deserialisedEntities = data.world.entities.map((ent) =>
-            this.deserialiseEntity(ent)
-        );
+    public deserialise(data: SerialisationObject): DeserialisedObject {
+        const maps = Object.entries(data.world.maps).reduce((prev, current) => {
+            const [key, value] = current;
+            return {
+                ...prev,
+                [key]: {
+                    entities: value.entities.map((ent) =>
+                        this.deserialiseEntity(ent)
+                    ),
+                },
+            };
+        }, {} as any);
         const player = this.deserialisePlayer(data.world.player);
         const deserialisedObject: DeserialisedObject = {
             world: {
-                entities: deserialisedEntities,
+                maps,
+                currentMap: data.world.currentMap,
                 player,
             },
             services: {
@@ -81,10 +110,7 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
             },
         };
 
-        this.serviceLocator
-            .getScriptingService()
-            .bootsrapDeserialisedContent(deserialisedObject);
-        // store.next(data.uiState);
+        return deserialisedObject;
     }
 
     public deserialisePlayer(player: PlayerSerialisation): Player {
@@ -95,16 +121,12 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
         return EntityFactory[entity.serial](this.serviceLocator, entity.state);
     }
 
-    private serialiseEntities(): SerialisedEntity[] {
-        const entities = this.serviceLocator
-            .getWorld()
-            .getEntityArray()
-            .getArray();
-        const serialised = entities.map(this.serialiseEntity);
+    public serialiseEntities(entities: Array<Entity<any>>): SerialisedEntity[] {
+        const serialised = entities.map((ent) => this.serialiseEntity(ent));
         return serialised;
     }
 
-    private serialiseEntity(entity: Entity<any>): SerialisedEntity {
+    public serialiseEntity(entity: Entity<any>): SerialisedEntity {
         return {
             state: { ...entity.getState(), exists: false },
             serial: entity.type,

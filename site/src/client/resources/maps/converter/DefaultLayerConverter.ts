@@ -62,7 +62,7 @@ export const MapLayerConverterDefault: MapLayerConverter = (
         case "ff00f2":
             return EntityFactory.LADDER(
                 serviceLocator,
-                createLadderState(x, y, Sprites.LADDER)
+                createLadderState(x, y, Sprites.LADDER, metadata.destination)
             );
         case "000000":
             return [

@@ -34,7 +34,7 @@ export interface PlayerSerialisation {
 const DEFAULT_PLAYER_STATE: PlayerSerialisation = {
     inventory: getEmptyInventory(),
     surface: {
-        position: { x: 31.5, y: 31.5 },
+        position: { x: 39, y: 29 },
         height: 0,
         angle: 0,
         yOffset: 0,
@@ -132,6 +132,14 @@ export class Player {
 
     public getPositon() {
         return this.state.surface.position;
+    }
+
+    public setPosition(x: number, y: number) {
+        this.state.surface.position = { x, y };
+    }
+
+    public setAngle(angle: number) {
+        this.state.surface.angle = angle;
     }
 
     public getInventory() {

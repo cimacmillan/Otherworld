@@ -1,8 +1,12 @@
 import { Entity } from "../../engine/Entity";
-import { ServiceLocator } from "../../services/ServiceLocator";
+import { MapLayerConverter } from "../../resources/maps/MapLayerConverters";
+import {
+    GameMap,
+    MapLayer,
+    MapMetadataObject,
+} from "../../resources/maps/MapShema";
 import { getHexFromRGB } from "../../util/math/UI";
-import { MapLayerConverter } from "./MapLayerConverters";
-import { GameMap, MapLayer, MapMetadataObject } from "./MapShema";
+import { ServiceLocator } from "../ServiceLocator";
 
 export function loadMap(serviceLocator: ServiceLocator, gameMap: GameMap) {
     const { layers } = gameMap;

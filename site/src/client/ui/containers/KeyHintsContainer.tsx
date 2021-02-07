@@ -73,6 +73,7 @@ export const KeyHintsContainer: React.FunctionComponent<KeyHintsContainerProps> 
     return (
         <div
             style={{
+                userSelect: "none",
                 position: "absolute",
                 display: "flex",
                 flexDirection: "column",
