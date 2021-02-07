@@ -9,6 +9,7 @@ import { EventRouter, GameEventSource } from "./services/EventRouter";
 import { InputService, InputState } from "./services/input/InputService";
 import { InteractionService } from "./services/interaction/InteractionService";
 import { ProcedureService } from "./services/jobs/ProcedureService";
+import { MapService } from "./services/map/MapService";
 import { ParticleService } from "./services/particle/ParticleService";
 import { PhysicsService } from "./services/physics/PhysicsService";
 import { RenderService, ScreenBuffer } from "./services/render";
@@ -65,6 +66,8 @@ export class Game {
 
         const tutorialService = new TutorialService();
 
+        const mapService = new MapService();
+
         this.serviceLocator = new ServiceLocator(
             this,
             resourceManager,
@@ -78,7 +81,8 @@ export class Game {
             interactionService,
             serialisationService,
             tutorialService,
-            new ParticleService()
+            new ParticleService(),
+            mapService
         );
 
         this.serviceLocator.getSerialisationService().init(this.serviceLocator);
@@ -88,6 +92,7 @@ export class Game {
         this.serviceLocator.getTutorialService().init(this.serviceLocator);
         this.serviceLocator.getParticleService().init(this.serviceLocator);
         this.serviceLocator.getScriptingService().init(this.serviceLocator);
+        this.serviceLocator.getMapService().init(this.serviceLocator);
 
         this.storage = new GameStorage();
 
