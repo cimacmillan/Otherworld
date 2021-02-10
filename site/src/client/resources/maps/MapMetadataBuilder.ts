@@ -1,6 +1,7 @@
 import { MapDestination } from "../../services/map/MapService";
 import { LockpickGameConfiguration } from "../../ui/containers/minigame/LockPickContainer";
 import { GameItem } from "../manifests/Items";
+import { Sprites } from "../manifests/Sprites";
 import { MapLayerMetadata, MapMetadataObject } from "./MapShema";
 
 export class MapMetadataBuilder {
@@ -51,6 +52,19 @@ export class MapMetadataItemBuilder {
 
     public withDestination(destination: MapDestination) {
         this.data = { ...this.data, destination };
+        return this;
+    }
+
+    public withSprite(sprite: Sprites) {
+        this.data = { ...this.data, sprite };
+        return this;
+    }
+    public withHeight(height: number) {
+        this.data = { ...this.data, height };
+        return this;
+    }
+    public withSize(size: number) {
+        this.data = { ...this.data, size };
         return this;
     }
 }

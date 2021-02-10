@@ -62,7 +62,7 @@ import { Sprites } from "./Sprites";
 
 export enum GameItem {
     GOLD_KEY = "GOLD_KEY",
-    GOLD_KEY_STACKABLE = "GOLD_KEY_STACKABLE",
+    GOLD_RING = "GOLD_RING",
 }
 
 export type GameItemMap = {
@@ -79,13 +79,13 @@ export const GameItems: GameItemMap = {
         category: ItemCategory.KEY,
         description: "I wonder what it unlocks",
     },
-    [GameItem.GOLD_KEY_STACKABLE]: {
-        id: GameItem.GOLD_KEY_STACKABLE,
-        spriteIcon: Sprites.ITEM_KEY,
-        stackable: true,
-        name: "Gold Key Stackable",
+    [GameItem.GOLD_RING]: {
+        id: GameItem.GOLD_RING,
+        spriteIcon: Sprites.ITEM_GOLD_RING,
+        stackable: false,
+        name: "Gold Ring",
         behaviours: [],
-        category: ItemCategory.KEY,
-        description: "I wonder what it doesnt unlocks",
+        category: ItemCategory.PRECIOUS,
+        description: "A ring I found inside someone's cell. It smells funny.",
     },
 };

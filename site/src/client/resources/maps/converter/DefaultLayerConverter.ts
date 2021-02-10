@@ -9,6 +9,7 @@ import { createLadderState } from "../../../engine/scripting/factory/MapChangeFa
 import {
     createBlock,
     createStaticFloorState,
+    createStaticSpriteState,
 } from "../../../engine/scripting/factory/SceneryFactory";
 import { GameItem, GameItems } from "../../manifests/Items";
 import { Sprites } from "../../manifests/Sprites";
@@ -32,6 +33,19 @@ export const MapLayerConverterDefault: MapLayerConverter = (
             ];
         case "ff0000":
             return createBlock(serviceLocator, x, y, Sprites.WALL);
+        case "ff8400":
+            return createBlock(serviceLocator, x, y, metadata.sprite);
+        case "45ffe0":
+            return EntityFactory.SCENERY_SPRITE(
+                serviceLocator,
+                createStaticSpriteState(
+                    metadata.sprite,
+                    { x: x + 0.5, y: y + 0.5 },
+                    metadata.height,
+                    metadata.size,
+                    metadata.size
+                )
+            );
         case "00ff00":
             if (metadata.configuration) {
                 return EntityFactory.DOOR_LOCKED(
