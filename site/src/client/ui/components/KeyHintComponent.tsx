@@ -22,12 +22,9 @@ export interface KeyHintComponentProps {
     x: number;
 }
 
-const yFade = 64;
-
 export const KeyHintComponent: React.FunctionComponent<KeyHintComponentProps> = (
     props
 ) => {
-    const { x } = props;
     const offset = props.selected ? SELECTED_TEXT_OFFSET : 0;
 
     const keyComponent = props.keyCode.map((code) => (
@@ -45,8 +42,6 @@ export const KeyHintComponent: React.FunctionComponent<KeyHintComponentProps> = 
                 ...props.style,
                 display: "flex",
                 alignItems: "center",
-                marginTop: x * yFade,
-                opacity: 1 - Math.abs(x),
             }}
         >
             {keyComponent}

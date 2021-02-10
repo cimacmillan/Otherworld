@@ -18,18 +18,20 @@ const registersSelf = (
     type: InteractionType,
     registration: (entity: Entity<SurfacePosition>) => InteractionRegistration
 ): EntityComponent<SurfacePosition> => {
+    let reg: InteractionRegistration | undefined;
     return {
         onCreate: (entity: Entity<SurfacePosition>) => {
+            reg = registration(entity);
             entity
                 .getServiceLocator()
                 .getInteractionService()
-                .registerEntity(registration(entity), type);
+                .registerEntity(reg, type);
         },
         onDestroy: (entity: Entity<SurfacePosition>) => {
             entity
                 .getServiceLocator()
                 .getInteractionService()
-                .unregisterEntity(registration(entity), type);
+                .unregisterEntity(reg, type);
         },
     };
 };

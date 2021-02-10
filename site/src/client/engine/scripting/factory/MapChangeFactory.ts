@@ -1,14 +1,25 @@
 import { Sprites } from "../../../resources/manifests/Sprites";
 import { InteractionType } from "../../../services/interaction/InteractionType";
+import { MapDestination } from "../../../services/map/MapService";
 import { ServiceLocator } from "../../../services/ServiceLocator";
-import { withInteractionHint } from "../../components/core/InteractionComponent";
+import {
+    onInteractedWith,
+    withInteractionHint,
+} from "../../components/core/InteractionComponent";
 import { SpriteRenderComponent } from "../../components/core/SpriteRenderComponent";
 import { Entity } from "../../Entity";
 import { SpriteRenderState } from "../../state/State";
 
-type LadderStateType = SpriteRenderState;
+type LadderStateType = SpriteRenderState & {
+    destination: MapDestination;
+};
 
-export const createLadderState = (x: number, y: number, sprite: Sprites) => {
+export const createLadderState = (
+    x: number,
+    y: number,
+    sprite: Sprites,
+    destination: MapDestination
+) => {
     return {
         yOffset: 0,
         position: { x: x + 0.5, y: y + 0.5 },
@@ -18,6 +29,7 @@ export const createLadderState = (x: number, y: number, sprite: Sprites) => {
         spriteWidth: 1,
         spriteHeight: 1,
         sprite,
+        destination,
     };
 };
 
@@ -34,6 +46,14 @@ export const createLadder = (
             InteractionType.INTERACT,
             ["E"],
             "Climb Ladder"
+        ),
+        onInteractedWith(
+            InteractionType.INTERACT,
+            (ent: Entity<LadderStateType>) => {
+                ent.getServiceLocator()
+                    .getMapService()
+                    .goToMap(ent.getState().destination);
+            }
         )
     );
 };

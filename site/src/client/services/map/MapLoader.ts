@@ -1,17 +1,28 @@
 import { Entity } from "../../engine/Entity";
-import { ServiceLocator } from "../../services/ServiceLocator";
+import { MapLayerConverter } from "../../resources/maps/MapLayerConverters";
+import {
+    GameMap,
+    MapLayer,
+    MapMetadataObject,
+} from "../../resources/maps/MapShema";
 import { getHexFromRGB } from "../../util/math/UI";
-import { MapLayerConverter } from "./MapLayerConverters";
-import { GameMap, MapLayer, MapMetadataObject } from "./MapShema";
+import { ServiceLocator } from "../ServiceLocator";
 
-export function loadMap(serviceLocator: ServiceLocator, gameMap: GameMap) {
+export function loadMap(
+    serviceLocator: ServiceLocator,
+    gameMap: GameMap
+): Array<Entity<any>> {
     const { layers } = gameMap;
-
-    layers.forEach((layer) => loadLayer(serviceLocator, layer));
-    gameMap.onStart(serviceLocator);
+    const entities: Array<Entity<any>> = [];
+    layers.forEach((layer) => loadLayer(serviceLocator, layer, entities));
+    return entities;
 }
 
-function loadLayer(serviceLocator: ServiceLocator, layer: MapLayer) {
+function loadLayer(
+    serviceLocator: ServiceLocator,
+    layer: MapLayer,
+    entities: Array<Entity<any>>
+) {
     const { image, mapLayerConverter, mapMetadata } = layer;
     const { data, width, height } = image;
 
@@ -34,7 +45,8 @@ function loadLayer(serviceLocator: ServiceLocator, layer: MapLayer) {
                 g,
                 b,
                 a,
-                metadata
+                metadata,
+                entities
             );
         }
     }
@@ -49,7 +61,8 @@ function loadPixel(
     g: number,
     b: number,
     a: number,
-    metadata: MapMetadataObject
+    metadata: MapMetadataObject,
+    toAdd: Array<Entity<any>>
 ) {
     const entities = mapLayerConverter({
         serviceLocator,
@@ -63,15 +76,9 @@ function loadPixel(
         metadata,
     });
 
-    const addEntity = (entity: Entity<any>) => {
-        serviceLocator.getWorld().addEntity(entity);
-    };
-
     if (Array.isArray(entities)) {
-        entities.forEach((entity) =>
-            serviceLocator.getWorld().addEntity(entity)
-        );
+        entities.forEach((entity) => toAdd.push(entity));
     } else {
-        addEntity(entities);
+        toAdd.push(entities);
     }
 }

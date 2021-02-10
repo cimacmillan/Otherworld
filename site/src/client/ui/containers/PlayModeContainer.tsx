@@ -26,9 +26,9 @@ export const PlayModeContainer: React.FunctionComponent<PlayModeContainerProps> 
             <WeaponComponent />
             <ScoreContainer />
             <ItemCollectionContainer />
+            <KeyHintsContainer />
             <InventoryContainer />
             <MiniGameContainer />
-            <KeyHintsContainer />
         </>
     );
 };

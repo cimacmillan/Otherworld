@@ -12,6 +12,9 @@ export function loadImage(url: string): Promise<HTMLImageElement> {
         image.onload = function () {
             resolve(image);
         };
+        image.onerror = (error) => {
+            console.log(`Error loading image ${url}`, error);
+        };
         image.src = url;
     });
 }
