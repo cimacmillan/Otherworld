@@ -1,10 +1,9 @@
+import { tmx } from "tmx-tiledmap";
 import { loadSound } from "../services/audio/AudioService";
 import { Actions } from "../ui/actions/Actions";
 import { setLoadPercentage } from "../ui/actions/GameStartActions";
 import { defaultManifest } from "./manifests/Resources";
-import { mapLayerConverterTypeMap } from "./maps/MapLayerConverters";
-import { LoadedMapLayerMetadata, MapLayerMetadata } from "./maps/MapShema";
-import { loadImageData, loadSpriteSheet } from "./TextureLoader";
+import { loadSpriteSheet } from "./TextureLoader";
 import { LoadedManifest, ResourceManifest } from "./Types";
 
 export class ResourceManager {
@@ -101,53 +100,16 @@ export class ResourceManager {
 
         for (const key in manifest.maps) {
             const mapSchema = manifest.maps[key];
+            const mapData = await (await fetch(mapSchema.url)).text();
+            const tmxJson = await tmx(mapData);
             loadedManifest.maps[key] = {
-                layers: [],
-                onStart: mapSchema.onStart,
+                tiled: tmxJson,
+                metadata: mapSchema.metadata,
             };
-
-            for (const layer of mapSchema.layers) {
-                const { imageUrl, mapLayerConverter } = layer;
-                const image = await loadImageData(imageUrl);
-
-                loadedManifest.maps[key].layers.push({
-                    image,
-                    mapLayerConverter:
-                        mapLayerConverterTypeMap[mapLayerConverter],
-                    mapMetadata: this.convertMapMetadata(layer.mapMetadata),
-                });
-            }
 
             increment();
         }
 
         return loadedManifest;
-    }
-
-    private convertMapMetadata(
-        mapMetadata: MapLayerMetadata[]
-    ): LoadedMapLayerMetadata {
-        const loadedMapMetadata: LoadedMapLayerMetadata = {};
-
-        mapMetadata.forEach((metadata) => {
-            const { x, y, data } = metadata;
-            if (
-                loadedMapMetadata[metadata.x] &&
-                loadedMapMetadata[metadata.x][metadata.y]
-            ) {
-                console.log("Merging metadata ", x, y, data);
-                loadedMapMetadata[metadata.x][metadata.y] = {
-                    ...loadedMapMetadata[metadata.x][metadata.y],
-                    data,
-                };
-            } else {
-                if (!loadedMapMetadata[metadata.x]) {
-                    loadedMapMetadata[metadata.x] = {};
-                }
-                loadedMapMetadata[metadata.x][metadata.y] = data;
-            }
-        });
-
-        return loadedMapMetadata;
     }
 }

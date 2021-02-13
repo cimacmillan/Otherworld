@@ -4,11 +4,13 @@ import { ServiceLocator } from "../ServiceLocator";
 import { loadMap } from "./MapLoader";
 
 type MapDestinationID = string;
-type PlayerDestination = { x: number; y: number } | MapDestinationID;
+type PlayerDestination =
+    | { x: number; y: number; angle: number }
+    | MapDestinationID;
 
 export interface MapDestination {
     mapId: Maps;
-    destination?: string | { x: number; y: number; angle: number };
+    destination?: PlayerDestination;
 }
 
 export interface MapData {
@@ -45,15 +47,13 @@ export class MapService {
             mapId
         ];
 
-        // console.log("Go to map", dest, this.currentMapData);
-
         if (this.currentMapData[dest.mapId]) {
             const { entities } = this.currentMapData[dest.mapId];
             entities.forEach((ent) =>
                 this.serviceLocator.getWorld().addEntity(ent)
             );
         } else {
-            const entities = loadMap(this.serviceLocator, map);
+            const { entities } = loadMap(this.serviceLocator, map);
             entities.forEach((ent) =>
                 this.serviceLocator.getWorld().addEntity(ent)
             );
@@ -67,7 +67,7 @@ export class MapService {
             player.setAngle(angle);
         }
 
-        map.onStart(this.serviceLocator);
+        map.metadata.onStart(this.serviceLocator);
     }
 
     public getCurrentMap(): Maps {

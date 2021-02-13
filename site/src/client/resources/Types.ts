@@ -1,5 +1,5 @@
 import { AudioMetadata, AudioObject } from "../services/audio/AudioObject";
-import { GameMap, MapSchema } from "./maps/MapShema";
+import { LoadedMap, UnloadedMap } from "./maps/MapTypes";
 import { SpriteSheet } from "./SpriteSheet";
 
 export interface LoadedManifest {
@@ -13,7 +13,7 @@ export interface LoadedManifest {
 }
 
 export interface LoadedMapManifest {
-    [key: string]: GameMap;
+    [key: string]: LoadedMap;
 }
 
 export interface ResourceManifest {
@@ -25,7 +25,7 @@ export interface ResourceManifest {
 }
 
 export interface MapManifest {
-    [key: string]: MapSchema;
+    [key: string]: UnloadedMap;
 }
 
 export interface SpriteSheetManifest {

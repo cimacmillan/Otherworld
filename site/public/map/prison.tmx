@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="6" nextobjectid="36">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="6" nextobjectid="38">
  <objectgroup id="5" name="Object Layer 1">
-  <object id="30" x="260.975" y="140.074">
-   <point/>
-  </object>
-  <object id="32" x="200" y="220">
-   <polygon points="0,0 20,0 20,-20 0,-20"/>
-  </object>
-  <object id="33" x="240" y="220">
-   <polygon points="0,0 20,0 20,-20 0,-20"/>
-  </object>
-  <object id="34" x="200" y="180">
-   <polygon points="0,0 20,0 20,-20 0,-20"/>
-  </object>
-  <object id="35" x="240" y="180">
-   <polygon points="0,0 20,0 20,-20 0,-20"/>
+  <object id="37" type="Wall" x="720" y="600">
+   <polyline points="0,0 280,0 280,200 0,200 0,60"/>
   </object>
  </objectgroup>
 </map>
