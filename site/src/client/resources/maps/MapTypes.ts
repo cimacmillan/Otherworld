@@ -1,6 +1,5 @@
+import { GameTiledMap } from "../../services/map/TiledParser";
 import { ServiceLocator } from "../../services/ServiceLocator";
-
-export type TiledMap = Record<string, any>;
 
 interface MapMetadata {
     onStart: (serviceLocator: ServiceLocator) => void;
@@ -12,6 +11,6 @@ export interface UnloadedMap {
 }
 
 export interface LoadedMap {
-    tiled: TiledMap;
+    tiled: GameTiledMap;
     metadata: MapMetadata;
 }

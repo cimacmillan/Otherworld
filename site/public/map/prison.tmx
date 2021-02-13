@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="6" nextobjectid="38">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="6" nextobjectid="42">
  <objectgroup id="5" name="Object Layer 1">
-  <object id="37" type="Wall" x="720" y="600">
-   <polyline points="0,0 280,0 280,200 0,200 0,60"/>
+  <object id="38" type="Wall" x="660" y="580">
+   <polyline points="0,0 40,-40 100,-40 100,60 0,60"/>
+  </object>
+  <object id="39" x="740" y="500">
+   <polyline points="0,0 -200,0 -140,-100 20,-100 40,-20"/>
+  </object>
+  <object id="40" x="820" y="520">
+   <polyline points="0,0 0,60 120,40 100,-60 40,20"/>
+  </object>
+  <object id="41" x="860" y="360">
+   <polyline points="0,0 -67.5508,31.6213 -220,0 -180,-40"/>
   </object>
  </objectgroup>
 </map>

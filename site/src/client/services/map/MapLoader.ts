@@ -12,7 +12,7 @@ export function loadMap(
 ): MapLoaderResult {
     const { tiled } = gameMap;
     const entities: Array<Entity<any>> = [];
-    console.log(tiled);
+    console.log("Load map", tiled);
     // layers.forEach((layer) => loadLayer(serviceLocator, layer, entities));
     return { entities };
 }

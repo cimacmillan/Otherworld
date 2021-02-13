@@ -1,5 +1,5 @@
-import { tmx } from "tmx-tiledmap";
 import { loadSound } from "../services/audio/AudioService";
+import { tiledXMLtoGameTiledMap } from "../services/map/TiledParser";
 import { Actions } from "../ui/actions/Actions";
 import { setLoadPercentage } from "../ui/actions/GameStartActions";
 import { defaultManifest } from "./manifests/Resources";
@@ -101,7 +101,10 @@ export class ResourceManager {
         for (const key in manifest.maps) {
             const mapSchema = manifest.maps[key];
             const mapData = await (await fetch(mapSchema.url)).text();
-            const tmxJson = await tmx(mapData);
+            const parse = new (require("xml2js").Parser)();
+            const tmxJson = tiledXMLtoGameTiledMap(
+                await parse.parseStringPromise(mapData)
+            );
             loadedManifest.maps[key] = {
                 tiled: tmxJson,
                 metadata: mapSchema.metadata,
