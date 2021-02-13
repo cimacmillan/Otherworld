@@ -120,6 +120,27 @@ export const MapLayerConverterDefault: MapLayerConverter = (
                     )
                 ),
             ];
+        case "000010":
+            return [
+                EntityFactory.SCENERY_FLOOR(
+                    serviceLocator,
+                    createStaticFloorState(
+                        Sprites.FLOOR_BLOOD,
+                        0,
+                        { x, y },
+                        { x: x + 1, y: y + 1 }
+                    )
+                ),
+                EntityFactory.SCENERY_FLOOR(
+                    serviceLocator,
+                    createStaticFloorState(
+                        Sprites.FLOOR,
+                        1,
+                        { x, y },
+                        { x: x + 1, y: y + 1 }
+                    )
+                ),
+            ];
     }
 
     return [];

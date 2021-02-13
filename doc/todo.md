@@ -25,6 +25,7 @@ Puzzle maps to escape prison
 * Item removed key hint
 * Add some enemies to the game again?
 * Add weapons to the game, with equiped inventory?
+* Inventory tabs
 
 ### Refactors
 * Quiet entities list

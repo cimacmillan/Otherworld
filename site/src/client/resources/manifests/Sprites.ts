@@ -6,6 +6,7 @@ export enum SpriteSheets {
 
 export enum Sprites {
     FLOOR = "FLOOR",
+    FLOOR_BLOOD = "FLOOR_BLOOD",
     SLIME = "SLIME",
     WALL = "WALL",
     HANGING_MAN = "HANGING_MAN",
@@ -23,6 +24,7 @@ export const sprites = new SpriteSheetManifestBuilder(
 const tenSprite = (sprite: Sprites, x: number, y: number) =>
     sprites.Sprite(sprite, x, y, 10, 10);
 tenSprite(Sprites.FLOOR, 90, 160);
+tenSprite(Sprites.FLOOR_BLOOD, 90, 170);
 tenSprite(Sprites.FLOOR_HOLE, 100, 160);
 tenSprite(Sprites.SLIME, 390, 10);
 tenSprite(Sprites.WALL, 90, 150);
