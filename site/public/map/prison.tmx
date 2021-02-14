@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="6" nextobjectid="42">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="6" nextobjectid="49">
  <objectgroup id="5" name="Object Layer 1">
-  <object id="38" type="Wall" x="660" y="580">
-   <polyline points="0,0 40,-40 100,-40 100,60 0,60"/>
+  <object id="48" x="443.871" y="862.535">
+   <polygon points="0,0 369.367,12.2194 369.367,-367.781 -50.6332,-367.781 -50.6332,-7.78065"/>
   </object>
-  <object id="39" x="740" y="500">
-   <polyline points="0,0 -200,0 -140,-100 20,-100 40,-20"/>
+  <object id="43" x="573.163" y="521.594">
+   <polygon points="0,0 -13.9665,39.2136 -39.7508,50.4942 -45.6596,44.5853 -47.2712,27.3958 -46.1968,13.4293 -33.8419,5.37172 -29.5445,-16.1152 -12.355,-16.1152"/>
   </object>
-  <object id="40" x="820" y="520">
-   <polyline points="0,0 0,60 120,40 100,-60 40,20"/>
+  <object id="45" x="456.781" y="753.105">
+   <polygon points="0,0 127.874,-43.6493 149.391,-4.91823"/>
   </object>
-  <object id="41" x="860" y="360">
-   <polyline points="0,0 -67.5508,31.6213 -220,0 -180,-40"/>
+  <object id="46" x="446.945" y="652.896">
+   <polygon points="0,0 44.2641,25.8207 44.2641,11.066"/>
+  </object>
+  <object id="47" x="675.642" y="730.358">
+   <polygon points="0,0 23.3616,-5.53301 37.5015,-12.9104 43.0346,-19.6729 46.7232,-25.8207 46.7232,-35.6572 46.1084,-43.0346 43.0346,-45.4937 43.0346,-49.1823 46.7232,-57.1745 52.2562,-57.1745 59.0188,-47.338 59.0188,-38.1163 52.2562,-10.4512 42.4198,6.76257 5.53301,12.2956"/>
   </object>
  </objectgroup>
 </map>

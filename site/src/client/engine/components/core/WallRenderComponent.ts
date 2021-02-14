@@ -1,3 +1,4 @@
+import { SCENERY_PIXEL_DENSITY } from "../../../Config";
 import { SpriteSheets } from "../../../resources/manifests/Sprites";
 import {
     RenderItem,
@@ -85,8 +86,18 @@ export const createWallType = (
         .getResourceManager()
         .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(spriteString);
 
-    const textureWidth = sprite.textureCoordinate.textureWidth;
-    const textureHeight = sprite.textureCoordinate.textureHeight;
+    const textureWidth =
+        (Math.sqrt(
+            Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2)
+        ) *
+            sprite.textureCoordinate.textureWidth *
+            SCENERY_PIXEL_DENSITY) /
+        sprite.pixelCoordinate.textureWidth;
+    const textureHeight =
+        (sprite.textureCoordinate.textureHeight *
+            height *
+            SCENERY_PIXEL_DENSITY) /
+        sprite.pixelCoordinate.textureHeight;
 
     return {
         startPos: [start.x, start.y],
