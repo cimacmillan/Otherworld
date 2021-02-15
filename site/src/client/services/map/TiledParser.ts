@@ -20,26 +20,32 @@ interface TiledInterface {
                 id: string;
                 name: string;
             };
-            object: Array<{
-                $: {
-                    id: string;
-                    type: string;
-                    x: string;
-                    y: string;
-                };
-                polyline?: Array<{
-                    $: {
-                        points: string;
-                    };
-                }>;
-                polygon?: Array<{
-                    $: {
-                        points: string;
-                    };
-                }>;
-            }>;
+            object: TMXObject[];
         }>;
     };
+}
+
+interface TMXObject {
+    $: {
+        id: string;
+        x: string;
+        y: string;
+        type?: string;
+        width?: string;
+        height?: string;
+    };
+    polyline?: Array<{
+        $: {
+            points: string;
+        };
+    }>;
+    polygon?: Array<{
+        $: {
+            points: string;
+        };
+    }>;
+    point?: string[];
+    ellipse?: string[];
 }
 
 export interface GameTiledMap {
@@ -48,21 +54,48 @@ export interface GameTiledMap {
     objects: GameTiledObject[];
 }
 
-interface PolyObject {
-    data: GameTiledObjectMetadata;
-    type: "Polygon";
+export enum GameTiledObjectType {
+    Ellipse = "Ellipse",
+    Polygon = "Polygon",
+    Rectangle = "Rectangle",
+    Point = "Point",
+}
+interface CommonTiledObject {
+    data: {
+        id: number;
+        type: string;
+        x: number;
+        y: number;
+    };
+}
+
+export interface PolyObject extends CommonTiledObject {
+    type: GameTiledObjectType.Polygon;
     points: Vector2D[];
     closed: boolean;
 }
 
-type GameTiledObject = PolyObject;
-
-interface GameTiledObjectMetadata {
-    id: number;
-    type?: string;
-    x: number;
-    y: number;
+export interface RectangleObject extends CommonTiledObject {
+    type: GameTiledObjectType.Rectangle;
+    width: number;
+    height: number;
 }
+
+export interface EllipseObject extends CommonTiledObject {
+    type: GameTiledObjectType.Ellipse;
+    width: number;
+    height: number;
+}
+
+export interface PointObject extends CommonTiledObject {
+    type: GameTiledObjectType.Point;
+}
+
+export type GameTiledObject =
+    | PolyObject
+    | RectangleObject
+    | EllipseObject
+    | PointObject;
 
 export function tiledXMLtoGameTiledMap(tmx: TiledInterface): GameTiledMap {
     console.log(tmx);
@@ -73,37 +106,78 @@ export function tiledXMLtoGameTiledMap(tmx: TiledInterface): GameTiledMap {
     const tWidth = Number.parseInt(tilewidth);
     const tHeight = Number.parseInt(tileheight);
 
-    const objects: GameTiledObject[] = [];
+    const destination: GameTiledObject[] = [];
     objectgroup.forEach((group) =>
         group.object.forEach((object) => {
-            const data = {
-                id: Number.parseInt(object.$.id),
-                type: object.$.type,
-                x: Number.parseInt(object.$.x),
-                y: Number.parseInt(object.$.y),
-            };
-            let objGeo: GameTiledObject;
-            const poly = object.polyline || object.polygon;
-            if (poly) {
-                objGeo = {
-                    data,
-                    type: "Polygon",
-                    points: poly[0].$.points.split(" ").map((str) => {
-                        const nums = str.split(",");
-                        const x = (Number.parseInt(nums[0]) + data.x) / tWidth;
-                        const y = (Number.parseInt(nums[1]) + data.y) / tHeight;
-                        return { x, y };
-                    }),
-                    closed: !!object.polygon,
-                };
-            }
-            objGeo && objects.push(objGeo);
+            parseObject({
+                object,
+                destination,
+                tileWidth: tWidth,
+                tileHeight: tHeight,
+            });
         })
     );
 
     return {
         width: Number.parseInt(width),
         height: Number.parseInt(height),
-        objects,
+        objects: destination,
     };
+}
+
+function parseObject(args: {
+    object: TMXObject;
+    destination: GameTiledObject[];
+    tileWidth: number;
+    tileHeight: number;
+}) {
+    const { object, destination, tileWidth, tileHeight } = args;
+
+    const data = {
+        id: Number.parseInt(object.$.id),
+        type: object.$.type,
+        x: Number.parseInt(object.$.x),
+        y: Number.parseInt(object.$.y),
+    };
+
+    const poly = object.polyline || object.polygon;
+
+    if (poly) {
+        destination.push({
+            data,
+            type: GameTiledObjectType.Polygon,
+            points: poly[0].$.points.split(" ").map((str) => {
+                const nums = str.split(",");
+                const x = (Number.parseInt(nums[0]) + data.x) / tileWidth;
+                const y = (Number.parseInt(nums[1]) + data.y) / tileHeight;
+                return { x, y };
+            }),
+            closed: !!object.polygon,
+        });
+    }
+
+    if (object.$.width && object.$.height) {
+        if (object.ellipse) {
+            destination.push({
+                data,
+                type: GameTiledObjectType.Ellipse,
+                width: Number.parseInt(object.$.width),
+                height: Number.parseInt(object.$.height),
+            });
+        } else {
+            destination.push({
+                data,
+                type: GameTiledObjectType.Rectangle,
+                width: Number.parseInt(object.$.width),
+                height: Number.parseInt(object.$.height),
+            });
+        }
+    } else {
+        if (!poly) {
+            destination.push({
+                data,
+                type: GameTiledObjectType.Point,
+            });
+        }
+    }
 }
