@@ -7,6 +7,7 @@ import {
 } from "../../engine/scripting/factory/EntityFactory";
 import { TutorialSerialisation } from "../../engine/scripting/TutorialService";
 import { store } from "../../ui/State";
+import { SpawnPoint } from "../map/MapLoader";
 import { MapData } from "../map/MapService";
 import { ServiceLocator } from "../ServiceLocator";
 import { Serialisable } from "./Serialisable";
@@ -22,6 +23,7 @@ export interface SerialisationObject {
         maps: {
             [key: string]: {
                 entities: SerialisedEntity[];
+                spawnPoints: SpawnPoint[];
             };
         };
         currentMap: string;
@@ -63,6 +65,7 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
                     ...prev,
                     [key]: {
                         entities: this.serialiseEntities(value.entities),
+                        spawnPoints: value.spawnPoints,
                     },
                 };
             },
@@ -96,6 +99,7 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
                     entities: value.entities.map((ent) =>
                         this.deserialiseEntity(ent)
                     ),
+                    spawnPoints: value.spawnPoints,
                 },
             };
         }, {} as any);

@@ -1,12 +1,9 @@
-import { Entity } from "../../engine/Entity";
 import { Maps } from "../../resources/manifests/Maps";
 import { ServiceLocator } from "../ServiceLocator";
-import { loadMap } from "./MapLoader";
+import { loadMap, MapLoaderResult, SpawnPoint } from "./MapLoader";
 
 type MapDestinationID = string;
-type PlayerDestination =
-    | { x: number; y: number; angle: number }
-    | MapDestinationID;
+type PlayerDestination = MapDestinationID;
 
 export interface MapDestination {
     mapId: Maps;
@@ -14,15 +11,14 @@ export interface MapDestination {
 }
 
 export interface MapData {
-    [key: string]: {
-        entities: Array<Entity<any>>;
-    };
+    [key: string]: MapLoaderResult;
 }
 
 export class MapService {
     private serviceLocator: ServiceLocator;
     private currentMap: Maps;
     private currentMapData: MapData = {};
+    private currentSpawnPoints: SpawnPoint[];
 
     public init(serviceLocator: ServiceLocator) {
         this.serviceLocator = serviceLocator;
@@ -33,7 +29,7 @@ export class MapService {
         this.currentMap = currentMap;
     }
 
-    public goToMap(dest: MapDestination) {
+    public goToLocation(dest: MapDestination) {
         const { mapId, destination } = dest;
 
         // Save the current map entites to map data
@@ -48,24 +44,28 @@ export class MapService {
         ];
 
         if (this.currentMapData[dest.mapId]) {
-            const { entities } = this.currentMapData[dest.mapId];
+            const { entities, spawnPoints } = this.currentMapData[dest.mapId];
+            this.currentSpawnPoints = spawnPoints;
             entities.forEach((ent) =>
                 this.serviceLocator.getWorld().addEntity(ent)
             );
         } else {
-            const { entities } = loadMap(this.serviceLocator, map);
+            const { entities, spawnPoints } = loadMap(this.serviceLocator, map);
+            this.currentSpawnPoints = spawnPoints;
             entities.forEach((ent) =>
                 this.serviceLocator.getWorld().addEntity(ent)
             );
         }
 
         const player = this.serviceLocator.getScriptingService().getPlayer();
+        const spawnPoint = this.getSpawnPoint(destination);
+        const { position, angle } = spawnPoint;
+        const { x, y } = position;
 
-        if (typeof destination === "object") {
-            const { x, y, angle } = destination;
-            player.setPosition(x, y);
-            player.setAngle(angle);
-        }
+        console.log("spawn point ", spawnPoint);
+
+        player.setPosition(x, y);
+        player.setAngle(angle);
 
         map.metadata.onStart(this.serviceLocator);
     }
@@ -84,11 +84,27 @@ export class MapService {
                         .getEntityArray()
                         .getArray(),
                 ],
+                spawnPoints: this.currentSpawnPoints,
             },
         };
     }
 
     public getMapData(): MapData {
         return this.currentMapData;
+    }
+
+    private getSpawnPoint(id?: string): SpawnPoint {
+        const search = id || "BIRTH";
+        const spawn = this.currentSpawnPoints.find(
+            (point) => point.name === search
+        );
+        if (!spawn) {
+            console.error(
+                "No spawn point ",
+                this.currentSpawnPoints,
+                this.currentMap
+            );
+        }
+        return spawn;
     }
 }

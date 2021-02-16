@@ -163,8 +163,8 @@ function parseObject(args: {
     const data = {
         id: Number.parseInt(object.$.id),
         type: objectType,
-        x: Number.parseInt(object.$.x),
-        y: Number.parseInt(object.$.y),
+        x: Number.parseInt(object.$.x) / tileWidth,
+        y: Number.parseInt(object.$.y) / tileHeight,
         properties,
     };
 
@@ -176,8 +176,8 @@ function parseObject(args: {
             type: GameTiledObjectType.Polygon,
             points: poly[0].$.points.split(" ").map((str) => {
                 const nums = str.split(",");
-                const x = (Number.parseInt(nums[0]) + data.x) / tileWidth;
-                const y = (Number.parseInt(nums[1]) + data.y) / tileHeight;
+                const x = Number.parseInt(nums[0]) / tileWidth + data.x;
+                const y = Number.parseInt(nums[1]) / tileHeight + data.y;
                 return { x, y };
             }),
             closed: !!object.polygon,

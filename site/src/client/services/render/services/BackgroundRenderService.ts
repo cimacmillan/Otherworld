@@ -58,7 +58,7 @@ export interface BackgroundShaderPositions {
 
 export class BackgroundRenderService {
     private gl: WebGLRenderingContext;
-    private currentBackground: Background = Backgrounds.OutdoorBackground;
+    private currentBackground: Background = Backgrounds.CaveBackground;
 
     public init(gl: WebGLRenderingContext) {
         this.gl = gl;

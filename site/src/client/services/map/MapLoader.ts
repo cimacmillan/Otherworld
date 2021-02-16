@@ -1,14 +1,21 @@
 import { Entity } from "../../engine/Entity";
 import { EntityFactory } from "../../engine/scripting/factory/EntityFactory";
 import { createStaticWallState } from "../../engine/scripting/factory/SceneryFactory";
-import { Sprites } from "../../resources/manifests/Sprites";
 import { LoadedMap } from "../../resources/maps/MapTypes";
+import { Vector2D } from "../../types";
 import { ServiceLocator } from "../ServiceLocator";
-import { GameTiledObjectType, PolyObject } from "./TiledParser";
+import { GameTiledObjectType, PointObject, PolyObject } from "./TiledParser";
 import { TiledObjectType } from "./TiledProperties";
 
-interface MapLoaderResult {
+export interface SpawnPoint {
+    name: string;
+    position: Vector2D;
+    angle: number;
+}
+
+export interface MapLoaderResult {
     entities: Array<Entity<any>>;
+    spawnPoints: SpawnPoint[];
 }
 
 export function loadMap(
@@ -19,6 +26,7 @@ export function loadMap(
 
     const { tiled } = gameMap;
     const entities: Array<Entity<any>> = [];
+    const spawnPoints: SpawnPoint[] = [];
 
     tiled.objects.forEach((object) => {
         switch (object.type) {
@@ -29,10 +37,18 @@ export function loadMap(
                     object,
                 });
                 break;
+            case GameTiledObjectType.Point:
+                loadPoint({
+                    serviceLocator,
+                    entities,
+                    spawnPoints,
+                    object,
+                });
+                break;
         }
     });
 
-    return { entities };
+    return { entities, spawnPoints };
 }
 
 export function loadPolygon(args: {
@@ -42,6 +58,7 @@ export function loadPolygon(args: {
 }) {
     const { serviceLocator, entities, object } = args;
     const { closed, points } = object;
+    const properties = object.data.properties;
 
     switch (object.data.type) {
         case TiledObjectType.Wall:
@@ -52,12 +69,37 @@ export function loadPolygon(args: {
                 entities.push(
                     EntityFactory.SCENERY_WALL(
                         serviceLocator,
-                        createStaticWallState(Sprites.WALL, first, second)
+                        createStaticWallState(properties.sprite, first, second)
                     )
                 );
             }
             break;
         case TiledObjectType.Door:
+            break;
+    }
+}
+
+export function loadPoint(args: {
+    serviceLocator: ServiceLocator;
+    entities: Array<Entity<any>>;
+    spawnPoints: SpawnPoint[];
+    object: PointObject;
+}) {
+    const { serviceLocator, entities, object, spawnPoints } = args;
+    const properties = object.data.properties;
+
+    switch (object.data.type) {
+        case TiledObjectType.SpawnPoint:
+            const angle = Number.parseInt(object.data.properties.angle);
+            const name = object.data.properties.name;
+            spawnPoints.push({
+                angle,
+                name,
+                position: {
+                    x: object.data.x,
+                    y: object.data.y,
+                },
+            });
             break;
     }
 }

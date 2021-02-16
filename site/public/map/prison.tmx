@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="6" nextobjectid="52">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="6" nextobjectid="60">
  <objectgroup id="5" name="Object Layer 1">
-  <object id="43" x="573.163" y="521.594">
-   <polygon points="0,0 -13.9665,39.2136 -39.7508,50.4942 -45.6596,44.5853 -47.2712,27.3958 -46.1968,13.4293 -33.8419,5.37172 -29.5445,-16.1152 -12.355,-16.1152"/>
+  <object id="52" type="Wall" x="480" y="620">
+   <polyline points="60,0 0,0 0,100 160,100 160,0 80,0"/>
   </object>
-  <object id="45" type="Wall" x="456.781" y="753.105">
-   <polygon points="0,0 127.874,-43.6493 149.391,-4.91823"/>
-  </object>
-  <object id="46" x="446.945" y="652.896">
-   <polygon points="0,0 44.2641,25.8207 44.2641,11.066"/>
-  </object>
-  <object id="47" x="675.642" y="730.358">
-   <polygon points="0,0 23.3616,-5.53301 37.5015,-12.9104 43.0346,-19.6729 46.7232,-25.8207 46.7232,-35.6572 46.1084,-43.0346 43.0346,-45.4937 43.0346,-49.1823 46.7232,-57.1745 52.2562,-57.1745 59.0188,-47.338 59.0188,-38.1163 52.2562,-10.4512 42.4198,6.76257 5.53301,12.2956"/>
-  </object>
-  <object id="49" type="Wall" x="531.574" y="648.777" width="30.7416" height="21.7753">
+  <object id="53" type="SpawnPoint" x="552.59" y="671.471">
    <properties>
-    <property name="sprite" value="WALLs"/>
+    <property name="angle" type="int" value="0"/>
+    <property name="name" value="BIRTH"/>
    </properties>
-  </object>
-  <object id="50" x="555.465" y="622.447">
    <point/>
   </object>
-  <object id="51" x="597.397" y="647.498" width="48.467" height="26.6841">
-   <ellipse/>
+  <object id="54" type="Wall" x="635.924" y="573.447">
+   <polyline points="0,0 117.516,1.48754 117.516,-110.078 -10.4128,-142.06 -49.8327,-59.5017"/>
   </object>
+  <object id="56" type="Wall" x="275.195" y="621.049">
+   <polyline points="60,0 0,0 0,100 160,100 160,0 80,0"/>
+  </object>
+  <object id="58" x="226.966" y="410.285" width="618.205" height="411.872"/>
  </objectgroup>
 </map>

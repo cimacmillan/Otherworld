@@ -52,7 +52,7 @@ export const createLadder = (
             (ent: Entity<LadderStateType>) => {
                 ent.getServiceLocator()
                     .getMapService()
-                    .goToMap(ent.getState().destination);
+                    .goToLocation(ent.getState().destination);
             }
         )
     );
