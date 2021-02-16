@@ -5,14 +5,10 @@ import { Sprites } from "../../resources/manifests/Sprites";
 import { LoadedMap } from "../../resources/maps/MapTypes";
 import { ServiceLocator } from "../ServiceLocator";
 import { GameTiledObjectType, PolyObject } from "./TiledParser";
+import { TiledObjectType } from "./TiledProperties";
 
 interface MapLoaderResult {
     entities: Array<Entity<any>>;
-}
-
-enum OtherworldObjectType {
-    Wall = "Wall",
-    Door = "Door",
 }
 
 export function loadMap(
@@ -48,7 +44,7 @@ export function loadPolygon(args: {
     const { closed, points } = object;
 
     switch (object.data.type) {
-        case OtherworldObjectType.Wall:
+        case TiledObjectType.Wall:
             const length = closed ? points.length : points.length - 1;
             for (let x = 0; x < length; x++) {
                 const first = points[x];
@@ -61,7 +57,7 @@ export function loadPolygon(args: {
                 );
             }
             break;
-        case OtherworldObjectType.Door:
+        case TiledObjectType.Door:
             break;
     }
 }

@@ -1,4 +1,8 @@
 import { Vector2D } from "../../types";
+import {
+    defaultTiledObjectProperties,
+    TiledObjectType,
+} from "./TiledProperties";
 
 interface TiledInterface {
     map: {
@@ -46,6 +50,14 @@ interface TMXObject {
     }>;
     point?: string[];
     ellipse?: string[];
+    properties?: Array<{
+        property: Array<{
+            $: {
+                name: string;
+                value: string;
+            };
+        }>;
+    }>;
 }
 
 export interface GameTiledMap {
@@ -66,6 +78,7 @@ interface CommonTiledObject {
         type: string;
         x: number;
         y: number;
+        properties: Record<string, string>;
     };
 }
 
@@ -133,11 +146,26 @@ function parseObject(args: {
 }) {
     const { object, destination, tileWidth, tileHeight } = args;
 
+    const objectType = object.$.type;
+    const properties: Record<string, string> =
+        objectType &&
+        defaultTiledObjectProperties[objectType as TiledObjectType]
+            ? defaultTiledObjectProperties[objectType as TiledObjectType]
+            : {};
+    if (object.properties) {
+        object.properties.forEach((property) => {
+            property.property.forEach((prop) => {
+                properties[prop.$.name] = prop.$.value;
+            });
+        });
+    }
+
     const data = {
         id: Number.parseInt(object.$.id),
-        type: object.$.type,
+        type: objectType,
         x: Number.parseInt(object.$.x),
         y: Number.parseInt(object.$.y),
+        properties,
     };
 
     const poly = object.polyline || object.polygon;
