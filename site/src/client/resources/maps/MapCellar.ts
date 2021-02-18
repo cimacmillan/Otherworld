@@ -3,7 +3,7 @@ import { Audios } from "../manifests/Audios";
 import { UnloadedMap } from "./MapTypes";
 
 export const MapCellar: UnloadedMap = {
-    url: "map/prison.tmx",
+    url: "map/cellar.tmx",
     metadata: {
         onStart: (serviceLocator: ServiceLocator) => {
             serviceLocator

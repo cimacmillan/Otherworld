@@ -32,29 +32,38 @@ export class MapService {
     public goToLocation(dest: MapDestination) {
         const { mapId, destination } = dest;
 
-        // Save the current map entites to map data
-        if (this.currentMap) {
-            this.syncMapData();
-        }
-        this.currentMap = mapId;
-        this.currentMapData = this.getMapData();
-        this.serviceLocator.getScriptingService().offloadEntities();
-        const map = this.serviceLocator.getResourceManager().manifest.maps[
-            mapId
-        ];
+        if (mapId !== this.getCurrentMap()) {
+            // Save the current map entites to map data
+            if (this.currentMap) {
+                this.syncMapData();
+            }
+            this.currentMap = mapId;
+            this.currentMapData = this.getMapData();
+            this.serviceLocator.getScriptingService().offloadEntities();
+            const map = this.serviceLocator.getResourceManager().manifest.maps[
+                mapId
+            ];
 
-        if (this.currentMapData[dest.mapId]) {
-            const { entities, spawnPoints } = this.currentMapData[dest.mapId];
-            this.currentSpawnPoints = spawnPoints;
-            entities.forEach((ent) =>
-                this.serviceLocator.getWorld().addEntity(ent)
-            );
-        } else {
-            const { entities, spawnPoints } = loadMap(this.serviceLocator, map);
-            this.currentSpawnPoints = spawnPoints;
-            entities.forEach((ent) =>
-                this.serviceLocator.getWorld().addEntity(ent)
-            );
+            if (this.currentMapData[dest.mapId]) {
+                const { entities, spawnPoints } = this.currentMapData[
+                    dest.mapId
+                ];
+                this.currentSpawnPoints = spawnPoints;
+                entities.forEach((ent) =>
+                    this.serviceLocator.getWorld().addEntity(ent)
+                );
+            } else {
+                const { entities, spawnPoints } = loadMap(
+                    this.serviceLocator,
+                    map
+                );
+                this.currentSpawnPoints = spawnPoints;
+                entities.forEach((ent) =>
+                    this.serviceLocator.getWorld().addEntity(ent)
+                );
+            }
+
+            map.metadata.onStart(this.serviceLocator);
         }
 
         const player = this.serviceLocator.getScriptingService().getPlayer();
@@ -66,8 +75,6 @@ export class MapService {
 
         player.setPosition(x, y);
         player.setAngle(angle);
-
-        map.metadata.onStart(this.serviceLocator);
     }
 
     public getCurrentMap(): Maps {

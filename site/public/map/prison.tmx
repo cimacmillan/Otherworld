@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="6" nextobjectid="61">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="6" nextobjectid="66">
  <objectgroup id="5" name="Object Layer 1">
   <object id="52" type="Wall" x="480" y="620">
    <polyline points="60,0 0,0 0,100 160,100 160,0 80,0"/>
   </object>
-  <object id="53" type="SpawnPoint" x="552.59" y="671.471">
+  <object id="53" type="SpawnPoint" x="528.979" y="531.193">
    <properties>
     <property name="angle" type="int" value="0"/>
-    <property name="name" value="BIRTH"/>
+    <property name="name" value="A"/>
    </properties>
    <point/>
   </object>
@@ -22,6 +22,41 @@
    <properties>
     <property name="height" value="1"/>
    </properties>
+  </object>
+  <object id="61" type="Door" x="537.442" y="576.077">
+   <properties>
+    <property name="height" value="3"/>
+    <property name="keyId" value="GOLD_KEY"/>
+    <property name="locked" type="bool" value="true"/>
+    <property name="width" value="4"/>
+   </properties>
+   <polyline points="0,0 20,0"/>
+  </object>
+  <object id="62" type="Door" x="400" y="540">
+   <properties>
+    <property name="height" value="3"/>
+    <property name="locked" type="bool" value="true"/>
+    <property name="resets" type="bool" value="true"/>
+    <property name="width" value="4"/>
+   </properties>
+   <polyline points="0,0 0,20"/>
+  </object>
+  <object id="63" type="GameItem" x="551" y="608.068">
+   <point/>
+  </object>
+  <object id="64" type="Portal" x="511.806" y="589.583">
+   <properties>
+    <property name="map" value="CELLAR"/>
+    <property name="spawn" value="BIRTH"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="65" type="SpawnPoint" x="556.25" y="657.639">
+   <properties>
+    <property name="angle" type="int" value="0"/>
+    <property name="name" value="BIRTH"/>
+   </properties>
+   <point/>
   </object>
  </objectgroup>
 </map>

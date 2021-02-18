@@ -1,3 +1,5 @@
+import { GameItem } from "../../resources/manifests/Items";
+import { Maps } from "../../resources/manifests/Maps";
 import { Sprites } from "../../resources/manifests/Sprites";
 
 export enum TiledObjectType {
@@ -5,6 +7,8 @@ export enum TiledObjectType {
     Door = "Door",
     SpawnPoint = "SpawnPoint",
     Floor = "Floor",
+    GameItem = "GameItem",
+    Portal = "Portal",
 }
 
 export const defaultTiledObjectProperties: Record<
@@ -14,7 +18,9 @@ export const defaultTiledObjectProperties: Record<
     [TiledObjectType.Wall]: {
         sprite: Sprites.WALL,
     },
-    [TiledObjectType.Door]: {},
+    [TiledObjectType.Door]: {
+        sprite: Sprites.CELL,
+    },
     [TiledObjectType.SpawnPoint]: {
         angle: "0",
         name: "BIRTH",
@@ -22,5 +28,12 @@ export const defaultTiledObjectProperties: Record<
     [TiledObjectType.Floor]: {
         sprite: Sprites.FLOOR,
         height: "0",
+    },
+    [TiledObjectType.GameItem]: {
+        item: GameItem.GOLD_KEY,
+    },
+    [TiledObjectType.Portal]: {
+        map: Maps.PRISON,
+        spawn: "BIRTH",
     },
 };

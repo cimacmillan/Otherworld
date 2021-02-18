@@ -1,9 +1,18 @@
 import { Entity } from "../../engine/Entity";
+import {
+    createDoorState,
+    createLockedDoorState,
+} from "../../engine/scripting/factory/DoorFactory";
 import { EntityFactory } from "../../engine/scripting/factory/EntityFactory";
+import { createItemDropState } from "../../engine/scripting/factory/ItemFactory";
+import { createLadderState } from "../../engine/scripting/factory/MapChangeFactory";
 import {
     createStaticFloorState,
     createStaticWallState,
 } from "../../engine/scripting/factory/SceneryFactory";
+import { GameItem, GameItems } from "../../resources/manifests/Items";
+import { Maps } from "../../resources/manifests/Maps";
+import { Sprites } from "../../resources/manifests/Sprites";
 import { LoadedMap } from "../../resources/maps/MapTypes";
 import { Vector2D } from "../../types";
 import { ServiceLocator } from "../ServiceLocator";
@@ -90,6 +99,38 @@ export function loadPolygon(args: {
             }
             break;
         case TiledObjectType.Door:
+            const start = points[0];
+            const end = points[1];
+
+            if (properties.keyId || properties.locked) {
+                entities.push(
+                    EntityFactory.DOOR_LOCKED(
+                        serviceLocator,
+                        createLockedDoorState({
+                            start,
+                            end,
+                            spriteString: properties.sprite,
+                            keyId: properties.keyId as GameItem,
+                            configuration: properties.locked
+                                ? {
+                                      width: Number.parseInt(properties.width),
+                                      height: Number.parseInt(
+                                          properties.height
+                                      ),
+                                      shouldReset: properties.resets === "true",
+                                  }
+                                : undefined,
+                        })
+                    )
+                );
+            } else {
+                entities.push(
+                    EntityFactory.DOOR(
+                        serviceLocator,
+                        createDoorState(start, end, properties.sprite)
+                    )
+                );
+            }
             break;
     }
 }
@@ -115,6 +156,36 @@ export function loadPoint(args: {
                     y: object.data.y,
                 },
             });
+            break;
+        case TiledObjectType.GameItem:
+            entities.push(
+                EntityFactory.ITEM_DROP(
+                    serviceLocator,
+                    createItemDropState({
+                        item: GameItems[properties.item as GameItem],
+                        position: {
+                            x: object.data.x,
+                            y: object.data.y,
+                        },
+                    })
+                )
+            );
+            break;
+        case TiledObjectType.Portal:
+            entities.push(
+                EntityFactory.LADDER(
+                    serviceLocator,
+                    createLadderState(
+                        object.data.x,
+                        object.data.y,
+                        Sprites.LADDER,
+                        {
+                            mapId: properties.map as Maps,
+                            destination: properties.spawn,
+                        }
+                    )
+                )
+            );
             break;
     }
 }

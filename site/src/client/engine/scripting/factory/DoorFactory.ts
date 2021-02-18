@@ -47,7 +47,6 @@ enum DoorOpenState {
 
 interface DoorState {
     open: DoorOpenState;
-    horizontal: boolean;
 }
 
 interface LockedDoorState extends DoorState {
@@ -130,20 +129,12 @@ export const playsEffect = <T>(
 export const doorOpensWithParticles = (
     start: Vector2D,
     end: Vector2D,
-    horizontal: boolean,
     initialState: DoorOpenState
 ): EntityComponent<DoorStateType> => {
     const getDoorPosition = (x: number) => {
-        const offsetVal = 0.9 * x + Math.random() * 0.06;
-        const offset = horizontal
-            ? {
-                  x: offsetVal,
-                  y: 0,
-              }
-            : {
-                  x: 0,
-                  y: -offsetVal,
-              };
+        const diff = vec.vec_sub(start, end);
+        const offsetVal = -0.9 * x + Math.random() * 0.06;
+        const offset = vec.vec_mult_scalar(diff, offsetVal);
         const newStart = vec.vec_sub(start, offset);
         const newEnd = vec.vec_sub(end, offset);
         return [newStart, newEnd];
@@ -187,13 +178,10 @@ export const doorOpensWithParticles = (
 };
 
 export const createDoorState = (
-    x: number,
-    y: number,
-    sprite: string,
-    horizontal: boolean = true
+    start: Vector2D,
+    end: Vector2D,
+    sprite: string
 ): DoorStateType => {
-    const start = horizontal ? { x, y: y + 0.5 } : { x: x + 0.5, y: y + 1 };
-    const end = horizontal ? { x: x + 1, y: y + 0.5 } : { x: x + 0.5, y };
     const collides = true;
     return {
         boundaryState: {
@@ -212,7 +200,6 @@ export const createDoorState = (
         radius: 0.5,
         angle: 0,
         open: DoorOpenState.CLOSED,
-        horizontal,
     };
 };
 
@@ -220,7 +207,7 @@ export const createDoor = (
     serviceLocator: ServiceLocator,
     state: DoorStateType
 ) => {
-    const { horizontal, wallStart, wallEnd, open } = state;
+    const { wallStart, wallEnd, open } = state;
     let interactHintId: number | undefined;
     const doorSwitch: SwitchComponents = {
         ["CLOSED"]: JoinComponent<DoorStateType>([
@@ -258,26 +245,23 @@ export const createDoor = (
         state,
         WallRenderComponent(),
         new SwitchComponent(doorSwitch, open, (ent) => ent.getState().open),
-        doorOpensWithParticles(wallStart, wallEnd, horizontal, open)
+        doorOpensWithParticles(wallStart, wallEnd, open)
     );
 };
 
 interface LockedDoorConfig {
-    x: number;
-    y: number;
+    start: Vector2D;
+    end: Vector2D;
     spriteString: string;
     configuration?: LockpickGameConfiguration;
-    horizontal?: boolean;
     keyId?: GameItem;
 }
 
 export const createLockedDoorState = (
     args: LockedDoorConfig
 ): LockedDoorStateType => {
-    const { x, y, spriteString, configuration, horizontal, keyId } = args;
+    const { start, end, spriteString, configuration, keyId } = args;
 
-    const start = horizontal ? { x, y: y + 0.5 } : { x: x + 0.5, y: y + 1 };
-    const end = horizontal ? { x: x + 1, y: y + 0.5 } : { x: x + 0.5, y };
     const collides = true;
 
     return {
@@ -297,7 +281,6 @@ export const createLockedDoorState = (
         radius: 0.5,
         angle: 0,
         open: DoorOpenState.CLOSED,
-        horizontal,
         configuration,
         keyId,
     };
@@ -307,14 +290,7 @@ export const createLockedDoor = (
     serviceLocator: ServiceLocator,
     state: LockedDoorStateType
 ) => {
-    const {
-        horizontal,
-        wallStart,
-        wallEnd,
-        configuration,
-        keyId,
-        open,
-    } = state;
+    const { wallStart, wallEnd, configuration, keyId, open } = state;
 
     let interactHintId: number | undefined;
 
@@ -389,6 +365,6 @@ export const createLockedDoor = (
         state,
         WallRenderComponent(),
         new SwitchComponent(doorSwitch, open, (ent) => ent.getState().open),
-        doorOpensWithParticles(wallStart, wallEnd, horizontal, open)
+        doorOpensWithParticles(wallStart, wallEnd, open)
     );
 };
