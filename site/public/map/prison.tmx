@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="6" nextobjectid="60">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="6" nextobjectid="61">
  <objectgroup id="5" name="Object Layer 1">
   <object id="52" type="Wall" x="480" y="620">
    <polyline points="60,0 0,0 0,100 160,100 160,0 80,0"/>
@@ -17,6 +17,11 @@
   <object id="56" type="Wall" x="275.195" y="621.049">
    <polyline points="60,0 0,0 0,100 160,100 160,0 80,0"/>
   </object>
-  <object id="58" x="226.966" y="410.285" width="618.205" height="411.872"/>
+  <object id="58" type="Floor" x="51.9368" y="303.971" width="793.234" height="550.599"/>
+  <object id="60" type="Floor" x="70.1275" y="328.875" width="793.234" height="550.599">
+   <properties>
+    <property name="height" value="1"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

@@ -1,10 +1,18 @@
 import { Entity } from "../../engine/Entity";
 import { EntityFactory } from "../../engine/scripting/factory/EntityFactory";
-import { createStaticWallState } from "../../engine/scripting/factory/SceneryFactory";
+import {
+    createStaticFloorState,
+    createStaticWallState,
+} from "../../engine/scripting/factory/SceneryFactory";
 import { LoadedMap } from "../../resources/maps/MapTypes";
 import { Vector2D } from "../../types";
 import { ServiceLocator } from "../ServiceLocator";
-import { GameTiledObjectType, PointObject, PolyObject } from "./TiledParser";
+import {
+    GameTiledObjectType,
+    PointObject,
+    PolyObject,
+    RectangleObject,
+} from "./TiledParser";
 import { TiledObjectType } from "./TiledProperties";
 
 export interface SpawnPoint {
@@ -42,6 +50,13 @@ export function loadMap(
                     serviceLocator,
                     entities,
                     spawnPoints,
+                    object,
+                });
+                break;
+            case GameTiledObjectType.Rectangle:
+                loadRectangle({
+                    serviceLocator,
+                    entities,
                     object,
                 });
                 break;
@@ -86,12 +101,12 @@ export function loadPoint(args: {
     object: PointObject;
 }) {
     const { serviceLocator, entities, object, spawnPoints } = args;
-    const properties = object.data.properties;
+    const { properties } = object.data;
 
     switch (object.data.type) {
         case TiledObjectType.SpawnPoint:
-            const angle = Number.parseInt(object.data.properties.angle);
-            const name = object.data.properties.name;
+            const angle = Number.parseInt(properties.angle);
+            const name = properties.name;
             spawnPoints.push({
                 angle,
                 name,
@@ -100,6 +115,38 @@ export function loadPoint(args: {
                     y: object.data.y,
                 },
             });
+            break;
+    }
+}
+
+export function loadRectangle(args: {
+    serviceLocator: ServiceLocator;
+    entities: Array<Entity<any>>;
+    object: RectangleObject;
+}) {
+    const { serviceLocator, entities, object } = args;
+    const { properties } = object.data;
+
+    switch (object.data.type) {
+        case TiledObjectType.Floor:
+            const { sprite, height } = properties;
+            entities.push(
+                EntityFactory.SCENERY_FLOOR(
+                    serviceLocator,
+                    createStaticFloorState(
+                        sprite,
+                        Number.parseInt(height),
+                        {
+                            x: object.data.x,
+                            y: object.data.y,
+                        },
+                        {
+                            x: object.data.x + object.width,
+                            y: object.data.y + object.height,
+                        }
+                    )
+                )
+            );
             break;
     }
 }

@@ -4,6 +4,7 @@ export enum TiledObjectType {
     Wall = "Wall",
     Door = "Door",
     SpawnPoint = "SpawnPoint",
+    Floor = "Floor",
 }
 
 export const defaultTiledObjectProperties: Record<
@@ -17,5 +18,9 @@ export const defaultTiledObjectProperties: Record<
     [TiledObjectType.SpawnPoint]: {
         angle: "0",
         name: "BIRTH",
+    },
+    [TiledObjectType.Floor]: {
+        sprite: Sprites.FLOOR,
+        height: "0",
     },
 };

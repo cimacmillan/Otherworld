@@ -150,7 +150,7 @@ function parseObject(args: {
     const properties: Record<string, string> =
         objectType &&
         defaultTiledObjectProperties[objectType as TiledObjectType]
-            ? defaultTiledObjectProperties[objectType as TiledObjectType]
+            ? { ...defaultTiledObjectProperties[objectType as TiledObjectType] }
             : {};
     if (object.properties) {
         object.properties.forEach((property) => {
@@ -189,15 +189,15 @@ function parseObject(args: {
             destination.push({
                 data,
                 type: GameTiledObjectType.Ellipse,
-                width: Number.parseInt(object.$.width),
-                height: Number.parseInt(object.$.height),
+                width: Number.parseInt(object.$.width) / tileWidth,
+                height: Number.parseInt(object.$.height) / tileHeight,
             });
         } else {
             destination.push({
                 data,
                 type: GameTiledObjectType.Rectangle,
-                width: Number.parseInt(object.$.width),
-                height: Number.parseInt(object.$.height),
+                width: Number.parseInt(object.$.width) / tileWidth,
+                height: Number.parseInt(object.$.height) / tileHeight,
             });
         }
     } else {
