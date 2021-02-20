@@ -10,16 +10,6 @@ Puzzle maps to escape prison
 * Item collect sound
 * BPM sequencer for syncing song change
 
-
-### Maps
-* Build map metadata with builder
-* Map service?
-
-### Serialiser
-* Map loader and serialiser uses same entity factory (?) but serialiser passes state in as an argument - what about multiple entity creation
-* Implement serialise / deserialise functions again
-* Serialise into saved map, changing map loads serialised version
-
 ### Gameplay
 * Destroy / remove key on door use?
 * Item removed key hint
@@ -28,8 +18,6 @@ Puzzle maps to escape prison
 * Inventory tabs
 
 ### Refactors
-* Quiet entities list
-* Use glm vec everywhere
 * Audio metadata with gain 
 * Refactor audio service to take Audio string
 * Refactor graphics service to take sprite string?

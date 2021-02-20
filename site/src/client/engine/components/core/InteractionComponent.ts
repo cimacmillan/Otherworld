@@ -66,7 +66,7 @@ export const onCanBeInteractedWithByPlayer = <T extends InteractionStateType>(
         const interacts = entity
             .getServiceLocator()
             .getInteractionService()
-            .getInteractables(InteractionType.INTERACT, position, angle, 1.5);
+            .getInteractables(InteractionType.INTERACT, position, angle, 1);
         const isInteractable = interacts.some(
             (interactable) =>
                 interactable.source.type === InteractionSourceType.ENTITY &&

@@ -10,7 +10,10 @@ export enum Sprites {
     SLIME = "SLIME",
     WALL = "WALL",
     HANGING_MAN = "HANGING_MAN",
+
     SKULL = "SKULL",
+    BONE = "BONE",
+
     CELL = "CELL",
     ITEM_KEY = "ITEM_KEY",
     ITEM_GOLD_RING = "",
@@ -32,5 +35,8 @@ tenSprite(Sprites.CELL, 100, 150);
 tenSprite(Sprites.ITEM_KEY, 540, 160);
 tenSprite(Sprites.ITEM_GOLD_RING, 0, 270);
 tenSprite(Sprites.LADDER, 110, 160);
+
 tenSprite(Sprites.SKULL, 550, 190);
+tenSprite(Sprites.BONE, 530, 190);
+
 sprites.Sprite(Sprites.HANGING_MAN, 70, 150, 20, 20);

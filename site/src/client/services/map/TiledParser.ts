@@ -116,8 +116,8 @@ export function tiledXMLtoGameTiledMap(tmx: TiledInterface): GameTiledMap {
     const { map } = tmx;
     const { $, objectgroup } = map;
     const { width, height, tilewidth, tileheight } = $;
-    const tWidth = Number.parseInt(tilewidth);
-    const tHeight = Number.parseInt(tileheight);
+    const tWidth = Number.parseFloat(tilewidth);
+    const tHeight = Number.parseFloat(tileheight);
 
     const destination: GameTiledObject[] = [];
     objectgroup.forEach((group) =>
@@ -132,8 +132,8 @@ export function tiledXMLtoGameTiledMap(tmx: TiledInterface): GameTiledMap {
     );
 
     return {
-        width: Number.parseInt(width),
-        height: Number.parseInt(height),
+        width: Number.parseFloat(width),
+        height: Number.parseFloat(height),
         objects: destination,
     };
 }
@@ -161,10 +161,10 @@ function parseObject(args: {
     }
 
     const data = {
-        id: Number.parseInt(object.$.id),
+        id: Number.parseFloat(object.$.id),
         type: objectType,
-        x: Number.parseInt(object.$.x) / tileWidth,
-        y: Number.parseInt(object.$.y) / tileHeight,
+        x: Number.parseFloat(object.$.x) / tileWidth,
+        y: Number.parseFloat(object.$.y) / tileHeight,
         properties,
     };
 
@@ -176,8 +176,8 @@ function parseObject(args: {
             type: GameTiledObjectType.Polygon,
             points: poly[0].$.points.split(" ").map((str) => {
                 const nums = str.split(",");
-                const x = Number.parseInt(nums[0]) / tileWidth + data.x;
-                const y = Number.parseInt(nums[1]) / tileHeight + data.y;
+                const x = Number.parseFloat(nums[0]) / tileWidth + data.x;
+                const y = Number.parseFloat(nums[1]) / tileHeight + data.y;
                 return { x, y };
             }),
             closed: !!object.polygon,
@@ -189,15 +189,15 @@ function parseObject(args: {
             destination.push({
                 data,
                 type: GameTiledObjectType.Ellipse,
-                width: Number.parseInt(object.$.width) / tileWidth,
-                height: Number.parseInt(object.$.height) / tileHeight,
+                width: Number.parseFloat(object.$.width) / tileWidth,
+                height: Number.parseFloat(object.$.height) / tileHeight,
             });
         } else {
             destination.push({
                 data,
                 type: GameTiledObjectType.Rectangle,
-                width: Number.parseInt(object.$.width) / tileWidth,
-                height: Number.parseInt(object.$.height) / tileHeight,
+                width: Number.parseFloat(object.$.width) / tileWidth,
+                height: Number.parseFloat(object.$.height) / tileHeight,
             });
         }
     } else {

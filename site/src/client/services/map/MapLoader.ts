@@ -8,6 +8,7 @@ import { createItemDropState } from "../../engine/scripting/factory/ItemFactory"
 import { createLadderState } from "../../engine/scripting/factory/MapChangeFactory";
 import {
     createStaticFloorState,
+    createStaticSpriteState,
     createStaticWallState,
 } from "../../engine/scripting/factory/SceneryFactory";
 import { GameItem, GameItems } from "../../resources/manifests/Items";
@@ -113,8 +114,10 @@ export function loadPolygon(args: {
                             keyId: properties.keyId as GameItem,
                             configuration: properties.locked
                                 ? {
-                                      width: Number.parseInt(properties.width),
-                                      height: Number.parseInt(
+                                      width: Number.parseFloat(
+                                          properties.width
+                                      ),
+                                      height: Number.parseFloat(
                                           properties.height
                                       ),
                                       shouldReset: properties.resets === "true",
@@ -146,7 +149,7 @@ export function loadPoint(args: {
 
     switch (object.data.type) {
         case TiledObjectType.SpawnPoint:
-            const angle = Number.parseInt(properties.angle);
+            const angle = Number.parseFloat(properties.angle);
             const name = properties.name;
             spawnPoints.push({
                 angle,
@@ -206,7 +209,7 @@ export function loadRectangle(args: {
                     serviceLocator,
                     createStaticFloorState(
                         sprite,
-                        Number.parseInt(height),
+                        Number.parseFloat(height),
                         {
                             x: object.data.x,
                             y: object.data.y,
@@ -215,6 +218,23 @@ export function loadRectangle(args: {
                             x: object.data.x + object.width,
                             y: object.data.y + object.height,
                         }
+                    )
+                )
+            );
+            break;
+        case TiledObjectType.StaticSprite:
+            entities.push(
+                EntityFactory.SCENERY_SPRITE(
+                    serviceLocator,
+                    createStaticSpriteState(
+                        properties.sprite as Sprites,
+                        {
+                            x: object.data.x + object.width / 2,
+                            y: object.data.y + object.height / 2,
+                        },
+                        Number.parseFloat(properties.height),
+                        object.width,
+                        object.height
                     )
                 )
             );

@@ -9,6 +9,7 @@ export enum TiledObjectType {
     Floor = "Floor",
     GameItem = "GameItem",
     Portal = "Portal",
+    StaticSprite = "StaticSprite",
 }
 
 export const defaultTiledObjectProperties: Record<
@@ -35,5 +36,9 @@ export const defaultTiledObjectProperties: Record<
     [TiledObjectType.Portal]: {
         map: Maps.PRISON,
         spawn: "BIRTH",
+    },
+    [TiledObjectType.StaticSprite]: {
+        sprite: Sprites.SKULL,
+        height: "0.5",
     },
 };

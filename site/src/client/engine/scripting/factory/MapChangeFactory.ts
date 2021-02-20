@@ -22,7 +22,7 @@ export const createLadderState = (
 ) => {
     return {
         yOffset: 0,
-        position: { x: x + 0.5, y: y + 0.5 },
+        position: { x, y },
         height: 0,
         radius: 1,
         angle: 0,
