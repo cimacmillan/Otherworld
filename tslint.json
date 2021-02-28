@@ -10,7 +10,8 @@
         "no-unused-variable": true,
         "interface-name": false,
         "object-literal-sort-keys": false,
-        "indent": [true, "spaces", 4]
+        "indent": [true, "spaces", 4],
+        "no-unused-declaration": true
     },  
     "rulesDirectory": []
 }

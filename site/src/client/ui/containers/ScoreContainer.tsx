@@ -4,13 +4,12 @@ import {
     TextSize,
     TextColour,
 } from "../components/TextComponent";
-import { useGlobalState, useDispatchListener } from "../effects/GlobalState";
+import { useGlobalState } from "../effects/GlobalState";
 import React = require("react");
 import { DOM_WIDTH, DOM_HEIGHT } from "../../Config";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { animation, sin } from "../../util/animation/Animations";
-import { Actions } from "../actions/Actions";
-import { EnemyEventType } from "../../engine/events/EnemyEvents";
+import { Actions } from "../../Actions";
 import {
     ShadowComponentStyle,
     ShadowComponentStyleAlpha,
@@ -30,12 +29,6 @@ export const ScoreContainer: React.FunctionComponent = (props) => {
             .speed(300)
             .driven(false);
     }, []);
-
-    useDispatchListener((action: Actions) => {
-        if (action.type === EnemyEventType.ENEMY_KILLED) {
-            bounce.start().whenDone(() => setScale(1));
-        }
-    });
 
     const transform = `scale(${scale})`;
     return (

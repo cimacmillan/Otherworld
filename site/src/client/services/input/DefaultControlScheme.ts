@@ -1,6 +1,11 @@
 import { OpenInventory } from "../../engine/commands/InventoryCommands";
-import { Interact, Turn, Walk } from "../../engine/commands/PlayerCommands";
-import { TurnDirection, WalkDirection } from "../../engine/events/TravelEvents";
+import {
+    Interact,
+    Turn,
+    TurnDirection,
+    Walk,
+    WalkDirection,
+} from "../../engine/commands/PlayerCommands";
 import { ServiceLocator } from "../ServiceLocator";
 import { ControlScheme } from "./ControlScheme";
 

@@ -1,11 +1,10 @@
+import { Actions, emptyActions } from "./Actions";
 import { HEIGHT, IS_DEV_MODE, TARGET_MILLIS, VERSION, WIDTH } from "./Config";
-import { GameEvent, RootEventType } from "./engine/events/Event";
 import { ScriptingService } from "./engine/scripting/ScriptingService";
 import { TutorialService } from "./engine/scripting/TutorialService";
 import { World } from "./engine/World";
 import { ResourceManager } from "./resources/ResourceManager";
 import { AudioService } from "./services/audio/AudioService";
-import { EventRouter, GameEventSource } from "./services/EventRouter";
 import { InputService, InputState } from "./services/input/InputService";
 import { InteractionService } from "./services/interaction/InteractionService";
 import { ProcedureService } from "./services/jobs/ProcedureService";
@@ -20,15 +19,14 @@ import {
 } from "./services/serialisation/SerialisationService";
 import { GameStorage } from "./services/serialisation/Storage";
 import { ServiceLocator } from "./services/ServiceLocator";
-import { Actions } from "./ui/actions/Actions";
-import { GameStartActionType } from "./ui/actions/GameStartActions";
+import { FunctionEventSubscriber } from "./util/engine/FunctionEventSubscriber";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
 
 export class Game {
     private serviceLocator: ServiceLocator;
     private storage: GameStorage;
-    private uiListener: (event: Actions) => void;
+    private uiListener: Partial<Actions>;
 
     private initialised: boolean = false;
     private updateWorld: boolean = false;
@@ -36,7 +34,7 @@ export class Game {
 
     public async init(
         openGL: WebGLRenderingContext,
-        uiListener: (event: Actions) => void
+        uiListener: Partial<Actions>
     ) {
         this.uiListener = uiListener;
 
@@ -46,15 +44,10 @@ export class Game {
         const resourceManager = new ResourceManager();
         await resourceManager.load(openGL, audioContext, uiListener);
 
-        const router = new EventRouter();
-        router.attachEventListener(GameEventSource.UI, uiListener);
+        const router = new FunctionEventSubscriber<Actions>(emptyActions);
+        router.subscribe(uiListener);
 
-        const world = new World((event: GameEvent) =>
-            router.routeEvent(GameEventSource.WORLD, event)
-        );
-        router.attachEventListener(GameEventSource.WORLD, (event: GameEvent) =>
-            world.emitIntoWorld(event)
-        );
+        const world = new World();
 
         const scriptingService = new ScriptingService(this);
 
@@ -154,9 +147,7 @@ export class Game {
 
         const loop = new TimeControlledLoop(TARGET_MILLIS, this.mainLoop);
         this.initialised = true;
-        this.serviceLocator.getEventRouter().routeEvent(GameEventSource.ROOT, {
-            type: RootEventType.GAME_INITIALISED,
-        });
+        this.serviceLocator.getEventRouter().actions().onGameInitialised();
 
         loop.start();
     }
@@ -217,11 +208,6 @@ export class Game {
                 }
                 `
             );
-            this.uiListener &&
-                this.uiListener({
-                    type: GameStartActionType.SET_GAME_FPS,
-                    fps,
-                });
         });
         setFPSProportion(1 / actualProportion);
 

@@ -37,7 +37,6 @@ import {
 } from "../../components/util/SwitchComponent";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import { LockpickingResult } from "../../events/MiniGameEvents";
 
 enum DoorOpenState {
     OPEN = "OPEN",
@@ -68,15 +67,20 @@ export const emitsParticles = <T>(
     emitter: ParticleEmitter
 ): EntityComponent<T> => {
     return {
-        onCreate: (entity: Entity<T>) => {
-            entity.getServiceLocator().getParticleService().addEmitter(emitter);
-        },
-        onDestroy: (entity: Entity<T>) => {
-            entity
-                .getServiceLocator()
-                .getParticleService()
-                .removeEmitter(emitter);
-        },
+        getActions: (entity: Entity<T>) => ({
+            onEntityCreated: () => {
+                entity
+                    .getServiceLocator()
+                    .getParticleService()
+                    .addEmitter(emitter);
+            },
+            onEntityDeleted: () => {
+                entity
+                    .getServiceLocator()
+                    .getParticleService()
+                    .removeEmitter(emitter);
+            },
+        }),
     };
 };
 
@@ -108,21 +112,23 @@ export const playsEffect = <T>(
 ): EntityComponent<T> => {
     let audioRef: AudioBufferSourceNode;
     return {
-        onCreate: (entity: Entity<T>) => {
-            audioRef = entity
-                .getServiceLocator()
-                .getAudioService()
-                .play(
-                    entity.getServiceLocator().getResourceManager().manifest
-                        .audio[audio],
-                    gain
-                );
-        },
-        onDestroy: (entity: Entity<T>) => {
-            if (audioRef) {
-                audioRef.stop();
-            }
-        },
+        getActions: (entity: Entity<T>) => ({
+            onEntityCreated: () => {
+                audioRef = entity
+                    .getServiceLocator()
+                    .getAudioService()
+                    .play(
+                        entity.getServiceLocator().getResourceManager().manifest
+                            .audio[audio],
+                        gain
+                    );
+            },
+            onEntityDeleted: () => {
+                if (audioRef) {
+                    audioRef.stop();
+                }
+            },
+        }),
     };
 };
 
@@ -314,7 +320,7 @@ export const createLockedDoor = (
                             );
                     } else {
                         OpenLockpickingChallenge(serviceLocator)(
-                            (result: LockpickingResult) => {
+                            (result: boolean) => {
                                 ent.setState({
                                     open: result
                                         ? DoorOpenState.OPENING

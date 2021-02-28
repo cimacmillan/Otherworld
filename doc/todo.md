@@ -2,6 +2,9 @@
 ### Milestone 2
 Puzzle maps to escape prison
 
+### Doing 
+* Item collection reducer
+
 ### Polish 
 * Improve head bob to not make noise when standing still (frequency?)
 
@@ -9,6 +12,7 @@ Puzzle maps to escape prison
 * Don't start audio until button pressed (onGameStart?)
 * Item collect sound
 * BPM sequencer for syncing song change
+* Fade in / fade out music
 
 ### Gameplay
 * Destroy / remove key on door use?
@@ -22,7 +26,13 @@ Puzzle maps to escape prison
 * Refactor audio service to take Audio string
 * Refactor graphics service to take sprite string?
 * Remove manifest everywhere
+* Remove command creator
 
+
+### Ideas
+* Skills
+* Exp from doing things
+* Levels from XP
 
 -------
 

@@ -1,10 +1,11 @@
+import { Actions } from "../Actions";
 import { ScriptingService } from "../engine/scripting/ScriptingService";
 import { TutorialService } from "../engine/scripting/TutorialService";
 import { World } from "../engine/World";
 import { Game } from "../Game";
 import { ResourceManager } from "../resources/ResourceManager";
+import { FunctionEventSubscriber } from "../util/engine/FunctionEventSubscriber";
 import { AudioService } from "./audio/AudioService";
-import { EventRouter } from "./EventRouter";
 import { InputService } from "./input/InputService";
 import { InteractionService } from "./interaction/InteractionService";
 import { MapService } from "./map/MapService";
@@ -20,7 +21,7 @@ export class ServiceLocator {
         private world: World,
         private renderService: RenderService,
         private audioService: AudioService,
-        private eventRouter: EventRouter,
+        private eventRouter: FunctionEventSubscriber<Actions>,
         private scriptingService: ScriptingService,
         private inputService: InputService,
         private physicsService: PhysicsService,

@@ -1,15 +1,8 @@
 import { ConsistentArray } from "../util/array/ConsistentArray";
 import { Entity } from "./Entity";
-import { EntityEventType } from "./events/EntityEvents";
-import { GameEvent } from "./events/Event";
 
 export class World {
     private entityArray: ConsistentArray<Entity<any>>;
-    private worldDispatch: (event: GameEvent) => void;
-
-    public constructor(worldDispatch: (event: GameEvent) => void) {
-        this.worldDispatch = worldDispatch;
-    }
 
     public init() {
         this.entityArray = new ConsistentArray<Entity<any>>();
@@ -30,17 +23,6 @@ export class World {
         this.entityArray.remove(entity);
     }
 
-    public emitIntoWorld(event: GameEvent) {
-        const entities = this.getEntityArray().getArray();
-        for (let i = 0; i < entities.length; i++) {
-            entities[i].emit(event);
-        }
-    }
-
-    public emitOutOfWorld(event: GameEvent) {
-        this.worldDispatch(event);
-    }
-
     public getEntityArray() {
         return this.entityArray;
     }
@@ -49,15 +31,13 @@ export class World {
         const toAdd = this.entityArray.getToAdd();
         const toRemove = this.entityArray.getToRemove();
         for (let i = 0; i < toAdd.length; i++) {
-            toAdd[i].emit({
-                type: EntityEventType.ENTITY_CREATED,
-            });
+            const actions = toAdd[i].getActions();
+            actions.onEntityCreated && actions.onEntityCreated();
         }
 
         for (let i = 0; i < toRemove.length; i++) {
-            toRemove[i].emit({
-                type: EntityEventType.ENTITY_DELETED,
-            });
+            const actions = toRemove[i].getActions();
+            actions.onEntityDeleted && actions.onEntityDeleted();
         }
         this.entityArray.sync();
     }

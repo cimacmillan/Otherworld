@@ -1,37 +1,26 @@
+import { Actions, emptyActions } from "../../../Actions";
+import { FunctionEventSubscriber } from "../../../util/engine/FunctionEventSubscriber";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import { GameEvent } from "../../events/Event";
 
 export function JoinComponent<T>(
     components: Array<EntityComponent<Partial<T>>>
 ): EntityComponent<T> {
+    const subscriber = new FunctionEventSubscriber<Actions>(emptyActions);
+    let initialised = false;
     return {
         update: (entity: Entity<T>) =>
             components.forEach(
                 (component) => component.update && component.update(entity)
             ),
-        onEvent: (entity: Entity<T>, event: GameEvent) =>
-            components.forEach(
-                (component) =>
-                    component.onEvent && component.onEvent(entity, event)
-            ),
-
-        onStateTransition: (entity: Entity<T>, from: T, to: T) =>
-            components.forEach(
-                (component) =>
-                    component.onStateTransition &&
-                    component.onStateTransition(entity, from, to)
-            ),
-        onCreate: (entity: Entity<T>, wasEntityCreated?: boolean) =>
-            components.forEach(
-                (component) =>
-                    component.onCreate &&
-                    component.onCreate(entity, wasEntityCreated)
-            ),
-        onDestroy: (entity: Entity<T>) =>
-            components.forEach(
-                (component) =>
-                    component.onDestroy && component.onDestroy(entity)
-            ),
+        getActions: (entity: Entity<T>) => {
+            if (!initialised) {
+                initialised = true;
+                components.forEach((component) =>
+                    subscriber.subscribe(component.getActions(entity))
+                );
+            }
+            return subscriber.actions();
+        },
     };
 }

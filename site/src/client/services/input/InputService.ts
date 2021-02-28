@@ -1,5 +1,3 @@
-import { GameEvent } from "../../engine/events/Event";
-import { GameEventSource } from "../EventRouter";
 import { ServiceLocator } from "../ServiceLocator";
 import { ControlScheme } from "./ControlScheme";
 import { DefaultControlScheme } from "./DefaultControlScheme";
@@ -30,9 +28,6 @@ export class InputService {
 
     public init(serviceLocator: ServiceLocator) {
         this.serviceLocator = serviceLocator;
-        this.serviceLocator
-            .getEventRouter()
-            .attachEventListener(GameEventSource.INPUT, this.onGameEvent);
         this.setInputState(InputState.MENU);
         this.attachWindowHooks();
     }
@@ -76,6 +71,4 @@ export class InputService {
         this.keydown[keyboardEvent.code] = true;
         this.controlScheme.onKeyDown(keyboardEvent.code, this.keydown);
     };
-
-    private onGameEvent = (event: GameEvent, source: GameEventSource) => {};
 }

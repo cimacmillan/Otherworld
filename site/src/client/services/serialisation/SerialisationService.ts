@@ -6,7 +6,6 @@ import {
     EntityType,
 } from "../../engine/scripting/factory/EntityFactory";
 import { TutorialSerialisation } from "../../engine/scripting/TutorialService";
-import { store } from "../../ui/State";
 import { SpawnPoint } from "../map/MapLoader";
 import { MapData } from "../map/MapService";
 import { ServiceLocator } from "../ServiceLocator";
@@ -55,7 +54,6 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
     }
 
     public serialise(): SerialisationObject {
-        const uiState = store.getValue();
         this.serviceLocator.getMapService().syncMapData();
         const mapData = this.serviceLocator.getMapService().getMapData();
         const serialisedMapData = Object.entries(mapData).reduce(
@@ -82,7 +80,6 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
                 maps: serialisedMapData,
                 currentMap: this.serviceLocator.getMapService().getCurrentMap(),
             },
-            uiState,
             services: {
                 tutorial: this.serviceLocator.getTutorialService().serialise(),
             },

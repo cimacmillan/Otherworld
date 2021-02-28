@@ -1,8 +1,6 @@
 import { GameItem } from "../../resources/manifests/Items";
-import { GameEventSource } from "../../services/EventRouter";
 import { InputState } from "../../services/input/InputService";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { PlayerEventType } from "../events/PlayerEvents";
 import { EntityFactory } from "../scripting/factory/EntityFactory";
 import {
     createItemDropState,
@@ -21,9 +19,7 @@ export const OpenInventory: CommandCreator = (
 
     serviceLocator.getGame().setUpdateWorld(false);
     serviceLocator.getInputService().setInputState(InputState.INVENTORY);
-    serviceLocator.getEventRouter().routeEvent(GameEventSource.INPUT, {
-        type: PlayerEventType.PLAYER_INVENTORY_OPENED,
-    });
+    serviceLocator.getEventRouter().actions().onPlayerInventoryOpened();
 };
 
 export const CloseInventory: CommandCreator = (
@@ -35,9 +31,7 @@ export const CloseInventory: CommandCreator = (
 
     serviceLocator.getGame().setUpdateWorld(true);
     serviceLocator.getInputService().setInputState(InputState.DEFAULT);
-    serviceLocator.getEventRouter().routeEvent(GameEventSource.INPUT, {
-        type: PlayerEventType.PLAYER_INVENTORY_CLOSED,
-    });
+    serviceLocator.getEventRouter().actions().onPlayerInventoryClosed();
 };
 
 export const PlayerUseItemFromInventory = (serviceLocator: ServiceLocator) => (
@@ -49,12 +43,7 @@ export const PlayerUseItemFromInventory = (serviceLocator: ServiceLocator) => (
 export const PlayerPickUpItem = (serviceLocator: ServiceLocator) => (
     item: Item
 ) => {
-    serviceLocator.getEventRouter().routeEvent(GameEventSource.WORLD, {
-        type: PlayerEventType.PLAYER_ITEM_DROP_COLLECTED,
-        payload: {
-            item,
-        },
-    });
+    serviceLocator.getEventRouter().actions().onPlayerItemDropCollected(item);
     serviceLocator
         .getTutorialService()
         .onEvent(TutorialServiceEvent.PICKED_UP_ITEM);

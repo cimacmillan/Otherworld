@@ -1,5 +1,5 @@
 import { SCENERY_PIXEL_DENSITY } from "../../../Config";
-import { Sprites, SpriteSheets } from "../../../resources/manifests/Sprites";
+import { SpriteSheets } from "../../../resources/manifests/Sprites";
 import {
     Floor,
     RenderItem,
@@ -19,27 +19,23 @@ export type FloorStateType = FloorState;
 export const FloorRenderComponent = () => {
     let toRenderRef: RenderItem;
     return {
-        getInitialState: () => ({
-            floorStart: { x: 0, y: 0 },
-            floorEnd: { x: 1, y: 1 },
-            floorSprite: Sprites.WALL,
-            floorHeight: 0,
-        }),
-        onCreate: (entity: Entity<FloorStateType>) => {
-            toRenderRef = entity
-                .getServiceLocator()
-                .getRenderService()
-                .floorRenderService.createItem(getFloorObject(entity));
-        },
-        onDestroy: (entity: Entity<FloorStateType>) => {
-            if (toRenderRef) {
-                entity
+        getActions: (entity: Entity<FloorStateType>) => ({
+            onEntityCreated: () => {
+                toRenderRef = entity
                     .getServiceLocator()
                     .getRenderService()
-                    .floorRenderService.freeItem(toRenderRef);
-                toRenderRef = undefined;
-            }
-        },
+                    .floorRenderService.createItem(getFloorObject(entity));
+            },
+            onEntityDeleted: () => {
+                if (toRenderRef) {
+                    entity
+                        .getServiceLocator()
+                        .getRenderService()
+                        .floorRenderService.freeItem(toRenderRef);
+                    toRenderRef = undefined;
+                }
+            },
+        }),
     };
 };
 

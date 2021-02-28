@@ -1,7 +1,6 @@
 import React = require("react");
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Subscription } from "rxjs";
-import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { DOM_HEIGHT, DOM_WIDTH } from "../../Config";
 import { getImagePropsFromSprite } from "../../util/math/UI";
 // import {
@@ -14,8 +13,8 @@ import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
 import { AnimationImageComponent } from "./AnimationImageComponent";
 import { connect } from "react-redux";
 import { animation } from "../../util/animation/Animations";
-import { useGlobalState, useDispatchListener } from "../effects/GlobalState";
-import { Actions } from "../actions/Actions";
+import { useGlobalState } from "../effects/GlobalState";
+import { Actions } from "../../Actions";
 
 const HEALTH_BAR_WIDTH = 0.5;
 const HEALTH_BAR_HEIGHT = HEALTH_BAR_WIDTH / 3;
@@ -40,17 +39,6 @@ export const HealthBarComponent: React.FunctionComponent<HealthBarComponentProps
         return () => knockAnimation.stop();
     }, []);
 
-    useDispatchListener((event: Actions) => {
-        switch (event.type) {
-            case PlayerEventType.PLAYER_DAMAGED:
-                knockAnimation.start().whenDone(() => setHealthBarOffset(0));
-                break;
-            case PlayerEventType.PLAYER_KILLED:
-                knockAnimation.start().whenDone(() => setHealthBarOffset(0));
-                break;
-        }
-    });
-
     const width = DOM_HEIGHT * HEALTH_BAR_WIDTH;
     const height = DOM_HEIGHT * HEALTH_BAR_HEIGHT;
     const marginLeft = 10;
@@ -58,9 +46,9 @@ export const HealthBarComponent: React.FunctionComponent<HealthBarComponentProps
 
     const translate = Math.floor(healthBarYOffset * 10);
 
-    if (!state.healthState.showing) {
-        return <></>;
-    }
+    // if (!state.healthState.showing) {
+    return <></>;
+    // }
 
     return (
         <div style={{ position: "absolute" }}>

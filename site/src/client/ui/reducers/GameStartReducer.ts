@@ -1,66 +1,53 @@
-import { EnemyEventType } from "../../engine/events/EnemyEvents";
-import { Actions } from "../actions/Actions";
-import { GameStartActionType } from "../actions/GameStartActions";
+import { Actions } from "../../Actions";
+import { GameReducer } from "../../util/engine/Store";
 
 export interface GameStartState {
     showingMenu: boolean;
     showingFade: boolean;
-    currentScore: number;
-    bestScore?: number;
     gameLoadPercentage: number;
     fps: number;
 }
 
-const initialGameStartState = {
+let initialGameStartState: GameStartState = {
     showingMenu: true,
     showingFade: true,
-    currentScore: 0,
     gameLoadPercentage: 0,
     fps: 0,
 };
 
-export function gameStartReducer(
-    state: GameStartState = initialGameStartState,
-    action: Actions
-): GameStartState {
-    switch (action.type) {
-        case GameStartActionType.START_GAME:
-            return {
-                ...state,
+export const gameStartReducer: GameReducer<GameStartState, Actions> = {
+    getState: () => initialGameStartState,
+    actions: {
+        startGame: () => {
+            initialGameStartState = {
+                ...initialGameStartState,
                 showingMenu: false,
                 showingFade: false,
-                currentScore: 0,
             };
-        case GameStartActionType.FADE_BACKGROUND:
-            return {
-                ...state,
+        },
+        fadeBackground: () => {
+            initialGameStartState = {
+                ...initialGameStartState,
                 showingFade: true,
             };
-        case GameStartActionType.FADE_MENU:
-            let bestScore = state.currentScore;
-            if (state.bestScore && state.bestScore > state.currentScore) {
-                bestScore = state.bestScore;
-            }
-            return {
-                ...state,
+        },
+        fadeMenu: () => {
+            initialGameStartState = {
+                ...initialGameStartState,
                 showingMenu: true,
-                bestScore,
             };
-        case EnemyEventType.ENEMY_KILLED:
-            return {
-                ...state,
-                currentScore: state.currentScore + 1,
+        },
+        setGameLoadPercentage: (x: number) => {
+            initialGameStartState = {
+                ...initialGameStartState,
+                gameLoadPercentage: x,
             };
-        case GameStartActionType.SET_GAME_LOAD_PERCENTAGE:
-            return {
-                ...state,
-                gameLoadPercentage: action.payload.percentage,
+        },
+        setGameFPS: (x: number) => {
+            initialGameStartState = {
+                ...initialGameStartState,
+                fps: x,
             };
-        case GameStartActionType.SET_GAME_FPS:
-            return {
-                ...state,
-                fps: action.fps,
-            };
-    }
-    return state;
-}
+        },
+    },
+};

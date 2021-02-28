@@ -1,7 +1,18 @@
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { TurnDirection, WalkDirection } from "../events/TravelEvents";
 import { TutorialServiceEvent } from "../scripting/TutorialService";
 import { CommandCreator } from "./Command";
+
+export enum WalkDirection {
+    FORWARD = "FORWARD",
+    BACK = "BACK",
+    LEFT = "LEFT",
+    RIGHT = "RIGHT",
+}
+
+export enum TurnDirection {
+    CLOCKWISE = "CLOCKWISE",
+    ANTICLOCKWISE = "ANTICLOCKWISE",
+}
 
 export const Walk: CommandCreator = (serviceLocator: ServiceLocator) => (
     walkDirection: WalkDirection

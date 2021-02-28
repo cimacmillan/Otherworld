@@ -2,14 +2,13 @@ import React = require("react");
 import { CanvasComponent } from "./services/render";
 import { Game } from "./Game";
 import { UIContainer } from "./ui/UIContainer";
-import { GameEvent } from "./engine/events/Event";
 import { DOM_WIDTH, DOM_HEIGHT, WIDTH, HEIGHT, RES_DIV } from "./Config";
-import { Actions } from "./ui/actions/Actions";
+import { Actions } from "./Actions";
 import { SiteContainer } from "./SiteContainer";
 import { useGame } from "./ui/effects/GameEffect";
 
 export interface GameComponentProps {
-    uiListener: (event: Actions) => void;
+    uiListener: Partial<Actions>;
     shouldShow: boolean;
 }
 

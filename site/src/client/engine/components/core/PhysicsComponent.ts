@@ -34,28 +34,32 @@ export const PhysicsComponent = (): EntityComponent<PhysicsStateType> => {
     let physicsRegistration: PhysicsRegistration;
 
     return {
-        onCreate: (entity: Entity<PhysicsStateType>) => {
-            const { collidesEntities, collidesWalls } = entity.getState();
-            physicsRegistration = {
-                collidesWalls,
-                collidesEntities,
-                setHeight: (height: number) => entity.setState({ height }),
-                setHeightVelocity: (heightVelocity: number) =>
-                    entity.setState({ heightVelocity }),
-                setVelocity: (x, y) => entity.setState({ velocity: { x, y } }),
-                setPosition: (x, y) => entity.setState({ position: { x, y } }),
-                getPhysicsInformation: () => entity.getState(),
-            };
-            entity
-                .getServiceLocator()
-                .getPhysicsService()
-                .registerPhysicsEntity(physicsRegistration);
-        },
-        onDestroy: (entity: Entity<PhysicsStateType>) => {
-            entity
-                .getServiceLocator()
-                .getPhysicsService()
-                .unregisterPhysicsEntity(physicsRegistration);
-        },
+        getActions: (entity: Entity<PhysicsStateType>) => ({
+            onEntityCreated: () => {
+                const { collidesEntities, collidesWalls } = entity.getState();
+                physicsRegistration = {
+                    collidesWalls,
+                    collidesEntities,
+                    setHeight: (height: number) => entity.setState({ height }),
+                    setHeightVelocity: (heightVelocity: number) =>
+                        entity.setState({ heightVelocity }),
+                    setVelocity: (x, y) =>
+                        entity.setState({ velocity: { x, y } }),
+                    setPosition: (x, y) =>
+                        entity.setState({ position: { x, y } }),
+                    getPhysicsInformation: () => entity.getState(),
+                };
+                entity
+                    .getServiceLocator()
+                    .getPhysicsService()
+                    .registerPhysicsEntity(physicsRegistration);
+            },
+            onEntityDeleted: () => {
+                entity
+                    .getServiceLocator()
+                    .getPhysicsService()
+                    .unregisterPhysicsEntity(physicsRegistration);
+            },
+        }),
     };
 };

@@ -10,8 +10,6 @@ import {
     TextColour,
 } from "../../components/TextComponent";
 import { GameButtonContainer } from "../GameButtonContainer";
-import { LockpickingResult } from "../../../engine/events/MiniGameEvents";
-import { MiniGameUIActionType } from "../../actions/MiniGameActions";
 import { LockButtonComponent } from "../../components/LockButtonComponent";
 import { ShadowComponentStyle } from "../../components/ShadowComponent";
 import { Colours } from "../../../resources/design/Colour";
@@ -27,11 +25,9 @@ export const MiniGameContainer: React.FunctionComponent<MiniGameContainerProps> 
 ) => {
     const [state, dispatch] = useGlobalState();
 
-    const onComplete = (result: LockpickingResult) => {
-        dispatch({
-            type: MiniGameUIActionType.MINI_GAME_CLOSE,
-        });
+    const onComplete = (result: boolean) => {
         state.minigame.onComplete(result);
+        dispatch.closeMiniGame();
     };
 
     return (

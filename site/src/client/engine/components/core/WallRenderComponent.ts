@@ -20,27 +20,38 @@ export interface WallState {
 export const WallRenderComponent = (): EntityComponent<WallState> => {
     let toRenderRef: RenderItem;
     return {
-        onCreate: (entity: Entity<WallState>) => {
-            const {
-                wallSprite,
-                wallStart,
-                wallEnd,
-                wallHeight,
-                wallOffset,
-            } = entity.getState();
-            const wall = createWallType(
-                entity.getServiceLocator(),
-                wallSprite,
-                wallStart,
-                wallEnd,
-                wallHeight,
-                wallOffset
-            );
-            toRenderRef = entity
-                .getServiceLocator()
-                .getRenderService()
-                .wallRenderService.createItem(wall);
-        },
+        getActions: (entity: Entity<WallState>) => ({
+            onEntityCreated: () => {
+                const {
+                    wallSprite,
+                    wallStart,
+                    wallEnd,
+                    wallHeight,
+                    wallOffset,
+                } = entity.getState();
+                const wall = createWallType(
+                    entity.getServiceLocator(),
+                    wallSprite,
+                    wallStart,
+                    wallEnd,
+                    wallHeight,
+                    wallOffset
+                );
+                toRenderRef = entity
+                    .getServiceLocator()
+                    .getRenderService()
+                    .wallRenderService.createItem(wall);
+            },
+            onEntityDeleted: () => {
+                if (toRenderRef) {
+                    entity
+                        .getServiceLocator()
+                        .getRenderService()
+                        .wallRenderService.freeItem(toRenderRef);
+                    toRenderRef = undefined;
+                }
+            },
+        }),
         update: (entity: Entity<WallState>) => {
             const {
                 wallSprite,
@@ -61,15 +72,6 @@ export const WallRenderComponent = (): EntityComponent<WallState> => {
                 .getServiceLocator()
                 .getRenderService()
                 .wallRenderService.updateItem(toRenderRef, wall);
-        },
-        onDestroy: (entity: Entity<WallState>) => {
-            if (toRenderRef) {
-                entity
-                    .getServiceLocator()
-                    .getRenderService()
-                    .wallRenderService.freeItem(toRenderRef);
-                toRenderRef = undefined;
-            }
         },
     };
 };

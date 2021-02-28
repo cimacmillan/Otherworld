@@ -6,7 +6,6 @@ import {
     ZFAR,
     ZNEAR,
 } from "../../Config";
-import { GameEventSource } from "../../services/EventRouter";
 import {
     InteractionSourceType,
     InteractionType,
@@ -15,11 +14,8 @@ import { PhysicsRegistration } from "../../services/physics/PhysicsService";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Camera, Vector2D } from "../../types";
 import { ActionDelay } from "../../util/time/ActionDelay";
-import { InteractionStateType } from "../components/core/InteractionComponent";
+import { TurnDirection, WalkDirection } from "../commands/PlayerCommands";
 import { PhysicsStateType } from "../components/core/PhysicsComponent";
-import { Entity } from "../Entity";
-import { PlayerEventType } from "../events/PlayerEvents";
-import { TurnDirection, WalkDirection } from "../events/TravelEvents";
 import { getEmptyInventory, Inventory } from "../scripting/items/types";
 import { CameraState, HealthState } from "../state/State";
 import { PlayerMovement } from "./PlayerMovement";
@@ -73,13 +69,6 @@ export class Player {
             (ang: number) => (this.state.surface.angle = ang)
         );
 
-        this.serviceLocator.getEventRouter().routeEvent(GameEventSource.WORLD, {
-            type: PlayerEventType.PLAYER_INFO_CHANGE,
-            payload: {
-                health: 1,
-            },
-        });
-
         this.physicsRegistration = {
             collidesEntities: true,
             collidesWalls: true,
@@ -100,19 +89,6 @@ export class Player {
 
     public update(): void {
         this.movement.update();
-    }
-
-    public onStateTransition(
-        entity: Entity<InteractionStateType>,
-        from: InternalEntityState,
-        to: InternalEntityState
-    ): void {
-        entity.emitGlobally({
-            type: PlayerEventType.PLAYER_INFO_CHANGE,
-            payload: {
-                health: to.health,
-            },
-        });
     }
 
     public getCamera(): Camera {

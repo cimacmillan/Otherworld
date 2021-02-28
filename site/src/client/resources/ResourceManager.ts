@@ -1,7 +1,7 @@
+import { Actions } from "../Actions";
 import { loadSound } from "../services/audio/AudioService";
 import { tiledXMLtoGameTiledMap } from "../services/map/TiledParser";
-import { Actions } from "../ui/actions/Actions";
-import { setLoadPercentage } from "../ui/actions/GameStartActions";
+// import { setLoadPercentage } from "../ui/actions/GameStartActions";
 import { defaultManifest } from "./manifests/Resources";
 import { loadSpriteSheet } from "./TextureLoader";
 import { LoadedManifest, ResourceManifest } from "./Types";
@@ -12,13 +12,13 @@ export class ResourceManager {
     public async load(
         gl: WebGLRenderingContext,
         audio: AudioContext,
-        uiListener: (actions: Actions) => void
+        uiListener: Partial<Actions>
     ) {
         this.manifest = await this.loadManifest(
             gl,
             audio,
             defaultManifest,
-            (percentage: number) => uiListener(setLoadPercentage(percentage))
+            (percentage: number) => uiListener.setGameLoadPercentage(percentage)
         );
     }
 
