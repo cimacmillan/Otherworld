@@ -9,17 +9,19 @@ export function TimeoutComponent<T>(
     let timeout: number;
     let done: boolean = false;
     return {
-        onCreate: () => {
-            timeout = ProcedureService.setGameTimeout(() => {
-                done = true;
-                callback();
-            }, time);
-        },
-        onDestroy: () => {
-            ProcedureService.clearTimeout(timeout);
-            if (done === false) {
-                onPrematureQuit && onPrematureQuit();
-            }
-        },
+        getActions: () => ({
+            onEntityCreated: () => {
+                timeout = ProcedureService.setGameTimeout(() => {
+                    done = true;
+                    callback();
+                }, time);
+            },
+            onEntityDeleted: () => {
+                ProcedureService.clearTimeout(timeout);
+                if (done === false) {
+                    onPrematureQuit && onPrematureQuit();
+                }
+            },
+        }),
     };
 }

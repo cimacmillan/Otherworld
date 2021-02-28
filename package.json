@@ -46,7 +46,9 @@
         "redux": "^4.0.5",
         "rxjs": "^6.6.3",
         "seedrandom": "^3.0.5",
-        "tslint-etc": "^1.13.9"
+        "tmx-tiledmap": "^1.2.1",
+        "tslint-etc": "^1.13.9",
+        "xml2js": "^0.4.23"
     },
     "scripts": {
         "clean": "rm -rf ./site/build/",
@@ -61,12 +63,10 @@
         "full-rebuild": "npm run-script clean && npm run-script build && npm run-script pack && npm run-script server",
         "test-unit": "npx jest site/src/",
         "test": "npm run-script test-unit",
-        "lint": "npx prettier --write site/src && tslint --project tsconfig.json --fix -c tslint.json 'site/src/**/*.ts' && git add .",
         "circular": "npx madge --circular site/src/**/*",
         "changelog": "npx git log --pretty=format:\"* *%cs* - %s\" > ./site/public/doc/announcements.md"
     },
     "pre-commit": [
-        "lint",
         "test"
     ],
     "prettier": {

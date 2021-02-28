@@ -1,6 +1,7 @@
+import { Actions, emptyActions } from "../../../Actions";
+import { FunctionEventSubscriber } from "../../../util/engine/FunctionEventSubscriber";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
-import { GameEvent } from "../../events/Event";
 
 export interface SwitchComponents {
     [key: string]: EntityComponent<any>;
@@ -17,25 +18,19 @@ export class SwitchComponent<T> implements EntityComponent<T> {
         this.newState = currentState;
     }
 
-    public onStateTransition(entity: Entity<T>, from: T, to: T) {
-        const currentStateCallback = this.components[this.currentState];
-        currentStateCallback &&
-            currentStateCallback.onStateTransition &&
-            currentStateCallback.onStateTransition(entity, from, to);
-        this.newState = this.getSwitch(entity);
-    }
-
     public update(entity: Entity<T>) {
         if (this.newState !== this.currentState) {
-            const currentStateCallback = this.components[this.currentState];
-            const newStateCallback = this.components[this.newState];
+            const currentStateCallback = this.components[this.currentState]
+                ? this.components[this.currentState].getActions(entity)
+                : {};
+            const newStateCallback = this.components[this.newState]
+                ? this.components[this.newState].getActions(entity)
+                : {};
 
-            currentStateCallback &&
-                currentStateCallback.onDestroy &&
-                currentStateCallback.onDestroy(entity);
-            newStateCallback &&
-                newStateCallback.onCreate &&
-                newStateCallback.onCreate(entity, false);
+            currentStateCallback.onEntityDeleted &&
+                currentStateCallback.onEntityDeleted();
+            newStateCallback.onEntityCreated &&
+                newStateCallback.onEntityCreated();
 
             this.currentState = this.newState;
         }
@@ -46,24 +41,43 @@ export class SwitchComponent<T> implements EntityComponent<T> {
             currentStateCallback.update(entity);
     }
 
-    public onCreate(entity: Entity<T>, wasEntityCreated?: boolean) {
-        const currentState = this.components[this.currentState];
-        currentState &&
-            currentState.onCreate &&
-            currentState.onCreate(entity, wasEntityCreated);
+    public getActions(entity: Entity<T>) {
+        const subscriber = new FunctionEventSubscriber<Actions>(emptyActions);
+        Object.keys(this.components).forEach((key) => {
+            subscriber.subscribe(
+                this.wrapActions(
+                    this.components[key].getActions(entity),
+                    key,
+                    entity
+                )
+            );
+        });
+
+        const entityActions = subscriber.actions();
+        return {
+            ...entityActions,
+            onStateTransition: (from: any, to: any) => {
+                entityActions.onStateTransition &&
+                    entityActions.onStateTransition(from, to);
+                this.newState = this.getSwitch(entity);
+            },
+        };
     }
 
-    public onDestroy(entity: Entity<T>) {
-        const currentState = this.components[this.currentState];
-        currentState &&
-            currentState.onDestroy &&
-            currentState.onDestroy(entity);
-    }
-
-    public onEvent(entity: Entity<T>, event: GameEvent) {
-        const currentState = this.components[this.currentState];
-        currentState &&
-            currentState.onEvent &&
-            currentState.onEvent(entity, event);
+    private wrapActions(
+        actions: Partial<Actions>,
+        rightKey: string,
+        entity: Entity<T>
+    ): Partial<Actions> {
+        const newActions: Partial<Actions> = {};
+        Object.keys(actions).forEach((key) => {
+            newActions[key as keyof Actions] = (...args: any[]) => {
+                if (this.getSwitch(entity) === rightKey) {
+                    const action = actions[key as keyof Actions];
+                    (action as any)(...args);
+                }
+            };
+        });
+        return newActions;
     }
 }

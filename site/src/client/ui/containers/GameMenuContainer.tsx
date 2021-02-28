@@ -11,7 +11,6 @@ import { GameButtonContainer } from "./GameButtonContainer";
 import { Subscription } from "rxjs";
 import { FadeComponent } from "../components/FadeComponent";
 import { useGlobalState } from "../effects/GlobalState";
-import { startGame } from "../actions/GameStartActions";
 import { KeyComponent } from "../components/KeyComponent";
 import { KeyHintComponentProps } from "../components/KeyHintComponent";
 import { DOM_WIDTH, DOM_HEIGHT } from "../../Config";
@@ -26,11 +25,9 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
     const serviceLocator = useServiceLocator();
 
     const onStartPress = () => {
-        dispatch(startGame());
+        dispatch.startGame();
         serviceLocator.getScriptingService().startGame();
     };
-
-    const showBestScore = state.gameStart.bestScore !== undefined;
 
     return (
         <FadeComponent

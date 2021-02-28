@@ -22,7 +22,7 @@ export const createLadderState = (
 ) => {
     return {
         yOffset: 0,
-        position: { x: x + 0.5, y: y + 0.5 },
+        position: { x, y },
         height: 0,
         radius: 1,
         angle: 0,
@@ -52,7 +52,7 @@ export const createLadder = (
             (ent: Entity<LadderStateType>) => {
                 ent.getServiceLocator()
                     .getMapService()
-                    .goToMap(ent.getState().destination);
+                    .goToLocation(ent.getState().destination);
             }
         )
     );

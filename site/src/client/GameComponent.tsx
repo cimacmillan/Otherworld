@@ -2,14 +2,15 @@ import React = require("react");
 import { CanvasComponent } from "./services/render";
 import { Game } from "./Game";
 import { UIContainer } from "./ui/UIContainer";
-import { GameEvent } from "./engine/events/Event";
 import { DOM_WIDTH, DOM_HEIGHT, WIDTH, HEIGHT, RES_DIV } from "./Config";
-import { Actions } from "./ui/actions/Actions";
+import { Actions } from "./Actions";
 import { SiteContainer } from "./SiteContainer";
 import { useGame } from "./ui/effects/GameEffect";
+import { Store } from "./util/engine/Store";
+import { State } from "./ui/State";
 
 export interface GameComponentProps {
-    uiListener: (event: Actions) => void;
+    store: Store<State, Actions>;
     shouldShow: boolean;
 }
 
@@ -21,7 +22,7 @@ export const GameComponent: React.FunctionComponent<GameComponentProps> = (
     React.useEffect(() => {
         game.init(
             (canvas.current as CanvasComponent).getOpenGL(),
-            props.uiListener
+            props.store
         );
     }, []);
     React.useEffect(() => {

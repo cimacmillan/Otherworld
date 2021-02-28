@@ -4,7 +4,6 @@ import { State } from "../State";
 import { useGlobalState } from "../effects/GlobalState";
 import { Subscription } from "rxjs";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { startGame } from "../actions/GameStartActions";
 import { FadeComponent } from "../components/FadeComponent";
 import { DOM_WIDTH, DOM_HEIGHT } from "../../Config";
 

@@ -1,5 +1,5 @@
 import { AudioMetadata } from "../services/audio/AudioObject";
-import { MapSchema } from "./maps/MapShema";
+import { UnloadedMap } from "./maps/MapTypes";
 import {
     AnimationManifest,
     AudioManifest,
@@ -27,7 +27,7 @@ export class ResourceManifestBuilder implements ResourceManifest {
         };
     }
 
-    public Map(key: string, map: MapSchema) {
+    public Map(key: string, map: UnloadedMap) {
         this.maps[key] = map;
     }
 

@@ -12,12 +12,11 @@ import { vec } from "../../util/math";
 import { getImagePropsFromSprite } from "../../util/math/UI";
 import { ViewportComponent } from "./ViewportComponent";
 // import { SpriteSheets, Sprites } from "../../resources/manifests/Types";
-import { PlayerEventType } from "../../engine/events/PlayerEvents";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { connect } from "react-redux";
 import { sequence, animation, parallel } from "../../util/animation/Animations";
-import { useGlobalState, useDispatchListener } from "../effects/GlobalState";
-import { Actions } from "../actions/Actions";
+import { useGlobalState } from "../effects/GlobalState";
+import { Actions } from "../../Actions";
 
 interface WeaponComponentProps {}
 
@@ -68,20 +67,14 @@ export const WeaponComponent: React.FunctionComponent<WeaponComponentProps> = (
         };
     }, []);
 
-    useDispatchListener((event: Actions) => {
-        if (event.type === PlayerEventType.PLAYER_ATTACK) {
-            composite.start();
-        }
-    });
-
     const width = DOM_HEIGHT * WEAPON_WIDTH;
     const height = DOM_HEIGHT * WEAPON_HEIGHT;
     const marginLeft = DOM_WIDTH * POS_X;
     const marginTop = DOM_HEIGHT * posY;
 
-    if (!state.weaponState.showing) {
-        return <></>;
-    }
+    // if (!state.weaponState.showing) {
+    return <></>;
+    // }
 
     return (
         <ViewportComponent

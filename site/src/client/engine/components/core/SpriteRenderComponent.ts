@@ -41,27 +41,29 @@ export const SpriteRenderComponent = (): EntityComponent<SpriteRenderState> => {
     let toRenderRef: RenderItem;
 
     return {
-        onCreate: (entity: Entity<SpriteRenderState>) => {
-            toRenderRef = entity
-                .getServiceLocator()
-                .getRenderService()
-                .spriteRenderService.createItem(getSpriteFromState(entity));
-        },
+        getActions: (entity: Entity<SpriteRenderState>) => ({
+            onEntityCreated: () => {
+                toRenderRef = entity
+                    .getServiceLocator()
+                    .getRenderService()
+                    .spriteRenderService.createItem(getSpriteFromState(entity));
+            },
+            onEntityDeleted: () => {
+                if (toRenderRef) {
+                    entity
+                        .getServiceLocator()
+                        .getRenderService()
+                        .spriteRenderService.freeItem(toRenderRef);
+                    toRenderRef = undefined;
+                }
+            },
+        }),
         update: (entity: Entity<SpriteRenderState>) => {
             const sprite = getSpriteFromState(entity);
             entity
                 .getServiceLocator()
                 .getRenderService()
                 .spriteRenderService.updateItem(toRenderRef, sprite);
-        },
-        onDestroy: (entity: Entity<SpriteRenderState>) => {
-            if (toRenderRef) {
-                entity
-                    .getServiceLocator()
-                    .getRenderService()
-                    .spriteRenderService.freeItem(toRenderRef);
-                toRenderRef = undefined;
-            }
         },
     };
 };

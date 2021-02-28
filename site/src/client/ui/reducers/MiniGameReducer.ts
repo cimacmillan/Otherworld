@@ -1,14 +1,10 @@
-import {
-    LockpickingResult,
-    MiniGameEventType,
-} from "../../engine/events/MiniGameEvents";
-import { Actions } from "../actions/Actions";
-import { MiniGameUIActionType } from "../actions/MiniGameActions";
+import { Actions } from "../../Actions";
+import { GameReducer } from "../../util/engine/Store";
 import { LockpickGameConfiguration } from "../containers/minigame/LockPickContainer";
 
 export interface MiniGameUIState {
     visible: boolean;
-    onComplete: (result: LockpickingResult) => void;
+    onComplete: (result: boolean) => void;
     configuration?: LockpickGameConfiguration;
 }
 
@@ -17,25 +13,20 @@ const initialMiniGameState: MiniGameUIState = {
     onComplete: () => undefined,
 };
 
-export const minigameReducer = (
-    state: MiniGameUIState = initialMiniGameState,
-    action: Actions
-): MiniGameUIState => {
-    switch (action.type) {
-        case MiniGameEventType.LOCKPICK:
-            return {
-                ...state,
-                visible: true,
-                onComplete: action.callback,
-                configuration: action.configuration,
-            };
-        case MiniGameUIActionType.MINI_GAME_CLOSE:
-            return {
-                ...state,
-                visible: false,
-                onComplete: () => undefined,
-            };
-    }
-
-    return state;
+export const minigameReducer: GameReducer<MiniGameUIState, Actions> = {
+    getState: () => initialMiniGameState,
+    actions: {
+        closeMiniGame: () => {
+            initialMiniGameState.visible = false;
+            initialMiniGameState.onComplete = () => undefined;
+        },
+        openLockpickEvent: (
+            callback: (result: boolean) => void,
+            configuration: LockpickGameConfiguration
+        ) => {
+            initialMiniGameState.visible = true;
+            initialMiniGameState.onComplete = callback;
+            initialMiniGameState.configuration = configuration;
+        },
+    },
 };

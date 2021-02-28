@@ -1,23 +1,20 @@
 import React = require("react");
-import { skip } from "rxjs/operators";
-import { Actions } from "../actions/Actions";
-import { dispatch, State, store } from "../State";
+import { Actions } from "../../Actions";
+import { State, store } from "../State";
 
-export const useGlobalState: () => [State, (action: Actions) => void] = () => {
-    const [state, setState] = React.useState(store.getValue());
+export const useGlobalState: () => [State, Actions] = () => {
+    const [storeState, setStore] = React.useState(store.getState());
     React.useEffect(() => {
-        const sub = store.pipe(skip(1)).subscribe(setState);
-        return () => sub.unsubscribe();
+        const callback = () => setStore(store.getState());
+        store.addChangeListener(callback);
+        return () => store.removeChangeListener(callback);
     }, []);
-    return [state, (action: Actions) => dispatch.next(action)];
+    return [storeState, store.getActions()];
 };
 
-export const useDispatchListener = (
-    callback: (action: Actions) => void,
-    deps: React.DependencyList = []
-) => {
+export const useDispatchListener = (actions: Partial<Actions>, deps: any[]) => {
     React.useEffect(() => {
-        const sub = dispatch.subscribe(callback);
-        return () => sub.unsubscribe();
+        store.subscribe(actions);
+        return () => store.unsubscribe(actions);
     }, deps);
-};
+}

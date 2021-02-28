@@ -1,5 +1,5 @@
-import { MapCellar } from "../maps/maps/MapCellar";
-import { MapPrison } from "../maps/maps/MapPrison";
+import { MapCellar } from "../maps/MapCellar";
+import { MapPrison } from "../maps/MapPrison";
 import { ResourceManifestBuilder } from "../ResourceManifestBuilder";
 import { audios } from "./Audios";
 import { Maps } from "./Maps";

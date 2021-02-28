@@ -1,5 +1,5 @@
-import { Actions } from "../actions/Actions";
-import { KeyHintContainerActionType } from "../actions/KeyHintActions";
+import { Actions } from "../../Actions";
+import { GameReducer } from "../../util/engine/Store";
 
 export interface KeyHintUIState {
     keyHints: {
@@ -12,32 +12,30 @@ export interface KeyHint {
     hint: string;
 }
 
-const initialKeyHintUIState: KeyHintUIState = {
+let initialKeyHintUIState: KeyHintUIState = {
     keyHints: {},
 };
 
-export const keyHintReducer = (
-    state: KeyHintUIState = initialKeyHintUIState,
-    action: Actions
-): KeyHintUIState => {
-    switch (action.type) {
-        case KeyHintContainerActionType.ADD_KEY_HINT:
-            return {
+export const keyHintReducer: GameReducer<KeyHintUIState, Actions> = {
+    getState: () => initialKeyHintUIState,
+    actions: {
+        addKeyHint: (action: { id: string; keys: string[]; hint: string }) => {
+            initialKeyHintUIState = {
                 keyHints: {
-                    ...state.keyHints,
+                    ...initialKeyHintUIState.keyHints,
                     [action.id]: {
                         keys: action.keys,
                         hint: action.hint,
                     },
                 },
             };
-        case KeyHintContainerActionType.REMOVE_KEY_HINT:
-            const keyHints = { ...state.keyHints };
+        },
+        removeKeyHint: (action: { id: string }) => {
+            const keyHints = { ...initialKeyHintUIState.keyHints };
             delete keyHints[action.id];
-            return {
+            initialKeyHintUIState = {
                 keyHints,
             };
-    }
-
-    return state;
+        },
+    },
 };

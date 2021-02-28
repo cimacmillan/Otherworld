@@ -7,8 +7,8 @@ import { vec } from "../../util/math";
 import { ActionDelay } from "../../util/time/ActionDelay";
 import { fpsNorm } from "../../util/time/GlobalFPSController";
 import { ActionSwitch } from "../../util/time/Switch";
+import { TurnDirection, WalkDirection } from "../commands/PlayerCommands";
 import { PhysicsStateType } from "../components/core/PhysicsComponent";
-import { TurnDirection, WalkDirection } from "../events/TravelEvents";
 
 const WALK_SPEED = 0.02;
 const TURN_SPEED = 0.15;

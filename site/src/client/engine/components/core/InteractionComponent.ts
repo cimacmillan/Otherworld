@@ -20,19 +20,21 @@ const registersSelf = (
 ): EntityComponent<SurfacePosition> => {
     let reg: InteractionRegistration | undefined;
     return {
-        onCreate: (entity: Entity<SurfacePosition>) => {
-            reg = registration(entity);
-            entity
-                .getServiceLocator()
-                .getInteractionService()
-                .registerEntity(reg, type);
-        },
-        onDestroy: (entity: Entity<SurfacePosition>) => {
-            entity
-                .getServiceLocator()
-                .getInteractionService()
-                .unregisterEntity(reg, type);
-        },
+        getActions: (entity: Entity<SurfacePosition>) => ({
+            onEntityCreated: () => {
+                reg = registration(entity);
+                entity
+                    .getServiceLocator()
+                    .getInteractionService()
+                    .registerEntity(reg, type);
+            },
+            onEntityDeleted: () => {
+                entity
+                    .getServiceLocator()
+                    .getInteractionService()
+                    .unregisterEntity(reg, type);
+            },
+        }),
     };
 };
 
@@ -66,7 +68,7 @@ export const onCanBeInteractedWithByPlayer = <T extends InteractionStateType>(
         const interacts = entity
             .getServiceLocator()
             .getInteractionService()
-            .getInteractables(InteractionType.INTERACT, position, angle, 1.5);
+            .getInteractables(InteractionType.INTERACT, position, angle, 1);
         const isInteractable = interacts.some(
             (interactable) =>
                 interactable.source.type === InteractionSourceType.ENTITY &&
@@ -85,7 +87,9 @@ export const onCanBeInteractedWithByPlayer = <T extends InteractionStateType>(
     return JoinComponent<SurfacePosition>([
         {
             update: throttleCount(onUpdate, 5),
-            onDestroy: onLeave,
+            getActions: () => ({
+                onEntityDeleted: onLeave,
+            }),
         },
         registersSelf(type, (entity: Entity<T>) => ({
             getPosition: () => entity.getState(),

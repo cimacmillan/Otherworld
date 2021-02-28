@@ -16,9 +16,8 @@ import {
 import { ItemCollectionComponent } from "../components/ItemCollectionComponent";
 import { Item } from "../../engine/scripting/items/types";
 import { GameItems } from "../../resources/manifests/Items";
-import { useGlobalState, useDispatchListener } from "../effects/GlobalState";
-import { Actions } from "../actions/Actions";
-import { PlayerEventType } from "../../engine/events/PlayerEvents";
+import { useDispatchListener, useGlobalState } from "../effects/GlobalState";
+import { Actions } from "../../Actions";
 import { useServiceLocator } from "../effects/GameEffect";
 
 export interface ItemCollectionContainerProps {}
@@ -71,16 +70,11 @@ export const ItemCollectionContainer: React.FunctionComponent<ItemCollectionCont
         setItemList(newList);
     };
 
-    useDispatchListener(
-        (action: Actions) => {
-            switch (action.type) {
-                case PlayerEventType.PLAYER_ITEM_DROP_COLLECTED:
-                    addItem(action.payload.item);
-                    break;
-            }
-        },
-        [itemList]
-    );
+    useDispatchListener({
+        onPlayerItemDropCollected: (item: Item) => {
+            addItem(item);
+        }
+    }, [itemList]);
 
     return (
         <ViewportComponent

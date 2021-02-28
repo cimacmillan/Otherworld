@@ -1,3 +1,4 @@
+import { SCENERY_PIXEL_DENSITY } from "../../../Config";
 import { SpriteSheets } from "../../../resources/manifests/Sprites";
 import {
     RenderItem,
@@ -19,27 +20,38 @@ export interface WallState {
 export const WallRenderComponent = (): EntityComponent<WallState> => {
     let toRenderRef: RenderItem;
     return {
-        onCreate: (entity: Entity<WallState>) => {
-            const {
-                wallSprite,
-                wallStart,
-                wallEnd,
-                wallHeight,
-                wallOffset,
-            } = entity.getState();
-            const wall = createWallType(
-                entity.getServiceLocator(),
-                wallSprite,
-                wallStart,
-                wallEnd,
-                wallHeight,
-                wallOffset
-            );
-            toRenderRef = entity
-                .getServiceLocator()
-                .getRenderService()
-                .wallRenderService.createItem(wall);
-        },
+        getActions: (entity: Entity<WallState>) => ({
+            onEntityCreated: () => {
+                const {
+                    wallSprite,
+                    wallStart,
+                    wallEnd,
+                    wallHeight,
+                    wallOffset,
+                } = entity.getState();
+                const wall = createWallType(
+                    entity.getServiceLocator(),
+                    wallSprite,
+                    wallStart,
+                    wallEnd,
+                    wallHeight,
+                    wallOffset
+                );
+                toRenderRef = entity
+                    .getServiceLocator()
+                    .getRenderService()
+                    .wallRenderService.createItem(wall);
+            },
+            onEntityDeleted: () => {
+                if (toRenderRef) {
+                    entity
+                        .getServiceLocator()
+                        .getRenderService()
+                        .wallRenderService.freeItem(toRenderRef);
+                    toRenderRef = undefined;
+                }
+            },
+        }),
         update: (entity: Entity<WallState>) => {
             const {
                 wallSprite,
@@ -61,15 +73,6 @@ export const WallRenderComponent = (): EntityComponent<WallState> => {
                 .getRenderService()
                 .wallRenderService.updateItem(toRenderRef, wall);
         },
-        onDestroy: (entity: Entity<WallState>) => {
-            if (toRenderRef) {
-                entity
-                    .getServiceLocator()
-                    .getRenderService()
-                    .wallRenderService.freeItem(toRenderRef);
-                toRenderRef = undefined;
-            }
-        },
     };
 };
 
@@ -85,8 +88,18 @@ export const createWallType = (
         .getResourceManager()
         .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(spriteString);
 
-    const textureWidth = sprite.textureCoordinate.textureWidth;
-    const textureHeight = sprite.textureCoordinate.textureHeight;
+    const textureWidth =
+        (Math.sqrt(
+            Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2)
+        ) *
+            sprite.textureCoordinate.textureWidth *
+            SCENERY_PIXEL_DENSITY) /
+        sprite.pixelCoordinate.textureWidth;
+    const textureHeight =
+        (sprite.textureCoordinate.textureHeight *
+            height *
+            SCENERY_PIXEL_DENSITY) /
+        sprite.pixelCoordinate.textureHeight;
 
     return {
         startPos: [start.x, start.y],

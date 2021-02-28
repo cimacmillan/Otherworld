@@ -1,5 +1,5 @@
-import { PlayerEventType } from "../../engine/events/PlayerEvents";
-import { Actions } from "../actions/Actions";
+import { Actions } from "../../Actions";
+import { GameReducer } from "../../util/engine/Store";
 
 export interface InventoryUIState {
     showing: boolean;
@@ -9,22 +9,14 @@ const initialInventoryState = {
     showing: false,
 };
 
-export const inventoryReducer = (
-    state: InventoryUIState = initialInventoryState,
-    action: Actions
-) => {
-    switch (action.type) {
-        case PlayerEventType.PLAYER_INVENTORY_OPENED:
-            return {
-                ...state,
-                showing: true,
-            };
-        case PlayerEventType.PLAYER_INVENTORY_CLOSED:
-            return {
-                ...state,
-                showing: false,
-            };
-    }
-
-    return state;
+export const inventoryReducer: GameReducer<InventoryUIState, Actions> = {
+    getState: () => initialInventoryState,
+    actions: {
+        onPlayerInventoryOpened: () => {
+            initialInventoryState.showing = true;
+        },
+        onPlayerInventoryClosed: () => {
+            initialInventoryState.showing = false;
+        },
+    },
 };

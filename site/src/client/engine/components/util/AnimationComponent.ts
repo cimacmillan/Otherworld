@@ -12,11 +12,13 @@ export function AnimationComponent<T>(
 ): EntityComponent<T> {
     let animation: GameAnimation | CompositeAnimation;
     return {
-        onCreate: (entity: Entity<T>) => {
-            animation = createAnimation(entity);
-            animation.start();
-        },
-        onDestroy: () => animation.stop(),
+        getActions: (entity: Entity<T>) => ({
+            onEntityCreated: () => {
+                animation = createAnimation(entity);
+                animation.start();
+            },
+            onEntityDeleted: () => animation.stop(),
+        }),
         update: () => animation.tick(),
     };
 }

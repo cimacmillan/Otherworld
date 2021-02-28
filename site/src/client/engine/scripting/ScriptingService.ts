@@ -91,9 +91,8 @@ export class ScriptingService {
             .getRenderService()
             .attachCamera(() => this.player.getCamera());
 
-        this.serviceLocator.getMapService().goToMap({
+        this.serviceLocator.getMapService().goToLocation({
             mapId: Maps.PRISON,
-            destination: { x: 31.5, y: 31.5, angle: 0 },
         });
 
         this.serviceLocator.getTutorialService().onStart();

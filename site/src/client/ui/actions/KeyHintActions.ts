@@ -1,18 +1,5 @@
-export enum KeyHintContainerActionType {
-    ADD_KEY_HINT = "ADD_KEY_HINT",
-    REMOVE_KEY_HINT = "REMOVE_KEY_HINT",
-}
+export interface KeyHintContainerActions {
+    addKeyHint: (args: { id: string; keys: string[]; hint: string }) => void;
 
-interface AddKeyHint {
-    type: KeyHintContainerActionType.ADD_KEY_HINT;
-    id: string;
-    keys: string[];
-    hint: string;
+    removeKeyHint: (args: { id: string }) => void;
 }
-
-interface RemoveKeyHint {
-    type: KeyHintContainerActionType.REMOVE_KEY_HINT;
-    id: string;
-}
-
-export type KeyHintContainerActions = AddKeyHint | RemoveKeyHint;

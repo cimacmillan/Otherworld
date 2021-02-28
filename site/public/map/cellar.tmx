@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="10" tileheight="10" infinite="0" nextlayerid="3" nextobjectid="4">
+ <objectgroup id="2" name="Object Layer 1">
+  <object id="1" type="SpawnPoint" x="309.24" y="259.483">
+   <point/>
+  </object>
+  <object id="2" type="Wall" x="292.654" y="211.332">
+   <polyline points="0,0 -35.3111,23.5407 -25.6808,71.6923 45.4764,77.0424 75.9724,46.5465 51.3616,5.88519 41.1963,4.81515"/>
+  </object>
+  <object id="3" type="Portal" x="317.265" y="176.556">
+   <point/>
+  </object>
+ </objectgroup>
+</map>

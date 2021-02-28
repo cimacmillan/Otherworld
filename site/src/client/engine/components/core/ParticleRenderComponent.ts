@@ -18,14 +18,22 @@ export const ParticleRenderComponent = (): EntityComponent<ParticleState> => {
     let renderItem: RenderItem | undefined;
 
     return {
-        onCreate: (entity: Entity<ParticleState>) => {
-            renderItem = entity
-                .getServiceLocator()
-                .getRenderService()
-                .particleRenderService.createItem(
-                    mapParticleStateToParticle(entity.getState())
-                );
-        },
+        getActions: (entity: Entity<ParticleState>) => ({
+            onEntityCreated: () => {
+                renderItem = entity
+                    .getServiceLocator()
+                    .getRenderService()
+                    .particleRenderService.createItem(
+                        mapParticleStateToParticle(entity.getState())
+                    );
+            },
+            onEntityDeleted: () => {
+                entity
+                    .getServiceLocator()
+                    .getRenderService()
+                    .particleRenderService.freeItem(renderItem);
+            },
+        }),
         update: (entity: Entity<ParticleState>) => {
             entity
                 .getServiceLocator()
@@ -34,12 +42,6 @@ export const ParticleRenderComponent = (): EntityComponent<ParticleState> => {
                     renderItem,
                     mapParticleStateToParticle(entity.getState())
                 );
-        },
-        onDestroy: (entity: Entity<ParticleState>) => {
-            entity
-                .getServiceLocator()
-                .getRenderService()
-                .particleRenderService.freeItem(renderItem);
         },
     };
 };

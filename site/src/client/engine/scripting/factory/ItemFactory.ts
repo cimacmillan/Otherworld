@@ -4,7 +4,6 @@ import { animation } from "../../../util/animation/Animations";
 import { vec } from "../../../util/math";
 import { PlayerPickUpItem } from "../../commands/InventoryCommands";
 import {
-    PHYSICS_STATE_DEFAULT,
     PhysicsComponent,
     PhysicsStateType,
 } from "../../components/core/PhysicsComponent";
@@ -12,9 +11,9 @@ import { SpriteRenderComponent } from "../../components/core/SpriteRenderCompone
 import { AnimationComponent } from "../../components/util/AnimationComponent";
 import { SwitchComponent } from "../../components/util/SwitchComponent";
 import { Entity } from "../../Entity";
+import { EntityComponent } from "../../EntityComponent";
 import {
     SpriteRenderState,
-    SUFRACE_POSITION_STATE_DEFAULT,
     SurfacePosition,
 } from "../../state/State";
 import { Item } from "../items/types";
@@ -70,10 +69,9 @@ const WhenInPlayerVicinity = (
     threshold: number,
     onEnter: (entity: Entity<SurfacePosition>) => void,
     onLeave: (entity: Entity<SurfacePosition>) => void
-) => {
+): EntityComponent<SurfacePosition> => {
     let entered = false;
     return {
-        getInitialState: () => SUFRACE_POSITION_STATE_DEFAULT,
         update: (entity: Entity<SurfacePosition>) => {
             const player = entity
                 .getServiceLocator()
@@ -96,6 +94,7 @@ const WhenInPlayerVicinity = (
                 }
             }
         },
+        getActions: () => ({}),
     };
 };
 
@@ -104,7 +103,6 @@ const AttractedToPosition = (
     forceMult: number
 ) => {
     return {
-        getInitialState: () => PHYSICS_STATE_DEFAULT,
         update: (entity: Entity<PhysicsStateType>) => {
             const { velocity, position } = entity.getState();
             const playerPosition = getPosition(entity);
@@ -122,6 +120,7 @@ const AttractedToPosition = (
                 false
             );
         },
+        getActions: () => ({}),
     };
 };
 
