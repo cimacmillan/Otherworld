@@ -9,8 +9,8 @@ export const OpenLockpickingChallenge = (serviceLocator: ServiceLocator) => (
     serviceLocator.getGame().setUpdateWorld(false);
     serviceLocator.getInputService().setInputState(InputState.INVENTORY);
     serviceLocator
-        .getEventRouter()
-        .actions()
+        .getStore()
+        .getActions()
         .openLockpickEvent((result: boolean) => {
             serviceLocator.getGame().setUpdateWorld(true);
             serviceLocator.getInputService().setInputState(InputState.DEFAULT);

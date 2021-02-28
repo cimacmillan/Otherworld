@@ -4,7 +4,9 @@ import { TutorialService } from "../engine/scripting/TutorialService";
 import { World } from "../engine/World";
 import { Game } from "../Game";
 import { ResourceManager } from "../resources/ResourceManager";
+import { State } from "../ui/State";
 import { FunctionEventSubscriber } from "../util/engine/FunctionEventSubscriber";
+import { Store } from "../util/engine/Store";
 import { AudioService } from "./audio/AudioService";
 import { InputService } from "./input/InputService";
 import { InteractionService } from "./interaction/InteractionService";
@@ -21,7 +23,7 @@ export class ServiceLocator {
         private world: World,
         private renderService: RenderService,
         private audioService: AudioService,
-        private eventRouter: FunctionEventSubscriber<Actions>,
+        private store: Store<State, Actions>,
         private scriptingService: ScriptingService,
         private inputService: InputService,
         private physicsService: PhysicsService,
@@ -52,8 +54,8 @@ export class ServiceLocator {
         return this.audioService;
     }
 
-    public getEventRouter() {
-        return this.eventRouter;
+    public getStore() {
+        return this.store;
     }
 
     public getScriptingService() {

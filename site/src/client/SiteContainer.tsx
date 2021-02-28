@@ -3,10 +3,12 @@ import * as ReactMarkdown from "react-markdown";
 import { Actions } from "./Actions";
 import { Game } from "./Game";
 import { GameComponent } from "./GameComponent";
+import { State } from "./ui/State";
 import { WebContentContainer } from "./uisite/WebContentContainer";
+import { Store } from "./util/engine/Store";
 
 export interface SiteContainerProps {
-    uiListener: Partial<Actions>;
+    store: Store<State, Actions>;
 }
 
 export const SiteContainer: React.FunctionComponent<SiteContainerProps> = (
@@ -17,7 +19,7 @@ export const SiteContainer: React.FunctionComponent<SiteContainerProps> = (
     return (
         <>
             <GameComponent
-                uiListener={props.uiListener}
+                store={props.store}
                 shouldShow={showGame}
             />
             <WebContentContainer

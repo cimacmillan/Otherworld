@@ -6,9 +6,11 @@ import { DOM_WIDTH, DOM_HEIGHT, WIDTH, HEIGHT, RES_DIV } from "./Config";
 import { Actions } from "./Actions";
 import { SiteContainer } from "./SiteContainer";
 import { useGame } from "./ui/effects/GameEffect";
+import { Store } from "./util/engine/Store";
+import { State } from "./ui/State";
 
 export interface GameComponentProps {
-    uiListener: Partial<Actions>;
+    store: Store<State, Actions>;
     shouldShow: boolean;
 }
 
@@ -20,7 +22,7 @@ export const GameComponent: React.FunctionComponent<GameComponentProps> = (
     React.useEffect(() => {
         game.init(
             (canvas.current as CanvasComponent).getOpenGL(),
-            props.uiListener
+            props.store
         );
     }, []);
     React.useEffect(() => {

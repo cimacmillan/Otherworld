@@ -11,3 +11,10 @@ export const useGlobalState: () => [State, Actions] = () => {
     }, []);
     return [storeState, store.getActions()];
 };
+
+export const useDispatchListener = (actions: Partial<Actions>, deps: any[]) => {
+    React.useEffect(() => {
+        store.subscribe(actions);
+        return () => store.unsubscribe(actions);
+    }, deps);
+}

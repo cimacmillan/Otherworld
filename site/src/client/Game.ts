@@ -19,14 +19,16 @@ import {
 } from "./services/serialisation/SerialisationService";
 import { GameStorage } from "./services/serialisation/Storage";
 import { ServiceLocator } from "./services/ServiceLocator";
+import { State } from "./ui/State";
 import { FunctionEventSubscriber } from "./util/engine/FunctionEventSubscriber";
+import { Store } from "./util/engine/Store";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
 
 export class Game {
     private serviceLocator: ServiceLocator;
     private storage: GameStorage;
-    private uiListener: Partial<Actions>;
+    private store: Store<State, Actions>;
 
     private initialised: boolean = false;
     private updateWorld: boolean = false;
@@ -34,18 +36,15 @@ export class Game {
 
     public async init(
         openGL: WebGLRenderingContext,
-        uiListener: Partial<Actions>
+        store: Store<State, Actions>
     ) {
-        this.uiListener = uiListener;
+        this.store = store;
 
         const audioContext = new AudioContext();
         const screen = new ScreenBuffer(openGL, WIDTH, HEIGHT);
 
         const resourceManager = new ResourceManager();
-        await resourceManager.load(openGL, audioContext, uiListener);
-
-        const router = new FunctionEventSubscriber<Actions>(emptyActions);
-        router.subscribe(uiListener);
+        await resourceManager.load(openGL, audioContext, store);
 
         const world = new World();
 
@@ -67,7 +66,7 @@ export class Game {
             world,
             new RenderService(resourceManager),
             new AudioService(audioContext),
-            router,
+            store,
             scriptingService,
             inputService,
             new PhysicsService(),
@@ -147,7 +146,7 @@ export class Game {
 
         const loop = new TimeControlledLoop(TARGET_MILLIS, this.mainLoop);
         this.initialised = true;
-        this.serviceLocator.getEventRouter().actions().onGameInitialised();
+        this.serviceLocator.getStore().getActions().onGameInitialised();
 
         loop.start();
     }

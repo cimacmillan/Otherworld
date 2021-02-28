@@ -19,7 +19,7 @@ export const OpenInventory: CommandCreator = (
 
     serviceLocator.getGame().setUpdateWorld(false);
     serviceLocator.getInputService().setInputState(InputState.INVENTORY);
-    serviceLocator.getEventRouter().actions().onPlayerInventoryOpened();
+    serviceLocator.getStore().getActions().onPlayerInventoryOpened();
 };
 
 export const CloseInventory: CommandCreator = (
@@ -31,7 +31,7 @@ export const CloseInventory: CommandCreator = (
 
     serviceLocator.getGame().setUpdateWorld(true);
     serviceLocator.getInputService().setInputState(InputState.DEFAULT);
-    serviceLocator.getEventRouter().actions().onPlayerInventoryClosed();
+    serviceLocator.getStore().getActions().onPlayerInventoryClosed();
 };
 
 export const PlayerUseItemFromInventory = (serviceLocator: ServiceLocator) => (
@@ -43,7 +43,7 @@ export const PlayerUseItemFromInventory = (serviceLocator: ServiceLocator) => (
 export const PlayerPickUpItem = (serviceLocator: ServiceLocator) => (
     item: Item
 ) => {
-    serviceLocator.getEventRouter().actions().onPlayerItemDropCollected(item);
+    serviceLocator.getStore().getActions().onPlayerItemDropCollected(item);
     serviceLocator
         .getTutorialService()
         .onEvent(TutorialServiceEvent.PICKED_UP_ITEM);

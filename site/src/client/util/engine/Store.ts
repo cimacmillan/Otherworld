@@ -68,7 +68,7 @@ export function combineReducers<Actions>(
     });
 
     const getState = () => {
-        leconsttate = {};
+        let state = {};
         Object.keys(reducers).forEach((key) => {
             const reducer = reducers[key];
             Object.assign(state, {

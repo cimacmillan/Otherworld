@@ -9,8 +9,8 @@ export const RegisterKeyHint = (serviceLocator: ServiceLocator) => (arg: {
     HINT_ID++;
     const { code, hint } = arg;
     serviceLocator
-        .getEventRouter()
-        .actions()
+        .getStore()
+        .getActions()
         .addKeyHint({
             id: `${HINT_ID}`,
             keys: code,
@@ -23,8 +23,8 @@ export const DeregisterKeyHint = (serviceLocator: ServiceLocator) => (
     hintId: number
 ) => {
     serviceLocator
-        .getEventRouter()
-        .actions()
+        .getStore()
+        .getActions()
         .removeKeyHint({
             id: `${hintId}`,
         });

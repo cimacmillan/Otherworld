@@ -13,7 +13,7 @@ console.log(VERSION);
 const render = () => {
     ReactDOM.render(
         <gameContext.Provider value={game}>
-            <SiteContainer uiListener={store.getActions()} />
+            <SiteContainer store={store} />
         </gameContext.Provider>,
         document.getElementById("root")
     );
