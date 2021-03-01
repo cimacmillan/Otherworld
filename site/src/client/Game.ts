@@ -20,7 +20,7 @@ import {
 import { GameStorage } from "./services/serialisation/Storage";
 import { ServiceLocator } from "./services/ServiceLocator";
 import { State } from "./ui/State";
-import { FunctionEventSubscriber } from "./util/engine/FunctionEventSubscriber";
+import { FunctionEventSubscriber } from "@cimacmillan/refunc";
 import { Store } from "./util/engine/Store";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";

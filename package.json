@@ -22,6 +22,7 @@
         "@babel/polyfill": "^7.12.1",
         "@babel/preset-env": "^7.12.11",
         "@babel/register": "^7.12.10",
+        "@cimacmillan/refunc": "^1.0.1",
         "@rooks/use-boundingclientrect": "^3.6.0",
         "@types/enzyme": "^3.10.8",
         "@types/express": "^4.17.11",

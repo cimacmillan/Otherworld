@@ -1,4 +1,4 @@
-import { FunctionEventSubscriber } from "./FunctionEventSubscriber";
+import { FunctionEventSubscriber } from "@cimacmillan/refunc";
 
 type Callback = () => void;
 

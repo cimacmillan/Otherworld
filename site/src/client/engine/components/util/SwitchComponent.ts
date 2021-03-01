@@ -1,5 +1,5 @@
 import { Actions, emptyActions } from "../../../Actions";
-import { FunctionEventSubscriber } from "../../../util/engine/FunctionEventSubscriber";
+import { FunctionEventSubscriber } from "@cimacmillan/refunc";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 

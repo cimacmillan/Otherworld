@@ -17,7 +17,7 @@ export function AnimationComponent<T>(
                 animation = createAnimation(entity);
                 animation.start();
             },
-            onEntityDeleted: () => animation.stop(),
+            onEntityDeleted: () => animation && animation.stop(),
         }),
         update: () => animation.tick(),
     };
