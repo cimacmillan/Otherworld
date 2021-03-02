@@ -2,7 +2,7 @@ import { Actions } from "../Actions";
 import { loadSound } from "../services/audio/AudioService";
 import { tiledXMLtoGameTiledMap } from "../services/map/TiledParser";
 import { State } from "../ui/State";
-import { Store } from "../util/engine/Store";
+import { Store } from "@cimacmillan/refunc";
 // import { setLoadPercentage } from "../ui/actions/GameStartActions";
 import { defaultManifest } from "./manifests/Resources";
 import { loadSpriteSheet } from "./TextureLoader";

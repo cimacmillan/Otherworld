@@ -1,5 +1,4 @@
 import React = require("react");
-import { Subscription } from "rxjs";
 import { DOM_WIDTH, DOM_HEIGHT } from "../../Config";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";

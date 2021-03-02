@@ -1,19 +1,15 @@
+import { Reducer } from "@cimacmillan/refunc";
 import { Actions } from "../../Actions";
-import { GameReducer } from "../../util/engine/Store";
 
 export interface UIState {
     canAccessGame: boolean;
 }
 
-const initialUIState = {
-    canAccessGame: false,
-};
-
-export const uiReducer: GameReducer<UIState, Actions> = {
-    getState: () => initialUIState,
+export const uiReducer: Reducer<UIState, Actions> = {
+    state: {
+        canAccessGame: false,
+    },
     actions: {
-        onGameInitialised: () => {
-            initialUIState.canAccessGame = true;
-        },
+        onGameInitialised: (state: UIState) => ({...state, canAccessGame: true})
     },
 };

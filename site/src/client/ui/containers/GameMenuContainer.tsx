@@ -8,7 +8,6 @@ import {
     TextColour,
 } from "../components/TextComponent";
 import { GameButtonContainer } from "./GameButtonContainer";
-import { Subscription } from "rxjs";
 import { FadeComponent } from "../components/FadeComponent";
 import { useGlobalState } from "../effects/GlobalState";
 import { KeyComponent } from "../components/KeyComponent";

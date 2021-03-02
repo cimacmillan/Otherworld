@@ -6,7 +6,7 @@ import { Game } from "../Game";
 import { ResourceManager } from "../resources/ResourceManager";
 import { State } from "../ui/State";
 import { FunctionEventSubscriber } from "@cimacmillan/refunc";
-import { Store } from "../util/engine/Store";
+import { Store } from "@cimacmillan/refunc";
 import { AudioService } from "./audio/AudioService";
 import { InputService } from "./input/InputService";
 import { InteractionService } from "./interaction/InteractionService";

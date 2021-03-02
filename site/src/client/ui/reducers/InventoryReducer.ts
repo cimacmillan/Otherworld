@@ -1,22 +1,20 @@
+import { Reducer } from "@cimacmillan/refunc";
 import { Actions } from "../../Actions";
-import { GameReducer } from "../../util/engine/Store";
 
 export interface InventoryUIState {
     showing: boolean;
 }
 
-const initialInventoryState = {
-    showing: false,
-};
-
-export const inventoryReducer: GameReducer<InventoryUIState, Actions> = {
-    getState: () => initialInventoryState,
+export const inventoryReducer: Reducer<InventoryUIState, Actions> = {
+    state: {
+        showing: false
+    },
     actions: {
-        onPlayerInventoryOpened: () => {
-            initialInventoryState.showing = true;
-        },
-        onPlayerInventoryClosed: () => {
-            initialInventoryState.showing = false;
-        },
+        onPlayerInventoryOpened: () => ({
+            showing: true
+        }),
+        onPlayerInventoryClosed: () => ({
+            showing: false
+        }),
     },
 };

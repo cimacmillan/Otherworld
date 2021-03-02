@@ -1,6 +1,5 @@
 import React = require("react");
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { Subscription } from "rxjs";
 import { DOM_HEIGHT, DOM_WIDTH } from "../../Config";
 import { getImagePropsFromSprite } from "../../util/math/UI";
 // import {
@@ -21,7 +20,7 @@ const HEALTH_BAR_HEIGHT = HEALTH_BAR_WIDTH / 3;
 
 const HEALTH_BAR_BUMP_SPEED = 100;
 
-interface HealthBarComponentProps {}
+interface HealthBarComponentProps { }
 
 export const HealthBarComponent: React.FunctionComponent<HealthBarComponentProps> = (
     props

@@ -7,7 +7,6 @@ import {
     CompositeAnimation,
     CompositeAnimationType,
 } from "../../util/animation/CompositeAnimation";
-import { Subscription } from "rxjs";
 import { vec } from "../../util/math";
 import { getImagePropsFromSprite } from "../../util/math/UI";
 import { ViewportComponent } from "./ViewportComponent";

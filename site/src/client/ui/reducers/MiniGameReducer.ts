@@ -1,5 +1,5 @@
+import { Reducer } from "@cimacmillan/refunc";
 import { Actions } from "../../Actions";
-import { GameReducer } from "../../util/engine/Store";
 import { LockpickGameConfiguration } from "../containers/minigame/LockPickContainer";
 
 export interface MiniGameUIState {
@@ -8,25 +8,26 @@ export interface MiniGameUIState {
     configuration?: LockpickGameConfiguration;
 }
 
-const initialMiniGameState: MiniGameUIState = {
-    visible: false,
-    onComplete: () => undefined,
-};
-
-export const minigameReducer: GameReducer<MiniGameUIState, Actions> = {
-    getState: () => initialMiniGameState,
+export const minigameReducer: Reducer<MiniGameUIState, Actions> = {
+    state: {
+        visible: false,
+        onComplete: () => {},
+    },
     actions: {
-        closeMiniGame: () => {
-            initialMiniGameState.visible = false;
-            initialMiniGameState.onComplete = () => undefined;
-        },
+        closeMiniGame: (state: MiniGameUIState) => ({
+            ...state,
+            visible: false,
+            onComplete: () => undefined,
+        }),
         openLockpickEvent: (
+            state: MiniGameUIState,
             callback: (result: boolean) => void,
             configuration: LockpickGameConfiguration
-        ) => {
-            initialMiniGameState.visible = true;
-            initialMiniGameState.onComplete = callback;
-            initialMiniGameState.configuration = configuration;
-        },
+        ) => ({
+            ...state,
+            visible: true,
+            onComplete: callback,
+            configuration: configuration,
+        }),
     },
 };

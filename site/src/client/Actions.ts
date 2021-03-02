@@ -1,3 +1,4 @@
+import { ActionType } from "@cimacmillan/refunc";
 import { Item } from "./engine/scripting/items/types";
 import {
     InteractionSource,
@@ -8,7 +9,7 @@ import { LockpickGameConfiguration } from "./ui/containers/minigame/LockPickCont
 
 const undef: () => void = () => undefined;
 
-export interface Actions {
+export interface Actions extends ActionType {
     onGameInitialised: () => void;
 
     fadeBackground: () => void;
@@ -46,7 +47,7 @@ export interface Actions {
     onPlayerInventoryClosed: () => void;
 }
 
-export const emptyActions: Actions = {
+export const emptyActions = {
     onGameInitialised: undef,
 
     fadeBackground: undef,
