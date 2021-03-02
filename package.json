@@ -63,8 +63,7 @@
         "changelog": "npx git log --pretty=format:\"* *%cs* - %s\" > ./site/public/doc/announcements.md"
     },
     "pre-commit": [
-        "test",
-        "ppack"
+        "test"
     ],
     "prettier": {
         "tabWidth": 4

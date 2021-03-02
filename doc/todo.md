@@ -3,7 +3,7 @@
 Puzzle maps to escape prison
 
 ### Doing 
-* Fix imports
+
 
 ### Polish 
 * Improve head bob to not make noise when standing still (frequency?)
