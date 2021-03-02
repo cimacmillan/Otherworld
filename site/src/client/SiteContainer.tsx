@@ -1,3 +1,4 @@
+import { Store } from "@cimacmillan/refunc";
 import React = require("react");
 import * as ReactMarkdown from "react-markdown";
 import { Actions } from "./Actions";
@@ -5,7 +6,6 @@ import { Game } from "./Game";
 import { GameComponent } from "./GameComponent";
 import { State } from "./ui/State";
 import { WebContentContainer } from "./uisite/WebContentContainer";
-import { Store } from "./util/engine/Store";
 
 export interface SiteContainerProps {
     store: Store<State, Actions>;

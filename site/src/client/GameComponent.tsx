@@ -6,7 +6,7 @@ import { DOM_WIDTH, DOM_HEIGHT, WIDTH, HEIGHT, RES_DIV } from "./Config";
 import { Actions } from "./Actions";
 import { SiteContainer } from "./SiteContainer";
 import { useGame } from "./ui/effects/GameEffect";
-import { Store } from "./util/engine/Store";
+import { Store } from "@cimacmillan/refunc";
 import { State } from "./ui/State";
 
 export interface GameComponentProps {

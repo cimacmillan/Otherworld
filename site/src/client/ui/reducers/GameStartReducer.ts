@@ -1,5 +1,5 @@
+import { Reducer } from "@cimacmillan/refunc";
 import { Actions } from "../../Actions";
-import { GameReducer } from "../../util/engine/Store";
 
 export interface GameStartState {
     showingMenu: boolean;
@@ -8,46 +8,34 @@ export interface GameStartState {
     fps: number;
 }
 
-let initialGameStartState: GameStartState = {
-    showingMenu: true,
-    showingFade: true,
-    gameLoadPercentage: 0,
-    fps: 0,
-};
-
-export const gameStartReducer: GameReducer<GameStartState, Actions> = {
-    getState: () => initialGameStartState,
+export const gameStartReducer: Reducer<GameStartState, Actions> = {
+    state: {
+        showingMenu: true,
+        showingFade: true,
+        gameLoadPercentage: 0,
+        fps: 0,
+    },
     actions: {
-        startGame: () => {
-            initialGameStartState = {
-                ...initialGameStartState,
-                showingMenu: false,
-                showingFade: false,
-            };
-        },
-        fadeBackground: () => {
-            initialGameStartState = {
-                ...initialGameStartState,
-                showingFade: true,
-            };
-        },
-        fadeMenu: () => {
-            initialGameStartState = {
-                ...initialGameStartState,
-                showingMenu: true,
-            };
-        },
-        setGameLoadPercentage: (x: number) => {
-            initialGameStartState = {
-                ...initialGameStartState,
-                gameLoadPercentage: x,
-            };
-        },
-        setGameFPS: (x: number) => {
-            initialGameStartState = {
-                ...initialGameStartState,
-                fps: x,
-            };
-        },
+        startGame: (state: GameStartState) => ({
+            ...state,
+            showingMenu: false,
+            showingFade: false,
+        }),
+        fadeBackground: (state: GameStartState) => ({
+            ...state,
+            showingFade: true,
+        }),
+        fadeMenu: (state: GameStartState) => ({
+            ...state,
+            showingMenu: true,
+        }),
+        setGameLoadPercentage: (state: GameStartState, x: number) => ({
+            ...state,
+            gameLoadPercentage: x,
+        }),
+        setGameFPS: (state: GameStartState, x: number) => ({
+            ...state,
+            fps: x,
+        }),
     },
 };

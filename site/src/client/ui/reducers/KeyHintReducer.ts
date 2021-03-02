@@ -1,5 +1,5 @@
+import { Reducer } from "@cimacmillan/refunc";
 import { Actions } from "../../Actions";
-import { GameReducer } from "../../util/engine/Store";
 
 export interface KeyHintUIState {
     keyHints: {
@@ -12,30 +12,26 @@ export interface KeyHint {
     hint: string;
 }
 
-let initialKeyHintUIState: KeyHintUIState = {
-    keyHints: {},
-};
-
-export const keyHintReducer: GameReducer<KeyHintUIState, Actions> = {
-    getState: () => initialKeyHintUIState,
+export const keyHintReducer: Reducer<KeyHintUIState, Actions> = {
+    state: {
+        keyHints: {}
+    },
     actions: {
-        addKeyHint: (action: { id: string; keys: string[]; hint: string }) => {
-            initialKeyHintUIState = {
-                keyHints: {
-                    ...initialKeyHintUIState.keyHints,
-                    [action.id]: {
-                        keys: action.keys,
-                        hint: action.hint,
-                    },
+        addKeyHint: (state: KeyHintUIState, action: { id: string; keys: string[]; hint: string }) => ({
+            keyHints: {
+                ...state.keyHints,
+                [action.id]: {
+                    keys: action.keys,
+                    hint: action.hint,
                 },
-            };
-        },
-        removeKeyHint: (action: { id: string }) => {
-            const keyHints = { ...initialKeyHintUIState.keyHints };
+            }
+        }),
+        removeKeyHint: (state: KeyHintUIState, action: { id: string }) => {
+            const keyHints = { ...state.keyHints };
             delete keyHints[action.id];
-            initialKeyHintUIState = {
-                keyHints,
-            };
+            return {
+                keyHints
+            }
         },
     },
 };

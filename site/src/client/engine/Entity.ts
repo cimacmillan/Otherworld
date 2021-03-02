@@ -1,6 +1,6 @@
 import { Actions, emptyActions } from "../Actions";
 import { ServiceLocator } from "../services/ServiceLocator";
-import { FunctionEventSubscriber } from "../util/engine/FunctionEventSubscriber";
+import { FunctionEventSubscriber } from "@cimacmillan/refunc";
 import { EntityComponent } from "./EntityComponent";
 import { EntityType } from "./scripting/factory/EntityFactory";
 

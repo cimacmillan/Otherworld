@@ -1,5 +1,5 @@
+import { combineReducers, Store } from "@cimacmillan/refunc";
 import { Actions, emptyActions } from "../Actions";
-import { combineReducers, GameReducer, Store } from "../util/engine/Store";
 import { gameStartReducer, GameStartState } from "./reducers/GameStartReducer";
 import {
     inventoryReducer,
@@ -17,7 +17,7 @@ export interface State {
     keyHints: KeyHintUIState;
 }
 
-export const reducers: { [key: string]: GameReducer<any, Actions> } = {
+export const reducers = {
     uiState: uiReducer,
     gameStart: gameStartReducer,
     inventory: inventoryReducer,
@@ -25,7 +25,7 @@ export const reducers: { [key: string]: GameReducer<any, Actions> } = {
     keyHints: keyHintReducer,
 };
 
-export const store = new Store(
-    combineReducers(reducers, emptyActions),
+export const store = new Store<State, Actions>(
+    combineReducers<State, Actions>(reducers),
     emptyActions
 );
