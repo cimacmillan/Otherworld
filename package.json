@@ -57,7 +57,7 @@
         "generate": "node site/build/server/Generator.js",
         "watch": "npm-watch",
         "full-rebuild": "npm run-script clean && npm run-script build && npm run-script pack && npm run-script server",
-        "test-unit": "npx jest site/src/",
+        "test-unit": "npx jest  --coverage site/src/",
         "test": "npm run-script test-unit",
         "circular": "npx madge --circular site/src/**/*",
         "changelog": "npx git log --pretty=format:\"* *%cs* - %s\" > ./site/public/doc/announcements.md"

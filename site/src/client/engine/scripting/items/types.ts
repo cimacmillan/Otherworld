@@ -16,6 +16,7 @@ export enum ItemCategory {
     CRAFTING = "Crafting",
     PRECIOUS = "Precious",
     KEY = "Key",
+    WEAPON = "Weapon"
 }
 
 export interface ItemMetadata {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="6" nextobjectid="90">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="6" nextobjectid="91">
  <objectgroup id="5" name="Object Layer 1">
   <object id="58" type="Floor" x="271.629" y="460.195" width="263.035" height="285.248"/>
   <object id="60" type="Floor" x="156.008" y="449.031" width="429.499" height="328.315">
@@ -126,6 +126,12 @@
     <property name="height" value="0"/>
     <property name="sprite" value="BONE"/>
    </properties>
+  </object>
+  <object id="90" type="GameItem" x="376.894" y="640.783">
+   <properties>
+    <property name="item" value="WEAPON_WOOD_STICK"/>
+   </properties>
+   <point/>
   </object>
  </objectgroup>
 </map>

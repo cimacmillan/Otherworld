@@ -12,6 +12,7 @@ import { ShadowComponentStyle } from "./ShadowComponent";
 import { animation } from "../../util/animation/Animations";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
+import { Sprites, SpriteSheets } from "../../resources/manifests/Sprites";
 // import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
 
 const TOOLTIP_WIDTH = 256;
@@ -158,6 +159,8 @@ function getCategoryColour(category: ItemCategory): TextColour {
             return TextColour.GOLD;
         case ItemCategory.KEY:
             return TextColour.GOLD;
+        case ItemCategory.WEAPON:
+            return TextColour.STEEL;
     }
 }
 
@@ -185,18 +188,18 @@ function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
     yOffset = offset > 0.5 ? diff : -diff;
 
     switch (item.category) {
-        case ItemCategory.CONSUMABLE:
+        case ItemCategory.WEAPON:
             return row([
-                // <SpriteImageComponent
-                //     spriteSheet={SpriteSheets.UI}
-                //     sprite={UISPRITES.ITEM_FINGER}
-                //     style={{
-                //         width: 32,
-                //         height: 32,
-                //         transform: `translate(0px, ${yOffset}px)`,
-                //     }}
-                // />,
-                text("to consume"),
+                <SpriteImageComponent
+                    spriteSheet={SpriteSheets.SPRITE}
+                    sprite={Sprites.UI_FINGER}
+                    style={{
+                        width: 32,
+                        height: 32,
+                        transform: `translate(0px, ${yOffset}px)`,
+                    }}
+                />,
+                text("to equip"),
             ]);
     }
 }
