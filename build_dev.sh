@@ -22,5 +22,5 @@
 # npm run start 
 
 sudo npm run build &
-sudo npm run ppack &
+sudo npm run pack &
 sudo npm run server

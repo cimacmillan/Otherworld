@@ -7,77 +7,42 @@ import {
 import { Vector2D } from "./types";
 import { LockpickGameConfiguration } from "./ui/containers/minigame/LockPickContainer";
 
-const undef: () => void = () => undefined;
+export const emptyActions = {
+    onGameInitialised: () => {},
 
-export interface Actions extends ActionType {
-    onGameInitialised: () => void;
+    fadeBackground: () => {},
+    fadeMenu: () => {},
+    setGameFPS: (fps: number) => {},
+    setGameLoadPercentage: (percentage: number) => {},
+    startGame: () => {},
 
-    fadeBackground: () => void;
-    fadeMenu: () => void;
-    setGameFPS: (fps: number) => void;
-    setGameLoadPercentage: (percentage: number) => void;
-    startGame: () => void;
+    closeMiniGame: () => {},
 
-    closeMiniGame: () => void;
+    addKeyHint: (args: { id: string; keys: string[]; hint: string }) => {},
+    removeKeyHint: (args: { id: string }) => {},
 
-    addKeyHint: (args: { id: string; keys: string[]; hint: string }) => void;
-    removeKeyHint: (args: { id: string }) => void;
+    onEntityCreated: () => {},
+    onEntityDeleted: () => {},
+    onStateTransition: (from: any, to: any) => {},
 
-    onEntityCreated: () => void;
-    onEntityDeleted: () => void;
-    onStateTransition: (from: any, to: any) => void;
-
-    onInteract: (type: InteractionType, source: InteractionSource) => void;
+    onInteract: (type: InteractionType, source: InteractionSource) => {},
 
     openLockpickEvent: (
         callback: (result: boolean) => void,
         configuration: LockpickGameConfiguration
-    ) => void;
+    ) => {},
 
-    onPhysicsImpulse: (velocity: Vector2D) => void;
+    onPhysicsImpulse: (velocity: Vector2D) => {},
 
-    onPlayerAttack: () => void;
-    onPlayerDamaged: () => void;
-    onPlayerKilled: () => void;
-    onPlayerInfoChanged: () => void;
-    onPlayerItemDropCollected: (item: Item) => void;
-    onPlayerItemUsed: (item: Item) => void;
-    onPlayerHealed: (amount: number) => void;
-    onPlayerInventoryOpened: () => void;
-    onPlayerInventoryClosed: () => void;
+    onPlayerAttack: () => {},
+    onPlayerDamaged: () => {},
+    onPlayerKilled: () => {},
+    onPlayerInfoChanged: () => {},
+    onPlayerItemDropCollected: (item: Item) => {},
+    onPlayerItemUsed: (item: Item) => {},
+    onPlayerHealed: (amount: number) => {},
+    onPlayerInventoryOpened: () => {},
+    onPlayerInventoryClosed: () => {},
 }
 
-export const emptyActions = {
-    onGameInitialised: undef,
-
-    fadeBackground: undef,
-    fadeMenu: undef,
-    setGameFPS: undef,
-    setGameLoadPercentage: undef,
-    startGame: undef,
-
-    closeMiniGame: undef,
-
-    addKeyHint: undef,
-    removeKeyHint: undef,
-
-    onEntityCreated: undef,
-    onEntityDeleted: undef,
-    onStateTransition: undef,
-
-    onInteract: undef,
-
-    openLockpickEvent: undef,
-
-    onPhysicsImpulse: undef,
-
-    onPlayerAttack: undef,
-    onPlayerDamaged: undef,
-    onPlayerKilled: undef,
-    onPlayerInfoChanged: undef,
-    onPlayerItemDropCollected: undef,
-    onPlayerItemUsed: undef,
-    onPlayerHealed: undef,
-    onPlayerInventoryOpened: undef,
-    onPlayerInventoryClosed: undef,
-};
+export type Actions = typeof emptyActions;
