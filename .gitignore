@@ -7,3 +7,4 @@ cypress/support
 cypress/videos
 site/build
 **/.DS_Store
+coverage
