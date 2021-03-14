@@ -6,7 +6,7 @@ import {
     createItemDropState,
     ItemDropArguments,
 } from "../scripting/factory/ItemFactory";
-import { Inventory, Item } from "../scripting/items/types";
+import { Inventory, Item } from "../scripting/items/ItemTypes";
 import { TutorialServiceEvent } from "../scripting/TutorialService";
 import { CommandCreator } from "./Command";
 

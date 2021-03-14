@@ -14,7 +14,7 @@ import { useGlobalState } from "../effects/GlobalState";
 import { Actions } from "../../Actions";
 import { ShadowComponentStyle } from "../components/ShadowComponent";
 import { SpriteImageComponent } from "../components/SpriteImageComponent";
-import { Item, ItemMetadata } from "../../engine/scripting/items/types";
+import { Item, ItemMetadata } from "../../engine/scripting/items/ItemTypes";
 import { GameItems } from "../../resources/manifests/Items";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { chunk } from "lodash";

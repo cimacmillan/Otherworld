@@ -4,7 +4,7 @@ import {
     ItemComponent,
     ItemComponentType,
     Item,
-} from "../../engine/scripting/items/types";
+} from "../../engine/scripting/items/ItemTypes";
 import React = require("react");
 import { TextComponent, TextFont, TextColour, TextSize } from "./TextComponent";
 import { Vector2D } from "../../types";
@@ -13,6 +13,8 @@ import { animation } from "../../util/animation/Animations";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Sprites, SpriteSheets } from "../../resources/manifests/Sprites";
+import { EffectComponent } from "./EffectComponent";
+import { Effect } from "../../engine/scripting/effects/Effects";
 // import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
 
 const TOOLTIP_WIDTH = 256;
@@ -88,13 +90,6 @@ export const ItemTooltipComponent: React.FunctionComponent<ItemTooltipComponentP
         return () => anim.stop();
     }, []);
 
-    const behaviours = props.itemMetadata.item.behaviours.map(
-        getDescriptionFromBehaviour
-    );
-    const filteredBehaviours = behaviours.filter(
-        (behaviour) => behaviour !== undefined
-    );
-
     return (
         <div
             style={{
@@ -116,9 +111,9 @@ export const ItemTooltipComponent: React.FunctionComponent<ItemTooltipComponentP
                 }}
             />
             <TextComponent
-                text={props.itemMetadata.item.category}
+                text={props.itemMetadata.item.type}
                 font={TextFont.REGULAR}
-                colour={getCategoryColour(props.itemMetadata.item.category)}
+                colour={getCategoryColour(props.itemMetadata.item.type)}
                 size={TextSize.VSMALL}
                 style={{}}
             />
@@ -129,18 +124,7 @@ export const ItemTooltipComponent: React.FunctionComponent<ItemTooltipComponentP
                 size={TextSize.VSMALL}
                 style={{}}
             />
-            <ul
-                style={{
-                    padding: 0,
-                    margin: 0,
-                    marginLeft: 16,
-                    color: TextColour.LIGHT,
-                }}
-            >
-                {filteredBehaviours.map((jsx) => (
-                    <li>{jsx}</li>
-                ))}
-            </ul>
+            {getEffectHintsFromItem(props.itemMetadata.item)}
             {getUsingHintFromItem(
                 props.serviceLocator,
                 props.itemMetadata.item
@@ -164,19 +148,6 @@ function getCategoryColour(category: ItemCategory): TextColour {
     }
 }
 
-function getDescriptionFromBehaviour(
-    behaviour: ItemComponent
-): JSX.Element | undefined {
-    switch (behaviour.type) {
-        case ItemComponentType.HEALS_PLAYER:
-            return row([
-                text("Heals", TextColour.RED),
-                text(`player ${behaviour.amount} pts`),
-            ]);
-    }
-    return undefined;
-}
-
 function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
     const [offset, setOffset] = React.useState(0);
     React.useEffect(() => {
@@ -187,7 +158,7 @@ function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
     let yOffset = offset;
     yOffset = offset > 0.5 ? diff : -diff;
 
-    switch (item.category) {
+    switch (item.type) {
         case ItemCategory.WEAPON:
             return row([
                 <SpriteImageComponent
@@ -202,6 +173,42 @@ function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
                 text("to equip"),
             ]);
     }
+}
+
+function getEffectHintsFromItem(item: Item): JSX.Element {
+    const effectList = (effects: Effect[]) => (
+        <ul
+            style={{
+                padding: 0,
+                margin: 0,
+                marginLeft: 16,
+                color: TextColour.LIGHT,
+            }}
+        >
+            {effects.map(effect => <EffectComponent effect={effect}/>)}
+        </ul>
+    )
+
+    switch (item.type) {
+        case ItemCategory.WEAPON: 
+            return (
+                <>
+                {item.onAttack && (
+                    <>
+                    {text("On attack")}
+                    {effectList(item.onAttack)}
+                    </>
+                )}
+                {item.onEquip && (
+                    <>
+                    {text("On equip")}
+                    {effectList(item.onEquip)}
+                    </>
+                )}                
+                </>
+        )
+    }
+    return undefined;
 }
 
 const row = (elements: JSX.Element[]) => {

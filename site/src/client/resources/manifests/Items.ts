@@ -1,4 +1,5 @@
-import { Item, ItemCategory } from "../../engine/scripting/items/types";
+import { EffectType } from "../../engine/scripting/effects/Effects";
+import { Item, ItemCategory } from "../../engine/scripting/items/ItemTypes";
 import { Sprites } from "./Sprites";
 
 export enum GameItem {
@@ -18,8 +19,7 @@ export const GameItems: GameItemMap = {
         spriteIcon: Sprites.ITEM_KEY,
         stackable: false,
         name: "Gold Key",
-        behaviours: [],
-        category: ItemCategory.KEY,
+        type: ItemCategory.KEY,
         description: "I wonder what it unlocks",
     },
     [GameItem.GOLD_RING]: {
@@ -27,8 +27,7 @@ export const GameItems: GameItemMap = {
         spriteIcon: Sprites.ITEM_GOLD_RING,
         stackable: false,
         name: "Gold Ring",
-        behaviours: [],
-        category: ItemCategory.PRECIOUS,
+        type: ItemCategory.PRECIOUS,
         description: "A ring I found inside someone's cell. It smells funny.",
     },
     [GameItem.WEAPON_WOOD_STICK]: {
@@ -36,8 +35,27 @@ export const GameItems: GameItemMap = {
         spriteIcon: Sprites.WEAPON_WOOD_STICK,
         stackable: false,
         name: "Wooden Club",
-        behaviours: [],
-        category: ItemCategory.WEAPON,
-        description: "A heavy wooden club. It feels like it could bash some skulls."
+        type: ItemCategory.WEAPON,
+        description: "A heavy wooden club. It feels like it could bash some skulls.",
+        onEquip: [
+            {
+                type: EffectType.HEALS_SELF,
+                points: 10
+            },
+            {
+                type: EffectType.DAMAGES_TARGET,
+                points: 8
+            }
+        ],
+        onAttack: [
+            {
+                type: EffectType.DAMAGES_TARGET,
+                points: 15
+            },
+            {
+                type: EffectType.HEALS_SELF,
+                points: 2
+            },
+        ]
     }
 };

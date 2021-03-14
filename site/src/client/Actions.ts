@@ -1,5 +1,5 @@
 import { ActionType } from "@cimacmillan/refunc";
-import { Item } from "./engine/scripting/items/types";
+import { Item } from "./engine/scripting/items/ItemTypes";
 import {
     InteractionSource,
     InteractionType,

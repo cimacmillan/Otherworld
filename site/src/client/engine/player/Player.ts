@@ -16,7 +16,7 @@ import { Camera, Vector2D } from "../../types";
 import { ActionDelay } from "../../util/time/ActionDelay";
 import { TurnDirection, WalkDirection } from "../commands/PlayerCommands";
 import { PhysicsStateType } from "../components/core/PhysicsComponent";
-import { getEmptyInventory, Inventory } from "../scripting/items/types";
+import { getEmptyInventory, Inventory } from "../scripting/items/ItemTypes";
 import { CameraState, HealthState } from "../state/State";
 import { PlayerMovement } from "./PlayerMovement";
 

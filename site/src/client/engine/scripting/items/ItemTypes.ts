@@ -1,15 +1,34 @@
 import { GameItem } from "../../../resources/manifests/Items";
+import { Effect } from "../effects/Effects";
 
-export interface Item {
+interface BaseItem {
     id: GameItem;
     spriteIcon: string;
     stackable: boolean;
     name: string;
-    value?: number;
-    behaviours: ItemComponent[];
-    category: ItemCategory;
     description: string;
 }
+
+interface KeyItem extends BaseItem {
+    type: ItemCategory.KEY;
+}
+
+interface ConsumableItem extends BaseItem {
+    type: ItemCategory.CONSUMABLE;
+    onConsume?: Effect[];
+}
+
+interface WeaponItem extends BaseItem {
+    type: ItemCategory.WEAPON;
+    onAttack?: Effect[];
+    onEquip?: Effect[];
+}
+
+interface PreciousItem extends BaseItem {
+    type: ItemCategory.PRECIOUS;
+}
+
+export type Item = KeyItem | WeaponItem | PreciousItem | ConsumableItem;
 
 export enum ItemCategory {
     CONSUMABLE = "Consumable",

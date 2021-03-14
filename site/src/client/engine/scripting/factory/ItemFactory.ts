@@ -16,7 +16,7 @@ import {
     SpriteRenderState,
     SurfacePosition,
 } from "../../state/State";
-import { Item } from "../items/types";
+import { Item } from "../items/ItemTypes";
 
 const ITEM_SIZE = 0.4;
 const ITEM_SPEED = 0.1;
