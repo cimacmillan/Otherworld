@@ -1,5 +1,5 @@
 import { EffectType } from "../../engine/scripting/effects/Effects";
-import { Item, ItemCategory } from "../../engine/scripting/items/ItemTypes";
+import { EquipmentType, Item, ItemCategory } from "../../engine/scripting/items/ItemTypes";
 import { Sprites } from "./Sprites";
 
 export enum GameItem {
@@ -35,13 +35,14 @@ export const GameItems: GameItemMap = {
         spriteIcon: Sprites.WEAPON_WOOD_STICK,
         stackable: false,
         name: "Wooden Club",
-        type: ItemCategory.WEAPON,
+        type: ItemCategory.EQUIPMENT,
         description: "A heavy wooden club. It feels like it could bash some skulls.",
         onAttack: [
             {
                 type: EffectType.DAMAGES_TARGET,
                 points: 1
             }
-        ]
+        ],
+        equipmentType: EquipmentType.WEAPON
     }
 };

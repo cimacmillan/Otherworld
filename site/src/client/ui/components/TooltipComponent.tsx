@@ -143,7 +143,7 @@ function getCategoryColour(category: ItemCategory): TextColour {
             return TextColour.GOLD;
         case ItemCategory.KEY:
             return TextColour.GOLD;
-        case ItemCategory.WEAPON:
+        case ItemCategory.EQUIPMENT:
             return TextColour.STEEL;
     }
 }
@@ -159,7 +159,7 @@ function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
     yOffset = offset > 0.5 ? diff : -diff;
 
     switch (item.type) {
-        case ItemCategory.WEAPON:
+        case ItemCategory.EQUIPMENT:
             return row([
                 <SpriteImageComponent
                     spriteSheet={SpriteSheets.SPRITE}
@@ -190,7 +190,7 @@ function getEffectHintsFromItem(item: Item): JSX.Element {
     )
 
     switch (item.type) {
-        case ItemCategory.WEAPON: 
+        case ItemCategory.EQUIPMENT: 
             return (
                 <>
                 {item.onAttack && (
