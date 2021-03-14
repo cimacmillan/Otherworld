@@ -45,10 +45,12 @@ export interface ItemMetadata {
 
 export interface Inventory {
     items: ItemMetadata[];
+    equipped: ItemMetadata[];
 }
 
 export const getEmptyInventory = (): Inventory => ({
     items: [],
+    equipped: []
 });
 
 export type ItemComponent = ItemHealsPlayer | MakesNoiseWhenConsumed;

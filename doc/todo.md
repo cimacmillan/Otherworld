@@ -38,7 +38,7 @@ Puzzle maps to escape prison, killing enemies
 * Refactor audio service to take Audio string
 * Refactor graphics service to take sprite string?
 * Remove manifest everywhere
-* Remove command creator
+* Remove commands with effects
 
 
 ### Ideas

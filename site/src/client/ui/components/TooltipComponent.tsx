@@ -195,13 +195,13 @@ function getEffectHintsFromItem(item: Item): JSX.Element {
                 <>
                 {item.onAttack && (
                     <>
-                    {text("On attack")}
+                    {text("On attack", TextColour.GOLD)}
                     {effectList(item.onAttack)}
                     </>
                 )}
                 {item.onEquip && (
                     <>
-                    {text("On equip")}
+                    {text("On equip", TextColour.GOLD)}
                     {effectList(item.onEquip)}
                     </>
                 )}                

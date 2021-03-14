@@ -37,25 +37,11 @@ export const GameItems: GameItemMap = {
         name: "Wooden Club",
         type: ItemCategory.WEAPON,
         description: "A heavy wooden club. It feels like it could bash some skulls.",
-        onEquip: [
-            {
-                type: EffectType.HEALS_SELF,
-                points: 10
-            },
-            {
-                type: EffectType.DAMAGES_TARGET,
-                points: 8
-            }
-        ],
         onAttack: [
             {
                 type: EffectType.DAMAGES_TARGET,
-                points: 15
-            },
-            {
-                type: EffectType.HEALS_SELF,
-                points: 2
-            },
+                points: 1
+            }
         ]
     }
 };
