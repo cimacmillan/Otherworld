@@ -32,6 +32,16 @@ export const INVENTORY_BORDER_RADIUS = 8;
 
 export interface InventoryContainerProps {}
 
+enum InventoryTabs {
+    Inventory = "Inventory",
+    Equipment = "Equipment"
+}
+
+const inventoryTabs = [
+    InventoryTabs.Inventory,
+    InventoryTabs.Equipment
+]
+
 export const InventoryContainer: React.FunctionComponent<InventoryContainerProps> = (
     props
 ) => {
@@ -49,6 +59,7 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
     });
     const [items, setItems] = React.useState<ItemMetadata[]>([]);
     const [state, dispatch] = useGlobalState();
+    const [activeTab, setActiveTab] = React.useState<InventoryTabs>(InventoryTabs.Inventory);
 
     React.useEffect(() => {
         const inventoryItems = serviceLocator
@@ -133,16 +144,17 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                             ...ShadowComponentStyle(),
                         }}
                     >
-                        <TextComponent
-                            text={"Inventory"}
-                            size={TextSize.SMALL}
-                            style={{
-                                paddingLeft: 8,
-                                paddingRight: 8,
-                                background: Colours.DESELCT_GREY,
-                                borderRadius: `${INVENTORY_BORDER_RADIUS}px ${INVENTORY_BORDER_RADIUS}px 0px 0px`,
-                            }}
-                        />
+                        <div style={{
+                            display: "flex",
+                            flexDirection: "row"
+                        }}>
+                            {
+                                inventoryTabs.map(tab => (
+                                    <InventoryTab label={tab} open={tab === activeTab} onPress={() => setActiveTab(tab)}/>
+                                ))
+                            }
+                        </div>
+
                         <div
                             style={{
                                 width: INVENTORY_WIDTH,
@@ -179,6 +191,27 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
         </div>
     );
 };
+
+const InventoryTab: React.FunctionComponent<{
+    label: string,
+    open: boolean,
+    onPress: () => void
+}> = (props) => {
+    const { label, open, onPress } = props;
+    return <TextComponent
+        text={label}
+        size={TextSize.SMALL}
+        colour={open ? TextColour.LIGHT : TextColour.LESS_LIGHT}
+        style={{
+            paddingLeft: 8,
+            paddingRight: 8,
+            background: open ? Colours.DESELCT_GREY : Colours.HIDDEN_GREY,
+            borderRadius: `${INVENTORY_BORDER_RADIUS}px ${INVENTORY_BORDER_RADIUS}px 0px 0px`,
+            cursor: open ? "default" : "pointer"
+        }}
+        clickable={onPress}
+    />
+}
 
 const InventoryItems: React.FunctionComponent<{
     items: ItemMetadata[];

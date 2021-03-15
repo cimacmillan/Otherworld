@@ -55,6 +55,7 @@ export const GameButtonContainer: React.FunctionComponent<GameButtonContainerPro
                 height,
                 backgroundColor,
                 borderRadius: Spacing.RADIUS_SMALL,
+                cursor: "pointer",
                 ...props.childStyle,
             }}
         >
