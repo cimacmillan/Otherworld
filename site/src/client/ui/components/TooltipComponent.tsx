@@ -28,7 +28,7 @@ export enum TooltipType {
 
 export interface TooltipItemContext {
     type: TooltipType.ITEM;
-    itemMetadata: ItemMetadata;
+    item: Item;
 }
 
 export interface TooltipNullContext {
@@ -54,7 +54,7 @@ export const TooltipComponent: React.FunctionComponent<TooltipComponentProps> = 
                 return (
                     <ItemTooltipComponent
                         serviceLocator={props.serviceLocator}
-                        itemMetadata={props.context.itemMetadata}
+                        item={props.context.item}
                     />
                 );
         }
@@ -75,7 +75,7 @@ export const TooltipComponent: React.FunctionComponent<TooltipComponentProps> = 
 
 interface ItemTooltipComponentProps {
     serviceLocator: ServiceLocator;
-    itemMetadata: ItemMetadata;
+    item: Item;
 }
 
 export const ItemTooltipComponent: React.FunctionComponent<ItemTooltipComponentProps> = (
@@ -99,7 +99,7 @@ export const ItemTooltipComponent: React.FunctionComponent<ItemTooltipComponentP
             }}
         >
             <TextComponent
-                text={props.itemMetadata.item.name}
+                text={props.item.name}
                 font={TextFont.REGULAR}
                 colour={TextColour.LIGHT}
                 size={TextSize.SMALL}
@@ -109,23 +109,23 @@ export const ItemTooltipComponent: React.FunctionComponent<ItemTooltipComponentP
                 }}
             />
             <TextComponent
-                text={props.itemMetadata.item.type}
+                text={props.item.type}
                 font={TextFont.REGULAR}
-                colour={getCategoryColour(props.itemMetadata.item.type)}
+                colour={getCategoryColour(props.item.type)}
                 size={TextSize.VSMALL}
                 style={{}}
             />
             <TextComponent
-                text={props.itemMetadata.item.description}
+                text={props.item.description}
                 font={TextFont.REGULAR}
                 colour={TextColour.LIGHT}
                 size={TextSize.VSMALL}
                 style={{}}
             />
-            {getEffectHintsFromItem(props.itemMetadata.item)}
+            {getEffectHintsFromItem(props.item)}
             {getUsingHintFromItem(
                 props.serviceLocator,
-                props.itemMetadata.item
+                props.item
             )}
         </div>
     );
@@ -158,6 +158,7 @@ function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
 
     switch (item.type) {
         case ItemType.EQUIPMENT:
+            const isEquipped = serviceLocator.getScriptingService().getPlayer().getInventory().equipped[item.equipmentType] === item;
             return row([
                 <SpriteImageComponent
                     spriteSheet={SpriteSheets.SPRITE}
@@ -168,7 +169,7 @@ function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
                         transform: `translate(0px, ${yOffset}px)`,
                     }}
                 />,
-                text("to equip"),
+                isEquipped ? text("to unequip") : text("to equip"),
             ]);
     }
 }

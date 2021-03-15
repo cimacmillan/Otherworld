@@ -19,6 +19,12 @@ export const EffectComponent: React.FunctionComponent<EffectComponentProps> = (p
                 text("Damages", TextColour.RED),
                 text(`target ${effect.points} pts`),
             ]);
+        case EffectType.HEALTH_INCREASE:
+            return row([
+                text(`Increase`),
+                text("Health", TextColour.RED),
+                text(`${effect.points} pts`),
+            ]); 
     }
     return <></>;
 }
@@ -29,6 +35,7 @@ const row = (elements: JSX.Element[]) => {
             style={{
                 display: "flex",
                 flexDirection: "row",
+                flexWrap: "wrap",
                 alignItems: "center",
             }}
         >
@@ -37,15 +44,17 @@ const row = (elements: JSX.Element[]) => {
     );
 };
 const text = (text: string, colour: TextColour = TextColour.LIGHT) => {
-    return (
-        <TextComponent
-            text={text}
-            font={TextFont.REGULAR}
-            colour={colour}
-            size={TextSize.VSMALL}
-            style={{
-                marginRight: 8,
-            }}
-        />
-    );
+    const word = (w: string) => <TextComponent
+        text={w}
+        font={TextFont.REGULAR}
+        colour={colour}
+        size={TextSize.VSMALL}
+        style={{
+            marginRight: 8,
+            wordWrap: "break-word"
+        }}
+    />;
+    return (<>
+        { text.split(" ").map(word) }
+    </>);
 };

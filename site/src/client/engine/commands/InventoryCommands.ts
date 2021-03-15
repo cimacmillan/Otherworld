@@ -67,6 +67,19 @@ export const EquipItemFromInventory = (serviceLocator: ServiceLocator, item: Equ
     }));
 }
 
+export const UnequipItemFromInventory =  (serviceLocator: ServiceLocator, item: EquipableItem) => {
+    const playerInventory = serviceLocator
+        .getScriptingService()
+        .getPlayer()
+        .getInventory();
+    playerInventory.equipped[item.equipmentType] = undefined;
+    AddItemToInventory(playerInventory, item);
+    item.onUnEquip?.forEach(effect => getEffect(effect).onTrigger({
+        type: "PLAYER",
+        player: serviceLocator.getScriptingService().getPlayer()
+    }));
+}
+
 
 export const PlayerPickUpItem = (serviceLocator: ServiceLocator) => (
     item: Item
@@ -88,7 +101,7 @@ export const RemoveItemFromInventory = (inventory: Inventory, item: Item) => {
         if (itemMetadata.item.id === item.id) {
             itemMetadata.count--;
             if (itemMetadata.count <= 0) {
-                inventory.items.splice(x);
+                inventory.items.splice(x, 1);
             }
             break;
         }

@@ -1,4 +1,4 @@
-import { GameItem } from "../../../resources/manifests/Items";
+import { GameItem, GameItems } from "../../../resources/manifests/Items";
 import { Effect } from "../effects/Effects";
 
 interface BaseItem {
@@ -61,7 +61,11 @@ export interface Inventory {
 }
 
 export const getEmptyInventory = (): Inventory => ({
-    items: [],
-    equipped: {}
+    items: [    
+
+    ],
+    equipped: {
+        
+    }
 });
 

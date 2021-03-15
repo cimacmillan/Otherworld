@@ -2,15 +2,21 @@ import { FunctionEventSubscriber } from "@cimacmillan/refunc";
 import { Entity } from "../../Entity";
 import { Player } from "../../player/Player";
 import { EffectDamagesTarget } from "./EffectDamagesTarget";
-import { EffectHealsPlayer } from "./EffectHealsPlayer";
+import { EffectHealsPlayer, EffectIncreaseHealthPlayer } from "./EffectHealsPlayer";
 
 export enum EffectType {
     HEALS_SELF = "HEALS_SELF",
-    DAMAGES_TARGET = "DAMAGES_TARGET"
+    DAMAGES_TARGET = "DAMAGES_TARGET",
+    HEALTH_INCREASE = "HEALTH_INCREASE"
 }
 
 export interface HealsPlayer {
     type: EffectType.HEALS_SELF;
+    points: number;
+}
+
+export interface HealthIncreasePlayer {
+    type: EffectType.HEALTH_INCREASE;
     points: number;
 }
 
@@ -19,7 +25,7 @@ export interface DamagesTarget {
     points: number;
 }
 
-export type Effect = HealsPlayer | DamagesTarget;
+export type Effect = HealsPlayer | DamagesTarget | HealthIncreasePlayer;
 
 export type EffectContext = {
     type: "PLAYER";
@@ -39,6 +45,7 @@ export const getEffect = (effects: Effect): ItemEffectActions => {
     switch (effects.type) {
         case EffectType.HEALS_SELF: return EffectHealsPlayer(effects);
         case EffectType.DAMAGES_TARGET: return EffectDamagesTarget(effects);
+        case EffectType.HEALTH_INCREASE: return EffectIncreaseHealthPlayer(effects);
     }
 }
 

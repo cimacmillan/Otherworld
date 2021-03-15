@@ -27,7 +27,14 @@ export const GameItems: GameItemMap = {
         spriteIcon: Sprites.ITEM_GOLD_RING,
         stackable: false,
         name: "Gold Ring",
-        type: ItemType.PRECIOUS,
+        type: ItemType.EQUIPMENT,
+        onEquip: [
+            {
+                type: EffectType.HEALTH_INCREASE,
+                points: 1
+            }
+        ],
+        equipmentType: EquipmentType.RING,
         description: "A ring I found inside someone's cell. It smells funny.",
     },
     [GameItem.WEAPON_WOOD_STICK]: {
