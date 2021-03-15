@@ -1,5 +1,5 @@
 import { EffectType } from "../../engine/scripting/effects/Effects";
-import { EquipmentType, Item, ItemCategory } from "../../engine/scripting/items/ItemTypes";
+import { EquipmentType, Item, ItemType } from "../../engine/scripting/items/ItemTypes";
 import { Sprites } from "./Sprites";
 
 export enum GameItem {
@@ -19,7 +19,7 @@ export const GameItems: GameItemMap = {
         spriteIcon: Sprites.ITEM_KEY,
         stackable: false,
         name: "Gold Key",
-        type: ItemCategory.KEY,
+        type: ItemType.KEY,
         description: "I wonder what it unlocks",
     },
     [GameItem.GOLD_RING]: {
@@ -27,7 +27,7 @@ export const GameItems: GameItemMap = {
         spriteIcon: Sprites.ITEM_GOLD_RING,
         stackable: false,
         name: "Gold Ring",
-        type: ItemCategory.PRECIOUS,
+        type: ItemType.PRECIOUS,
         description: "A ring I found inside someone's cell. It smells funny.",
     },
     [GameItem.WEAPON_WOOD_STICK]: {
@@ -35,7 +35,7 @@ export const GameItems: GameItemMap = {
         spriteIcon: Sprites.WEAPON_WOOD_STICK,
         stackable: false,
         name: "Wooden Club",
-        type: ItemCategory.EQUIPMENT,
+        type: ItemType.EQUIPMENT,
         description: "A heavy wooden club. It feels like it could bash some skulls.",
         onAttack: [
             {

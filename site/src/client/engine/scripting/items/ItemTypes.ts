@@ -10,11 +10,11 @@ interface BaseItem {
 }
 
 interface KeyItem extends BaseItem {
-    type: ItemCategory.KEY;
+    type: ItemType.KEY;
 }
 
 interface ConsumableItem extends BaseItem {
-    type: ItemCategory.CONSUMABLE;
+    type: ItemType.CONSUMABLE;
     onConsume?: Effect[];
 }
 
@@ -24,24 +24,25 @@ export enum EquipmentType {
     SHIELD = "SHIELD",
     BODY = "BODY",
     SHOES = "SHOES",
-    LRING = "LRING",
-    RRING = "RRING"
+    RING = "RING"
 } 
 
-interface EquipableItem extends BaseItem {
-    type: ItemCategory.EQUIPMENT;
+export interface EquipableItem extends BaseItem {
+    type: ItemType.EQUIPMENT;
     onAttack?: Effect[];
     onEquip?: Effect[];
+    onUnEquip?: Effect[];
     equipmentType: EquipmentType;
+    stackable: false;
 }
 
 interface PreciousItem extends BaseItem {
-    type: ItemCategory.PRECIOUS;
+    type: ItemType.PRECIOUS;
 }
 
 export type Item = KeyItem | EquipableItem | PreciousItem | ConsumableItem;
 
-export enum ItemCategory {
+export enum ItemType {
     CONSUMABLE = "Consumable",
     CRAFTING = "Crafting",
     PRECIOUS = "Precious",
@@ -56,7 +57,7 @@ export interface ItemMetadata {
 
 export interface Inventory {
     items: ItemMetadata[];
-    equipped: Partial<Record<EquipmentType, Item | undefined>>;
+    equipped: Partial<Record<EquipmentType, EquipableItem | undefined>>;
 }
 
 export const getEmptyInventory = (): Inventory => ({
@@ -64,18 +65,3 @@ export const getEmptyInventory = (): Inventory => ({
     equipped: {}
 });
 
-export type ItemComponent = ItemHealsPlayer | MakesNoiseWhenConsumed;
-
-export interface ItemHealsPlayer {
-    type: ItemComponentType.HEALS_PLAYER;
-    amount: number;
-}
-
-export interface MakesNoiseWhenConsumed {
-    type: ItemComponentType.MAKES_NOISE_WHEN_CONSUMED;
-}
-
-export enum ItemComponentType {
-    HEALS_PLAYER = "HEALS_PLAYER",
-    MAKES_NOISE_WHEN_CONSUMED = "MAKES_NOISE_WHEN_CONSUMED",
-}

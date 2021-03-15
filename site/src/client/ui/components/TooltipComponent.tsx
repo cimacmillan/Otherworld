@@ -1,8 +1,6 @@
 import {
     ItemMetadata,
-    ItemCategory,
-    ItemComponent,
-    ItemComponentType,
+    ItemType,
     Item,
 } from "../../engine/scripting/items/ItemTypes";
 import React = require("react");
@@ -133,17 +131,17 @@ export const ItemTooltipComponent: React.FunctionComponent<ItemTooltipComponentP
     );
 };
 
-function getCategoryColour(category: ItemCategory): TextColour {
+function getCategoryColour(category: ItemType): TextColour {
     switch (category) {
-        case ItemCategory.CONSUMABLE:
+        case ItemType.CONSUMABLE:
             return TextColour.RED;
-        case ItemCategory.CRAFTING:
+        case ItemType.CRAFTING:
             return TextColour.YELLOW;
-        case ItemCategory.PRECIOUS:
+        case ItemType.PRECIOUS:
             return TextColour.GOLD;
-        case ItemCategory.KEY:
+        case ItemType.KEY:
             return TextColour.GOLD;
-        case ItemCategory.EQUIPMENT:
+        case ItemType.EQUIPMENT:
             return TextColour.STEEL;
     }
 }
@@ -159,7 +157,7 @@ function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
     yOffset = offset > 0.5 ? diff : -diff;
 
     switch (item.type) {
-        case ItemCategory.EQUIPMENT:
+        case ItemType.EQUIPMENT:
             return row([
                 <SpriteImageComponent
                     spriteSheet={SpriteSheets.SPRITE}
@@ -190,7 +188,7 @@ function getEffectHintsFromItem(item: Item): JSX.Element {
     )
 
     switch (item.type) {
-        case ItemCategory.EQUIPMENT: 
+        case ItemType.EQUIPMENT: 
             return (
                 <>
                 {item.onAttack && (

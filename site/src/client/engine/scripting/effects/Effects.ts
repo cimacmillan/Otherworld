@@ -33,7 +33,7 @@ export const emptyItemActions = {
     onTrigger: (context: EffectContext) => {}
 }
 
-export type ItemEffectActions = Partial<typeof emptyItemActions>;
+export type ItemEffectActions = typeof emptyItemActions;
 
 export const getEffect = (effects: Effect): ItemEffectActions => {
     switch (effects.type) {

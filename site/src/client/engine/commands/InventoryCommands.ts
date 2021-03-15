@@ -1,12 +1,13 @@
 import { GameItem } from "../../resources/manifests/Items";
 import { InputState } from "../../services/input/InputService";
 import { ServiceLocator } from "../../services/ServiceLocator";
+import { getEffect } from "../scripting/effects/Effects";
 import { EntityFactory } from "../scripting/factory/EntityFactory";
 import {
     createItemDropState,
     ItemDropArguments,
 } from "../scripting/factory/ItemFactory";
-import { Inventory, Item } from "../scripting/items/ItemTypes";
+import { EquipableItem, Inventory, Item, ItemType } from "../scripting/items/ItemTypes";
 import { TutorialServiceEvent } from "../scripting/TutorialService";
 import { CommandCreator } from "./Command";
 
@@ -37,8 +38,35 @@ export const CloseInventory: CommandCreator = (
 export const PlayerUseItemFromInventory = (serviceLocator: ServiceLocator) => (
     item: Item
 ) => {
-    console.log("Used item from inventory ", item);
+    switch (item.type) {
+        case ItemType.EQUIPMENT:
+            EquipItemFromInventory(serviceLocator, item);
+            break;
+    }
 };
+
+export const EquipItemFromInventory = (serviceLocator: ServiceLocator, item: EquipableItem) => {
+    const playerInventory = serviceLocator
+        .getScriptingService()
+        .getPlayer()
+        .getInventory();
+    RemoveItemFromInventory(playerInventory, item);
+    const alreadyEquipped = playerInventory.equipped[item.equipmentType];
+    if (alreadyEquipped) {
+        AddItemToInventory(playerInventory, item);
+        alreadyEquipped.onUnEquip?.forEach(effect => getEffect(effect).onTrigger({
+            type: "PLAYER",
+            player: serviceLocator.getScriptingService().getPlayer()
+        }));
+    }
+    playerInventory.equipped[item.equipmentType] = item;
+    serviceLocator.getStore().getActions().onPlayerItemEquipped(item);
+    item.onEquip?.forEach(effect => getEffect(effect).onTrigger({
+        type: "PLAYER",
+        player: serviceLocator.getScriptingService().getPlayer()
+    }));
+}
+
 
 export const PlayerPickUpItem = (serviceLocator: ServiceLocator) => (
     item: Item
@@ -53,6 +81,19 @@ export const PlayerPickUpItem = (serviceLocator: ServiceLocator) => (
         .getInventory();
     AddItemToInventory(playerInventory, item);
 };
+
+export const RemoveItemFromInventory = (inventory: Inventory, item: Item) => {
+    for (let x = 0; x < inventory.items.length; x++) {
+        const itemMetadata = inventory.items[x];
+        if (itemMetadata.item.id === item.id) {
+            itemMetadata.count--;
+            if (itemMetadata.count <= 0) {
+                inventory.items.splice(x);
+            }
+            break;
+        }
+    }
+}
 
 export const AddItemToInventory = (inventory: Inventory, item: Item) => {
     let countIncreased = false;
@@ -108,28 +149,3 @@ export const DoesHaveItem = (inventory: Inventory, item: GameItem) => {
         (inventoryItem) => inventoryItem.item.id === item
     );
 };
-
-// public useItemFromInventory(
-//     entity: Entity<InventoryState & HealthState>,
-//     item: ItemMetadata
-// ) {
-//     const itemBehaviour = ItemBehaviours.getItemBehaviours(item.item);
-
-//     if (
-//         !itemBehaviour.canConsume({
-//             entity,
-//             serviceLocator: this.serviceLocator,
-//         })
-//     ) {
-//         return;
-//     }
-
-//     itemBehaviour.onConsume({
-//         entity,
-//         serviceLocator: this.serviceLocator,
-//     });
-//     entity.emit({
-//         type: PlayerEventType.PLAYER_ITEM_USED,
-//         payload: { item: item.item },
-//     });
-// }
