@@ -145,8 +145,6 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                 {inventoryShowing && (
                     <div
                         style={{
-                            width: INVENTORY_WIDTH,
-                            height: INVENTORY_HEIGHT,
                             opacity: fade,
                             display: "flex",
                             flexDirection: "column",

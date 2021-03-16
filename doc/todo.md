@@ -2,9 +2,8 @@
 ### Milestone 2
 Puzzle maps to escape prison, killing enemies
 
-* Equip items in inventory by selecting?
-* Equiped items view
-* Sword container or rendered in some way? Maybe through new renderer or through sprite render
+* Voxel render service for weapon
+* Voxel object with rotation and center point
 * Player attack animation and event
 * Jailor entity which has jailor image
 * Jailor entity listens to player attacks and loses damage

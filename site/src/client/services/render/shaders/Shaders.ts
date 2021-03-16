@@ -6,6 +6,7 @@ import { rfsSource } from "./fragment/RepeatedFragment";
 import { initShaderProgram } from "./ShaderCompiler";
 import { AttributePositions, UniformPositions } from "./types";
 import { BilloardVertex } from "./vertex/BillboardVertex";
+import { ColourVertex } from "./vertex/ColourVertex";
 import { ParticleVertex } from "./vertex/ParticleVertex";
 import { RepeatedVertex } from "./vertex/RepeatedVertex";
 import { Vertex } from "./vertex/Vertex";
@@ -97,6 +98,33 @@ export function compileModelShader(gl: WebGLRenderingContext) {
         texturePosition: gl.getAttribLocation(
             shaderId,
             Vertex.v.texturePosition
+        ),
+    };
+    return { shaderId, uniform, attribute };
+}
+
+export function compileVoxelShader(gl: WebGLRenderingContext) {
+    const shaderId = initShaderProgram(gl, ColourVertex.source, colourFragment);
+    const uniform: UniformPositions = {
+        ...fadeUniformPositions(shaderId, gl),
+        ...hazeUniformPositions(shaderId, gl),
+        projectionMatrix: gl.getUniformLocation(
+            shaderId,
+            ColourVertex.v.projectionMatrix
+        ),
+        modelMatrix: gl.getUniformLocation(
+            shaderId,
+            ColourVertex.v.modelMatrix
+        ),
+    };
+    const attribute: AttributePositions = {
+        vertexPosition: gl.getAttribLocation(
+            shaderId,
+            ColourVertex.v.vertexPosition
+        ),
+        colourOverride: gl.getAttribLocation(
+            shaderId,
+            ColourVertex.v.colourOverride
         ),
     };
     return { shaderId, uniform, attribute };
