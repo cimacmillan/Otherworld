@@ -33,7 +33,7 @@ export class PlayerEquipmentRender {
         const voxelData: VoxelGroupData = {
             colourMap,
             data,
-            sizePerVoxel: 0.005
+            sizePerVoxel: 0.01
         };
 
         const voxelGroup = new VoxelGroup3D(this.serviceLocator, voxelData);
@@ -50,19 +50,19 @@ export class PlayerEquipmentRender {
             rads += 0.01;
             voxelGroup.setAngle([rads, rads, rads]);
         }, 10);
-        // setInterval(() => {
-        //     colourMap.forEach((_, index) => {
-        //         colourMap[index] = [Math.random(), Math.random(), Math.random()];
-        //     })
-        //     forEach3D(voxelData.data, (val: number, x: number, y: number, z: number) => {
-        //         if (Math.random() > 0.3) {
-        //             voxelData.data[x][y][z] = 0;
-        //         } else {
-        //             voxelData.data[x][y][z] = randomIntRange(1, 4);
-        //         }
-        //     });
-        //     voxelGroup.onDataUpdate();
-        // }, 200)
+        setInterval(() => {
+            colourMap.forEach((_, index) => {
+                colourMap[index] = [Math.random(), Math.random(), Math.random()];
+            })
+            forEach3D(voxelData.data, (val: number, x: number, y: number, z: number) => {
+                if (Math.random() > 0.05) {
+                    voxelData.data[x][y][z] = 0;
+                } else {
+                    voxelData.data[x][y][z] = randomIntRange(1, 4);
+                }
+            });
+            voxelGroup.onDataUpdate();
+        }, 200)
     }
 
 }
