@@ -10,7 +10,7 @@ import {
     BackgroundShaderPositions,
 } from "./BackgroundRenderService";
 
-interface Object {
+export interface Object3D {
     positions: [vec3, vec3, vec3][];
     colour: vec3[];
     transform?: mat4;
@@ -19,10 +19,10 @@ interface Object {
 const IDENTITY = mat4.identity(mat4.create());
 const tempMat4 = mat4.create();
 
-export class ObjectRenderService implements RenderItemInterface<Object> {
+export class ObjectRenderService implements RenderItemInterface<Object3D> {
     private gl: WebGLRenderingContext;
 
-    private objectArray: SyncedArray<Object>;
+    private objectArray: SyncedArray<Object3D>;
 
     private shader: CompiledShader;
 
@@ -47,11 +47,11 @@ export class ObjectRenderService implements RenderItemInterface<Object> {
         this.backgroundShaderPositions = this.shader.uniform as any;
 
         this.objectArray = new SyncedArray({
-            onReconstruct: (array: Array<ISyncedArrayRef<Object>>) =>
+            onReconstruct: (array: Array<ISyncedArrayRef<Object3D>>) =>
                 this.onArrayReconstruct(gl, array),
-            onUpdate: (array: Array<ISyncedArrayRef<Object>>) =>
+            onUpdate: (array: Array<ISyncedArrayRef<Object3D>>) =>
                 this.onArrayUpdate(gl),
-            onInjection: (index: number, ref: ISyncedArrayRef<Object>) =>
+            onInjection: (index: number, ref: ISyncedArrayRef<Object3D>) =>
                 this.onInjection(index, ref.obj),
         });
 
@@ -119,13 +119,13 @@ export class ObjectRenderService implements RenderItemInterface<Object> {
         }
     }
 
-    public createItem(param: Object) {
+    public createItem(param: Object3D) {
         return {
             renderId: this.objectArray.createItem(param),
         };
     }
 
-    public updateItem(ref: RenderItem, param: Partial<Object>) {
+    public updateItem(ref: RenderItem, param: Partial<Object3D>) {
         this.objectArray.updateItem(ref.renderId, param);
     }
 
@@ -140,7 +140,7 @@ export class ObjectRenderService implements RenderItemInterface<Object> {
 
     private onArrayReconstruct(
         gl: WebGLRenderingContext,
-        array: Array<ISyncedArrayRef<Object>>
+        array: Array<ISyncedArrayRef<Object3D>>
     ) {
         const triangleCount = array.reduce((sum, obj) => sum + obj.obj.colour.length, 0);
         const positionCount = triangleCount * 3;
@@ -166,7 +166,7 @@ export class ObjectRenderService implements RenderItemInterface<Object> {
         gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW);
     }
 
-    private onInjection(index: number, object: Object) {
+    private onInjection(index: number, object: Object3D) {
         const { positions, colour } = object;
         const vertexNumber = this.objectArray.getArray().slice(0, index).reduce((sum, obj) => sum + obj.obj.colour.length, 0) * 3;
 

@@ -1,6 +1,7 @@
 import { ServiceLocator } from "../../ServiceLocator";
 import { mat4, vec3 } from "gl-matrix";
 import { RenderItem } from "../types/RenderInterface";
+import { Object3D } from "../services/ObjectRenderService";
 
 interface VoxelData {
     position: vec3;
@@ -12,8 +13,7 @@ interface VoxelData {
 const IDENTITY = mat4.identity(mat4.create());
 
 export class Voxel3D {
-    private items: RenderItem[] = [];
-    private attached = false;
+    private item?: RenderItem;
 
     public constructor (private serviceLocator: ServiceLocator, private data: VoxelData) {
     }
@@ -30,7 +30,7 @@ export class Voxel3D {
     }
     
     public attach() {
-        if (this.attached) {
+        if (this.item) {
             return;
         }
         this.attached = true;
@@ -38,13 +38,15 @@ export class Voxel3D {
         const { position, size, colour } = this.data;
         const transform = this.data.transform || IDENTITY;
 
+        const itemData: Object3D = {
+            positions: [],
+            colour: [],
+            transform
+        }
+
         const createTriangle = (positions: [vec3, vec3, vec3], colour: vec3) => {
-            const item = triangleRenderService.createItem({
-                positions: [positions],
-                colour: [colour],
-                transform
-            });
-            this.items.push(item);
+            itemData.positions.push(positions);
+            itemData.colour.push(colour);
         }
 
         const createQuad = (positions: [vec3, vec3, vec3, vec3], col: vec3) => {
@@ -107,18 +109,19 @@ export class Voxel3D {
             [x + size, y + size, z + size],
             [x, y + size, z + size]
         ], darker);
+
+        this.item = triangleRenderService.createItem(itemData);
     }
 
     public destroy() {
         const { triangleRenderService } = this.serviceLocator.getRenderService();
-        for (let item of this.items) {
-            triangleRenderService.freeItem(item);
+        if (this.item) {
+            triangleRenderService.freeItem(this.item);
         }
-        this.attached = false;
-        this.items = [];
+        this.item = undefined;
     }
 
     public isBeingDrawn() {
-        return this.attached;
+        return !!this.item;
     }
 }
