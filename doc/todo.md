@@ -39,6 +39,9 @@ Puzzle maps to escape prison, killing enemies
 * Remove manifest everywhere
 * Remove commands with effects
 
+### Optimise
+* Triangle render service to render arbitrary triangle counts for a single transform
+
 
 ### Ideas
 * Skills

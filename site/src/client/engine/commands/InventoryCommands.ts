@@ -65,6 +65,7 @@ export const EquipItemFromInventory = (serviceLocator: ServiceLocator, item: Equ
         type: "PLAYER",
         player: serviceLocator.getScriptingService().getPlayer()
     }));
+    serviceLocator.getScriptingService().getPlayer().equipment.onEquip(item);
 }
 
 export const UnequipItemFromInventory =  (serviceLocator: ServiceLocator, item: EquipableItem) => {
@@ -78,6 +79,7 @@ export const UnequipItemFromInventory =  (serviceLocator: ServiceLocator, item: 
         type: "PLAYER",
         player: serviceLocator.getScriptingService().getPlayer()
     }));
+    serviceLocator.getScriptingService().getPlayer().equipment.onUnequip(item);
 }
 
 

@@ -105,16 +105,16 @@ export class TriangleRenderService implements RenderItemInterface<Triangle> {
         );
 
         const objects = this.objectArray.getArray();
-        for (let x = 0; x < objects.length; x++) {
-            const transform = mat4.multiply(tempMat4, this.modelViewMatrix, objects[x].obj.transform || IDENTITY);
+        // for (let x = 0; x < objects.length; x++) {
+            const transform = mat4.multiply(tempMat4, this.modelViewMatrix, objects[0].obj.transform || IDENTITY);
             this.gl.uniformMatrix4fv(
                 this.shader.uniform.modelMatrix,
                 false,
                 transform
             );
-            const startX = x * 3;
-            this.gl.drawArrays(this.gl.TRIANGLES, startX, 3);
-        }
+            // const startX = x * 3;
+            this.gl.drawArrays(this.gl.TRIANGLES, 0, objects.length * 3);
+        // }
     }
 
     public createItem(param: Triangle) {

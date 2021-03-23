@@ -1,7 +1,5 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Game } from "./Game";
-import { Actions } from "./Actions";
 import { VERSION } from "./Config";
 import { SiteContainer } from "./SiteContainer";
 import { game, gameContext } from "./GameContext";

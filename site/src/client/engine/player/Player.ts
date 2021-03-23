@@ -21,6 +21,7 @@ import { PhysicsStateType } from "../components/core/PhysicsComponent";
 import { getEmptyInventory, Inventory } from "../scripting/items/ItemTypes";
 import { CameraState, HealthState } from "../state/State";
 import { PlayerMovement } from "./PlayerMovement";
+import { PlayerEquipmentRender } from "./PlayerEquipmentRender";
 
 type InternalEntityState = PhysicsStateType & HealthState & CameraState;
 
@@ -50,6 +51,7 @@ const DEFAULT_PLAYER_STATE: PlayerSerialisation = {
 export class Player {
     public state: PlayerSerialisation;
     public movement: PlayerMovement;
+    public equipment: PlayerEquipmentRender;
 
     private serviceLocator: ServiceLocator;
 
@@ -69,6 +71,10 @@ export class Player {
             () => this.state.surface,
             (vec: Vector2D) => (this.state.surface.velocity = vec),
             (ang: number) => (this.state.surface.angle = ang)
+        );
+
+        this.equipment = new PlayerEquipmentRender(
+            this.serviceLocator
         );
 
         this.physicsRegistration = {
