@@ -19,14 +19,14 @@ export class Voxel3D {
     }
 
     public setColour(colour: vec3) {
-        this.data.colour = colour;
-        if (this.attached) {
-            this.items.forEach(item => {
-                this.serviceLocator.getRenderService().triangleRenderService.updateItem(item, {
-                    colour
-                })
-            });
-        }
+        // this.data.colour = colour;
+        // if (this.attached) {
+        //     this.items.forEach(item => {
+        //         this.serviceLocator.getRenderService().triangleRenderService.updateItem(item, {
+        //             colour
+        //         })
+        //     });
+        // }
     }
     
     public attach() {
@@ -40,8 +40,8 @@ export class Voxel3D {
 
         const createTriangle = (positions: [vec3, vec3, vec3], colour: vec3) => {
             const item = triangleRenderService.createItem({
-                positions,
-                colour,
+                positions: [positions],
+                colour: [colour],
                 transform
             });
             this.items.push(item);

@@ -22,7 +22,7 @@ export class PlayerEquipmentRender {
     }
 
     private setWeapon(weapon: EquipableItem) {
-        const data = map3D(create3DArray(50, 50, 50, 0), (val: number, x: number, y: number, z: number) => {
+        const data = map3D(create3DArray(20, 20, 20, 0), (val: number, x: number, y: number, z: number) => {
             if (Math.random() > 0.3) {
                 return 0;
             }

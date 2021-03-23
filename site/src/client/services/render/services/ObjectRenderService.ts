@@ -10,19 +10,19 @@ import {
     BackgroundShaderPositions,
 } from "./BackgroundRenderService";
 
-interface Triangle {
-    positions: [vec3, vec3, vec3];
-    colour: vec3;
+interface Object {
+    positions: [vec3, vec3, vec3][];
+    colour: vec3[];
     transform?: mat4;
 }
 
 const IDENTITY = mat4.identity(mat4.create());
 const tempMat4 = mat4.create();
 
-export class TriangleRenderService implements RenderItemInterface<Triangle> {
+export class ObjectRenderService implements RenderItemInterface<Object> {
     private gl: WebGLRenderingContext;
 
-    private objectArray: SyncedArray<Triangle>;
+    private objectArray: SyncedArray<Object>;
 
     private shader: CompiledShader;
 
@@ -47,11 +47,11 @@ export class TriangleRenderService implements RenderItemInterface<Triangle> {
         this.backgroundShaderPositions = this.shader.uniform as any;
 
         this.objectArray = new SyncedArray({
-            onReconstruct: (array: Array<ISyncedArrayRef<Triangle>>) =>
+            onReconstruct: (array: Array<ISyncedArrayRef<Object>>) =>
                 this.onArrayReconstruct(gl, array),
-            onUpdate: (array: Array<ISyncedArrayRef<Triangle>>) =>
+            onUpdate: (array: Array<ISyncedArrayRef<Object>>) =>
                 this.onArrayUpdate(gl),
-            onInjection: (index: number, ref: ISyncedArrayRef<Triangle>) =>
+            onInjection: (index: number, ref: ISyncedArrayRef<Object>) =>
                 this.onInjection(index, ref.obj),
         });
 
@@ -105,25 +105,27 @@ export class TriangleRenderService implements RenderItemInterface<Triangle> {
         );
 
         const objects = this.objectArray.getArray();
-        // for (let x = 0; x < objects.length; x++) {
+        let start = 0;
+        for (let x = 0; x < objects.length; x++) {
             const transform = mat4.multiply(tempMat4, this.modelViewMatrix, objects[0].obj.transform || IDENTITY);
             this.gl.uniformMatrix4fv(
                 this.shader.uniform.modelMatrix,
                 false,
                 transform
             );
-            // const startX = x * 3;
-            this.gl.drawArrays(this.gl.TRIANGLES, 0, objects.length * 3);
-        // }
+            const vertexes = objects[x].obj.colour.length * 3;
+            this.gl.drawArrays(this.gl.TRIANGLES, start, vertexes);
+            start += vertexes;
+        }
     }
 
-    public createItem(param: Triangle) {
+    public createItem(param: Object) {
         return {
             renderId: this.objectArray.createItem(param),
         };
     }
 
-    public updateItem(ref: RenderItem, param: Partial<Triangle>) {
+    public updateItem(ref: RenderItem, param: Partial<Object>) {
         this.objectArray.updateItem(ref.renderId, param);
     }
 
@@ -138,9 +140,9 @@ export class TriangleRenderService implements RenderItemInterface<Triangle> {
 
     private onArrayReconstruct(
         gl: WebGLRenderingContext,
-        array: Array<ISyncedArrayRef<Triangle>>
+        array: Array<ISyncedArrayRef<Object>>
     ) {
-        const triangleCount = array.length;
+        const triangleCount = array.reduce((sum, obj) => sum + obj.obj.colour.length, 0);
         const positionCount = triangleCount * 3;
         const colourCount = triangleCount * 3;
 
@@ -164,35 +166,39 @@ export class TriangleRenderService implements RenderItemInterface<Triangle> {
         gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW);
     }
 
-    private onInjection(index: number, object: Triangle) {
+    private onInjection(index: number, object: Object) {
         const { positions, colour } = object;
+        const vertexNumber = this.objectArray.getArray().slice(0, index).reduce((sum, obj) => sum + obj.obj.colour.length, 0) * 3;
 
-        const positionIndex = index * 3 * 3;
-        const colourIndex = index * 3 * 3;
+        const positionIndex = vertexNumber * 3;
+        const colourIndex = vertexNumber * 3;
 
-        this.positions[positionIndex] = positions[0][0];
-        this.positions[positionIndex + 1] = positions[0][1];
-        this.positions[positionIndex + 2] = positions[0][2];
-
-        this.positions[positionIndex + 3] = positions[1][0];
-        this.positions[positionIndex + 4] = positions[1][1];
-        this.positions[positionIndex + 5] = positions[1][2];
-
-        this.positions[positionIndex + 6] = positions[2][0];
-        this.positions[positionIndex + 7] = positions[2][1];
-        this.positions[positionIndex + 8] = positions[2][2];
-
-        this.colours[colourIndex] = colour[0];
-        this.colours[colourIndex + 1] = colour[1];
-        this.colours[colourIndex + 2] = colour[2];
-
-        this.colours[colourIndex + 3] = colour[0];
-        this.colours[colourIndex + 4] = colour[1];
-        this.colours[colourIndex + 5] = colour[2];
-
-        this.colours[colourIndex + 6] = colour[0];
-        this.colours[colourIndex + 7] = colour[1];
-        this.colours[colourIndex + 8] = colour[2];
+        for (let i = 0; i < object.colour.length; i++) {
+            const shift = i * 9;
+            this.positions[shift + positionIndex] = positions[i][0][0];
+            this.positions[shift + positionIndex + 1] = positions[i][0][1];
+            this.positions[shift + positionIndex + 2] = positions[i][0][2];
+    
+            this.positions[shift + positionIndex + 3] = positions[i][1][0];
+            this.positions[shift + positionIndex + 4] = positions[i][1][1];
+            this.positions[shift + positionIndex + 5] = positions[i][1][2];
+    
+            this.positions[shift + positionIndex + 6] = positions[i][2][0];
+            this.positions[shift + positionIndex + 7] = positions[i][2][1];
+            this.positions[shift + positionIndex + 8] = positions[i][2][2];
+    
+            this.colours[shift + colourIndex] = colour[i][0];
+            this.colours[shift + colourIndex + 1] = colour[i][1];
+            this.colours[shift + colourIndex + 2] = colour[i][2];
+    
+            this.colours[shift + colourIndex + 3] = colour[i][0];
+            this.colours[shift + colourIndex + 4] = colour[i][1];
+            this.colours[shift + colourIndex + 5] = colour[i][2];
+    
+            this.colours[shift + colourIndex + 6] = colour[i][0];
+            this.colours[shift + colourIndex + 7] = colour[i][1];
+            this.colours[shift + colourIndex + 8] = colour[i][2];
+        }
     }
 
 }
