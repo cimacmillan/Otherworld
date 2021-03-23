@@ -17,10 +17,6 @@ export const v = {
 export const source = `
     attribute vec3 ${v.vertexPosition};
     attribute vec3 ${v.colourOverride};
-    attribute vec4 ${v.transform0};
-    attribute vec4 ${v.transform1};
-    attribute vec4 ${v.transform2};
-    attribute vec4 ${v.transform3};
 
     uniform mat4 ${v.modelMatrix};
     uniform mat4 ${v.projectionMatrix};

@@ -125,11 +125,7 @@ export function compileVoxelShader(gl: WebGLRenderingContext) {
         colourOverride: gl.getAttribLocation(
             shaderId,
             ColourVertex.v.colourOverride
-        ),
-        transform: gl.getAttribLocation(
-            shaderId,
-            ColourVertex.v.transform
-        ),
+        )
     };
     return { shaderId, uniform, attribute };
 }

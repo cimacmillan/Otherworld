@@ -7,7 +7,7 @@ import { FloorRenderService } from "./services/FloorRenderService";
 import { ParticleRenderService } from "./services/ParticleRenderService";
 import { ScreenShakeService } from "./services/ScreenShakeService";
 import { SpriteRenderService } from "./services/SpriteRenderService";
-import { TriangleRenderService } from "./services/VoxelRenderService";
+import { TriangleRenderService } from "./services/TriangleRenderService";
 import { WallRenderService } from "./services/WallRenderService";
 import { RenderInterface } from "./types/RenderInterface";
 
@@ -18,7 +18,7 @@ export class RenderService implements RenderInterface {
     public screenShakeService: ScreenShakeService;
     public backgroundRenderService: BackgroundRenderService;
     public particleRenderService: ParticleRenderService;
-    public voxelRenderService: TriangleRenderService;
+    public triangleRenderService: TriangleRenderService;
     private gl: WebGLRenderingContext;
 
     private camera: () => Camera;
@@ -38,7 +38,7 @@ export class RenderService implements RenderInterface {
         this.particleRenderService = new ParticleRenderService(
             this.backgroundRenderService
         );
-        this.voxelRenderService = new TriangleRenderService(
+        this.triangleRenderService = new TriangleRenderService(
             this.backgroundRenderService
         );
     }
@@ -65,7 +65,7 @@ export class RenderService implements RenderInterface {
             ].getTexture()
         );
         this.particleRenderService.init(gl);
-        this.voxelRenderService.init(gl);
+        this.triangleRenderService.init(gl);
     }
 
     public draw() {
@@ -93,7 +93,7 @@ export class RenderService implements RenderInterface {
             modelViewMatrix,
             projectionMatrix
         );
-        this.voxelRenderService.attachViewMatrices(
+        this.triangleRenderService.attachViewMatrices(
             modelViewMatrix,
             projectionMatrix
         );
@@ -104,7 +104,7 @@ export class RenderService implements RenderInterface {
         this.spriteRenderService.draw();
         this.wallRenderService.draw();
         this.floorRenderService.draw();
-        this.voxelRenderService.draw();
+        this.triangleRenderService.draw();
     }
 
     public attachCamera(camera: () => Camera) {

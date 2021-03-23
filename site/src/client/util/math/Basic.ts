@@ -76,3 +76,40 @@ export function toGameVector(angle: number): Vector2D {
         y: -Math.cos(angle),
     };
 }
+
+export function map3D<A, B>(array: A[][][], f: (val: A, x: number, y: number, z: number) => B): B[][][] {
+    return array.map(
+        (ys, x) => ys.map(
+            (zs, y) => zs.map(
+                (a, z) => {
+                    return f(a, x, y, z);
+                }
+            )
+        )
+    )
+}
+
+export function forEach3D<A>(array: A[][][], f: (val: A, x: number, y: number, z: number) => void) {
+    array.forEach(
+        (ys, x) => ys.forEach(
+            (zs, y) => zs.forEach(
+                (a, z) => {
+                    return f(a, x, y, z);
+                }
+            )
+        )
+    )
+}
+
+export function create3DArray<T>(xCount: number, yCount: number, zCount: number, fill: T): T[][][] {
+    const createArray = (length: number) => new Array(length).fill(fill);
+    const xArrays: T[][][]  = [];
+    for (let x = 0; x < xCount; x++) {
+        const yArrays: T[][] = [];
+        for (let y = 0; y < yCount; y++) {
+            yArrays.push(createArray(zCount));
+        }
+        xArrays.push(yArrays);
+    }
+    return xArrays;
+}

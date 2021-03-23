@@ -24,6 +24,10 @@ import { FunctionEventSubscriber } from "@cimacmillan/refunc";
 import { Store } from "@cimacmillan/refunc";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
+import { Voxel3D } from "./services/render/util/Voxel3D";
+import { mat4 } from "gl-matrix";
+import { VoxelGroup3D } from "./services/render/util/VoxelGroup3D";
+import { create3DArray, forEach3D, map3D, randomIntRange } from "./util/math";
 
 export class Game {
     private serviceLocator: ServiceLocator;
@@ -149,6 +153,47 @@ export class Game {
         this.serviceLocator.getStore().getActions().onGameInitialised();
 
         loop.start();
+
+
+        const data = map3D(create3DArray(5, 5, 5, 0), (val: number, x: number, y: number, z: number) => {
+            if (Math.random() > 0.3) {
+                return 0;
+            }
+            return randomIntRange(1, 4);
+        });
+        const voxelData = {
+            colourMap: [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+            data,
+            sizePerVoxel: 0.05
+        };
+
+        const voxelGroup = new VoxelGroup3D(this.serviceLocator, {
+            colourMap: [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+            data,
+            sizePerVoxel: 0.05
+        });
+
+        const x = 379.50 / 20;
+        const y = (671.84 / 20) - 2;
+        const h = 0.5;
+
+        voxelGroup.setPosition([x, h, y]);
+        voxelGroup.setCenter([2.5 * 0.05, 2.5 * 0.05, 2.5 * 0.05]);
+        let rads = 0;
+        setInterval(() => {
+            rads += 0.01;
+            voxelGroup.setAngle([rads, rads, rads]);
+        }, 10);
+        setInterval(() => {
+            forEach3D(voxelData.data, (val: number, x: number, y: number, z: number) => {
+                if (Math.random() > 0.3) {
+                    voxelData.data[x][y][z] = 0;
+                } else {
+                    voxelData.data[x][y][z] = randomIntRange(1, 4);
+                }
+            });
+            voxelGroup.onDataUpdate();
+        }, 200)
     }
 
     public isInitialised() {
