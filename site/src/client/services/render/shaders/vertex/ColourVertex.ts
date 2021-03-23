@@ -8,11 +8,13 @@ export const v = {
     modelMatrix: `uModelViewMatrix`,
     projectionMatrix: `uProjectionMatrix`,
     colourOverride: `colourOverride`,
+    transform: `transform`,
 };
 
 export const source = `
     attribute vec3 ${v.vertexPosition};
     attribute vec3 ${v.colourOverride};
+    attribute mat4 ${v.transform};
 
     uniform mat4 ${v.modelMatrix};
     uniform mat4 ${v.projectionMatrix};

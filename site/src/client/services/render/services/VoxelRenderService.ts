@@ -1,4 +1,5 @@
 import { mat4, vec3 } from "gl-matrix";
+import { identity } from "lodash";
 import { ISyncedArrayRef, SyncedArray } from "../../../util/array/SyncedArray";
 import { compileSpriteShader, compileVoxelShader } from "../shaders/Shaders";
 import { CompiledShader } from "../shaders/types";
@@ -9,23 +10,28 @@ import {
     BackgroundShaderPositions,
 } from "./BackgroundRenderService";
 
-interface VoxelObject {
-    position: vec3;
+interface Triangle {
+    positions: [vec3, vec3, vec3];
     colour: vec3;
+    transform?: mat4;
 }
 
-export class VoxelRenderService implements RenderItemInterface<VoxelObject> {
+const IDENTITY = mat4.identity(mat4.create());
+
+export class TriangleRenderService implements RenderItemInterface<Triangle> {
     private gl: WebGLRenderingContext;
 
-    private objectArray: SyncedArray<VoxelObject>;
+    private objectArray: SyncedArray<Triangle>;
 
     private shader: CompiledShader;
 
     private positionBuffer: WebGLBuffer;
     private colourBuffer: WebGLBuffer;
+    private transformBuffer: WebGLBuffer;
 
     private positions: Float32Array;
     private colours: Float32Array;
+    private transforms: mat4[];
 
     private modelViewMatrix: mat4;
     private projectionMatrix: mat4;
@@ -42,23 +48,29 @@ export class VoxelRenderService implements RenderItemInterface<VoxelObject> {
         this.backgroundShaderPositions = this.shader.uniform as any;
 
         this.objectArray = new SyncedArray({
-            onReconstruct: (array: Array<ISyncedArrayRef<VoxelObject>>) =>
+            onReconstruct: (array: Array<ISyncedArrayRef<Triangle>>) =>
                 this.onArrayReconstruct(gl, array),
-            onUpdate: (array: Array<ISyncedArrayRef<VoxelObject>>) =>
+            onUpdate: (array: Array<ISyncedArrayRef<Triangle>>) =>
                 this.onArrayUpdate(gl),
-            onInjection: (index: number, ref: ISyncedArrayRef<VoxelObject>) =>
+            onInjection: (index: number, ref: ISyncedArrayRef<Triangle>) =>
                 this.onInjection(index, ref.obj),
         });
 
         this.positionBuffer = gl.createBuffer();
         this.colourBuffer = gl.createBuffer();
+        this.transformBuffer = gl.createBuffer();
 
         const x = 379.50 / 20;
         const y = 671.84 / 20;
         const h = 0.5;
         this.createItem({
-            position: vec3.fromValues(x, h, y - 1),
-            colour: vec3.fromValues(0, 0, 1)
+            positions: 
+                [
+                    vec3.fromValues(x, h + 0.5, y - 2),
+                    vec3.fromValues(x + 1, h + 0.5, y - 2),
+                    vec3.fromValues(x, h - 0.5, y - 2)
+                ],
+            colour: vec3.fromValues(1, 1, 1),
         });
     }
 
@@ -88,13 +100,25 @@ export class VoxelRenderService implements RenderItemInterface<VoxelObject> {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colourBuffer);
         this.gl.vertexAttribPointer(
             this.shader.attribute.colourOverride,
-            3,
+            numComponents,
             type,
             normalize,
             stride,
             offset
         );
         this.gl.enableVertexAttribArray(this.shader.attribute.colourOverride);
+
+        // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.transformBuffer);
+        // this.gl.vertexAttribPointer(
+        //     this.shader.attribute.transform,
+        //     16,
+        //     type,
+        //     normalize,
+        //     stride,
+        //     offset
+        // );
+        // this.gl.enableVertexAttribArray(this.shader.attribute.transform);
+
 
         this.gl.useProgram(this.shader.shaderId);
         this.backgroundRenderService.applyShaderArguments(
@@ -112,17 +136,17 @@ export class VoxelRenderService implements RenderItemInterface<VoxelObject> {
             this.modelViewMatrix
         );
 
-        const vertexCount = this.positions.length / 3;
+        const vertexCount = this.objectArray.getArray().length * 3;
         this.gl.drawArrays(this.gl.TRIANGLES, 0, vertexCount);
     }
 
-    public createItem(param: VoxelObject) {
+    public createItem(param: Triangle) {
         return {
             renderId: this.objectArray.createItem(param),
         };
     }
 
-    public updateItem(ref: RenderItem, param: Partial<VoxelObject>) {
+    public updateItem(ref: RenderItem, param: Partial<Triangle>) {
         this.objectArray.updateItem(ref.renderId, param);
     }
 
@@ -137,15 +161,19 @@ export class VoxelRenderService implements RenderItemInterface<VoxelObject> {
 
     private onArrayReconstruct(
         gl: WebGLRenderingContext,
-        array: Array<ISyncedArrayRef<VoxelObject>>
+        array: Array<ISyncedArrayRef<Triangle>>
     ) {
-        const length = array.length;
+        const triangleCount = array.length;
+        const positionCount = triangleCount * 3;
+        const colourCount = triangleCount * 3;
 
         this.positions = new Float32Array(
-            new Array(length * 2 * 3 * 3).fill(0)
+            new Array(positionCount * 3).fill(0)
         );
 
-        this.colours = new Float32Array(new Array(length * 2 * 3 * 3).fill(0));
+        this.colours = new Float32Array(new Array(colourCount * 3).fill(0));
+
+        this.transforms = new Array(triangleCount * 3).fill(IDENTITY);
 
         for (let i = 0; i < array.length; i++) {
             this.onInjection(i, array[i].obj);
@@ -161,69 +189,39 @@ export class VoxelRenderService implements RenderItemInterface<VoxelObject> {
         gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW);
     }
 
-    private onInjection(index: number, object: VoxelObject) {
-        const { position, colour } = object;
-        const [r, g, b] = colour;
-        
-        const t1i = index * 2 * 3 * 3;
-        const col = index * 2 * 3 * 3;
+    private onInjection(index: number, object: Triangle) {
+        const { positions, colour } = object;
 
-        const halfWidth = 0.2;
-        const halfHeight = 0.2;
-        const x = position[0];
-        const y = position[1];
-        const z = position[2];
+        const positionIndex = index * 3 * 3;
+        const colourIndex = index * 3 * 3;
+        const transformIndex = index * 3;
 
-        // T1
-        this.positions[t1i] = -halfWidth + x;
-        this.positions[t1i + 1] = halfHeight + y;
-        this.positions[t1i + 2] = z;
+        this.positions[positionIndex] = positions[0][0];
+        this.positions[positionIndex + 1] = positions[0][1];
+        this.positions[positionIndex + 2] = positions[0][2];
 
-        this.positions[t1i + 3] = halfWidth + x;
-        this.positions[t1i + 4] = halfHeight + y;
-        this.positions[t1i + 5] = z;
+        this.positions[positionIndex + 3] = positions[1][0];
+        this.positions[positionIndex + 4] = positions[1][1];
+        this.positions[positionIndex + 5] = positions[1][2];
 
-        this.positions[t1i + 6] = -halfWidth + x;
-        this.positions[t1i + 7] = -halfHeight + y;
-        this.positions[t1i + 8] = z;
+        this.positions[positionIndex + 6] = positions[2][0];
+        this.positions[positionIndex + 7] = positions[2][1];
+        this.positions[positionIndex + 8] = positions[2][2];
 
-        // T2
-        this.positions[t1i + 9] = +halfWidth + x;
-        this.positions[t1i + 10] = halfHeight + y;
-        this.positions[t1i + 11] = z;
+        this.colours[colourIndex] = colour[0];
+        this.colours[colourIndex + 1] = colour[1];
+        this.colours[colourIndex + 2] = colour[2];
 
-        this.positions[t1i + 12] = +halfWidth + x;
-        this.positions[t1i + 13] = -halfHeight + y;
-        this.positions[t1i + 14] = z;
+        this.colours[colourIndex + 3] = colour[0];
+        this.colours[colourIndex + 4] = colour[1];
+        this.colours[colourIndex + 5] = colour[2];
 
-        this.positions[t1i + 15] = -halfWidth + x;
-        this.positions[t1i + 16] = -halfHeight + y;
-        this.positions[t1i + 17] = z;
+        this.colours[colourIndex + 6] = colour[0];
+        this.colours[colourIndex + 7] = colour[1];
+        this.colours[colourIndex + 8] = colour[2];
 
-        // T1
-        this.colours[col] = r;
-        this.colours[col + 1] = g;
-        this.colours[col + 2] = b;
-
-        this.colours[col + 3] = r;
-        this.colours[col + 4] = g;
-        this.colours[col + 5] = b;
-
-        this.colours[col + 6] = r;
-        this.colours[col + 7] = g;
-        this.colours[col + 8] = b;
-
-        // T2
-        this.colours[col + 9] = r;
-        this.colours[col + 10] = g;
-        this.colours[col + 11] = b;
-
-        this.colours[col + 12] = r;
-        this.colours[col + 13] = g;
-        this.colours[col + 14] = b;
-
-        this.colours[col + 15] = r;
-        this.colours[col + 16] = g;
-        this.colours[col + 17] = b;
+        this.transforms[transformIndex] = object.transform || IDENTITY;
+        this.transforms[transformIndex + 1] = object.transform || IDENTITY;
+        this.transforms[transformIndex + 2] = object.transform || IDENTITY;
     }
 }

@@ -7,7 +7,7 @@ import { FloorRenderService } from "./services/FloorRenderService";
 import { ParticleRenderService } from "./services/ParticleRenderService";
 import { ScreenShakeService } from "./services/ScreenShakeService";
 import { SpriteRenderService } from "./services/SpriteRenderService";
-import { VoxelRenderService } from "./services/VoxelRenderService";
+import { TriangleRenderService } from "./services/VoxelRenderService";
 import { WallRenderService } from "./services/WallRenderService";
 import { RenderInterface } from "./types/RenderInterface";
 
@@ -18,7 +18,7 @@ export class RenderService implements RenderInterface {
     public screenShakeService: ScreenShakeService;
     public backgroundRenderService: BackgroundRenderService;
     public particleRenderService: ParticleRenderService;
-    public voxelRenderService: VoxelRenderService;
+    public voxelRenderService: TriangleRenderService;
     private gl: WebGLRenderingContext;
 
     private camera: () => Camera;
@@ -38,7 +38,7 @@ export class RenderService implements RenderInterface {
         this.particleRenderService = new ParticleRenderService(
             this.backgroundRenderService
         );
-        this.voxelRenderService = new VoxelRenderService(
+        this.voxelRenderService = new TriangleRenderService(
             this.backgroundRenderService
         );
     }
