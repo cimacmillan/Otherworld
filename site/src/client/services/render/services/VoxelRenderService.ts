@@ -27,11 +27,17 @@ export class TriangleRenderService implements RenderItemInterface<Triangle> {
 
     private positionBuffer: WebGLBuffer;
     private colourBuffer: WebGLBuffer;
-    private transformBuffer: WebGLBuffer;
+    private transform0Buffer: WebGLBuffer;
+    private transform1Buffer: WebGLBuffer;
+    private transform2Buffer: WebGLBuffer;
+    private transform3Buffer: WebGLBuffer;
 
     private positions: Float32Array;
     private colours: Float32Array;
-    private transforms: mat4[];
+    private transform0: Float32Array;
+    private transform1: Float32Array;
+    private transform2: Float32Array;
+    private transform3: Float32Array;
 
     private modelViewMatrix: mat4;
     private projectionMatrix: mat4;
@@ -58,7 +64,10 @@ export class TriangleRenderService implements RenderItemInterface<Triangle> {
 
         this.positionBuffer = gl.createBuffer();
         this.colourBuffer = gl.createBuffer();
-        this.transformBuffer = gl.createBuffer();
+        this.transform0Buffer = gl.createBuffer();
+        this.transform1Buffer = gl.createBuffer();
+        this.transform2Buffer = gl.createBuffer();
+        this.transform3Buffer = gl.createBuffer();
 
         const x = 379.50 / 20;
         const y = 671.84 / 20;
@@ -108,17 +117,49 @@ export class TriangleRenderService implements RenderItemInterface<Triangle> {
         );
         this.gl.enableVertexAttribArray(this.shader.attribute.colourOverride);
 
-        // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.transformBuffer);
+        // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.transform0Buffer);
         // this.gl.vertexAttribPointer(
-        //     this.shader.attribute.transform,
-        //     16,
+        //     this.shader.attribute.transform0,
+        //     4,
         //     type,
         //     normalize,
         //     stride,
         //     offset
         // );
-        // this.gl.enableVertexAttribArray(this.shader.attribute.transform);
+        // this.gl.enableVertexAttribArray(this.shader.attribute.transform0);
 
+        // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.transform1Buffer);
+        // this.gl.vertexAttribPointer(
+        //     this.shader.attribute.transform1,
+        //     4,
+        //     type,
+        //     normalize,
+        //     stride,
+        //     offset
+        // );
+        // this.gl.enableVertexAttribArray(this.shader.attribute.transform1);
+
+        // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.transform2Buffer);
+        // this.gl.vertexAttribPointer(
+        //     this.shader.attribute.transform2,
+        //     4,
+        //     type,
+        //     normalize,
+        //     stride,
+        //     offset
+        // );
+        // this.gl.enableVertexAttribArray(this.shader.attribute.transform2);
+
+        // this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.transform3Buffer);
+        // this.gl.vertexAttribPointer(
+        //     this.shader.attribute.transform3,
+        //     4,
+        //     type,
+        //     normalize,
+        //     stride,
+        //     offset
+        // );
+        // this.gl.enableVertexAttribArray(this.shader.attribute.transform3);
 
         this.gl.useProgram(this.shader.shaderId);
         this.backgroundRenderService.applyShaderArguments(
@@ -173,7 +214,10 @@ export class TriangleRenderService implements RenderItemInterface<Triangle> {
 
         this.colours = new Float32Array(new Array(colourCount * 3).fill(0));
 
-        this.transforms = new Array(triangleCount * 3).fill(IDENTITY);
+        this.transform0 = new Float32Array(new Array(colourCount * 4).fill(0));
+        this.transform1 = new Float32Array(new Array(colourCount * 4).fill(0));
+        this.transform2 = new Float32Array(new Array(colourCount * 4).fill(0));
+        this.transform3 = new Float32Array(new Array(colourCount * 4).fill(0));
 
         for (let i = 0; i < array.length; i++) {
             this.onInjection(i, array[i].obj);
@@ -187,14 +231,23 @@ export class TriangleRenderService implements RenderItemInterface<Triangle> {
         gl.bufferData(gl.ARRAY_BUFFER, this.positions, gl.DYNAMIC_DRAW);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.colourBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.colours, gl.DYNAMIC_DRAW);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.transform0Buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.transform0, gl.DYNAMIC_DRAW);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.transform1Buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.transform1, gl.DYNAMIC_DRAW);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.transform2Buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.transform2, gl.DYNAMIC_DRAW);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.transform3Buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.transform3, gl.DYNAMIC_DRAW);
     }
 
     private onInjection(index: number, object: Triangle) {
         const { positions, colour } = object;
+        const transform = object.transform || IDENTITY;
 
         const positionIndex = index * 3 * 3;
         const colourIndex = index * 3 * 3;
-        const transformIndex = index * 3;
+        const vertex = index * 3;
 
         this.positions[positionIndex] = positions[0][0];
         this.positions[positionIndex + 1] = positions[0][1];
@@ -220,8 +273,37 @@ export class TriangleRenderService implements RenderItemInterface<Triangle> {
         this.colours[colourIndex + 7] = colour[1];
         this.colours[colourIndex + 8] = colour[2];
 
-        this.transforms[transformIndex] = object.transform || IDENTITY;
-        this.transforms[transformIndex + 1] = object.transform || IDENTITY;
-        this.transforms[transformIndex + 2] = object.transform || IDENTITY;
+        for (let x = 0; x < 3; x++) {
+            const transformIndex = vertex + (x * 4);
+            this.transform0[transformIndex] = transform[0];
+            this.transform0[transformIndex + 1] = transform[1];
+            this.transform0[transformIndex + 2] = transform[2];
+            this.transform0[transformIndex + 3] = transform[3];
+        } 
+
+        for (let x = 0; x < 3; x++) {
+            const transformIndex = vertex + (x * 4);
+            this.transform1[transformIndex] = transform[4];
+            this.transform1[transformIndex + 1] = transform[5];
+            this.transform1[transformIndex + 2] = transform[6];
+            this.transform1[transformIndex + 3] = transform[7];
+        } 
+
+        for (let x = 0; x < 3; x++) {
+            const transformIndex = vertex + (x * 4);
+            this.transform2[transformIndex] = transform[8];
+            this.transform2[transformIndex + 1] = transform[9];
+            this.transform2[transformIndex + 2] = transform[10];
+            this.transform2[transformIndex + 3] = transform[11];
+        } 
+
+        for (let x = 0; x < 3; x++) {
+            const transformIndex = vertex + (x * 4);
+            this.transform3[transformIndex] = transform[12];
+            this.transform3[transformIndex + 1] = transform[13];
+            this.transform3[transformIndex + 2] = transform[14];
+            this.transform3[transformIndex + 3] = transform[15];
+        } 
     }
+
 }
