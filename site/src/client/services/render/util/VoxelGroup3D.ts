@@ -3,7 +3,7 @@ import { forEach3D } from "../../../util/math";
 import { ServiceLocator } from "../../ServiceLocator";
 import { Voxel3D } from "./Voxel3D";
 
-interface VoxelGroupData {
+export interface VoxelGroupData {
     data: number[][][],
     colourMap: vec3[],
     sizePerVoxel: number;
@@ -34,14 +34,24 @@ export class VoxelGroup3D {
                             colour: colourMap[voxelId ? voxelId - 1 : 0],
                             transform: this.transform
                         });
-                        if (voxelId > 0) {
-                            voxel.attach();
-                        }
+                        // if (voxelId > 0) {
+                        //     voxel.attach();
+                        // }
                         return voxel;
                     }
                 )
             )
         )
+    }
+
+    public attach() {
+        this.onDataUpdate();
+    }
+
+    public destroy() {
+        forEach3D(this.voxels, (voxel: Voxel3D) => {
+            voxel.destroy();
+        })
     }
 
     public onDataUpdate() {
