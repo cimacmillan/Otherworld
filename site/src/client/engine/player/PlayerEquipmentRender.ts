@@ -1,6 +1,10 @@
 import { vec3 } from "gl-matrix";
 import { GameItems } from "../../resources/manifests/Items";
+import { SpriteSheets } from "../../resources/manifests/Sprites";
+import { SpriteSheet } from "../../resources/SpriteSheet";
+import { ColourMap } from "../../services/render/util/ReferenceMap";
 import { VoxelGroupData, VoxelGroup3D } from "../../services/render/util/VoxelGroup3D";
+import { getVoxelGroupFromSprite } from "../../services/render/util/VoxelGroupGenerator";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { map3D, create3DArray, randomIntRange, forEach3D } from "../../util/math";
 import { EquipableItem } from "../scripting/items/ItemTypes";
@@ -22,47 +26,25 @@ export class PlayerEquipmentRender {
     }
 
     private setWeapon(weapon: EquipableItem) {
-        const data = map3D(create3DArray(35, 35, 80, 0), (val: number, x: number, y: number, z: number) => {
-            if (Math.random() > 0.3) {
-                return 0;
-            }
-            return randomIntRange(1, 4);
-        });
+        const weaponColourMap = new ColourMap();
+        const { spriteIcon } = weapon;
 
-        const colourMap: vec3[] =  [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
-        const voxelData: VoxelGroupData = {
-            colourMap,
-            data,
-            sizePerVoxel: 0.01
-        };
-
-        const voxelGroup = new VoxelGroup3D(this.serviceLocator, voxelData);
+        const sizePerVoxel = 0.02;
+        const voxelGroup = getVoxelGroupFromSprite(this.serviceLocator, spriteIcon, sizePerVoxel);
+        const [width, height, depth] = voxelGroup.getDimensions();
 
         const x = 379.50 / 20;
         const y = (671.84 / 20) - 2;
         const h = 0.5;
 
         voxelGroup.setPosition([x, h, y]);
-        voxelGroup.setCenter([2.5 * 0.05, 2.5 * 0.05, 2.5 * 0.05]);
+        voxelGroup.setCenter([width * sizePerVoxel / 2, height * sizePerVoxel / 2, depth * sizePerVoxel / 2]);
         voxelGroup.attach();
         let rads = 0;
         setInterval(() => {
             rads += 0.01;
             voxelGroup.setAngle([rads, rads, rads]);
         }, 10);
-        setInterval(() => {
-            colourMap.forEach((_, index) => {
-                colourMap[index] = [Math.random(), Math.random(), Math.random()];
-            })
-            forEach3D(voxelData.data, (val: number, x: number, y: number, z: number) => {
-                if (Math.random() > 0.05) {
-                    voxelData.data[x][y][z] = 0;
-                } else {
-                    voxelData.data[x][y][z] = randomIntRange(1, 4);
-                }
-            });
-            voxelGroup.onDataUpdate();
-        }, 200)
     }
 
 }

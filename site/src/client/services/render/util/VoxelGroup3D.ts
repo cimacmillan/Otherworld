@@ -128,5 +128,13 @@ export class VoxelGroup3D {
         mat4.translate(this.transform, this.transform, [-this.center[0], -this.center[1], -this.center[2]]);
     }
 
+    public getDimensions() {
+        const width = this.voxelGroupData.data.length;
+        const height = this.voxelGroupData.data[0].length;
+        const depth = this.voxelGroupData.data[0][0].length;
+
+        return [width, height, depth];
+    }
+
 }
 

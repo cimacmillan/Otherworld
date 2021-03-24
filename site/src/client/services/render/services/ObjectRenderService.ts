@@ -114,6 +114,11 @@ export class ObjectRenderService implements RenderItemInterface<Object3D> {
                 transform
             );
             const vertexes = objects[x].obj.colour.length * 3;
+
+            if (vertexes === 0) {
+                continue;
+            }
+
             this.gl.drawArrays(this.gl.TRIANGLES, start, vertexes);
             start += vertexes;
         }
