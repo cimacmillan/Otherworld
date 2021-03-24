@@ -21,7 +21,7 @@ export function getVoxelGroupFromSprite (serviceLocator: ServiceLocator, spriteI
     for (let x = 0; x < width; x ++) {
         const spriteX = x + sprite.pixelCoordinate.textureX;
         for (let y = 0; y < height; y++) {
-            const spriteY = y + sprite.pixelCoordinate.textureY;
+            const spriteY = (height - y - 1) + sprite.pixelCoordinate.textureY;
 
             const index = (spriteX + (spriteY * imageData.width) ) * 4;
             const r = imageData.data[index];

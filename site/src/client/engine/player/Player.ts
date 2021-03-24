@@ -95,8 +95,13 @@ export class Player {
             .registerPhysicsEntity(this.physicsRegistration);
     }
 
+    public init() {
+        this.equipment.init();
+    }
+
     public update(): void {
         this.movement.update();
+        this.equipment.update();
     }
 
     public getCamera(): Camera {
@@ -173,5 +178,6 @@ export class Player {
         this.serviceLocator
             .getPhysicsService()
             .unregisterPhysicsEntity(this.physicsRegistration);
+        this.equipment.destroy();
     }
 }

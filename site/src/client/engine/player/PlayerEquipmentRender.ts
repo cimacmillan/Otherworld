@@ -7,44 +7,54 @@ import { VoxelGroupData, VoxelGroup3D } from "../../services/render/util/VoxelGr
 import { getVoxelGroupFromSprite } from "../../services/render/util/VoxelGroupGenerator";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { map3D, create3DArray, randomIntRange, forEach3D } from "../../util/math";
-import { EquipableItem } from "../scripting/items/ItemTypes";
+import { EquipableItem, EquipmentType } from "../scripting/items/ItemTypes";
 
 export class PlayerEquipmentRender {
 
     private weaponVoxelGroup?: VoxelGroup3D;
 
-    constructor(private serviceLocator: ServiceLocator) {
-        this.setWeapon(GameItems.WEAPON_WOOD_STICK as EquipableItem);
+    constructor(
+        private serviceLocator: ServiceLocator,
+        ) {}
+
+    public init() {
+        const existingWeapon = this.serviceLocator.getScriptingService().getPlayer().getInventory().equipped[EquipmentType.WEAPON];
+        if (existingWeapon) {
+            this.setWeapon(existingWeapon);
+        }
+    }
+
+    public update() {
+        
     }
 
     public onEquip(item: EquipableItem) {
-       
+       this.setWeapon(item);
     }
 
     public onUnequip(item: EquipableItem) {
+        this.destroy();
+    }
 
+    public destroy() {
+        if (this.weaponVoxelGroup) {
+            this.weaponVoxelGroup.destroy();
+        }
     }
 
     private setWeapon(weapon: EquipableItem) {
-        const weaponColourMap = new ColourMap();
         const { spriteIcon } = weapon;
-
         const sizePerVoxel = 0.02;
-        const voxelGroup = getVoxelGroupFromSprite(this.serviceLocator, spriteIcon, sizePerVoxel);
-        const [width, height, depth] = voxelGroup.getDimensions();
+        this.weaponVoxelGroup = getVoxelGroupFromSprite(this.serviceLocator, spriteIcon, sizePerVoxel);
+        const [width, height, depth] = this.weaponVoxelGroup.getDimensions();
 
         const x = 379.50 / 20;
         const y = (671.84 / 20) - 2;
         const h = 0.5;
 
-        voxelGroup.setPosition([x, h, y]);
-        voxelGroup.setCenter([width * sizePerVoxel / 2, height * sizePerVoxel / 2, depth * sizePerVoxel / 2]);
-        voxelGroup.attach();
-        let rads = 0;
-        setInterval(() => {
-            rads += 0.01;
-            voxelGroup.setAngle([rads, rads, rads]);
-        }, 10);
+        this.weaponVoxelGroup.setPosition([x, h, y]);
+        this.weaponVoxelGroup.setCenter([width * sizePerVoxel / 2, height * sizePerVoxel / 2, depth * sizePerVoxel / 2]);
+        this.weaponVoxelGroup.attach();
     }
 
 }
