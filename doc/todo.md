@@ -2,8 +2,6 @@
 ### Milestone 2
 Puzzle maps to escape prison, killing enemies
 
-* Voxel render service for weapon
-* Voxel object with rotation and center point
 * Player attack animation and event
 * Jailor entity which has jailor image
 * Jailor entity listens to player attacks and loses damage
