@@ -1,6 +1,8 @@
 import { mat4, vec3 } from "gl-matrix";
 import { forEach3D } from "../../../util/math";
 import { ServiceLocator } from "../../ServiceLocator";
+import { Object3D } from "../services/ObjectRenderService";
+import { RenderItem } from "../types/RenderInterface";
 import { Voxel3D } from "./Voxel3D";
 
 export interface VoxelGroupData {
@@ -16,6 +18,7 @@ export class VoxelGroup3D {
     private angle: vec3 = [0, 0, 0];
     private center: vec3 = [0, 0, 0];
     private scale: vec3 = [1, 1, 1];
+    private renderItem?: [RenderItem, Object3D];
 
     public constructor(private serviceLocator: ServiceLocator, private voxelGroupData: VoxelGroupData) {
         const { data, colourMap, sizePerVoxel } = voxelGroupData;
@@ -31,12 +34,8 @@ export class VoxelGroup3D {
                                 z * sizePerVoxel
                             ],
                             size: sizePerVoxel,
-                            colour: colourMap[voxelId ? voxelId - 1 : 0],
-                            transform: this.transform
+                            colour: colourMap[voxelId ? voxelId - 1 : 0]
                         });
-                        // if (voxelId > 0) {
-                        //     voxel.attach();
-                        // }
                         return voxel;
                     }
                 )
@@ -51,11 +50,22 @@ export class VoxelGroup3D {
     public destroy() {
         forEach3D(this.voxels, (voxel: Voxel3D) => {
             voxel.destroy();
-        })
+        });
+        if (this.renderItem) {
+            this.serviceLocator.getRenderService().triangleRenderService.freeItem(this.renderItem[0]);
+            this.renderItem = undefined;
+        }
     }
 
     public onDataUpdate() {
         const { colourMap, data } = this.voxelGroupData;
+
+        const object3D: Object3D = {
+            positions: [],
+            colour: [],
+            transform: this.transform
+        }
+
         forEach3D(this.voxels, (voxel: Voxel3D, x: number, y: number, z: number) => {
             const voxelId = data[x][y][z];
             if (voxelId > 0) {
@@ -64,7 +74,28 @@ export class VoxelGroup3D {
             } else {
                 voxel.destroy();
             }
-        })
+
+            const itemData = voxel.getData();
+            itemData && object3D.positions.push(...itemData.positions);
+            itemData && object3D.colour.push(...itemData.colour);
+        });
+
+        if (this.renderItem) {
+
+            const [item, object] = this.renderItem;
+            
+            if (object3D.positions.length === object.positions.length) {
+                this.serviceLocator.getRenderService().triangleRenderService.updateItem(item, object3D);
+            } else {
+                this.serviceLocator.getRenderService().triangleRenderService.freeItem(item);
+                const newItem = this.serviceLocator.getRenderService().triangleRenderService.createItem(object3D);
+                this.renderItem = [newItem, object3D];
+            }
+
+        } else {
+            const item = this.serviceLocator.getRenderService().triangleRenderService.createItem(object3D);
+            this.renderItem = [item, object3D];
+        }
     } 
 
     public setPosition(position: vec3) {

@@ -7,13 +7,11 @@ interface VoxelData {
     position: vec3;
     size: number;
     colour: vec3;
-    transform?: mat4;
 }
 
 const IDENTITY = mat4.identity(mat4.create());
 
 export class Voxel3D {
-    private item?: RenderItem;
     private itemData?: Object3D;
 
     public constructor (private serviceLocator: ServiceLocator, private data: VoxelData) {
@@ -21,25 +19,18 @@ export class Voxel3D {
 
     public setColour(colour: vec3) {
         this.data.colour = colour;
-        if (this.item && this.itemData) {
-            this.serviceLocator.getRenderService().triangleRenderService.updateItem(this.item, {
-                colour: this.itemData.colour.map(() => colour)
-            })
-        }
     }
     
     public attach() {
-        if (this.item) {
+        if (this.itemData) {
             return;
         }
         const { triangleRenderService } = this.serviceLocator.getRenderService();
         const { position, size, colour } = this.data;
-        const transform = this.data.transform || IDENTITY;
 
         this.itemData = {
             positions: [],
             colour: [],
-            transform
         }
 
         const createTriangle = (positions: [vec3, vec3, vec3], colour: vec3) => {
@@ -107,19 +98,17 @@ export class Voxel3D {
             [x + size, y + size, z + size],
             [x, y + size, z + size]
         ], darker);
-
-        this.item = triangleRenderService.createItem(this.itemData);
     }
 
     public destroy() {
-        const { triangleRenderService } = this.serviceLocator.getRenderService();
-        if (this.item) {
-            triangleRenderService.freeItem(this.item);
-        }
-        this.item = undefined;
+        this.itemData = undefined;
     }
 
     public isBeingDrawn() {
-        return !!this.item;
+        return !!this.itemData;
+    }
+
+    public getData() {
+        return this.itemData;
     }
 }
