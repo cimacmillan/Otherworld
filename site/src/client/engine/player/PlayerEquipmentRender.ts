@@ -16,10 +16,12 @@ const PLAYER_WEAPON_ARM_TILT_ANGLE = toRadians(90);
 const PLAYER_WEAPON_DISTANCE = 1;
 const PLAYER_WEAPON_HEIGHT = 0.4;
 const PLAYER_WEAPON_SIZE = 0.08;
+const PLAYER_WEAPON_MOVE_TWEEN = 0.5;
 
 export class PlayerEquipmentRender {
     private weaponVoxelGroup?: VoxelGroup3D;
     private targetPosition = vec3.create();
+    private actualPosition?: vec3 = undefined;
 
     constructor(
         private serviceLocator: ServiceLocator,
@@ -47,7 +49,16 @@ export class PlayerEquipmentRender {
 
             vec3.add(this.targetPosition, playerPosition, diff);
 
-            this.weaponVoxelGroup.setPosition(this.targetPosition);
+            if (!this.actualPosition) {
+                this.actualPosition = vec3.create();
+                vec3.copy(this.actualPosition, this.targetPosition);
+            }
+
+            const positionDiff = vec3.sub(vec3.create(), this.targetPosition, this.actualPosition);
+            const positionDiffScalar = vec3.scale(positionDiff, positionDiff, PLAYER_WEAPON_MOVE_TWEEN);
+            vec3.add(this.actualPosition, this.actualPosition, positionDiffScalar);
+
+            this.weaponVoxelGroup.setPosition(this.actualPosition);
             this.weaponVoxelGroup.setAngle([0, - PLAYER_WEAPON_ARM_TILT_ANGLE - playerAngle, PLAYER_WEAPON_SPRITE_ANGLE]);
         }
     }
@@ -67,6 +78,7 @@ export class PlayerEquipmentRender {
     public destroy() {
         if (this.weaponVoxelGroup) {
             this.weaponVoxelGroup.destroy();
+            this.actualPosition = undefined;
         }
     }
 
