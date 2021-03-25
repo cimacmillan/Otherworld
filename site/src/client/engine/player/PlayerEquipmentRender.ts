@@ -6,15 +6,25 @@ import { ColourMap } from "../../services/render/util/ReferenceMap";
 import { VoxelGroupData, VoxelGroup3D } from "../../services/render/util/VoxelGroup3D";
 import { getVoxelGroupFromSprite } from "../../services/render/util/VoxelGroupGenerator";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { map3D, create3DArray, randomIntRange, forEach3D } from "../../util/math";
+import { map3D, create3DArray, randomIntRange, forEach3D, toRadians } from "../../util/math";
 import { EquipableItem, EquipmentType } from "../scripting/items/ItemTypes";
 
-export class PlayerEquipmentRender {
+const PLAYER_WEAPON_SPRITE_ANGLE = toRadians(45);
+const PLAYER_WEAPON_ARM_ANGLE = toRadians(30);
+const PLAYER_WEAPON_ARM_TILT_ANGLE = toRadians(90);
+// const PLAYER_WEAPON_ANGLE = 0;
+const PLAYER_WEAPON_DISTANCE = 1;
+const PLAYER_WEAPON_HEIGHT = 0.4;
+const PLAYER_WEAPON_SIZE = 0.08;
 
+export class PlayerEquipmentRender {
     private weaponVoxelGroup?: VoxelGroup3D;
+    private targetPosition = vec3.create();
 
     constructor(
         private serviceLocator: ServiceLocator,
+        private getPlayerPosition: () => vec3,
+        private getPlayerAngle: () => number,
         ) {}
 
     public init() {
@@ -25,15 +35,33 @@ export class PlayerEquipmentRender {
     }
 
     public update() {
-        
+        if (this.weaponVoxelGroup) {
+            const playerPosition = this.getPlayerPosition();
+            const playerAngle = this.getPlayerAngle();
+
+            const diff: vec3 = [
+                PLAYER_WEAPON_DISTANCE * Math.sin(PLAYER_WEAPON_ARM_ANGLE + playerAngle),
+                PLAYER_WEAPON_HEIGHT,
+                -PLAYER_WEAPON_DISTANCE * Math.cos(PLAYER_WEAPON_ARM_ANGLE + playerAngle)
+            ];
+
+            vec3.add(this.targetPosition, playerPosition, diff);
+
+            this.weaponVoxelGroup.setPosition(this.targetPosition);
+            this.weaponVoxelGroup.setAngle([0, - PLAYER_WEAPON_ARM_TILT_ANGLE - playerAngle, PLAYER_WEAPON_SPRITE_ANGLE]);
+        }
     }
 
     public onEquip(item: EquipableItem) {
-       this.setWeapon(item);
+        if (item.equipmentType === EquipmentType.WEAPON) {
+            this.setWeapon(item);
+        }
     }
 
     public onUnequip(item: EquipableItem) {
-        this.destroy();
+        if (item.equipmentType === EquipmentType.WEAPON) {
+            this.destroy();
+        }
     }
 
     public destroy() {
@@ -44,17 +72,14 @@ export class PlayerEquipmentRender {
 
     private setWeapon(weapon: EquipableItem) {
         const { spriteIcon } = weapon;
-        const sizePerVoxel = 0.02;
+        const sizePerVoxel = PLAYER_WEAPON_SIZE;
         this.weaponVoxelGroup = getVoxelGroupFromSprite(this.serviceLocator, spriteIcon, sizePerVoxel);
         const [width, height, depth] = this.weaponVoxelGroup.getDimensions();
-
-        const x = 379.50 / 20;
-        const y = (671.84 / 20) - 2;
-        const h = 0.5;
-
-        this.weaponVoxelGroup.setPosition([x, h, y]);
         this.weaponVoxelGroup.setCenter([width * sizePerVoxel / 2, height * sizePerVoxel / 2, depth * sizePerVoxel / 2]);
         this.weaponVoxelGroup.attach();
+
+        // Update once so that the position is set when equipping on paused menu
+        this.update();
     }
 
 }

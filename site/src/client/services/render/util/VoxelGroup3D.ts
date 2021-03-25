@@ -121,7 +121,6 @@ export class VoxelGroup3D {
     private recomputeTransform() {
         mat4.identity(this.transform);    
         mat4.translate(this.transform, this.transform, this.position);
-        mat4.translate(this.transform, this.transform, [this.center[0], this.center[1], this.center[2]]);
         mat4.rotateX(this.transform, this.transform, this.angle[0]);
         mat4.rotateY(this.transform, this.transform, this.angle[1]);
         mat4.rotateZ(this.transform, this.transform, this.angle[2]);

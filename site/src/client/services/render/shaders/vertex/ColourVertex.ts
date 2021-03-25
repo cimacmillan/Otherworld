@@ -8,10 +8,7 @@ export const v = {
     modelMatrix: `uModelViewMatrix`,
     projectionMatrix: `uProjectionMatrix`,
     colourOverride: `colourOverride`,
-    transform0: `transform0`,
-    transform1: `transform1`,
-    transform2: `transform2`,
-    transform3: `transform3`,
+
 };
 
 export const source = `
@@ -25,9 +22,10 @@ export const source = `
     varying lowp vec4 position;
 
     void main() {
-      gl_Position = ${v.projectionMatrix} * ${v.modelMatrix} * vec4(${v.vertexPosition}, 1);
-      colour = ${v.colourOverride};
-      position = gl_Position / 2.0;
+        vec4 pos = ${v.projectionMatrix} * ${v.modelMatrix} * vec4(${v.vertexPosition}, 1);
+        gl_Position = vec4(pos.x, pos.y, pos.z, pos.w);
+        colour = ${v.colourOverride};
+        position = pos / 2.0;
     }
   `;
 

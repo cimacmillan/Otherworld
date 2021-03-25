@@ -104,6 +104,9 @@ export class RenderService implements RenderInterface {
         this.spriteRenderService.draw();
         this.wallRenderService.draw();
         this.floorRenderService.draw();
+
+        // TODO Triangle renderer needs to be split so that overlay for weapon specific to that object (create new triangle render service?)
+        this.gl.clear(this.gl.DEPTH_BUFFER_BIT);
         this.triangleRenderService.draw();
     }
 

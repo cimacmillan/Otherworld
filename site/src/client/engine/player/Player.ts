@@ -74,7 +74,12 @@ export class Player {
         );
 
         this.equipment = new PlayerEquipmentRender(
-            this.serviceLocator
+            this.serviceLocator,
+            () => {
+                const { x, y } = this.state.surface.position;
+                return [x, this.state.surface.height, y];
+            },
+            () => this.state.surface.angle
         );
 
         this.physicsRegistration = {
