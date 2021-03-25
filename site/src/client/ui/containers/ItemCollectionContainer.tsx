@@ -14,7 +14,7 @@ import {
     TextColour,
 } from "../components/TextComponent";
 import { ItemCollectionComponent } from "../components/ItemCollectionComponent";
-import { Item } from "../../engine/scripting/items/types";
+import { Item } from "../../engine/scripting/items/ItemTypes";
 import { GameItems } from "../../resources/manifests/Items";
 import { useDispatchListener, useGlobalState } from "../effects/GlobalState";
 import { Actions } from "../../Actions";

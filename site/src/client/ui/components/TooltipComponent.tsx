@@ -1,10 +1,8 @@
 import {
     ItemMetadata,
-    ItemCategory,
-    ItemComponent,
-    ItemComponentType,
+    ItemType,
     Item,
-} from "../../engine/scripting/items/types";
+} from "../../engine/scripting/items/ItemTypes";
 import React = require("react");
 import { TextComponent, TextFont, TextColour, TextSize } from "./TextComponent";
 import { Vector2D } from "../../types";
@@ -12,6 +10,9 @@ import { ShadowComponentStyle } from "./ShadowComponent";
 import { animation } from "../../util/animation/Animations";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
+import { Sprites, SpriteSheets } from "../../resources/manifests/Sprites";
+import { EffectComponent } from "./EffectComponent";
+import { Effect } from "../../engine/scripting/effects/Effects";
 // import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
 
 const TOOLTIP_WIDTH = 256;
@@ -27,7 +28,7 @@ export enum TooltipType {
 
 export interface TooltipItemContext {
     type: TooltipType.ITEM;
-    itemMetadata: ItemMetadata;
+    item: Item;
 }
 
 export interface TooltipNullContext {
@@ -53,7 +54,7 @@ export const TooltipComponent: React.FunctionComponent<TooltipComponentProps> = 
                 return (
                     <ItemTooltipComponent
                         serviceLocator={props.serviceLocator}
-                        itemMetadata={props.context.itemMetadata}
+                        item={props.context.item}
                     />
                 );
         }
@@ -74,7 +75,7 @@ export const TooltipComponent: React.FunctionComponent<TooltipComponentProps> = 
 
 interface ItemTooltipComponentProps {
     serviceLocator: ServiceLocator;
-    itemMetadata: ItemMetadata;
+    item: Item;
 }
 
 export const ItemTooltipComponent: React.FunctionComponent<ItemTooltipComponentProps> = (
@@ -87,13 +88,6 @@ export const ItemTooltipComponent: React.FunctionComponent<ItemTooltipComponentP
         return () => anim.stop();
     }, []);
 
-    const behaviours = props.itemMetadata.item.behaviours.map(
-        getDescriptionFromBehaviour
-    );
-    const filteredBehaviours = behaviours.filter(
-        (behaviour) => behaviour !== undefined
-    );
-
     return (
         <div
             style={{
@@ -105,7 +99,7 @@ export const ItemTooltipComponent: React.FunctionComponent<ItemTooltipComponentP
             }}
         >
             <TextComponent
-                text={props.itemMetadata.item.name}
+                text={props.item.name}
                 font={TextFont.REGULAR}
                 colour={TextColour.LIGHT}
                 size={TextSize.SMALL}
@@ -115,63 +109,41 @@ export const ItemTooltipComponent: React.FunctionComponent<ItemTooltipComponentP
                 }}
             />
             <TextComponent
-                text={props.itemMetadata.item.category}
+                text={props.item.type}
                 font={TextFont.REGULAR}
-                colour={getCategoryColour(props.itemMetadata.item.category)}
+                colour={getCategoryColour(props.item.type)}
                 size={TextSize.VSMALL}
                 style={{}}
             />
             <TextComponent
-                text={props.itemMetadata.item.description}
+                text={props.item.description}
                 font={TextFont.REGULAR}
                 colour={TextColour.LIGHT}
                 size={TextSize.VSMALL}
                 style={{}}
             />
-            <ul
-                style={{
-                    padding: 0,
-                    margin: 0,
-                    marginLeft: 16,
-                    color: TextColour.LIGHT,
-                }}
-            >
-                {filteredBehaviours.map((jsx) => (
-                    <li>{jsx}</li>
-                ))}
-            </ul>
+            {getEffectHintsFromItem(props.item)}
             {getUsingHintFromItem(
                 props.serviceLocator,
-                props.itemMetadata.item
+                props.item
             )}
         </div>
     );
 };
 
-function getCategoryColour(category: ItemCategory): TextColour {
+function getCategoryColour(category: ItemType): TextColour {
     switch (category) {
-        case ItemCategory.CONSUMABLE:
+        case ItemType.CONSUMABLE:
             return TextColour.RED;
-        case ItemCategory.CRAFTING:
+        case ItemType.CRAFTING:
             return TextColour.YELLOW;
-        case ItemCategory.PRECIOUS:
+        case ItemType.PRECIOUS:
             return TextColour.GOLD;
-        case ItemCategory.KEY:
+        case ItemType.KEY:
             return TextColour.GOLD;
+        case ItemType.EQUIPMENT:
+            return TextColour.STEEL;
     }
-}
-
-function getDescriptionFromBehaviour(
-    behaviour: ItemComponent
-): JSX.Element | undefined {
-    switch (behaviour.type) {
-        case ItemComponentType.HEALS_PLAYER:
-            return row([
-                text("Heals", TextColour.RED),
-                text(`player ${behaviour.amount} pts`),
-            ]);
-    }
-    return undefined;
 }
 
 function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
@@ -184,21 +156,58 @@ function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
     let yOffset = offset;
     yOffset = offset > 0.5 ? diff : -diff;
 
-    switch (item.category) {
-        case ItemCategory.CONSUMABLE:
+    switch (item.type) {
+        case ItemType.EQUIPMENT:
+            const isEquipped = serviceLocator.getScriptingService().getPlayer().getInventory().equipped[item.equipmentType] === item;
             return row([
-                // <SpriteImageComponent
-                //     spriteSheet={SpriteSheets.UI}
-                //     sprite={UISPRITES.ITEM_FINGER}
-                //     style={{
-                //         width: 32,
-                //         height: 32,
-                //         transform: `translate(0px, ${yOffset}px)`,
-                //     }}
-                // />,
-                text("to consume"),
+                <SpriteImageComponent
+                    spriteSheet={SpriteSheets.SPRITE}
+                    sprite={Sprites.UI_FINGER}
+                    style={{
+                        width: 32,
+                        height: 32,
+                        transform: `translate(0px, ${yOffset}px)`,
+                    }}
+                />,
+                isEquipped ? text("to unequip") : text("to equip"),
             ]);
     }
+}
+
+function getEffectHintsFromItem(item: Item): JSX.Element {
+    const effectList = (effects: Effect[]) => (
+        <ul
+            style={{
+                padding: 0,
+                margin: 0,
+                marginLeft: 16,
+                color: TextColour.LIGHT,
+            }}
+        >
+            {effects.map(effect => <EffectComponent effect={effect}/>)}
+        </ul>
+    )
+
+    switch (item.type) {
+        case ItemType.EQUIPMENT: 
+            return (
+                <>
+                {item.onAttack && (
+                    <>
+                    {text("On attack", TextColour.GOLD)}
+                    {effectList(item.onAttack)}
+                    </>
+                )}
+                {item.onEquip && (
+                    <>
+                    {text("On equip", TextColour.GOLD)}
+                    {effectList(item.onEquip)}
+                    </>
+                )}                
+                </>
+        )
+    }
+    return undefined;
 }
 
 const row = (elements: JSX.Element[]) => {

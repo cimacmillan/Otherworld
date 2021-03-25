@@ -63,6 +63,7 @@ export class ScriptingService {
         this.offloadWorld();
         const world = this.serviceLocator.getWorld();
         this.player = player;
+        this.player.init();
         // world.addEntity(this.player);
 
         this.serviceLocator
@@ -84,6 +85,7 @@ export class ScriptingService {
 
     public bootstrapInitialContent() {
         this.player = createPlayer(this.serviceLocator);
+        this.player.init();
         this.serviceLocator
             .getAudioService()
             .attachCamera(() => this.player.getCamera());

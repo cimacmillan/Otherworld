@@ -1,5 +1,5 @@
 import { ActionType } from "@cimacmillan/refunc";
-import { Item } from "./engine/scripting/items/types";
+import { Item } from "./engine/scripting/items/ItemTypes";
 import {
     InteractionSource,
     InteractionType,
@@ -43,6 +43,7 @@ export const emptyActions = {
     onPlayerHealed: (amount: number) => {},
     onPlayerInventoryOpened: () => {},
     onPlayerInventoryClosed: () => {},
+    onPlayerItemEquipped: (item: Item) => {},
 }
 
 export type Actions = typeof emptyActions;

@@ -6,6 +6,7 @@ import {
     ZFAR,
     ZNEAR,
 } from "../../Config";
+import { GameItems } from "../../resources/manifests/Items";
 import {
     InteractionSourceType,
     InteractionType,
@@ -14,11 +15,13 @@ import { PhysicsRegistration } from "../../services/physics/PhysicsService";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Camera, Vector2D } from "../../types";
 import { ActionDelay } from "../../util/time/ActionDelay";
+import { AddItemToInventory, PlayerPickUpItem } from "../commands/InventoryCommands";
 import { TurnDirection, WalkDirection } from "../commands/PlayerCommands";
 import { PhysicsStateType } from "../components/core/PhysicsComponent";
-import { getEmptyInventory, Inventory } from "../scripting/items/types";
+import { getEmptyInventory, Inventory } from "../scripting/items/ItemTypes";
 import { CameraState, HealthState } from "../state/State";
 import { PlayerMovement } from "./PlayerMovement";
+import { PlayerEquipmentRender } from "./PlayerEquipmentRender";
 
 type InternalEntityState = PhysicsStateType & HealthState & CameraState;
 
@@ -48,6 +51,7 @@ const DEFAULT_PLAYER_STATE: PlayerSerialisation = {
 export class Player {
     public state: PlayerSerialisation;
     public movement: PlayerMovement;
+    public equipment: PlayerEquipmentRender;
 
     private serviceLocator: ServiceLocator;
 
@@ -69,6 +73,15 @@ export class Player {
             (ang: number) => (this.state.surface.angle = ang)
         );
 
+        this.equipment = new PlayerEquipmentRender(
+            this.serviceLocator,
+            () => {
+                const { x, y } = this.state.surface.position;
+                return [x, this.state.surface.height, y];
+            },
+            () => this.state.surface.angle
+        );
+
         this.physicsRegistration = {
             collidesEntities: true,
             collidesWalls: true,
@@ -87,8 +100,13 @@ export class Player {
             .registerPhysicsEntity(this.physicsRegistration);
     }
 
+    public init() {
+        this.equipment.init();
+    }
+
     public update(): void {
         this.movement.update();
+        this.equipment.update();
     }
 
     public getCamera(): Camera {
@@ -165,5 +183,6 @@ export class Player {
         this.serviceLocator
             .getPhysicsService()
             .unregisterPhysicsEntity(this.physicsRegistration);
+        this.equipment.destroy();
     }
 }

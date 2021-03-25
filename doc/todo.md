@@ -1,9 +1,18 @@
 
 ### Milestone 2
-Puzzle maps to escape prison
+Puzzle maps to escape prison, killing enemies
 
-### Doing 
-
+* Player attack animation and event
+* Jailor entity which has jailor image
+* Jailor entity listens to player attacks and loses damage
+* Damaged text renderer 
+* jailor entity has drops of a certain distribution, item drops
+* Player skills definition and serialisation
+* Killing jailor increases skill
+* Skill increase component and view
+* Player skills tab in inventory
+* Skill level up sound effect and view
+* Lockpicking increases skill
 
 ### Polish 
 * Improve head bob to not make noise when standing still (frequency?)
@@ -26,7 +35,10 @@ Puzzle maps to escape prison
 * Refactor audio service to take Audio string
 * Refactor graphics service to take sprite string?
 * Remove manifest everywhere
-* Remove command creator
+* Remove commands with effects
+
+### Optimise
+* Triangle render service to render arbitrary triangle counts for a single transform
 
 
 ### Ideas

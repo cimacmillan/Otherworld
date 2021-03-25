@@ -1,5 +1,5 @@
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { ItemMetadata } from "../../engine/scripting/items/types";
+import { ItemMetadata } from "../../engine/scripting/items/ItemTypes";
 import React = require("react");
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { animation } from "../../util/animation/Animations";

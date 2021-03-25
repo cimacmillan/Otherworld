@@ -24,6 +24,10 @@ import { FunctionEventSubscriber } from "@cimacmillan/refunc";
 import { Store } from "@cimacmillan/refunc";
 import { logFPS, setFPSProportion } from "./util/time/GlobalFPSController";
 import { TimeControlledLoop } from "./util/time/TimeControlledLoop";
+import { Voxel3D } from "./services/render/util/Voxel3D";
+import { mat4, vec3 } from "gl-matrix";
+import { VoxelGroup3D, VoxelGroupData } from "./services/render/util/VoxelGroup3D";
+import { create3DArray, forEach3D, map3D, randomIntRange } from "./util/math";
 
 export class Game {
     private serviceLocator: ServiceLocator;

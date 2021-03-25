@@ -7,6 +7,7 @@ import { FloorRenderService } from "./services/FloorRenderService";
 import { ParticleRenderService } from "./services/ParticleRenderService";
 import { ScreenShakeService } from "./services/ScreenShakeService";
 import { SpriteRenderService } from "./services/SpriteRenderService";
+import { ObjectRenderService } from "./services/ObjectRenderService";
 import { WallRenderService } from "./services/WallRenderService";
 import { RenderInterface } from "./types/RenderInterface";
 
@@ -17,6 +18,7 @@ export class RenderService implements RenderInterface {
     public screenShakeService: ScreenShakeService;
     public backgroundRenderService: BackgroundRenderService;
     public particleRenderService: ParticleRenderService;
+    public triangleRenderService: ObjectRenderService;
     private gl: WebGLRenderingContext;
 
     private camera: () => Camera;
@@ -34,6 +36,9 @@ export class RenderService implements RenderInterface {
         );
         this.screenShakeService = new ScreenShakeService();
         this.particleRenderService = new ParticleRenderService(
+            this.backgroundRenderService
+        );
+        this.triangleRenderService = new ObjectRenderService(
             this.backgroundRenderService
         );
     }
@@ -60,6 +65,7 @@ export class RenderService implements RenderInterface {
             ].getTexture()
         );
         this.particleRenderService.init(gl);
+        this.triangleRenderService.init(gl);
     }
 
     public draw() {
@@ -87,6 +93,10 @@ export class RenderService implements RenderInterface {
             modelViewMatrix,
             projectionMatrix
         );
+        this.triangleRenderService.attachViewMatrices(
+            modelViewMatrix,
+            projectionMatrix
+        );
 
         this.backgroundRenderService.draw();
         this.screenShakeService.update();
@@ -94,6 +104,10 @@ export class RenderService implements RenderInterface {
         this.spriteRenderService.draw();
         this.wallRenderService.draw();
         this.floorRenderService.draw();
+
+        // TODO Triangle renderer needs to be split so that overlay for weapon specific to that object (create new triangle render service?)
+        this.gl.clear(this.gl.DEPTH_BUFFER_BIT);
+        this.triangleRenderService.draw();
     }
 
     public attachCamera(camera: () => Camera) {

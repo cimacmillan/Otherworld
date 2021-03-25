@@ -1,7 +1,7 @@
 import { Sprites } from "../../resources/manifests/Sprites";
 import { SpriteShadeOverride } from "../../services/render/types/RenderInterface";
 import { Camera, Vector2D } from "../../types";
-import { Inventory } from "../scripting/items/types";
+import { Inventory } from "../scripting/items/ItemTypes";
 
 export interface SurfacePosition {
     position: Vector2D;

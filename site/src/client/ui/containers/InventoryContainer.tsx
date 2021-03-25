@@ -14,7 +14,7 @@ import { useGlobalState } from "../effects/GlobalState";
 import { Actions } from "../../Actions";
 import { ShadowComponentStyle } from "../components/ShadowComponent";
 import { SpriteImageComponent } from "../components/SpriteImageComponent";
-import { Item, ItemMetadata } from "../../engine/scripting/items/types";
+import { EquipableItem, EquipmentType, getEmptyInventory, Inventory, Item, ItemMetadata } from "../../engine/scripting/items/ItemTypes";
 import { GameItems } from "../../resources/manifests/Items";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { chunk } from "lodash";
@@ -23,7 +23,10 @@ import { TooltipComponent, TooltipType } from "../components/TooltipComponent";
 import { Vector2D } from "../../types";
 import { useServiceLocator } from "../effects/GameEffect";
 import { Colours } from "../../resources/design/Colour";
-import { PlayerUseItemFromInventory } from "../../engine/commands/InventoryCommands";
+import { PlayerUseItemFromInventory, UnequipItemFromInventory } from "../../engine/commands/InventoryCommands";
+import { SpriteSheets } from "../../resources/manifests/Sprites";
+import { Effect } from "../../engine/scripting/effects/Effects";
+import { EffectComponent } from "../components/EffectComponent";
 
 const FADE_IN = 200;
 export const INVENTORY_WIDTH = 520;
@@ -31,6 +34,16 @@ export const INVENTORY_HEIGHT = 312;
 export const INVENTORY_BORDER_RADIUS = 8;
 
 export interface InventoryContainerProps {}
+
+enum InventoryTabs {
+    Inventory = "Inventory",
+    Equipment = "Equipment"
+}
+
+const inventoryTabs = [
+    InventoryTabs.Inventory,
+    InventoryTabs.Equipment
+]
 
 export const InventoryContainer: React.FunctionComponent<InventoryContainerProps> = (
     props
@@ -40,22 +53,22 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
     const serviceLocator = useServiceLocator();
     const [inventoryShowing, setInventoryShowing] = React.useState(false);
     const [tooltipItem, setTooltipItem] = React.useState<
-        ItemMetadata | undefined
+        Item | undefined
     >(undefined);
     const [fade, setFade] = React.useState(0);
     const [mousePosition, setMousePosition] = React.useState<Vector2D>({
         x: 0,
         y: 0,
     });
-    const [items, setItems] = React.useState<ItemMetadata[]>([]);
+    const [inventory, setInventory] = React.useState<Inventory>(getEmptyInventory());
     const [state, dispatch] = useGlobalState();
+    const [activeTab, setActiveTab] = React.useState<InventoryTabs>(InventoryTabs.Inventory);
 
     React.useEffect(() => {
-        const inventoryItems = serviceLocator
+        setInventory(serviceLocator
             .getScriptingService()
             .getPlayer()
-            .getInventory().items;
-        setItems(inventoryItems);
+            .getInventory());
     });
 
     React.useEffect(() => {
@@ -74,8 +87,8 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
         }
     }, [state.inventory.showing]);
 
-    const onSetItemTooltip = (itemMetadata: ItemMetadata | undefined) => {
-        setTooltipItem(itemMetadata);
+    const onSetItemTooltip = (item: Item | undefined) => {
+        setTooltipItem(item);
     };
 
     const onItemUsed = (itemMetadata: ItemMetadata | undefined) => {
@@ -85,15 +98,23 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
             .getPlayer()
             .getInventory().items.length;
         PlayerUseItemFromInventory(serviceLocator)(item);
-        const inventoryItems = serviceLocator
+        setInventory(serviceLocator
             .getScriptingService()
             .getPlayer()
-            .getInventory().items;
-        setItems(inventoryItems);
-        if (inventoryItems.length !== itemAmount) {
+            .getInventory());
+        if (inventory.items.length !== itemAmount) {
             onSetItemTooltip(undefined);
         }
     };
+
+    const onItemUnequiped = (item: EquipableItem) => {
+        UnequipItemFromInventory(serviceLocator, item);
+        setInventory(serviceLocator
+            .getScriptingService()
+            .getPlayer()
+            .getInventory());
+        onSetItemTooltip(undefined);
+    }
 
     return (
         <div
@@ -124,8 +145,6 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                 {inventoryShowing && (
                     <div
                         style={{
-                            width: INVENTORY_WIDTH,
-                            height: INVENTORY_HEIGHT,
                             opacity: fade,
                             display: "flex",
                             flexDirection: "column",
@@ -133,52 +152,89 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                             ...ShadowComponentStyle(),
                         }}
                     >
-                        <TextComponent
-                            text={"Inventory"}
-                            size={TextSize.SMALL}
-                            style={{
-                                paddingLeft: 8,
-                                paddingRight: 8,
-                                background: Colours.DESELCT_GREY,
-                                borderRadius: `${INVENTORY_BORDER_RADIUS}px ${INVENTORY_BORDER_RADIUS}px 0px 0px`,
-                            }}
-                        />
+                        <div style={{
+                            display: "flex",
+                            flexDirection: "row"
+                        }}>
+                            {
+                                inventoryTabs.map(tab => (
+                                    <InventoryTab label={tab} open={tab === activeTab} onPress={() => setActiveTab(tab)}/>
+                                ))
+                            }
+                        </div>
+
                         <div
                             style={{
                                 width: INVENTORY_WIDTH,
                                 height: INVENTORY_HEIGHT,
-                                display: "flex",
-                                flexDirection: "column",
-                                overflowY: "scroll",
                                 background: Colours.DESELCT_GREY,
                                 borderRadius: `0px ${INVENTORY_BORDER_RADIUS}px ${INVENTORY_BORDER_RADIUS}px ${INVENTORY_BORDER_RADIUS}px`,
                             }}
                         >
-                            <InventoryItems
-                                items={items}
-                                onMouseEnter={(item) => onSetItemTooltip(item)}
-                                onMouseLeave={(item) =>
-                                    onSetItemTooltip(undefined)
-                                }
-                                onClick={(item) => onItemUsed(item)}
-                            />
+                            {
+                                (() => {
+                                    switch (activeTab) {
+                                        case InventoryTabs.Inventory:
+                                            return <InventoryItems
+                                                items={inventory.items}
+                                                onMouseEnter={(item) => onSetItemTooltip(item.item)}
+                                                onMouseLeave={(item) =>
+                                                    onSetItemTooltip(undefined)
+                                                }
+                                                onClick={(item) => onItemUsed(item)}
+                                            />
+                                        case InventoryTabs.Equipment:
+                                            return <InventoryEquipment
+                                                inventory={inventory}
+                                                onMouseEnter={(item) => onSetItemTooltip(item)}
+                                                onMouseLeave={(item) =>
+                                                    onSetItemTooltip(undefined)
+                                                }
+                                                onMousePress={(item) => onItemUnequiped(item)}
+                                            />
+                                    }
+                                })()
+                            }
                         </div>
                     </div>
                 )}
                 {tooltipItem && inventoryShowing && (
-                    <TooltipComponent
-                        serviceLocator={serviceLocator}
-                        context={{
-                            type: TooltipType.ITEM,
-                            itemMetadata: tooltipItem,
-                        }}
-                        position={mousePosition}
-                    />
+                    <div style={{opacity: fade}}>
+                        <TooltipComponent
+                            serviceLocator={serviceLocator}
+                            context={{
+                                type: TooltipType.ITEM,
+                                item: tooltipItem,
+                            }}
+                            position={mousePosition}
+                        />
+                    </div>
                 )}
             </ViewportComponent>
         </div>
     );
 };
+
+const InventoryTab: React.FunctionComponent<{
+    label: string,
+    open: boolean,
+    onPress: () => void
+}> = (props) => {
+    const { label, open, onPress } = props;
+    return <TextComponent
+        text={label}
+        size={TextSize.SMALL}
+        colour={open ? TextColour.LIGHT : TextColour.LESS_LIGHT}
+        style={{
+            paddingLeft: 8,
+            paddingRight: 8,
+            background: open ? Colours.DESELCT_GREY : Colours.HIDDEN_GREY,
+            borderRadius: `${INVENTORY_BORDER_RADIUS}px ${INVENTORY_BORDER_RADIUS}px 0px 0px`,
+            cursor: open ? "default" : "pointer"
+        }}
+        clickable={onPress}
+    />
+}
 
 const InventoryItems: React.FunctionComponent<{
     items: ItemMetadata[];
@@ -187,7 +243,13 @@ const InventoryItems: React.FunctionComponent<{
     onClick: (item: ItemMetadata) => void;
 }> = (props) => {
     return (
-        <div>
+        <div
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                overflowY: "scroll",
+            }}
+        >
             {props.items.map((item) => (
                 <InventoryItemComponent
                     itemMetadata={item}
@@ -206,3 +268,171 @@ const InventoryItems: React.FunctionComponent<{
         </div>
     );
 };
+
+const InventoryEquipment: React.FunctionComponent<{
+    inventory: Inventory;
+    onMouseEnter: (item: EquipableItem) => void;
+    onMouseLeave: (item: EquipableItem) => void;
+    onMousePress: (item: EquipableItem) => void;
+}> = (props) => {
+    const { inventory, onMouseEnter, onMouseLeave, onMousePress } = props;
+
+    const slot = (x: number, y: number, item?: EquipableItem) => (
+        <EquipmentSlot
+            x={x}
+            y={y}
+            item={item}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            onMousePress={onMousePress}
+        />
+    );
+
+    const text = (text: string, colour: TextColour = TextColour.LIGHT) => {
+        return (
+            <TextComponent
+                text={text}
+                font={TextFont.REGULAR}
+                colour={colour}
+                size={TextSize.VSMALL}
+                style={{
+                    marginRight: 8,
+                }}
+            />
+        );
+    };
+
+    function getEffectHintsFromItem(items: (EquipableItem | undefined)[]): JSX.Element {
+        const effectList = (effects: Effect[]) => (
+            <ul
+                style={{
+                    padding: 0,
+                    margin: 0,
+                    marginLeft: 16,
+                    color: TextColour.LIGHT,
+                }}
+            >
+                {effects.map(effect => <EffectComponent effect={effect}/>)}
+            </ul>
+        )
+
+        const onAttack: Effect[] = [];
+        const onEquip: Effect[] = [];
+
+        items.forEach(item => {
+            if (item) {
+                if (item.onAttack) {
+                    onAttack.push(...item.onAttack)
+                }
+                if (item.onEquip) {
+                    onEquip.push(...item.onEquip)
+                }
+            }
+        })
+    
+        return (
+            <div style={{
+                position: "absolute",
+                width: 244,
+                height: 277,
+                left: 260,
+                top: 17,
+                border: "solid",
+                borderWidth: 1,
+                borderColor: Colours.HOVER_GREY,
+                borderRadius: 8,
+                overflowY: "scroll",
+            }}>
+                {onAttack.length > 0 && (
+                    <>
+                    {text("On attack", TextColour.GOLD)}
+                    {effectList(onAttack)}
+                    </>
+                )}
+                {onEquip.length > 0 && (
+                    <>
+                    {text("On equip", TextColour.GOLD)}
+                    {effectList(onEquip)}
+                    </>
+                )}                
+            </div>
+        )
+    }
+
+    return <div style={{
+        position: "relative",
+        width: INVENTORY_WIDTH,
+        height: INVENTORY_HEIGHT
+    }}>
+        { 
+            [
+                slot(102, 58, inventory.equipped[EquipmentType.HELMET]),
+                slot(102, 129, inventory.equipped[EquipmentType.BODY]),
+                slot(102, 200, inventory.equipped[EquipmentType.SHOES]),
+                slot(31, 129, inventory.equipped[EquipmentType.WEAPON]),
+                slot(170, 129, inventory.equipped[EquipmentType.SHIELD]),
+                slot(31, 200, inventory.equipped[EquipmentType.RING]),
+            ]
+        }
+
+        {getEffectHintsFromItem(Object.values(inventory.equipped))}
+    </div>
+}
+
+const EQUIPMENT_SLOT_SIZE = 58;
+const EquipmentSlot: React.FunctionComponent<{
+    item?: EquipableItem,
+    onMouseEnter: (item: EquipableItem) => void;
+    onMouseLeave: (item: EquipableItem) => void;
+    onMousePress: (item: EquipableItem) => void;
+    x: number, y: number
+}> = (props) => {
+    const { item, onMouseEnter, onMouseLeave, onMousePress, x, y} = props;
+
+    const [ hover, setHover ] = React.useState(false);
+
+    return <div 
+        onMouseEnter={() => {
+            if (item) {
+                onMouseEnter(item);
+                setHover(true);
+            }
+        }}
+        onMouseLeave={() => {
+            if (item) {
+                onMouseLeave(item);
+                setHover(false);
+            }
+        }}
+        onMouseDown={() => {
+            if (item) {
+                onMousePress(item);
+                setHover(false);
+            }
+        }}
+        style={{
+            position: "absolute",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: EQUIPMENT_SLOT_SIZE,
+            height: EQUIPMENT_SLOT_SIZE,
+            border: "solid",
+            borderRadius: 8,
+            borderColor: Colours.HOVER_GREY,
+            borderWidth: 1,
+            backgroundColor: hover ? Colours.HOVER_GREY : Colours.DESELCT_GREY,
+            left: x,
+            top: y
+        }}>
+            {item && <SpriteImageComponent 
+                spriteSheet={SpriteSheets.SPRITE}
+                sprite={item.spriteIcon}
+                style={{
+                    width: EQUIPMENT_SLOT_SIZE - 16,
+                    height: EQUIPMENT_SLOT_SIZE - 16
+                }}
+            />
+            }
+        </div>
+}

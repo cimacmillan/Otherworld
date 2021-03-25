@@ -1,3 +1,5 @@
+import { getImageData } from "./TextureLoader";
+
 export interface TextureCoordinate {
     textureX: number;
     textureY: number;
@@ -23,13 +25,16 @@ interface AnimationHash {
 export class SpriteSheet {
     private spriteHash: SpriteHash = {};
     private animationHash: AnimationHash = {};
+    public readonly imageData: ImageData;
 
     public constructor(
         private width: number,
         private height: number,
         private texture: WebGLTexture,
         private image: HTMLImageElement
-    ) {}
+    ) {
+        this.imageData = getImageData(image);
+    }
 
     public registerSprite(
         name: string,
