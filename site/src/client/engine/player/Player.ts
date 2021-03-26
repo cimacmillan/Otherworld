@@ -21,7 +21,7 @@ import { PhysicsStateType } from "../components/core/PhysicsComponent";
 import { getEmptyInventory, Inventory } from "../scripting/items/ItemTypes";
 import { CameraState, HealthState } from "../state/State";
 import { PlayerMovement } from "./PlayerMovement";
-import { PlayerEquipmentRender } from "./PlayerEquipmentRender";
+import { PlayerEquipment } from "./PlayerEquipment";
 
 type InternalEntityState = PhysicsStateType & HealthState & CameraState;
 
@@ -51,7 +51,7 @@ const DEFAULT_PLAYER_STATE: PlayerSerialisation = {
 export class Player {
     public state: PlayerSerialisation;
     public movement: PlayerMovement;
-    public equipment: PlayerEquipmentRender;
+    public equipment: PlayerEquipment;
 
     private serviceLocator: ServiceLocator;
 
@@ -73,8 +73,9 @@ export class Player {
             (ang: number) => (this.state.surface.angle = ang)
         );
 
-        this.equipment = new PlayerEquipmentRender(
+        this.equipment = new PlayerEquipment(
             this.serviceLocator,
+            () => this,
             () => {
                 const { x, y } = this.state.surface.position;
                 return [x, this.state.surface.height, y];
@@ -165,6 +166,10 @@ export class Player {
                     player: this,
                 });
         });
+    }
+
+    public attack() {
+        this.equipment.attack();
     }
 
     public walk(direction: WalkDirection) {

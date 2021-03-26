@@ -32,7 +32,9 @@ export const KeyHintComponent: React.FunctionComponent<KeyHintComponentProps> = 
             key={code}
             keyCode={code}
             selected={props.selected}
-            style={{}}
+            style={{
+                marginRight: 8
+            }}
         />
     ));
 

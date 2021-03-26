@@ -7,7 +7,7 @@ import {
     createItemDropState,
     ItemDropArguments,
 } from "../scripting/factory/ItemFactory";
-import { EquipableItem, Inventory, Item, ItemType } from "../scripting/items/ItemTypes";
+import { EquipableItem, EquipmentType, Inventory, Item, ItemType } from "../scripting/items/ItemTypes";
 import { TutorialServiceEvent } from "../scripting/TutorialService";
 import { CommandCreator } from "./Command";
 
@@ -66,6 +66,9 @@ export const EquipItemFromInventory = (serviceLocator: ServiceLocator, item: Equ
         player: serviceLocator.getScriptingService().getPlayer()
     }));
     serviceLocator.getScriptingService().getPlayer().equipment.onEquip(item);
+    if (item.equipmentType === EquipmentType.WEAPON) {
+        serviceLocator.getTutorialService().onEvent(TutorialServiceEvent.EQUIPED_WEAPON);
+    }
 }
 
 export const UnequipItemFromInventory =  (serviceLocator: ServiceLocator, item: EquipableItem) => {
@@ -80,6 +83,9 @@ export const UnequipItemFromInventory =  (serviceLocator: ServiceLocator, item: 
         player: serviceLocator.getScriptingService().getPlayer()
     }));
     serviceLocator.getScriptingService().getPlayer().equipment.onUnequip(item);
+    if (item.equipmentType === EquipmentType.WEAPON) {
+        serviceLocator.getTutorialService().onEvent(TutorialServiceEvent.UNEQUIPED_WEAPON);
+    }
 }
 
 

@@ -31,15 +31,13 @@ export const KeyComponent: React.FunctionComponent<KeyComponentProps> = (
     return (
         <div
             style={{
-                ...props.style,
-                width: KEY_CONTAINER_WIDTH,
-                height: KEY_CONTAINER_HEIGHT,
-                display: "flex",
+                display: "inline-flex",
                 justifyContent: "center",
                 alignItems: "center",
+                ...props.style
             }}
         >
-            <div
+            {/* <div
                 style={{
                     position: "absolute",
                     width: KEY_WIDTH,
@@ -49,17 +47,7 @@ export const KeyComponent: React.FunctionComponent<KeyComponentProps> = (
                     borderRadius: Spacing.RADIUS_SMALL,
                     marginTop: props.selected ? 0 : 8,
                 }}
-            />
-            <div
-                style={{
-                    position: "absolute",
-                    width: KEY_WIDTH,
-                    height: KEY_HEIGHT,
-                    backgroundColor: Colours.HOVER_GREY,
-                    transform: `translate(0px, ${offset}px)`,
-                    borderRadius: Spacing.RADIUS_SMALL,
-                }}
-            />
+            /> */}
             <TextComponent
                 text={props.keyCode}
                 font={TextFont.REGULAR}
@@ -68,10 +56,11 @@ export const KeyComponent: React.FunctionComponent<KeyComponentProps> = (
                 // shadow={TextShadow.LARGE}
                 style={{
                     textAlign: "center",
-                    position: "absolute",
-                    width: KEY_WIDTH,
-                    height: KEY_HEIGHT,
+                    minWidth: KEY_WIDTH,
+                    minHeight: KEY_HEIGHT,
                     transform: `translate(0px, ${offset}px)`,
+                    backgroundColor: Colours.HOVER_GREY,
+                    borderRadius: Spacing.RADIUS_SMALL,
                 }}
             />
         </div>

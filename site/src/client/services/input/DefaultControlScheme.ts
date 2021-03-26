@@ -1,5 +1,6 @@
 import { OpenInventory } from "../../engine/commands/InventoryCommands";
 import {
+    Attack,
     Interact,
     Turn,
     TurnDirection,
@@ -36,9 +37,14 @@ export class DefaultControlScheme implements ControlScheme {
         if (keysDown.KeyE) {
             Interact(this.serviceLocator)();
         }
+
+        if (keysDown.Space) {
+            Attack(this.serviceLocator);
+        }
     }
 
     public onKeyDown(key: string, keysDown: { [key: string]: boolean }) {
+
         if (key == "KeyI") {
             OpenInventory(this.serviceLocator)();
         }

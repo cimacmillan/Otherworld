@@ -31,3 +31,10 @@ export const Turn: CommandCreator = (serviceLocator: ServiceLocator) => (
 export const Interact: CommandCreator = (
     serviceLocator: ServiceLocator
 ) => () => serviceLocator.getScriptingService().getPlayer().interact();
+
+export const Attack = (
+    serviceLocator: ServiceLocator
+) => {
+    serviceLocator.getScriptingService().getPlayer().attack();
+    serviceLocator.getTutorialService().onEvent(TutorialServiceEvent.ATTACKED);
+}

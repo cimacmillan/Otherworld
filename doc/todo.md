@@ -16,6 +16,7 @@ Puzzle maps to escape prison, killing enemies
 
 ### Polish 
 * Improve head bob to not make noise when standing still (frequency?)
+* Weapon noises
 
 ### Audio
 * Don't start audio until button pressed (onGameStart?)
