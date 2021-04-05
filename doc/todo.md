@@ -2,8 +2,6 @@
 ### Milestone 2
 Puzzle maps to escape prison, killing enemies
 
-* Player attack animation and event
-* Jailor entity which has jailor image
 * Jailor entity listens to player attacks and loses damage
 * Damaged text renderer 
 * jailor entity has drops of a certain distribution, item drops

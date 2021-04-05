@@ -6,6 +6,7 @@ import {
 import { EntityFactory } from "../../engine/scripting/factory/EntityFactory";
 import { createItemDropState } from "../../engine/scripting/factory/ItemFactory";
 import { createLadderState } from "../../engine/scripting/factory/MapChangeFactory";
+import { createNPCState } from "../../engine/scripting/factory/NPCFactory";
 import {
     createStaticFloorState,
     createStaticSpriteState,
@@ -189,6 +190,19 @@ export function loadPoint(args: {
                     )
                 )
             );
+            break;
+        case TiledObjectType.NPC:
+            entities.push(
+                EntityFactory.NPC_BULKY_MAN(
+                    serviceLocator,
+                    createNPCState({
+                        position: {
+                            x: object.data.x,
+                            y: object.data.y
+                        }
+                    })
+                )
+            )
             break;
     }
 }

@@ -9,7 +9,6 @@ export enum Sprites {
 
     FLOOR = "FLOOR",
     FLOOR_BLOOD = "FLOOR_BLOOD",
-    SLIME = "SLIME",
     WALL = "WALL",
     HANGING_MAN = "HANGING_MAN",
 
@@ -23,6 +22,9 @@ export enum Sprites {
     FLOOR_HOLE = "FLOOR_HOLE",
 
     WEAPON_WOOD_STICK = "WEAPON_WOOD_STICK",
+
+    SLIME = "SLIME",
+    NPC_BULKY_MAN = "NPC_BULKY_MAN"
 }
 
 export const sprites = new SpriteSheetManifestBuilder(
@@ -46,5 +48,7 @@ tenSprite(Sprites.BONE, 530, 190);
 tenSprite(Sprites.WEAPON_WOOD_STICK, 540, 430);
 
 tenSprite(Sprites.UI_FINGER, 80, 140);
+
+tenSprite(Sprites.NPC_BULKY_MAN, 350, 90);
 
 sprites.Sprite(Sprites.HANGING_MAN, 70, 150, 20, 20);

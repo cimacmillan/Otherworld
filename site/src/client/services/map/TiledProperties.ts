@@ -10,6 +10,7 @@ export enum TiledObjectType {
     GameItem = "GameItem",
     Portal = "Portal",
     StaticSprite = "StaticSprite",
+    NPC = "NPC"
 }
 
 export const defaultTiledObjectProperties: Record<
@@ -41,4 +42,7 @@ export const defaultTiledObjectProperties: Record<
         sprite: Sprites.SKULL,
         height: "0.5",
     },
+    [TiledObjectType.NPC]: {
+        
+    }
 };

@@ -56,7 +56,7 @@ const HINTS: Record<string, KeyHint> = {
 
 export class TutorialService {
     private serviceLocator: ServiceLocator;
-    private state: TutorialSerialisation;
+    private state: TutorialSerialisation = DEFAULT_STATE;
 
     public constructor() {}
 
