@@ -56,14 +56,16 @@ export const EquipItemFromInventory = (serviceLocator: ServiceLocator, item: Equ
         AddItemToInventory(playerInventory, item);
         alreadyEquipped.onUnEquip?.forEach(effect => getEffect(effect).onTrigger({
             type: "PLAYER",
-            player: serviceLocator.getScriptingService().getPlayer()
+            player: serviceLocator.getScriptingService().getPlayer(),
+            serviceLocator
         }));
     }
     playerInventory.equipped[item.equipmentType] = item;
     serviceLocator.getStore().getActions().onPlayerItemEquipped(item);
     item.onEquip?.forEach(effect => getEffect(effect).onTrigger({
         type: "PLAYER",
-        player: serviceLocator.getScriptingService().getPlayer()
+        player: serviceLocator.getScriptingService().getPlayer(),
+        serviceLocator
     }));
     serviceLocator.getScriptingService().getPlayer().equipment.onEquip(item);
     if (item.equipmentType === EquipmentType.WEAPON) {
@@ -80,7 +82,8 @@ export const UnequipItemFromInventory =  (serviceLocator: ServiceLocator, item: 
     AddItemToInventory(playerInventory, item);
     item.onUnEquip?.forEach(effect => getEffect(effect).onTrigger({
         type: "PLAYER",
-        player: serviceLocator.getScriptingService().getPlayer()
+        player: serviceLocator.getScriptingService().getPlayer(),
+        serviceLocator
     }));
     serviceLocator.getScriptingService().getPlayer().equipment.onUnequip(item);
     if (item.equipmentType === EquipmentType.WEAPON) {

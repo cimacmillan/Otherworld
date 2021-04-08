@@ -38,6 +38,19 @@ const registersSelf = (
     };
 };
 
+export const CanBeInteractedWith = <T extends InteractionStateType>(
+    type: InteractionType,
+): EntityComponent<InteractionStateType> => {
+    return registersSelf(type, (entity: Entity<T>) => ({
+        onInteract: (source: InteractionSource) => {},
+        getPosition: () => entity.getState(),
+        source: {
+            type: InteractionSourceType.ENTITY,
+            entity,
+        },
+    }));
+};
+
 export const onInteractedWith = <T extends InteractionStateType>(
     type: InteractionType,
     callback: (entity: Entity<T>, source: InteractionSource) => void

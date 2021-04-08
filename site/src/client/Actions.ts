@@ -44,6 +44,8 @@ export const emptyActions = {
     onPlayerInventoryOpened: () => {},
     onPlayerInventoryClosed: () => {},
     onPlayerItemEquipped: (item: Item) => {},
+
+    onDamagedByPlayer: (damage: number) => {}
 }
 
 export type Actions = typeof emptyActions;

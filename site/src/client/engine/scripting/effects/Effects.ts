@@ -1,4 +1,5 @@
 import { FunctionEventSubscriber } from "@cimacmillan/refunc";
+import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Entity } from "../../Entity";
 import { Player } from "../../player/Player";
 import { EffectDamagesTarget } from "./EffectDamagesTarget";
@@ -27,13 +28,15 @@ export interface DamagesTarget {
 
 export type Effect = HealsPlayer | DamagesTarget | HealthIncreasePlayer;
 
-export type EffectContext = {
+export type EffectContext = ({
     type: "PLAYER";
     player: Player;
 } | {
     type: "ENTITY";
     entity: Entity<any>;
-} 
+}) & {
+    serviceLocator: ServiceLocator
+}
 
 export const emptyItemActions = {
     onTrigger: (context: EffectContext) => {}

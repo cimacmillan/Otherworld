@@ -2,8 +2,14 @@
 ### Milestone 2
 Puzzle maps to escape prison, killing enemies
 
-* Jailor entity listens to player attacks and loses damage
+* jailor has a dead state
+* jailor has IDLE state with breathing
+* jailor rebounds when hit
+* jailor goes white when hit
+* jailor can walk around by rotating sprite, scaling?
 * Damaged text renderer 
+* player health view
+* jailor entity attacks player
 * jailor entity has drops of a certain distribution, item drops
 * Player skills definition and serialisation
 * Killing jailor increases skill

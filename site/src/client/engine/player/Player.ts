@@ -137,6 +137,10 @@ export class Player {
         this.state.surface.angle = angle;
     }
 
+    public getAngle() {
+        return this.state.surface.angle;
+    }
+
     public getInventory() {
         return this.state.inventory;
     }
@@ -163,7 +167,7 @@ export class Player {
             ent.onInteract &&
                 ent.onInteract({
                     type: InteractionSourceType.PLAYER,
-                    player: this,
+                    player: this
                 });
         });
     }

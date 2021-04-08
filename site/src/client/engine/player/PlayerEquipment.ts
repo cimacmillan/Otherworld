@@ -12,6 +12,7 @@ import { animation } from "../../util/animation/Animations";
 import { map3D, create3DArray, randomIntRange, forEach3D, toRadians } from "../../util/math";
 import { ActionDelay } from "../../util/time/ActionDelay";
 import { setFPSProportion } from "../../util/time/GlobalFPSController";
+import { EffectContext, getEffect } from "../scripting/effects/Effects";
 import { EquipableItem, EquipmentType } from "../scripting/items/ItemTypes";
 import { Player } from "./Player";
 
@@ -131,25 +132,17 @@ export class PlayerEquipment {
             this.attackDelay.onAction();
             this.weaponAnimation.stop();
             this.weaponAnimation.start();
-            const [ x, y, z ] = this.getPlayerPosition();
-            const position: Vector2D = {
-                x,
-                y: z
-            }
-            const interacts = this.serviceLocator
-                .getInteractionService()
-                .getInteractables(
-                    InteractionType.ATTACK,
-                    position,
-                    this.getPlayerAngle(),
-                    1.5
-                );
-            interacts.forEach((ent) => {
-                ent.onInteract &&
-                    ent.onInteract({
-                        type: InteractionSourceType.PLAYER,
-                        player: this.getPlayer(),
-                    });
+            const effectContext: EffectContext = {
+                type: "PLAYER",
+                player: this.getPlayer(),
+                serviceLocator: this.serviceLocator
+            };
+            const equipment = Object.entries(this.getPlayer().getInventory().equipped);
+            equipment.forEach(([key, value]) => {
+                const onAttack = (value && value.onAttack) || [];
+                onAttack.map(getEffect).forEach((effect) => {
+                    effect.onTrigger(effectContext);
+                })
             })
         }
     }
