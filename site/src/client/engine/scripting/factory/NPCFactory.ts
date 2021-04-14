@@ -1,12 +1,17 @@
 import { Sprites } from "../../../resources/manifests/Sprites";
 import { InteractionSource, InteractionSourceType, InteractionType } from "../../../services/interaction/InteractionType";
+import { SpriteShadeOverride } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
 import { animation, easeInOutCirc } from "../../../util/animation/Animations";
+import { vec } from "../../../util/math/Vector";
 import { CanBeInteractedWith, onInteractedWith } from "../../components/core/InteractionComponent";
 import { PhysicsComponent, PhysicsStateType } from "../../components/core/PhysicsComponent";
 import { SpriteRenderComponent } from "../../components/core/SpriteRenderComponent";
 import { AnimationComponent } from "../../components/util/AnimationComponent";
+import { JoinComponent } from "../../components/util/JoinComponent";
+import { SwitchComponent } from "../../components/util/SwitchComponent";
+import { TimeoutComponent } from "../../components/util/TimeoutEffect";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { SpriteRenderState } from "../../state/State";
@@ -24,7 +29,7 @@ type NPCState = SpriteRenderState &
                 PhysicsStateType &
                 HealthState & {
                     behaviour: NPCBehaviour
-                };
+                } & ColourHitState;
 
 
 const LosesHealthWhenDamaged = () => {
@@ -37,6 +42,23 @@ const LosesHealthWhenDamaged = () => {
                 health = health < 0 ? 0 : health;
                 entity.setState({
                     health
+                })
+            }
+        })
+    })
+}
+
+const ReboundsWhenDamaged = (force = 0.1) => {
+    return ({
+        getActions: (entity: Entity<PhysicsStateType>) => ({
+            onDamagedByPlayer: (points: number) => {
+                const { velocity, position } = entity.getState();
+                const playerPosition = entity.getServiceLocator().getScriptingService().getPlayer().getPositon();
+                const direction = vec.vec_normalize(vec.vec_sub(position, playerPosition));
+                const forceVector = vec.vec_mult_scalar(direction, force);
+                const newVelocity = vec.vec_add(velocity, forceVector);
+                entity.setState({
+                    velocity: newVelocity
                 })
             }
         })
@@ -70,6 +92,51 @@ const BreathsSlowly = (defaultHeight: number): EntityComponent<SpriteRenderState
     });
 }
 
+type ColourHitState = {
+    colourHit: "DEFAULT" | "COLOUR"
+} & SpriteRenderState;
+const COLOUR_HIT_TIME = 200;
+const TemporaryEffectComponentWhenDamaged = (state: ColourHitState, onEffect: (entity: Entity<ColourHitState>) => void, onDefault: (entity: Entity<ColourHitState>) => void): EntityComponent<ColourHitState> => {
+    return new SwitchComponent<ColourHitState>(
+        {
+            ["DEFAULT"]: {
+                getActions: (entity: Entity<ColourHitState>) => ({
+                    onEntityCreated: () => {
+                        onDefault(entity);
+                    },
+                    onDamagedByPlayer: () => {
+                        entity.setState({
+                            colourHit: "COLOUR"
+                        })
+                    }
+                })
+            },
+            ["COLOUR"]: JoinComponent<ColourHitState>([
+                {
+                    getActions: (entity: Entity<ColourHitState>) => ({
+                        onEntityCreated: () => {
+                            onEffect(entity);
+                        }
+                    })
+                },
+                TimeoutComponent<ColourHitState>((entity: Entity<ColourHitState>) => {
+                    entity.setState({
+                        colourHit: "DEFAULT"
+                    })
+                }, COLOUR_HIT_TIME)
+            ])
+        },
+        state.colourHit,
+        (entity: Entity<ColourHitState>) => entity.getState().colourHit
+    );
+}
+
+const whiteShade = {
+    intensity: 1,
+    r: 1,
+    g: 1, 
+    b: 1
+}
 export function createNPC(
     serviceLocator: ServiceLocator,
     state: NPCState
@@ -81,10 +148,30 @@ export function createNPC(
         PhysicsComponent(),
         CanBeInteractedWith(InteractionType.ATTACK),
         LosesHealthWhenDamaged(),
+        ReboundsWhenDamaged(),
+        TemporaryEffectComponentWhenDamaged(
+            state, 
+            (entity: Entity<NPCState>) => entity.setState({
+                shade: whiteShade,
+                spriteWidth: 1.1,
+                spriteHeight: 1.1
+            }),
+            (entity: Entity<NPCState>) => entity.setState({
+                shade: undefined,
+                spriteWidth: 1,
+                spriteHeight: 1
+            }),
+        ),
         WhenHealthDepleted(() => {
             console.log("He died :(")
         }),
-        BreathsSlowly(state.spriteHeight)
+        new SwitchComponent(
+            {
+                "DEFAULT": BreathsSlowly(state.spriteHeight)
+            }, 
+            state.colourHit, 
+            (entity: Entity<ColourHitState>) => entity.getState().colourHit
+        )
     )
 }
 
@@ -103,7 +190,7 @@ export function createNPCState(
         position,
         height: 0,
         yOffset: 0,
-        radius: 0.2,
+        radius: 0.4,
         angle: 0,
         velocity: { x: 0, y: 0 },
         heightVelocity: 0,
@@ -112,7 +199,8 @@ export function createNPCState(
         elastic: 0.9,
         collidesEntities: true,
         collidesWalls: true,
-        health
+        health,
+        colourHit: "DEFAULT"
     };
 }
 

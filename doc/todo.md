@@ -3,9 +3,6 @@
 Puzzle maps to escape prison, killing enemies
 
 * jailor has a dead state
-* jailor has IDLE state with breathing
-* jailor rebounds when hit
-* jailor goes white when hit
 * jailor can walk around by rotating sprite, scaling?
 * Damaged text renderer 
 * player health view
