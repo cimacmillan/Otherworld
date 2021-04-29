@@ -48,11 +48,5 @@ Puzzle maps to escape prison, killing enemies
 * Exp from doing things
 * Levels from XP
 
--------
-
-
-### Milestone 3 
-NPCs & NPC Dialog
-Quests
 
 

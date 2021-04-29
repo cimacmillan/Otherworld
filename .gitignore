@@ -9,3 +9,4 @@ site/build
 **/.DS_Store
 coverage
 *.lcov
+.vscode
