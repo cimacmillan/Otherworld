@@ -88,7 +88,7 @@ function insertPngFileIntoNewManifest(manifest, obj) {
             }
 
             const [ newWidth, newHeight ] = getManifestSize(newManifest);
-            const size = newWidth * newHeight;
+            const size = newWidth * newWidth + newHeight * newHeight;
             if (smallestSize === undefined || size < smallestSize) {
                 smallestSize = size;
                 bestManifest = newManifest;
@@ -136,12 +136,17 @@ function mapPngFilesToPngAndManifest(pngFiles) {
 function main() {
     console.log("CompileArt");
     const inputFiles = fs.readdirSync(inputDirectory).map(file => inputDirectory + file);
-    const pngFiles = inputFiles.map(fileName => ({
+    const pngFiles = inputFiles.filter(fileName => fileName.substring(fileName.length - 3, fileName.length) === "png").map(fileName => ({
         png: readPng(fileName),
         fileName: fileName.substring(inputDirectory.length, fileName.length - 4)
     }));
 
     const [pngDest, manifest] = mapPngFilesToPngAndManifest(pngFiles);
+
+    const [ width, height ] = getManifestSize(manifest);
+    if (width > 2048 || height > 2048) {
+        console.log("Warning, filesize getting big (", width, ", ", height, ")");
+    }
 
     writeJson(outputJSON, manifest);
     writePng(outputFile, pngDest);
