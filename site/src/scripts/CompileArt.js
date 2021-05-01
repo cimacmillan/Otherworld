@@ -12,6 +12,11 @@ function readPng(input) {
     return png;
 }
 
+function readJson(input) {
+    const file = fs.readFileSync(input);
+    return JSON.parse(file);
+}
+
 function writePng(dir, png) {
     const buffer = PNG.sync.write(png);
     fs.writeFileSync(dir, buffer, { flag: "w" });
@@ -133,22 +138,41 @@ function mapPngFilesToPngAndManifest(pngFiles) {
     return [pngDest, manifest]
 }
 
+function getManifestKeyFromFilename(fileName, ending) {
+    return fileName.substring(inputDirectory.length, fileName.length - (ending.length + 1));
+}
+
+function getFrameCountFromJsonFile(jsonFile) {
+    return Object.keys(jsonFile.json.frames).length
+}
+
+function getManifestWithFrameCounts(manifest, jsonFiles) {
+    let newManifest = {...manifest};
+    jsonFiles.forEach(jsonFile => {
+        const frames = getFrameCountFromJsonFile(jsonFile);
+        newManifest[getManifestKeyFromFilename(jsonFile.fileName, "json")].frames = frames
+    });
+    return newManifest;
+}
+
 function main() {
     console.log("CompileArt");
     const inputFiles = fs.readdirSync(inputDirectory).map(file => inputDirectory + file);
     const pngFiles = inputFiles.filter(fileName => fileName.substring(fileName.length - 3, fileName.length) === "png").map(fileName => ({
         png: readPng(fileName),
-        fileName: fileName.substring(inputDirectory.length, fileName.length - 4)
+        fileName: getManifestKeyFromFilename(fileName, "png")
     }));
-
+    const jsonFiles = inputFiles.filter(fileName => fileName.substring(fileName.length - 4, fileName.length) === "json").map((fileName) => ({
+        json: readJson(fileName),
+        fileName
+    }));
     const [pngDest, manifest] = mapPngFilesToPngAndManifest(pngFiles);
-
     const [ width, height ] = getManifestSize(manifest);
     if (width > 2048 || height > 2048) {
         console.log("Warning, filesize getting big (", width, ", ", height, ")");
     }
-
-    writeJson(outputJSON, manifest);
+    const manifestWithFrames = getManifestWithFrameCounts(manifest, jsonFiles);
+    writeJson(outputJSON, manifestWithFrames);
     writePng(outputFile, pngDest);
 }
 
