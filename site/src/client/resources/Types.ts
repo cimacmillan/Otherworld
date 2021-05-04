@@ -64,3 +64,13 @@ export interface AudioManifest {
         metadata?: AudioMetadata;
     };
 }
+
+export interface SpriteSheetManifestJson {
+    [key: string]: {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+        frames?: number;
+    }
+}

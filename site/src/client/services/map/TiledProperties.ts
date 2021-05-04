@@ -1,6 +1,5 @@
 import { GameItem } from "../../resources/manifests/Items";
 import { Maps } from "../../resources/manifests/Maps";
-import { Sprites } from "../../resources/manifests/Sprites";
 
 export enum TiledObjectType {
     Wall = "Wall",
@@ -18,17 +17,17 @@ export const defaultTiledObjectProperties: Record<
     Record<string, string>
 > = {
     [TiledObjectType.Wall]: {
-        sprite: Sprites.WALL,
+        sprite: "wall",
     },
     [TiledObjectType.Door]: {
-        sprite: Sprites.CELL,
+        sprite: "cell",
     },
     [TiledObjectType.SpawnPoint]: {
         angle: "0",
         name: "BIRTH",
     },
     [TiledObjectType.Floor]: {
-        sprite: Sprites.FLOOR,
+        sprite: "floor",
         height: "0",
     },
     [TiledObjectType.GameItem]: {
@@ -39,7 +38,7 @@ export const defaultTiledObjectProperties: Record<
         spawn: "BIRTH",
     },
     [TiledObjectType.StaticSprite]: {
-        sprite: Sprites.SKULL,
+        sprite: "skull",
         height: "0.5",
     },
     [TiledObjectType.NPC]: {

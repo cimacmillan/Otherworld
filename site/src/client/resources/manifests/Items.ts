@@ -1,6 +1,5 @@
 import { EffectType } from "../../engine/scripting/effects/Effects";
 import { EquipmentType, Item, ItemType } from "../../engine/scripting/items/ItemTypes";
-import { Sprites } from "./Sprites";
 
 export enum GameItem {
     GOLD_KEY = "GOLD_KEY",
@@ -16,7 +15,7 @@ export type GameItemMap = {
 export const GameItems: GameItemMap = {
     [GameItem.GOLD_KEY]: {
         id: GameItem.GOLD_KEY,
-        spriteIcon: Sprites.ITEM_KEY,
+        spriteIcon: "item_key",
         stackable: false,
         name: "Gold Key",
         type: ItemType.KEY,
@@ -24,7 +23,7 @@ export const GameItems: GameItemMap = {
     },
     [GameItem.GOLD_RING]: {
         id: GameItem.GOLD_RING,
-        spriteIcon: Sprites.ITEM_GOLD_RING,
+        spriteIcon: "item_gold_ring",
         stackable: false,
         name: "Gold Ring",
         type: ItemType.EQUIPMENT,
@@ -39,7 +38,7 @@ export const GameItems: GameItemMap = {
     },
     [GameItem.WEAPON_WOOD_STICK]: {
         id: GameItem.WEAPON_WOOD_STICK,
-        spriteIcon: Sprites.WEAPON_WOOD_STICK,
+        spriteIcon: "weapon_wood_stick",
         stackable: false,
         name: "Wooden Club",
         type: ItemType.EQUIPMENT,

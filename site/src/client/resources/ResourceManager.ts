@@ -65,36 +65,33 @@ export class ResourceManager {
 
         for (const key in manifest.spritesheets) {
             const spritesheetManifest = manifest.spritesheets[key];
-            loadedManifest.spritesheets[key] = await loadSpriteSheet(
+            const [sheet, json] = await loadSpriteSheet(
                 gl,
-                spritesheetManifest.url
+                spritesheetManifest
             );
-
-            for (const spriteKey in spritesheetManifest.sprites) {
-                const sprite = spritesheetManifest.sprites[spriteKey];
-                loadedManifest.spritesheets[key].registerSprite(
-                    spriteKey,
-                    sprite.width,
-                    sprite.height,
-                    sprite.x,
-                    sprite.y
-                );
-                increment();
+            loadedManifest.spritesheets[key] = sheet;
+            for (const key in json) {
+                if (!json[key].frames) {
+                    sheet.registerSprite(
+                        key,
+                        json[key].width,
+                        json[key].height,
+                        json[key].x,
+                        json[key].y
+                    );
+                } else {
+                    sheet.registerAnimation(
+                        key,
+                        json[key].width,
+                        json[key].height,
+                        json[key].x,
+                        json[key].y,
+                        json[key].frames,
+                        false
+                    );
+                }
             }
-
-            for (const animationKey in spritesheetManifest.animations) {
-                const animation = spritesheetManifest.animations[animationKey];
-                loadedManifest.spritesheets[key].registerAnimation(
-                    animationKey,
-                    animation.width,
-                    animation.height,
-                    animation.x,
-                    animation.y,
-                    animation.frames,
-                    animation.vertical
-                );
-                increment();
-            }
+            increment();
         }
 
         for (const key in manifest.maps) {

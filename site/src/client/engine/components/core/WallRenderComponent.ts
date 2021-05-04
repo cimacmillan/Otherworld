@@ -1,5 +1,5 @@
 import { SCENERY_PIXEL_DENSITY } from "../../../Config";
-import { SpriteSheets } from "../../../resources/manifests/Sprites";
+import { SpriteSheets } from "../../../resources/manifests";
 import {
     RenderItem,
     Wall,

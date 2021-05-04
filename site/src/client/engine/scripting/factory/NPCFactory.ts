@@ -1,4 +1,3 @@
-import { Sprites } from "../../../resources/manifests/Sprites";
 import { InteractionSource, InteractionSourceType, InteractionType } from "../../../services/interaction/InteractionType";
 import { SpriteShadeOverride } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
@@ -184,7 +183,7 @@ export function createNPCState(
     const { position, health } = args;
     return {
         behaviour: NPCBehaviour.IDLE,
-        sprite: Sprites.NPC_BULKY_MAN,
+        sprite: "npc_bulky_man",
         spriteHeight: 1,
         spriteWidth: 1,
         position,

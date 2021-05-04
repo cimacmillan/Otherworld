@@ -1,4 +1,4 @@
-import { SpriteSheets } from "../../../resources/manifests/Sprites";
+import { SpriteSheets } from "../../../resources/manifests";
 import {
     RenderItem,
     Sprite,

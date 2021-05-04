@@ -1,4 +1,3 @@
-import { Sprites } from "../../../resources/manifests/Sprites";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
 import {
@@ -80,7 +79,7 @@ export function createStaticWall(
 }
 
 export function createStaticSpriteState(
-    sprite: Sprites,
+    sprite: string,
     position: Vector2D,
     height: number,
     spriteWidth: number,

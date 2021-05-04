@@ -1,6 +1,5 @@
 import { vec2, vec3 } from "gl-matrix";
 import { GameItems } from "../../resources/manifests/Items";
-import { SpriteSheets } from "../../resources/manifests/Sprites";
 import { SpriteSheet } from "../../resources/SpriteSheet";
 import { InteractionSourceType, InteractionType } from "../../services/interaction/InteractionType";
 import { ColourMap } from "../../services/render/util/ReferenceMap";
