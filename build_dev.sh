@@ -20,7 +20,7 @@
 # printf "${GREEN}Starting Server...${NC}...\n"
 
 # npm run start 
-sudo npm run compileArt
+sudo npm run compileArt-w &
 sudo npm run build &
 sudo npm run pack &
 sudo npm run server

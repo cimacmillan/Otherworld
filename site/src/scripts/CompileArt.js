@@ -168,9 +168,7 @@ function main() {
     }));
     const [pngDest, manifest] = mapPngFilesToPngAndManifest(pngFiles);
     const [ width, height ] = getManifestSize(manifest);
-    if (width > 2048 || height > 2048) {
-        console.log("Warning, filesize getting big (", width, ", ", height, ")");
-    }
+    console.log("filesize (", width, ", ", height, ")");
     const manifestWithFrames = getManifestWithFrameCounts(manifest, jsonFiles);
     writeJson(outputJSON, manifestWithFrames);
     writePng(outputFile, pngDest);

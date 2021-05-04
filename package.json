@@ -56,6 +56,7 @@
         "pack": "npx webpack --config webpack.config.js -o site/public/js/main.js",
         "server": "nodemon site/build/server/Run.js --delay 1",
         "compileArt": "node site/src/scripts/CompileArt.js",
+        "compileArt-w": "watch 'npm run-script compileArt' res/graphics",
         "generate": "node site/build/server/Generator.js",
         "watch": "npm-watch",
         "full-rebuild": "npm run-script clean && npm run-script build && npm run-script pack && npm run-script server",
