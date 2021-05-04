@@ -36,10 +36,7 @@ export class ResourceManager {
             Object.keys(manifest.spritesheets).reduce(
                 (prevValue: number, next: string) => {
                     return (
-                        prevValue +
-                        Object.keys(manifest.spritesheets[next].animations)
-                            .length +
-                        Object.keys(manifest.spritesheets[next].sprites).length
+                        prevValue + 1
                     );
                 },
                 0

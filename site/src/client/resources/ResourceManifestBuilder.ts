@@ -11,13 +11,13 @@ import {
 
 export class ResourceManifestBuilder implements ResourceManifest {
     public spritesheets: {
-        [key: string]: SpriteSheetManifest;
+        [key: string]: string;
     } = {};
     public audio: AudioManifest = {};
     public maps: MapManifest = {};
 
-    public Spritesheet(key: string, manifest: SpriteSheetManifest) {
-        this.spritesheets[key] = manifest;
+    public Spritesheet(key: string, url: string) {
+        this.spritesheets[key] = url;
     }
 
     public Audio(key: string, audio: string, metadata?: AudioMetadata) {

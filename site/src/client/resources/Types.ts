@@ -18,7 +18,7 @@ export interface LoadedMapManifest {
 
 export interface ResourceManifest {
     spritesheets: {
-        [key: string]: SpriteSheetManifest;
+        [key: string]: string;
     };
     audio: AudioManifest;
     maps: MapManifest;
