@@ -23,8 +23,11 @@ export interface TextRender {
     },
     position: vec2,
     height: number,
-    size: number
+    size: number,
+    angle: number
 }
+
+const CHAR_MAG_SPACING = 0.8;
 
 interface TextRenderObject {
     textRender: TextRender;
@@ -61,7 +64,24 @@ export class TextRenderService implements RenderItemInterface<TextRender> {
     }
 
     public updateItem(ref: RenderItem, param: Partial<TextRender>) {
+        const index = this.textArray.findRealIndexOf(ref.renderId);
+        const textRenderObject = this.textArray.getArray()[index].obj;
+        const { textRender, sprites } = textRenderObject;
+        const { contents } = textRender;
+        const newTextRender = {...textRender, ...param};
+        const newSprites = contents.split("")
+            .map((_, index: number) => this.constructTextChar(newTextRender, index))
+            .map((newSprite, index: number) => this.spriteRenderService.updateItem(sprites[index], newSprite));
 
+        if (param.contents) {
+            if (param.contents.length < textRender.contents.length) {
+                console.log("Need to free some sprites");
+            } else if (param.contents.length > textRender.contents.length) {
+                console.log("Need to create some sprites");
+            }
+        }
+
+        this.textArray.updateItem(ref.renderId, { sprites: sprites, textRender: newTextRender});
     }
 
     public freeItem(ref: RenderItem) {
@@ -69,24 +89,53 @@ export class TextRenderService implements RenderItemInterface<TextRender> {
     }
 
     private constructTextRenderObject(textRender: TextRender): TextRenderObject {
-        const { position, size, colour, height} = textRender;
-        const item = this.spriteRenderService.createItem({
-            position,
+        const { contents} = textRender;
+        const sprites = contents.split("")
+            .map((_, index: number) => this.constructTextChar(textRender, index))
+            .map(sprite => this.spriteRenderService.createItem(sprite));
+        return { 
+            textRender,
+            sprites: sprites
+        }
+    }   
+
+    private constructTextChar(textRender: TextRender, charCount: number): Sprite {
+        const { position, size, colour, height, contents, angle } = textRender;
+        const mag = size * charCount * CHAR_MAG_SPACING;
+        const rotatedPosition: vec2 = [
+            position[0] + Math.cos(angle) * mag,
+            position[1] + Math.sin(angle) * mag
+        ];
+        return {
+            position: rotatedPosition,
             size: [size, size],
             height,
             shade: {...colour, intensity: 1 },
-            texture: this.getFont(0)
-        });
-        return { 
-            textRender,
-            sprites: [item]
-        }
-    }   
+            texture: this.getFont(this.getFrameFromChar(contents.charAt(charCount)))
+        };
+    }
 
     private getFont(frame: number) {
         const sheet = this.resourceManager.getDefaultSpriteSheet();
         const image = sheet.getAnimationFrame("font", frame).textureCoordinate;
         return image;
+    }
+
+    private getFrameFromChar(char: string): number {
+        const alphabetCharCode = 65;
+        const numberCharCode = 48;
+        const upperCase = char.toUpperCase();
+        const code = upperCase.charCodeAt(0);
+
+        if (code - numberCharCode < 10) {
+            return code - numberCharCode;
+        }
+
+        if (code - alphabetCharCode < 26) {
+            return code - alphabetCharCode;
+        }
+
+        return 0;
     }
 }
 

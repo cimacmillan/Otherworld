@@ -1,5 +1,5 @@
 import { InteractionSource, InteractionSourceType, InteractionType } from "../../../services/interaction/InteractionType";
-import { SpriteShadeOverride } from "../../../services/render/types/RenderInterface";
+import { RenderItem, SpriteShadeOverride } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
 import { animation, easeInOutCirc } from "../../../util/animation/Animations";
@@ -130,6 +130,37 @@ const TemporaryEffectComponentWhenDamaged = (state: ColourHitState, onEffect: (e
     );
 }
 
+export const RendersText = (position: Vector2D, height: number): EntityComponent<any> => {
+    let item: RenderItem = undefined;
+    let num = 0;
+    return  {
+        getActions: (ent: Entity<NPCState>) => {
+            return ({
+                onEntityCreated: () => {
+                    item = ent.getServiceLocator().getRenderService().textRenderService.createItem({
+                        contents: `${num}`,
+                        position: [position.x,position.y],
+                        height,
+                        size: 1,
+                        colour: {
+                            r: 1,
+                            g: 0,
+                            b: 1
+                        },
+                        angle: 0
+                    })
+                }
+            })
+        },
+        update: (ent: Entity<NPCState>) => {
+            const playerAngle = ent.getServiceLocator().getScriptingService().getPlayer().getAngle();
+            ent.getServiceLocator().getRenderService().textRenderService.updateItem(item, {
+                angle: playerAngle
+            });
+        }
+    }
+}
+
 const whiteShade = {
     intensity: 1,
     r: 1,
@@ -171,23 +202,7 @@ export function createNPC(
             state.colourHit, 
             (entity: Entity<ColourHitState>) => entity.getState().colourHit
         ),
-        {
-            getActions: (ent: Entity<NPCState>) => ({
-                onEntityCreated: () => {
-                    ent.getServiceLocator().getRenderService().textRenderService.createItem({
-                        contents: "Hello World",
-                        position: [state.position.x, state.position.y],
-                        height: state.height,
-                        size: 1,
-                        colour: {
-                            r: 1,
-                            g: 1,
-                            b: 1
-                        }
-                    })
-                }
-            })
-        }
+        RendersText(state.position, state.height)
     )
 }
 
