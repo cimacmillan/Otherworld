@@ -23,7 +23,7 @@ function writePng(dir, png) {
 }
 
 function writeJson(dir, json) {
-    const val = JSON.stringify(json);
+    const val = JSON.stringify(json, undefined, 4);
     fs.writeFileSync(dir, val, { flag: "w" });
 }
 

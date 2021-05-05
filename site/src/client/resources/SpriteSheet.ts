@@ -112,7 +112,7 @@ export class SpriteSheet {
         return this.spriteHash[name];
     }
 
-    public getAnimationFrame(name: number, frame: number) {
+    public getAnimationFrame(name: string, frame: number) {
         const animation = this.animationHash[name];
         if (!animation) {
             console.log(`Animation ${name} missing`);
@@ -126,7 +126,7 @@ export class SpriteSheet {
         return this.animationHash[name][frame];
     }
 
-    public getAnimationInterp(name: number, interp: number) {
+    public getAnimationInterp(name: string, interp: number) {
         const animation = this.animationHash[name];
         if (!animation) {
             console.log(`Animation ${name} missing`);

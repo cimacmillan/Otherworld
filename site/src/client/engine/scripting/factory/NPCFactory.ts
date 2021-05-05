@@ -170,7 +170,24 @@ export function createNPC(
             }, 
             state.colourHit, 
             (entity: Entity<ColourHitState>) => entity.getState().colourHit
-        )
+        ),
+        {
+            getActions: (ent: Entity<NPCState>) => ({
+                onEntityCreated: () => {
+                    ent.getServiceLocator().getRenderService().textRenderService.createItem({
+                        contents: "Hello World",
+                        position: [state.position.x, state.position.y],
+                        height: state.height,
+                        size: 1,
+                        colour: {
+                            r: 1,
+                            g: 1,
+                            b: 1
+                        }
+                    })
+                }
+            })
+        }
     )
 }
 

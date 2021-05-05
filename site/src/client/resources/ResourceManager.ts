@@ -4,7 +4,7 @@ import { tiledXMLtoGameTiledMap } from "../services/map/TiledParser";
 import { State } from "../ui/State";
 import { Store } from "@cimacmillan/refunc";
 // import { setLoadPercentage } from "../ui/actions/GameStartActions";
-import { defaultManifest } from "./manifests/Resources";
+import { defaultManifest, SpriteSheets } from "./manifests/Resources";
 import { loadSpriteSheet } from "./TextureLoader";
 import { LoadedManifest, ResourceManifest } from "./Types";
 
@@ -82,7 +82,7 @@ export class ResourceManager {
                 } else {
                     sheet.registerAnimation(
                         key,
-                        json[key].width,
+                        json[key].width / json[key].frames,
                         json[key].height,
                         json[key].x,
                         json[key].y,
@@ -110,5 +110,9 @@ export class ResourceManager {
         }
 
         return loadedManifest;
+    }
+
+    public getDefaultSpriteSheet() {
+        return this.manifest.spritesheets[SpriteSheets.SPRITE]
     }
 }

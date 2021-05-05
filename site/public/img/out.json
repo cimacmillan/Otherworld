@@ -1,1 +1,94 @@
-{"bone":{"x":0,"y":0,"width":10,"height":10},"cell":{"x":0,"y":10,"width":10,"height":10},"floor":{"x":10,"y":0,"width":10,"height":10},"floor_blood":{"x":10,"y":10,"width":10,"height":10},"floor_hole":{"x":0,"y":20,"width":10,"height":10},"glorp":{"x":20,"y":0,"width":32,"height":32},"item_key":{"x":10,"y":20,"width":10,"height":10},"ladder":{"x":0,"y":30,"width":10,"height":10},"miner":{"x":0,"y":40,"width":256,"height":160,"frames":8},"npc_bulky_man":{"x":10,"y":30,"width":10,"height":10},"skull":{"x":52,"y":0,"width":10,"height":10},"ui_finger":{"x":52,"y":10,"width":10,"height":10},"wall":{"x":52,"y":20,"width":10,"height":10},"weapon_wood_stick":{"x":52,"y":30,"width":10,"height":10}}
+{
+    "bone": {
+        "x": 0,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "cell": {
+        "x": 0,
+        "y": 10,
+        "width": 10,
+        "height": 10
+    },
+    "floor": {
+        "x": 10,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "floor_blood": {
+        "x": 10,
+        "y": 10,
+        "width": 10,
+        "height": 10
+    },
+    "floor_hole": {
+        "x": 0,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "font": {
+        "x": 0,
+        "y": 30,
+        "width": 360,
+        "height": 10,
+        "frames": 36
+    },
+    "glorp": {
+        "x": 0,
+        "y": 40,
+        "width": 32,
+        "height": 32
+    },
+    "item_key": {
+        "x": 10,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "ladder": {
+        "x": 20,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "miner": {
+        "x": 32,
+        "y": 40,
+        "width": 256,
+        "height": 160,
+        "frames": 8
+    },
+    "npc_bulky_man": {
+        "x": 0,
+        "y": 72,
+        "width": 10,
+        "height": 10
+    },
+    "skull": {
+        "x": 0,
+        "y": 82,
+        "width": 10,
+        "height": 10
+    },
+    "ui_finger": {
+        "x": 0,
+        "y": 92,
+        "width": 10,
+        "height": 10
+    },
+    "wall": {
+        "x": 0,
+        "y": 102,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_wood_stick": {
+        "x": 0,
+        "y": 112,
+        "width": 10,
+        "height": 10
+    }
+}
