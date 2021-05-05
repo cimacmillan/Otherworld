@@ -155,8 +155,10 @@ export const RendersText = (position: Vector2D, height: number): EntityComponent
         update: (ent: Entity<NPCState>) => {
             const playerAngle = ent.getServiceLocator().getScriptingService().getPlayer().getAngle();
             ent.getServiceLocator().getRenderService().textRenderService.updateItem(item, {
-                angle: playerAngle
+                angle: playerAngle,
+                contents: `${num}`
             });
+            num++;
         }
     }
 }
