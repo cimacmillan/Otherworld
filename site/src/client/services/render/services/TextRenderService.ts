@@ -67,21 +67,25 @@ export class TextRenderService implements RenderItemInterface<TextRender> {
         const index = this.textArray.findRealIndexOf(ref.renderId);
         const textRenderObject = this.textArray.getArray()[index].obj;
         const { textRender, sprites } = textRenderObject;
-        const { contents } = textRender;
-        const newTextRender = {...textRender, ...param};
-        const newSprites = contents.split("")
-            .map((_, index: number) => this.constructTextChar(newTextRender, index))
-            .map((newSprite, index: number) => this.spriteRenderService.updateItem(sprites[index], newSprite));
+        const newTextRender = { ...textRender, ...param} ;
+        const { contents } = newTextRender;
+        let newSprites = sprites;
 
-        if (param.contents) {
-            if (param.contents.length < textRender.contents.length) {
-                console.log("Need to free some sprites");
-            } else if (param.contents.length > textRender.contents.length) {
-                console.log("Need to create some sprites");
+        if (contents.length !== sprites.length) {
+            for (let i = sprites.length; i < contents.length; i++) {
+                newSprites.push(this.spriteRenderService.createItem(this.constructTextChar(newTextRender, index)))
             }
+            for (let i = sprites.length; i > contents.length; i--) {
+                this.spriteRenderService.freeItem(sprites[i - 1]);
+            }
+            newSprites = newSprites.slice(0, contents.length);
         }
 
-        this.textArray.updateItem(ref.renderId, { sprites: sprites, textRender: newTextRender});
+        contents.split("")
+            .map((_, index: number) => this.constructTextChar(newTextRender, index))
+            .forEach((newSprite, index: number) => this.spriteRenderService.updateItem(sprites[index], newSprite));
+
+        this.textArray.updateItem(ref.renderId, { sprites: newSprites, textRender: newTextRender});
     }
 
     public freeItem(ref: RenderItem) {
@@ -127,11 +131,11 @@ export class TextRenderService implements RenderItemInterface<TextRender> {
         const upperCase = char.toUpperCase();
         const code = upperCase.charCodeAt(0);
 
-        if (code - numberCharCode < 10) {
+        if (code - numberCharCode < 10 && code - numberCharCode >= 0) {
             return code - numberCharCode;
         }
 
-        if (code - alphabetCharCode < 26) {
+        if (code - alphabetCharCode < 26 && code - alphabetCharCode >= 0) {
             return code - alphabetCharCode;
         }
 
