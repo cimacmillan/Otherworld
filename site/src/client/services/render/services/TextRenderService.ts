@@ -89,7 +89,12 @@ export class TextRenderService implements RenderItemInterface<TextRender> {
     }
 
     public freeItem(ref: RenderItem) {
-
+        const index = this.textArray.findRealIndexOf(ref.renderId);
+        const textRenderObject = this.textArray.getArray()[index].obj;
+        textRenderObject.sprites.forEach((sprite) => {
+            this.spriteRenderService.freeItem(sprite)
+        })
+        this.textArray.freeItem(ref.renderId);
     }
 
     private constructTextRenderObject(textRender: TextRender): TextRenderObject {
