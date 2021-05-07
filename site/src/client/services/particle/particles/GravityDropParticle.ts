@@ -13,13 +13,16 @@ export const GravityDropParticle = (args: {
         life,
         render: (x: number) => {
             const grav = x * x * x;
-            return {
-                position: [start[0], start[1] - grav, start[2]],
-                size: [0.1, 0.1],
-                r,
-                g,
-                b,
-            };
+            return ({
+                type: "Particle",
+                particle: {
+                    position: [start[0], start[1] - grav, start[2]],
+                    size: [0.1, 0.1],
+                    r,
+                    g,
+                    b,
+                }
+            });
         },
     };
 };

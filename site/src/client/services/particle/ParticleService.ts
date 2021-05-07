@@ -1,11 +1,17 @@
 import { ConsistentArray } from "../../util/array/ConsistentArray";
 import { fpsNorm } from "../../util/time/GlobalFPSController";
+import { TextRender } from "../render/services/TextRenderService";
 import { ParticleRender, RenderItem } from "../render/types/RenderInterface";
 import { ServiceLocator } from "../ServiceLocator";
 
-// interface Particle {
+export type ParticleType = {
+    type: "Particle",
+    particle: ParticleRender
+} | {
+    type: "Text",
+    particle: TextRender
+}
 
-// }
 
 export interface ParticleEmitter {
     // How many particles per frame
@@ -16,38 +22,48 @@ export interface ParticleEmitter {
 export interface Particle {
     // How many frames until death
     life: number;
-    render: (x: number) => ParticleRender;
+    render: (x: number) => ParticleType;
 }
 
 class ParticleInstance {
     private x = 0;
     private renderItem: RenderItem;
+    private type: "Particle" | "Text";
 
     public constructor(
         private serviceLocator: ServiceLocator,
         private particle: Particle,
         private removeSelf: () => void
     ) {
-        this.renderItem = this.serviceLocator
-            .getRenderService()
-            .particleRenderService.createItem(this.particle.render(0));
+        const rendered = particle.render(0);
+        this.type = rendered.type;
+        this.renderItem = this.getRenderService().createItem(rendered.particle as any);
     }
 
     public update() {
         this.x += fpsNorm(1);
         if (this.x > this.particle.life) {
-            this.serviceLocator
-                .getRenderService()
-                .particleRenderService.freeItem(this.renderItem);
+            this.getRenderService().freeItem(this.renderItem);
             this.removeSelf();
             return;
         }
-        this.serviceLocator
-            .getRenderService()
-            .particleRenderService.updateItem(
-                this.renderItem,
-                this.particle.render(this.x / this.particle.life)
-            );
+        this.getRenderService().updateItem(
+            this.renderItem,
+            this.particle.render(this.x / this.particle.life) as any
+        );
+    }
+
+    private getRenderService() {
+        switch (this.type) {
+            case "Particle":
+                return this.serviceLocator
+                    .getRenderService()
+                    .particleRenderService;
+            case "Text":
+                return this.serviceLocator
+                    .getRenderService()
+                    .textRenderService;
+        }
     }
 }
 
@@ -108,7 +124,7 @@ export class ParticleService {
         return this.particles.getArray();
     }
 
-    private addParticle(particle: Particle) {
+    public addParticle(particle: Particle) {
         const instance: ParticleInstance = new ParticleInstance(
             this.serviceLocator,
             particle,
