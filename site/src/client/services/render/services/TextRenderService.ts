@@ -24,7 +24,9 @@ export interface TextRender {
     position: vec2,
     height: number,
     size: number,
-    angle: number
+    angle: number,
+    horizontalPlacement?: number,
+    verticalPlacement?: number
 }
 
 const CHAR_MAG_SPACING = 0.8;
@@ -109,8 +111,11 @@ export class TextRenderService implements RenderItemInterface<TextRender> {
     }   
 
     private constructTextChar(textRender: TextRender, charCount: number): Sprite {
-        const { position, size, colour, height, contents, angle } = textRender;
-        const mag = size * charCount * CHAR_MAG_SPACING;
+        const { position, size, colour, height, contents, angle, horizontalPlacement, verticalPlacement } = textRender;
+        const vert = verticalPlacement ?? 0;
+        const horiz = horizontalPlacement ?? 0;
+        const mag = size * (charCount + 0.5) * CHAR_MAG_SPACING - this.getWidth(textRender) * horiz;
+
         const rotatedPosition: vec2 = [
             position[0] + Math.cos(angle) * mag,
             position[1] + Math.sin(angle) * mag
@@ -118,10 +123,18 @@ export class TextRenderService implements RenderItemInterface<TextRender> {
         return {
             position: rotatedPosition,
             size: [size, size],
-            height,
+            height: height + this.getHeight(textRender) * vert,
             shade: {...colour, intensity: 1 },
             texture: this.getFont(this.getFrameFromChar(contents.charAt(charCount)))
         };
+    }
+
+    private getWidth(textRender: TextRender) {
+        return textRender.size * textRender.contents.length * CHAR_MAG_SPACING;
+    }
+
+    private getHeight(textRender: TextRender) {
+        return textRender.size;
     }
 
     private getFont(frame: number) {

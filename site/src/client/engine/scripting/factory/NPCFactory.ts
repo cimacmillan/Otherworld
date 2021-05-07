@@ -132,7 +132,7 @@ const TemporaryEffectComponentWhenDamaged = (state: ColourHitState, onEffect: (e
 
 export const RendersText = (position: Vector2D, height: number): EntityComponent<any> => {
     let item: RenderItem = undefined;
-    let num = 1000;
+    let num = 0;
     return  {
         getActions: (ent: Entity<NPCState>) => {
             return ({
@@ -147,7 +147,9 @@ export const RendersText = (position: Vector2D, height: number): EntityComponent
                             g: 0,
                             b: 1
                         },
-                        angle: 0
+                        angle: 0,
+                        horizontalPlacement: 0.5,
+                        verticalPlacement: 0.5
                     })
                 }
             })
@@ -158,7 +160,7 @@ export const RendersText = (position: Vector2D, height: number): EntityComponent
                 angle: playerAngle,
                 contents: `${num}`
             });
-            num = num - 1;
+            num = num + 1;
         }
     }
 }
