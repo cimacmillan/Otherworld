@@ -45,8 +45,9 @@ export const GameItems: GameItemMap = {
         description: "A heavy wooden club. It feels like it could bash some skulls.",
         onAttack: [
             {
-                type: EffectType.DAMAGES_TARGET,
-                points: 1
+                type: EffectType.DAMAGES_TARGET_IN_RANGE,
+                a: 1,
+                b: 2
             }
         ],
         equipmentType: EquipmentType.WEAPON

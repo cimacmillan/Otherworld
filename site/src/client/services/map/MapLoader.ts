@@ -199,7 +199,7 @@ export function loadPoint(args: {
                             x: object.data.x,
                             y: object.data.y
                         },
-                        health: 5
+                        health: 20
                     })
                 )
             )

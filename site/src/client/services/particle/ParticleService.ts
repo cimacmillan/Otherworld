@@ -45,12 +45,12 @@ class ParticleInstance {
         if (this.x > this.particle.life) {
             this.getRenderService().freeItem(this.renderItem);
             this.removeSelf();
-            return;
+        } else {
+            this.getRenderService().updateItem(
+                this.renderItem,
+                this.particle.render(this.x / this.particle.life).particle as any
+            );
         }
-        this.getRenderService().updateItem(
-            this.renderItem,
-            this.particle.render(this.x / this.particle.life) as any
-        );
     }
 
     private getRenderService() {

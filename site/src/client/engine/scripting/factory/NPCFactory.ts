@@ -1,4 +1,6 @@
+import { vec3 } from "gl-matrix";
 import { InteractionSource, InteractionSourceType, InteractionType } from "../../../services/interaction/InteractionType";
+import { DamageTextParticle, HealthDropParticle } from "../../../services/particle/particles/HealthDropParticle";
 import { RenderItem, SpriteShadeOverride } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
@@ -62,6 +64,27 @@ const ReboundsWhenDamaged = (force = 0.1) => {
             }
         })
     })
+}
+
+const RendersTextWhenDamaged = () => {
+    return ({
+        getActions: (entity: Entity<NPCState>) => ({
+            onDamagedByPlayer: (points: number) => {
+                const { position, height, spriteHeight, health } = entity.getState();
+                const vector: vec3 = [position.x, height + spriteHeight/2, position.y];
+                entity.getServiceLocator().getParticleService().addParticle(HealthDropParticle({ 
+                    damage: health, 
+                    start: vector,
+                    getAngle: () => entity.getServiceLocator().getScriptingService().getPlayer().getAngle()
+                }));
+                entity.getServiceLocator().getParticleService().addParticle(DamageTextParticle({ 
+                    damage: points, 
+                    start: vector,
+                    getAngle: () => entity.getServiceLocator().getScriptingService().getPlayer().getAngle()
+                }))
+            }
+        })
+    });
 }
 
 const WhenHealthDepleted = (callback: () => void): EntityComponent<HealthState> => {
@@ -130,41 +153,6 @@ const TemporaryEffectComponentWhenDamaged = (state: ColourHitState, onEffect: (e
     );
 }
 
-export const RendersText = (position: Vector2D, height: number): EntityComponent<any> => {
-    let item: RenderItem = undefined;
-    let num = 0;
-    return  {
-        getActions: (ent: Entity<NPCState>) => {
-            return ({
-                onEntityCreated: () => {
-                    item = ent.getServiceLocator().getRenderService().textRenderService.createItem({
-                        contents: `${num}`,
-                        position: [position.x,position.y],
-                        height,
-                        size: 1,
-                        colour: {
-                            r: 1,
-                            g: 0,
-                            b: 1
-                        },
-                        angle: 0,
-                        horizontalPlacement: 0.5,
-                        verticalPlacement: 0.5
-                    })
-                }
-            })
-        },
-        update: (ent: Entity<NPCState>) => {
-            const playerAngle = ent.getServiceLocator().getScriptingService().getPlayer().getAngle();
-            ent.getServiceLocator().getRenderService().textRenderService.updateItem(item, {
-                angle: playerAngle,
-                contents: `${num}`
-            });
-            num = num + 1;
-        }
-    }
-}
-
 const whiteShade = {
     intensity: 1,
     r: 1,
@@ -206,7 +194,7 @@ export function createNPC(
             state.colourHit, 
             (entity: Entity<ColourHitState>) => entity.getState().colourHit
         ),
-        RendersText(state.position, state.height)
+        RendersTextWhenDamaged()
     )
 }
 
