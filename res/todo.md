@@ -4,7 +4,6 @@ Puzzle maps to escape prison, killing enemies
 
 * jailor has a dead state
 * jailor can walk around by rotating sprite, scaling?
-* Damaged text renderer 
 * player health view
 * jailor entity attacks player
 * jailor entity has drops of a certain distribution, item drops
