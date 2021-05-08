@@ -13,7 +13,7 @@ function damageTargets(context: EffectContext, amount: number) {
                 InteractionType.ATTACK,
                 position,
                 player.getAngle(),
-                1.5
+                2
             );
         interacts.forEach(interact => {
             const source = interact.source;
