@@ -16,6 +16,8 @@ import { TimeoutComponent } from "../../components/util/TimeoutEffect";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { SpriteRenderState } from "../../state/State";
+import { EntityFactory, EntityType } from "./EntityFactory";
+import { createStaticSpriteState } from "./SceneryFactory";
 
 interface HealthState {
     health: number;
@@ -87,12 +89,12 @@ const RendersTextWhenDamaged = () => {
     });
 }
 
-const WhenHealthDepleted = (callback: () => void): EntityComponent<HealthState> => {
+const WhenHealthDepleted = (callback: (entity: Entity<NPCState>) => void): EntityComponent<NPCState> => {
     return ({
-        getActions: () => ({
+        getActions: (entity: Entity<NPCState>) => ({
             onStateTransition: (from: HealthState, to: HealthState) => {
                 if (from.health !== 0 && to.health === 0) {
-                    callback();
+                    callback(entity);
                 }
             }
         })
@@ -184,8 +186,16 @@ export function createNPC(
                 spriteHeight: 1
             }),
         ),
-        WhenHealthDepleted(() => {
-            console.log("He died :(")
+        WhenHealthDepleted((entity: Entity<NPCState>) => {
+            entity.delete();
+            const newStaticSprite = EntityFactory[EntityType.SCENERY_SPRITE](serviceLocator, createStaticSpriteState(
+                "dead_man",
+                entity.getState().position,
+                0,
+                entity.getState().spriteWidth,
+                entity.getState().spriteHeight
+            ));
+            newStaticSprite.create();
         }),
         new SwitchComponent(
             {

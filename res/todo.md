@@ -2,7 +2,6 @@
 ### Milestone 2
 Puzzle maps to escape prison, killing enemies
 
-* jailor has a dead state
 * jailor can walk around by rotating sprite, scaling?
 * player health view
 * jailor entity attacks player
@@ -17,12 +16,15 @@ Puzzle maps to escape prison, killing enemies
 ### Polish 
 * Improve head bob to not make noise when standing still (frequency?)
 * Weapon noises
+* Add particles to hits and deaths
+* Add screenshake to hits and deaths
 
 ### Audio
 * Don't start audio until button pressed (onGameStart?)
 * Item collect sound
 * BPM sequencer for syncing song change
 * Fade in / fade out music
+* Read audio directly from folder 
 
 ### Gameplay
 * Destroy / remove key on door use?

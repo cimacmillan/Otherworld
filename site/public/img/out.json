@@ -11,20 +11,26 @@
         "width": 10,
         "height": 10
     },
-    "floor": {
+    "dead_man": {
         "x": 10,
         "y": 0,
         "width": 10,
         "height": 10
     },
-    "floor_blood": {
+    "floor": {
         "x": 10,
         "y": 10,
         "width": 10,
         "height": 10
     },
-    "floor_hole": {
+    "floor_blood": {
         "x": 0,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "floor_hole": {
+        "x": 10,
         "y": 20,
         "width": 10,
         "height": 10
@@ -43,14 +49,14 @@
         "height": 32
     },
     "item_key": {
-        "x": 10,
-        "y": 20,
+        "x": 20,
+        "y": 0,
         "width": 10,
         "height": 10
     },
     "ladder": {
         "x": 20,
-        "y": 0,
+        "y": 10,
         "width": 10,
         "height": 10
     },
