@@ -65,14 +65,14 @@ const HoversAnimation = (
             .looping()
     );
 
-const WhenInPlayerVicinity = (
+export const WhenInPlayerVicinity = <T extends SurfacePosition>(
     threshold: number,
-    onEnter: (entity: Entity<SurfacePosition>) => void,
-    onLeave: (entity: Entity<SurfacePosition>) => void
-): EntityComponent<SurfacePosition> => {
+    onEnter: (entity: Entity<T>) => void,
+    onLeave: (entity: Entity<T>) => void
+): EntityComponent<T> => {
     let entered = false;
     return {
-        update: (entity: Entity<SurfacePosition>) => {
+        update: (entity: Entity<T>) => {
             const player = entity
                 .getServiceLocator()
                 .getScriptingService()
@@ -94,7 +94,9 @@ const WhenInPlayerVicinity = (
                 }
             }
         },
-        getActions: () => ({}),
+        getActions: () => ({
+            onEntityCreated: () => entered = false,
+        }),
     };
 };
 

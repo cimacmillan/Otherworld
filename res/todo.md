@@ -6,18 +6,22 @@ Puzzle maps to escape prison, killing enemies
 * player health view
 * jailor entity attacks player
 * jailor entity has drops of a certain distribution, item drops
-* Player skills definition and serialisation
+
+
+
+<!-- * Player skills definition and serialisation
 * Killing jailor increases skill
 * Skill increase component and view
 * Player skills tab in inventory
 * Skill level up sound effect and view
-* Lockpicking increases skill
+* Lockpicking increases skill -->
 
 ### Polish 
 * Improve head bob to not make noise when standing still (frequency?)
 * Weapon noises
 * Add particles to hits and deaths
 * Add screenshake to hits and deaths
+* Sort dodgy sprites shapes when rendering
 
 ### Audio
 * Don't start audio until button pressed (onGameStart?)

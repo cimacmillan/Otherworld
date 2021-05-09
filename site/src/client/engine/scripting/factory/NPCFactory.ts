@@ -17,6 +17,7 @@ import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { SpriteRenderState } from "../../state/State";
 import { EntityFactory, EntityType } from "./EntityFactory";
+import { WhenInPlayerVicinity } from "./ItemFactory";
 import { createStaticSpriteState } from "./SceneryFactory";
 
 interface HealthState {
@@ -25,14 +26,15 @@ interface HealthState {
 
 enum NPCBehaviour {
     IDLE = "IDLE",
-    DEAD = "DEAD"
+    ATTACKING = "ATTACKING",
+    HIT = "HIT"
 }
 
 type NPCState = SpriteRenderState &
                 PhysicsStateType &
                 HealthState & {
                     behaviour: NPCBehaviour
-                } & ColourHitState;
+                };
 
 
 const LosesHealthWhenDamaged = () => {
@@ -116,43 +118,85 @@ const BreathsSlowly = (defaultHeight: number): EntityComponent<SpriteRenderState
     });
 }
 
-type ColourHitState = {
-    colourHit: "DEFAULT" | "COLOUR"
-} & SpriteRenderState;
+const OnDamagedByPlayer = (onDamaged: (entity: Entity<NPCState>) => void) => {
+    return {
+        getActions: (entity: Entity<NPCState>) => ({
+            onDamagedByPlayer: () => onDamaged(entity)
+        })
+    }
+}
+
 const COLOUR_HIT_TIME = 200;
-const TemporaryEffectComponentWhenDamaged = (state: ColourHitState, onEffect: (entity: Entity<ColourHitState>) => void, onDefault: (entity: Entity<ColourHitState>) => void): EntityComponent<ColourHitState> => {
-    return new SwitchComponent<ColourHitState>(
+const TemporaryEffectComponentWhenDamaged = (state: NPCState, onEffect: (entity: Entity<NPCState>) => void, onDefault: (entity: Entity<NPCState>) => void): EntityComponent<NPCState> => {
+    return new SwitchComponent<NPCState>(
         {
-            ["DEFAULT"]: {
-                getActions: (entity: Entity<ColourHitState>) => ({
+            [NPCBehaviour.IDLE]: {
+                getActions: (entity: Entity<NPCState>) => ({
                     onEntityCreated: () => {
                         onDefault(entity);
                     },
-                    onDamagedByPlayer: () => {
-                        entity.setState({
-                            colourHit: "COLOUR"
-                        })
-                    }
                 })
             },
-            ["COLOUR"]: JoinComponent<ColourHitState>([
+            [NPCBehaviour.HIT]: JoinComponent<NPCState>([
                 {
-                    getActions: (entity: Entity<ColourHitState>) => ({
+                    getActions: (entity: Entity<NPCState>) => ({
                         onEntityCreated: () => {
                             onEffect(entity);
                         }
                     })
                 },
-                TimeoutComponent<ColourHitState>((entity: Entity<ColourHitState>) => {
+                TimeoutComponent<NPCState>((entity: Entity<NPCState>) => {
                     entity.setState({
-                        colourHit: "DEFAULT"
+                        behaviour: NPCBehaviour.IDLE
                     })
                 }, COLOUR_HIT_TIME)
             ])
         },
-        state.colourHit,
-        (entity: Entity<ColourHitState>) => entity.getState().colourHit
+        state.behaviour,
+        (entity: Entity<NPCState>) => entity.getState().behaviour
     );
+}
+
+const WalksTowardsPlayer = (): EntityComponent<PhysicsStateType> => {
+    return ({
+        getActions: (entity: Entity<PhysicsStateType>) => ({
+
+        }),
+        update: (entity: Entity<PhysicsStateType>) => {
+            const playerPos = entity.getServiceLocator().getScriptingService().getPlayer().getPositon();
+            const pos = entity.getState().position;
+            const diff = vec.vec_sub(playerPos, pos);
+            const norm = vec.vec_normalize(diff);
+            const speed = vec.vec_mult_scalar(norm, 0.004);
+            const newVelocity = vec.vec_add(entity.getState().velocity, speed);
+            entity.setState({
+                velocity: newVelocity
+            })
+        }
+    })
+}
+
+const IdleBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
+    return [
+        OnDamagedByPlayer(ent => ent.setState({ behaviour: NPCBehaviour.HIT })),
+        BreathsSlowly(state.spriteHeight),
+        WhenInPlayerVicinity(8, (entity: Entity<NPCState>) => {
+            entity.setState({
+                behaviour: NPCBehaviour.ATTACKING
+            })
+        }, (entity: Entity<NPCState>) => {})
+    ];
+}
+
+const AttackBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
+    return [
+        OnDamagedByPlayer(ent => ent.setState({ behaviour: NPCBehaviour.HIT })),
+        WalksTowardsPlayer()
+    ];
+}
+
+const HitBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
+    return [];
 }
 
 const whiteShade = {
@@ -199,10 +243,12 @@ export function createNPC(
         }),
         new SwitchComponent(
             {
-                "DEFAULT": BreathsSlowly(state.spriteHeight)
+                [NPCBehaviour.IDLE]: JoinComponent(IdleBehaviour(state)),
+                [NPCBehaviour.ATTACKING]: JoinComponent(AttackBehaviour(state)),
+                [NPCBehaviour.HIT]: JoinComponent(HitBehaviour(state)),
             }, 
-            state.colourHit, 
-            (entity: Entity<ColourHitState>) => entity.getState().colourHit
+            state.behaviour, 
+            (entity: Entity<NPCState>) => entity.getState().behaviour
         ),
         RendersTextWhenDamaged()
     )
@@ -232,8 +278,7 @@ export function createNPCState(
         elastic: 0.9,
         collidesEntities: true,
         collidesWalls: true,
-        health,
-        colourHit: "DEFAULT"
+        health
     };
 }
 
