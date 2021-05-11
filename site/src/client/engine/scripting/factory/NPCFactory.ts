@@ -5,6 +5,7 @@ import { RenderItem, SpriteShadeOverride } from "../../../services/render/types/
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
 import { animation, easeInOutCirc } from "../../../util/animation/Animations";
+import { GameAnimation } from "../../../util/animation/GameAnimation";
 import { vec } from "../../../util/math/Vector";
 import { CanBeInteractedWith, onInteractedWith } from "../../components/core/InteractionComponent";
 import { PhysicsComponent, PhysicsStateType } from "../../components/core/PhysicsComponent";
@@ -26,8 +27,9 @@ interface HealthState {
 
 enum NPCBehaviour {
     IDLE = "IDLE",
-    ATTACKING = "ATTACKING",
-    HIT = "HIT"
+    PURSUING = "PURSUING",
+    DAMAGED = "DAMAGED",
+    ATTACKING = "ATTACKING"
 }
 
 type NPCState = SpriteRenderState &
@@ -145,22 +147,57 @@ const WalksTowardsPlayer = (): EntityComponent<PhysicsStateType> => {
     })
 }
 
-const IdleBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
+const IdleBehaviour = (state: NPCState, visibleDistance: number): EntityComponent<NPCState>[] => {
     return [
-        OnDamagedByPlayer(ent => ent.setState({ behaviour: NPCBehaviour.HIT })),
+        OnDamagedByPlayer(ent => ent.setState({ behaviour: NPCBehaviour.DAMAGED })),
         BreathsSlowly(state.spriteHeight),
-        WhenInPlayerVicinity(8, (entity: Entity<NPCState>) => {
+        WhenInPlayerVicinity(visibleDistance, (entity: Entity<NPCState>) => {
             entity.setState({
-                behaviour: NPCBehaviour.ATTACKING
+                behaviour: NPCBehaviour.PURSUING
             })
         }, (entity: Entity<NPCState>) => {})
     ];
 }
 
-const AttackBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
+const PursuingBehaviour = (state: NPCState, attackDistance: number): EntityComponent<NPCState>[] => {
+    let anim: GameAnimation;
+    let prevX: number = 0;
     return [
-        OnDamagedByPlayer(ent => ent.setState({ behaviour: NPCBehaviour.HIT })),
-        WalksTowardsPlayer()
+        OnDamagedByPlayer(ent => ent.setState({ behaviour: NPCBehaviour.DAMAGED })),
+        WalksTowardsPlayer(),
+        WhenInPlayerVicinity(attackDistance, (entity: Entity<NPCState>) => {
+            entity.setState({
+                behaviour: NPCBehaviour.ATTACKING
+            })
+        }, (entity: Entity<NPCState>) => {}),
+        AnimationComponent((entity: Entity<NPCState>) => {
+            anim = animation((x) => {
+                const sprite = entity.getServiceLocator().getResourceManager().getDefaultSpriteSheet().getAnimationInterp("npc_bulky_man_run", x);
+                entity.setState({
+                    sprite: sprite.textureCoordinate
+                });
+
+                if ((prevX < 0.25 && x > 0.25) || (prevX < 0.75 && x > 0.75)) {
+                    entity.getServiceLocator().getRenderService().screenShakeService.shake(0.3);
+                }
+                prevX = x;
+            }).looping();
+            return anim;
+        }),
+        {
+            getActions: (entity: Entity<NPCState>) => ({
+                onEntityDeleted: () => {
+                    entity.setState({
+                        sprite: "npc_bulky_man"
+                    })
+                }
+            }),
+            update: (entity: Entity<NPCState>) => {
+                const speed = vec.vec_distance(entity.getState().velocity);
+                const animationSpeed = 50 / speed;
+                anim && anim.speed(animationSpeed);
+            }
+        }
     ];
 }
 
@@ -190,6 +227,12 @@ const HitBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
                 behaviour: NPCBehaviour.IDLE
             })
         }, COLOUR_HIT_TIME)
+    ];
+}
+
+const AttackingBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
+    return [
+        OnDamagedByPlayer(ent => ent.setState({ behaviour: NPCBehaviour.DAMAGED }))
     ];
 }
 
@@ -224,9 +267,10 @@ export function createNPC(
         }),
         new SwitchComponent(
             {
-                [NPCBehaviour.IDLE]: JoinComponent(IdleBehaviour(state)),
-                [NPCBehaviour.ATTACKING]: JoinComponent(AttackBehaviour(state)),
-                [NPCBehaviour.HIT]: JoinComponent(HitBehaviour(state)),
+                [NPCBehaviour.IDLE]: JoinComponent(IdleBehaviour(state, 8)),
+                [NPCBehaviour.PURSUING]: JoinComponent(PursuingBehaviour(state, 1)),
+                [NPCBehaviour.DAMAGED]: JoinComponent(HitBehaviour(state)),
+                [NPCBehaviour.ATTACKING]: JoinComponent(AttackingBehaviour(state)),
             }, 
             state.behaviour, 
             (entity: Entity<NPCState>) => entity.getState().behaviour

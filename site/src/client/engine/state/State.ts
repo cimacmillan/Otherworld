@@ -1,3 +1,4 @@
+import { TextureCoordinate } from "../../resources/SpriteSheet";
 import { SpriteShadeOverride } from "../../services/render/types/RenderInterface";
 import { Camera, Vector2D } from "../../types";
 import { Inventory } from "../scripting/items/ItemTypes";
@@ -35,7 +36,7 @@ export interface HealthState {
 }
 
 export interface SpriteRenderState extends SurfacePosition {
-    sprite: string;
+    sprite: string | TextureCoordinate;
     spriteHeight: number;
     spriteWidth: number;
     shade?: SpriteShadeOverride;

@@ -24,15 +24,16 @@ function getSpriteFromState(entity: Entity<SpriteRenderState>): Sprite {
         height,
         shade,
     } = entity.getState();
+    const texture = typeof sprite === "string" ? entity
+    .getServiceLocator()
+    .getResourceManager()
+    .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(sprite)
+    .textureCoordinate : sprite;
     return {
         position: [position.x, position.y],
         size: [spriteWidth, spriteHeight],
         height: height + spriteHeight / 2,
-        texture: entity
-            .getServiceLocator()
-            .getResourceManager()
-            .manifest.spritesheets[SpriteSheets.SPRITE].getSprite(sprite)
-            .textureCoordinate,
+        texture,
         shade: shade || DEFAULT_SHADE_OVERRIDE,
     };
 }

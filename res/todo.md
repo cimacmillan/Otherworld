@@ -2,7 +2,6 @@
 ### Milestone 2
 Puzzle maps to escape prison, killing enemies
 
-* jailor can walk around by rotating sprite, scaling?
 * player health view
 * jailor entity attacks player
 * jailor entity has drops of a certain distribution, item drops
