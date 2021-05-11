@@ -126,37 +126,6 @@ const OnDamagedByPlayer = (onDamaged: (entity: Entity<NPCState>) => void) => {
     }
 }
 
-const COLOUR_HIT_TIME = 200;
-const TemporaryEffectComponentWhenDamaged = (state: NPCState, onEffect: (entity: Entity<NPCState>) => void, onDefault: (entity: Entity<NPCState>) => void): EntityComponent<NPCState> => {
-    return new SwitchComponent<NPCState>(
-        {
-            [NPCBehaviour.IDLE]: {
-                getActions: (entity: Entity<NPCState>) => ({
-                    onEntityCreated: () => {
-                        onDefault(entity);
-                    },
-                })
-            },
-            [NPCBehaviour.HIT]: JoinComponent<NPCState>([
-                {
-                    getActions: (entity: Entity<NPCState>) => ({
-                        onEntityCreated: () => {
-                            onEffect(entity);
-                        }
-                    })
-                },
-                TimeoutComponent<NPCState>((entity: Entity<NPCState>) => {
-                    entity.setState({
-                        behaviour: NPCBehaviour.IDLE
-                    })
-                }, COLOUR_HIT_TIME)
-            ])
-        },
-        state.behaviour,
-        (entity: Entity<NPCState>) => entity.getState().behaviour
-    );
-}
-
 const WalksTowardsPlayer = (): EntityComponent<PhysicsStateType> => {
     return ({
         getActions: (entity: Entity<PhysicsStateType>) => ({
@@ -195,8 +164,33 @@ const AttackBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
     ];
 }
 
+const COLOUR_HIT_TIME = 200;
 const HitBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
-    return [];
+    return [
+        {
+        getActions: (entity: Entity<NPCState>) => ({
+            onEntityCreated: () => {
+                entity.setState({
+                    shade: whiteShade,
+                    spriteWidth: 1.1,
+                    spriteHeight: 1.1
+                });
+            },
+            onEntityDeleted: () => {
+                entity.setState({
+                    shade: undefined,
+                    spriteWidth: 1,
+                    spriteHeight: 1
+                });
+            }
+        })
+        },
+        TimeoutComponent<NPCState>((entity: Entity<NPCState>) => {
+            entity.setState({
+                behaviour: NPCBehaviour.IDLE
+            })
+        }, COLOUR_HIT_TIME)
+    ];
 }
 
 const whiteShade = {
@@ -217,19 +211,6 @@ export function createNPC(
         CanBeInteractedWith(InteractionType.ATTACK),
         LosesHealthWhenDamaged(),
         ReboundsWhenDamaged(),
-        TemporaryEffectComponentWhenDamaged(
-            state, 
-            (entity: Entity<NPCState>) => entity.setState({
-                shade: whiteShade,
-                spriteWidth: 1.1,
-                spriteHeight: 1.1
-            }),
-            (entity: Entity<NPCState>) => entity.setState({
-                shade: undefined,
-                spriteWidth: 1,
-                spriteHeight: 1
-            }),
-        ),
         WhenHealthDepleted((entity: Entity<NPCState>) => {
             entity.delete();
             const newStaticSprite = EntityFactory[EntityType.SCENERY_SPRITE](serviceLocator, createStaticSpriteState(
@@ -269,7 +250,7 @@ export function createNPCState(
         position,
         height: 0,
         yOffset: 0,
-        radius: 0.4,
+        radius: 0.6,
         angle: 0,
         velocity: { x: 0, y: 0 },
         heightVelocity: 0,
