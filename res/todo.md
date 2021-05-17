@@ -5,7 +5,7 @@ Puzzle maps to escape prison, killing enemies
 * player health view
 * jailor entity attacks player
 * jailor entity has drops of a certain distribution, item drops
-
+* Get rid of entity factory and just add strings to thing
 
 
 <!-- * Player skills definition and serialisation
