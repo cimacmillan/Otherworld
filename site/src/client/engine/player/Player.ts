@@ -28,6 +28,10 @@ type InternalEntityState = PhysicsStateType & HealthState & CameraState;
 export interface PlayerSerialisation {
     inventory: Inventory;
     surface: PhysicsStateType;
+    health: {
+        current: number, 
+        max: number
+    };
 }
 
 const DEFAULT_PLAYER_STATE: PlayerSerialisation = {
@@ -46,6 +50,10 @@ const DEFAULT_PLAYER_STATE: PlayerSerialisation = {
         collidesEntities: true,
         collidesWalls: true,
     },
+    health: {
+        current: 10,
+        max: 10
+    }
 };
 
 export class Player {
@@ -103,6 +111,7 @@ export class Player {
 
     public init() {
         this.equipment.init();
+        this.serviceLocator.getStore().getActions().onPlayerHealth(this.state.health);
     }
 
     public update(): void {
@@ -170,6 +179,18 @@ export class Player {
                     player: this
                 });
         });
+    }
+
+    public onDamage(amount: number) {
+        this.state.health.current -= amount;
+        if (this.state.health.current < 0) {
+            this.state.health.current = 0;
+            this.onDeath();
+        }
+    }
+
+    private onDeath() {
+        console.log("On death");
     }
 
     public attack() {

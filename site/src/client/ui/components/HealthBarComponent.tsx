@@ -28,6 +28,8 @@ export const HealthBarComponent: React.FunctionComponent<HealthBarComponentProps
     const [healthBarYOffset, setHealthBarOffset] = React.useState(0);
     const [state, dispatch] = useGlobalState();
 
+    console.log("health bar component render", state.player.health);
+
     let knockAnimation: GameAnimation;
     React.useEffect(() => {
         knockAnimation = animation((x: number) => {
@@ -45,25 +47,9 @@ export const HealthBarComponent: React.FunctionComponent<HealthBarComponentProps
 
     const translate = Math.floor(healthBarYOffset * 10);
 
-    // if (!state.healthState.showing) {
-    return <></>;
-    // }
-
     return (
         <div style={{ position: "absolute" }}>
-            {/* <AnimationImageComponent
-                serviceLocator={props.serviceLocator}
-                spriteSheet={SpriteSheets.UI}
-                animation={UIANIMATIONS.HEALTH_BAR}
-                interp={1 - state.healthState.health}
-                style={{
-                    marginLeft,
-                    marginTop,
-                    width,
-                    height,
-                    transform: `translate(0, ${translate}px)`,
-                }}
-            /> */}
+            
         </div>
     );
 };

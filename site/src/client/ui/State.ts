@@ -7,6 +7,7 @@ import {
 } from "./reducers/InventoryReducer";
 import { keyHintReducer, KeyHintUIState } from "./reducers/KeyHintReducer";
 import { minigameReducer, MiniGameUIState } from "./reducers/MiniGameReducer";
+import { playerReducer, PlayerReducerState } from "./reducers/PlayerReducer";
 import { uiReducer, UIState } from "./reducers/UIReducer";
 
 export interface State {
@@ -15,6 +16,7 @@ export interface State {
     inventory: InventoryUIState;
     minigame: MiniGameUIState;
     keyHints: KeyHintUIState;
+    player: PlayerReducerState;
 }
 
 export const reducers = {
@@ -23,6 +25,7 @@ export const reducers = {
     inventory: inventoryReducer,
     minigame: minigameReducer,
     keyHints: keyHintReducer,
+    player: playerReducer,
 };
 
 export const store = new Store<State, Actions>(
