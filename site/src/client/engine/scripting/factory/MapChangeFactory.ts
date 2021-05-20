@@ -1,4 +1,3 @@
-import { Sprites } from "../../../resources/manifests/Sprites";
 import { InteractionType } from "../../../services/interaction/InteractionType";
 import { MapDestination } from "../../../services/map/MapService";
 import { ServiceLocator } from "../../../services/ServiceLocator";
@@ -17,7 +16,7 @@ type LadderStateType = SpriteRenderState & {
 export const createLadderState = (
     x: number,
     y: number,
-    sprite: Sprites,
+    sprite: string,
     destination: MapDestination
 ) => {
     return {

@@ -24,7 +24,7 @@ import { Vector2D } from "../../types";
 import { useServiceLocator } from "../effects/GameEffect";
 import { Colours } from "../../resources/design/Colour";
 import { PlayerUseItemFromInventory, UnequipItemFromInventory } from "../../engine/commands/InventoryCommands";
-import { SpriteSheets } from "../../resources/manifests/Sprites";
+import { SpriteSheets } from "../../resources/manifests";
 import { Effect } from "../../engine/scripting/effects/Effects";
 import { EffectComponent } from "../components/EffectComponent";
 

@@ -1,4 +1,4 @@
-import { Sprites } from "../../resources/manifests/Sprites";
+import { TextureCoordinate } from "../../resources/SpriteSheet";
 import { SpriteShadeOverride } from "../../services/render/types/RenderInterface";
 import { Camera, Vector2D } from "../../types";
 import { Inventory } from "../scripting/items/ItemTypes";
@@ -36,7 +36,7 @@ export interface HealthState {
 }
 
 export interface SpriteRenderState extends SurfacePosition {
-    sprite: string;
+    sprite: string | TextureCoordinate;
     spriteHeight: number;
     spriteWidth: number;
     shade?: SpriteShadeOverride;
@@ -44,7 +44,7 @@ export interface SpriteRenderState extends SurfacePosition {
 
 export const DEFAULT_SPRITE_RENDER_STATE: SpriteRenderState = {
     ...SUFRACE_POSITION_STATE_DEFAULT,
-    sprite: Sprites.CELL,
+    sprite: "cell",
     spriteWidth: 1,
     spriteHeight: 1,
     shade: undefined,

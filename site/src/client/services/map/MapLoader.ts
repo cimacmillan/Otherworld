@@ -6,6 +6,7 @@ import {
 import { EntityFactory } from "../../engine/scripting/factory/EntityFactory";
 import { createItemDropState } from "../../engine/scripting/factory/ItemFactory";
 import { createLadderState } from "../../engine/scripting/factory/MapChangeFactory";
+import { createNPCState } from "../../engine/scripting/factory/NPCFactory";
 import {
     createStaticFloorState,
     createStaticSpriteState,
@@ -13,7 +14,6 @@ import {
 } from "../../engine/scripting/factory/SceneryFactory";
 import { GameItem, GameItems } from "../../resources/manifests/Items";
 import { Maps } from "../../resources/manifests/Maps";
-import { Sprites } from "../../resources/manifests/Sprites";
 import { LoadedMap } from "../../resources/maps/MapTypes";
 import { Vector2D } from "../../types";
 import { ServiceLocator } from "../ServiceLocator";
@@ -181,7 +181,7 @@ export function loadPoint(args: {
                     createLadderState(
                         object.data.x,
                         object.data.y,
-                        Sprites.LADDER,
+                        "ladder",
                         {
                             mapId: properties.map as Maps,
                             destination: properties.spawn,
@@ -189,6 +189,20 @@ export function loadPoint(args: {
                     )
                 )
             );
+            break;
+        case TiledObjectType.NPC:
+            entities.push(
+                EntityFactory.NPC_BULKY_MAN(
+                    serviceLocator,
+                    createNPCState({
+                        position: {
+                            x: object.data.x,
+                            y: object.data.y
+                        },
+                        health: 2
+                    })
+                )
+            )
             break;
     }
 }
@@ -227,7 +241,7 @@ export function loadRectangle(args: {
                 EntityFactory.SCENERY_SPRITE(
                     serviceLocator,
                     createStaticSpriteState(
-                        properties.sprite as Sprites,
+                        properties.sprite,
                         {
                             x: object.data.x + object.width / 2,
                             y: object.data.y + object.height / 2,

@@ -65,4 +65,8 @@ export class Entity<State> {
     public delete() {
         this.serviceLocator.getWorld().removeEntity(this);
     }
+
+    public create() {
+        this.serviceLocator.getWorld().addEntity(this);
+    }
 }

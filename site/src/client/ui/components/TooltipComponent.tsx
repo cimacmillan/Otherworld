@@ -10,7 +10,7 @@ import { ShadowComponentStyle } from "./ShadowComponent";
 import { animation } from "../../util/animation/Animations";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { Sprites, SpriteSheets } from "../../resources/manifests/Sprites";
+import { SpriteSheets } from "../../resources/manifests";
 import { EffectComponent } from "./EffectComponent";
 import { Effect } from "../../engine/scripting/effects/Effects";
 // import { SpriteSheets, UISPRITES } from "../../resources/manifests/Types";
@@ -162,7 +162,7 @@ function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
             return row([
                 <SpriteImageComponent
                     spriteSheet={SpriteSheets.SPRITE}
-                    sprite={Sprites.UI_FINGER}
+                    sprite={"ui_finger"}
                     style={{
                         width: 32,
                         height: 32,

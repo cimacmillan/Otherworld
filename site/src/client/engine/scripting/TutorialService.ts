@@ -4,11 +4,13 @@ import { DeregisterKeyHint, RegisterKeyHint } from "../commands/UICommands";
 export interface TutorialSerialisation {
     movement: "WALKING" | "TURNING" | "DONE";
     inventory: "NONE" | "OPENED" | "CLOSED" | "DONE";
+    weapon: "NONE" | "DONE"
 }
 
 const DEFAULT_STATE: TutorialSerialisation = {
     movement: "WALKING",
     inventory: "NONE",
+    weapon: "NONE"
 };
 
 export enum TutorialServiceEvent {
@@ -18,6 +20,9 @@ export enum TutorialServiceEvent {
     OPEN_INVENTORY,
     CLOSE_INVENTORY,
     PICKED_UP_ITEM,
+    EQUIPED_WEAPON,
+    UNEQUIPED_WEAPON,
+    ATTACKED
 }
 
 interface KeyHint {
@@ -43,18 +48,15 @@ const HINTS: Record<string, KeyHint> = {
         code: ["I"],
         hint: "Close Inventory",
     },
+    attack: {
+        code: ["Space"],
+        hint: "Attack"
+    }
 };
 
 export class TutorialService {
     private serviceLocator: ServiceLocator;
-    private state: TutorialSerialisation;
-
-    // private walk: number = undefined;
-    // private turn: number = undefined;
-
-    // private hasUsedInventory = false;
-    // private inventory: number = undefined;
-    // private closeInventory: number = undefined;
+    private state: TutorialSerialisation = DEFAULT_STATE;
 
     public constructor() {}
 
@@ -116,6 +118,18 @@ export class TutorialService {
                     this.deregister(HINTS.closeInventory);
                     this.state.inventory = "DONE";
                 }
+                break;
+            case TutorialServiceEvent.EQUIPED_WEAPON:
+                if (this.state.weapon === "NONE") {
+                    this.register(HINTS.attack)
+                }
+                break;
+            case TutorialServiceEvent.UNEQUIPED_WEAPON:
+                this.deregister(HINTS.attack);
+                break;
+            case TutorialServiceEvent.ATTACKED:
+                this.deregister(HINTS.attack);
+                this.state.weapon = "DONE";
                 break;
         }
     }

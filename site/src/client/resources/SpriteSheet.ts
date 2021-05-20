@@ -112,7 +112,7 @@ export class SpriteSheet {
         return this.spriteHash[name];
     }
 
-    public getAnimationFrame(name: number, frame: number) {
+    public getAnimationFrame(name: string, frame: number) {
         const animation = this.animationHash[name];
         if (!animation) {
             console.log(`Animation ${name} missing`);
@@ -126,7 +126,7 @@ export class SpriteSheet {
         return this.animationHash[name][frame];
     }
 
-    public getAnimationInterp(name: number, interp: number) {
+    public getAnimationInterp(name: string, interp: number) {
         const animation = this.animationHash[name];
         if (!animation) {
             console.log(`Animation ${name} missing`);
@@ -161,11 +161,14 @@ export class SpriteSheet {
         xPixel: number,
         yPixel: number
     ): TextureCoordinate {
+        const amount = 0.1;
+        const xOffset = amount / this.width;
+        const yOffset = amount / this.height;
         return {
-            textureX: xPixel / this.width,
-            textureY: yPixel / this.height,
-            textureWidth: width / this.width,
-            textureHeight: height / this.height,
+            textureX: (xPixel / this.width) + xOffset,
+            textureY: (yPixel / this.height) + yOffset,
+            textureWidth: (width / this.width) - xOffset * 2,
+            textureHeight: (height / this.height) - yOffset * 2,
         };
     }
 }

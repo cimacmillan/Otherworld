@@ -1,5 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { SpriteSheets } from "../../resources/manifests/Sprites";
+import { SpriteSheets } from "../../resources/manifests";
 import { ResourceManager } from "../../resources/ResourceManager";
 import { Camera } from "../../types";
 import { BackgroundRenderService } from "./services/BackgroundRenderService";
@@ -10,6 +10,7 @@ import { SpriteRenderService } from "./services/SpriteRenderService";
 import { ObjectRenderService } from "./services/ObjectRenderService";
 import { WallRenderService } from "./services/WallRenderService";
 import { RenderInterface } from "./types/RenderInterface";
+import { TextRender, TextRenderService } from "./services/TextRenderService";
 
 export class RenderService implements RenderInterface {
     public spriteRenderService: SpriteRenderService;
@@ -19,6 +20,7 @@ export class RenderService implements RenderInterface {
     public backgroundRenderService: BackgroundRenderService;
     public particleRenderService: ParticleRenderService;
     public triangleRenderService: ObjectRenderService;
+    public textRenderService: TextRenderService;
     private gl: WebGLRenderingContext;
 
     private camera: () => Camera;
@@ -41,6 +43,10 @@ export class RenderService implements RenderInterface {
         this.triangleRenderService = new ObjectRenderService(
             this.backgroundRenderService
         );
+        this.textRenderService = new TextRenderService(
+            this.resourceManager,
+            this.spriteRenderService
+        )
     }
 
     public init(gl: WebGLRenderingContext) {
@@ -66,6 +72,7 @@ export class RenderService implements RenderInterface {
         );
         this.particleRenderService.init(gl);
         this.triangleRenderService.init(gl);
+        this.textRenderService.init(gl);
     }
 
     public draw() {
@@ -104,6 +111,7 @@ export class RenderService implements RenderInterface {
         this.spriteRenderService.draw();
         this.wallRenderService.draw();
         this.floorRenderService.draw();
+        this.textRenderService.draw();
 
         // TODO Triangle renderer needs to be split so that overlay for weapon specific to that object (create new triangle render service?)
         this.gl.clear(this.gl.DEPTH_BUFFER_BIT);

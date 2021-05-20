@@ -18,7 +18,7 @@ export interface LoadedMapManifest {
 
 export interface ResourceManifest {
     spritesheets: {
-        [key: string]: SpriteSheetManifest;
+        [key: string]: string;
     };
     audio: AudioManifest;
     maps: MapManifest;
@@ -63,4 +63,14 @@ export interface AudioManifest {
         url: string;
         metadata?: AudioMetadata;
     };
+}
+
+export interface SpriteSheetManifestJson {
+    [key: string]: {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+        frames?: number;
+    }
 }

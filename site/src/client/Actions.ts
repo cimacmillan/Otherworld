@@ -34,6 +34,7 @@ export const emptyActions = {
 
     onPhysicsImpulse: (velocity: Vector2D) => {},
 
+    onPlayerHealth: (health: { current: number, max: number}) => {},
     onPlayerAttack: () => {},
     onPlayerDamaged: () => {},
     onPlayerKilled: () => {},
@@ -44,6 +45,8 @@ export const emptyActions = {
     onPlayerInventoryOpened: () => {},
     onPlayerInventoryClosed: () => {},
     onPlayerItemEquipped: (item: Item) => {},
+
+    onDamagedByPlayer: (damage: number) => {}
 }
 
 export type Actions = typeof emptyActions;

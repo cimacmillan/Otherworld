@@ -19,6 +19,11 @@ export const EffectComponent: React.FunctionComponent<EffectComponentProps> = (p
                 text("Damages", TextColour.RED),
                 text(`target ${effect.points} pts`),
             ]);
+        case EffectType.DAMAGES_TARGET_IN_RANGE:
+            return row([
+                text("Damages", TextColour.RED),
+                text(`target between ${effect.a} and ${effect.b} pts`),
+            ]);
         case EffectType.HEALTH_INCREASE:
             return row([
                 text(`Increase`),

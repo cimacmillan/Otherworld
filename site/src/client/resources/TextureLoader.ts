@@ -1,4 +1,5 @@
 import { SpriteSheet } from "./SpriteSheet";
+import { SpriteSheetManifestJson } from "./Types";
 
 export function loadImage(url: string): Promise<HTMLImageElement> {
     return new Promise<HTMLImageElement>((resolve) => {
@@ -11,6 +12,10 @@ export function loadImage(url: string): Promise<HTMLImageElement> {
         };
         image.src = url;
     });
+}
+
+export function loadJson<T>(url: string): Promise<T> {
+    return fetch(url).then(response => response.json())
 }
 
 export function loadTextureFromImage(
@@ -37,14 +42,18 @@ export function loadTextureFromURL(
     });
 }
 
-export function loadSpriteSheet(
+export async function loadSpriteSheet(
     gl: WebGLRenderingContext,
     url: string
-): Promise<SpriteSheet> {
-    return loadImage(url).then((image: HTMLImageElement) => {
-        const texture = loadTextureFromImage(gl, image);
-        return new SpriteSheet(image.width, image.height, texture, image);
-    });
+): Promise<[SpriteSheet, SpriteSheetManifestJson]> {
+    const imageUrl = url + ".png";
+    const manifestUrl = url + ".json";
+
+    const image = await loadImage(imageUrl);
+    const json = await loadJson<SpriteSheetManifestJson>(manifestUrl);
+
+    const texture = loadTextureFromImage(gl, image);
+    return [new SpriteSheet(image.width, image.height, texture, image), json];
 }
 
 export function getImageData(img: HTMLImageElement) {

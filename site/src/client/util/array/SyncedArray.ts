@@ -65,7 +65,7 @@ export class SyncedArray<T> {
         return this.array;
     }
 
-    private findRealIndexOf(renderId: number) {
+    public findRealIndexOf(renderId: number) {
         if (this.array.length === 0) {
             return -1;
         }

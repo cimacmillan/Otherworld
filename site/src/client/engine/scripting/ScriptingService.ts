@@ -94,7 +94,7 @@ export class ScriptingService {
             .attachCamera(() => this.player.getCamera());
 
         this.serviceLocator.getMapService().goToLocation({
-            mapId: Maps.PRISON,
+            mapId: Maps.TEST,
         });
 
         this.serviceLocator.getTutorialService().onStart();

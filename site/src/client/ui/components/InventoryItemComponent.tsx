@@ -6,7 +6,7 @@ import { animation } from "../../util/animation/Animations";
 import { SpriteImageComponent } from "./SpriteImageComponent";
 import { TextComponent, TextFont, TextSize, TextColour } from "./TextComponent";
 import { useServiceLocator } from "../effects/GameEffect";
-import { SpriteSheets } from "../../resources/manifests/Sprites";
+import { SpriteSheets } from "../../resources/manifests";
 import { Colours } from "../../resources/design/Colour";
 import {
     INVENTORY_BORDER_RADIUS,

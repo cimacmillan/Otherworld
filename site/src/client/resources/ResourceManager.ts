@@ -4,7 +4,7 @@ import { tiledXMLtoGameTiledMap } from "../services/map/TiledParser";
 import { State } from "../ui/State";
 import { Store } from "@cimacmillan/refunc";
 // import { setLoadPercentage } from "../ui/actions/GameStartActions";
-import { defaultManifest } from "./manifests/Resources";
+import { defaultManifest, SpriteSheets } from "./manifests/Resources";
 import { loadSpriteSheet } from "./TextureLoader";
 import { LoadedManifest, ResourceManifest } from "./Types";
 
@@ -36,10 +36,7 @@ export class ResourceManager {
             Object.keys(manifest.spritesheets).reduce(
                 (prevValue: number, next: string) => {
                     return (
-                        prevValue +
-                        Object.keys(manifest.spritesheets[next].animations)
-                            .length +
-                        Object.keys(manifest.spritesheets[next].sprites).length
+                        prevValue + 1
                     );
                 },
                 0
@@ -68,36 +65,33 @@ export class ResourceManager {
 
         for (const key in manifest.spritesheets) {
             const spritesheetManifest = manifest.spritesheets[key];
-            loadedManifest.spritesheets[key] = await loadSpriteSheet(
+            const [sheet, json] = await loadSpriteSheet(
                 gl,
-                spritesheetManifest.url
+                spritesheetManifest
             );
-
-            for (const spriteKey in spritesheetManifest.sprites) {
-                const sprite = spritesheetManifest.sprites[spriteKey];
-                loadedManifest.spritesheets[key].registerSprite(
-                    spriteKey,
-                    sprite.width,
-                    sprite.height,
-                    sprite.x,
-                    sprite.y
-                );
-                increment();
+            loadedManifest.spritesheets[key] = sheet;
+            for (const key in json) {
+                if (!json[key].frames) {
+                    sheet.registerSprite(
+                        key,
+                        json[key].width,
+                        json[key].height,
+                        json[key].x,
+                        json[key].y
+                    );
+                } else {
+                    sheet.registerAnimation(
+                        key,
+                        json[key].width / json[key].frames,
+                        json[key].height,
+                        json[key].x,
+                        json[key].y,
+                        json[key].frames,
+                        false
+                    );
+                }
             }
-
-            for (const animationKey in spritesheetManifest.animations) {
-                const animation = spritesheetManifest.animations[animationKey];
-                loadedManifest.spritesheets[key].registerAnimation(
-                    animationKey,
-                    animation.width,
-                    animation.height,
-                    animation.x,
-                    animation.y,
-                    animation.frames,
-                    animation.vertical
-                );
-                increment();
-            }
+            increment();
         }
 
         for (const key in manifest.maps) {
@@ -116,5 +110,9 @@ export class ResourceManager {
         }
 
         return loadedManifest;
+    }
+
+    public getDefaultSpriteSheet() {
+        return this.manifest.spritesheets[SpriteSheets.SPRITE]
     }
 }

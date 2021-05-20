@@ -1,9 +1,9 @@
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Entity } from "../../Entity";
 import { createDoor, createLockedDoor } from "./DoorFactory";
-import { createSlime } from "./EnemyFactory";
 import { createItemDrop } from "./ItemFactory";
 import { createLadder } from "./MapChangeFactory";
+import { createNPC } from "./NPCFactory";
 import {
     createStaticFloor,
     createStaticSprite,
@@ -16,7 +16,7 @@ export enum EntityType {
     DOOR = "DOOR",
     DOOR_LOCKED = "DOOR_LOCKED",
 
-    ENEMY_SLIME = "ENEMY_SLIME",
+    NPC_BULKY_MAN = "NPC_BULKY_MAN",
 
     ITEM_DROP = "ITEM_DROP",
 
@@ -48,12 +48,12 @@ const entityFactory: Record<EntityType, EntityCreationFunction> = {
     },
     [EntityType.DOOR]: createDoor,
     [EntityType.DOOR_LOCKED]: createLockedDoor,
-    [EntityType.ENEMY_SLIME]: createSlime,
     [EntityType.ITEM_DROP]: createItemDrop,
     [EntityType.LADDER]: createLadder,
     [EntityType.SCENERY_FLOOR]: createStaticFloor,
     [EntityType.SCENERY_WALL]: createStaticWall,
     [EntityType.SCENERY_SPRITE]: createStaticSprite,
+    [EntityType.NPC_BULKY_MAN]: createNPC
 };
 
 const factoryWithType: any = {};

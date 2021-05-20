@@ -2,26 +2,32 @@
 ### Milestone 2
 Puzzle maps to escape prison, killing enemies
 
-* Player attack animation and event
-* Jailor entity which has jailor image
-* Jailor entity listens to player attacks and loses damage
-* Damaged text renderer 
+* player health view
+* jailor entity attacks player
 * jailor entity has drops of a certain distribution, item drops
-* Player skills definition and serialisation
+* Get rid of entity factory and just add strings to thing
+
+
+<!-- * Player skills definition and serialisation
 * Killing jailor increases skill
 * Skill increase component and view
 * Player skills tab in inventory
 * Skill level up sound effect and view
-* Lockpicking increases skill
+* Lockpicking increases skill -->
 
 ### Polish 
 * Improve head bob to not make noise when standing still (frequency?)
+* Weapon noises
+* Add particles to hits and deaths
+* Add screenshake to hits and deaths
+* Sort dodgy sprites shapes when rendering
 
 ### Audio
 * Don't start audio until button pressed (onGameStart?)
 * Item collect sound
 * BPM sequencer for syncing song change
 * Fade in / fade out music
+* Read audio directly from folder 
 
 ### Gameplay
 * Destroy / remove key on door use?
@@ -46,11 +52,5 @@ Puzzle maps to escape prison, killing enemies
 * Exp from doing things
 * Levels from XP
 
--------
-
-
-### Milestone 3 
-NPCs & NPC Dialog
-Quests
 
 

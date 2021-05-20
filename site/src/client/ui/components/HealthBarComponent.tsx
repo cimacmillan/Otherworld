@@ -1,69 +1,96 @@
 import React = require("react");
-import { ServiceLocator } from "../../services/ServiceLocator";
 import { DOM_HEIGHT, DOM_WIDTH } from "../../Config";
-import { getImagePropsFromSprite } from "../../util/math/UI";
-// import {
-//     SpriteSheets,
-//     UISPRITES,
-//     UIANIMATIONS,
-// } from "../../resources/manifests/Types";
 import { GameAnimation } from "../../util/animation/GameAnimation";
-import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
-import { AnimationImageComponent } from "./AnimationImageComponent";
-import { connect } from "react-redux";
 import { animation } from "../../util/animation/Animations";
-import { useGlobalState } from "../effects/GlobalState";
-import { Actions } from "../../Actions";
-
-const HEALTH_BAR_WIDTH = 0.5;
-const HEALTH_BAR_HEIGHT = HEALTH_BAR_WIDTH / 3;
+import { useDispatchListener, useGlobalState } from "../effects/GlobalState";
+import { TextComponent, TextSize } from "./TextComponent";
+import { ProcedureService } from "../../services/jobs/ProcedureService";
 
 const HEALTH_BAR_BUMP_SPEED = 100;
 
-interface HealthBarComponentProps { }
-
-export const HealthBarComponent: React.FunctionComponent<HealthBarComponentProps> = (
+export const HealthBarComponent: React.FunctionComponent<{}> = (
     props
 ) => {
-    const [healthBarYOffset, setHealthBarOffset] = React.useState(0);
     const [state, dispatch] = useGlobalState();
+    const [anim, setAnim] = React.useState<GameAnimation>(null);
+    const [fadeIn, setFadeIn] = React.useState<GameAnimation>(null);
+    const [fadeOut, setFadeOut] = React.useState<GameAnimation>(null);
+    const [y, setY] = React.useState(0);
+    const [fade, setFade] = React.useState(0);
+    const [timeout, setTimeout] = React.useState(undefined);
 
-    let knockAnimation: GameAnimation;
     React.useEffect(() => {
-        knockAnimation = animation((x: number) => {
-            setHealthBarOffset(Math.sin(x * Math.PI));
-        })
-            .driven(false)
-            .speed(HEALTH_BAR_BUMP_SPEED);
-        return () => knockAnimation.stop();
+        setAnim(animation((x) => setY(-Math.sin(x * Math.PI) * 10)).speed(100).driven(false).whenDone(() => setY(0)))
+        setFadeIn(animation((x) => setFade(x)).speed(100).driven(false));
+        setFadeOut(animation((x) => setFade(1 - x)).speed(200).driven(false));
     }, []);
 
-    const width = DOM_HEIGHT * HEALTH_BAR_WIDTH;
-    const height = DOM_HEIGHT * HEALTH_BAR_HEIGHT;
-    const marginLeft = 10;
-    const marginTop = 10;
+    useDispatchListener(({
+        onPlayerDamaged: () => {
+            anim.stop();
+            anim.start();
+            fadeIn.start();
+            if (timeout) {
+                ProcedureService.clearTimeout(timeout);
+            }
+            setTimeout(ProcedureService.setTimeout(() => {
+                fadeOut.start();
+            }, 2000));
+        }
+    }), [anim, fadeIn, fadeOut, timeout]);
 
-    const translate = Math.floor(healthBarYOffset * 10);
-
-    // if (!state.healthState.showing) {
-    return <></>;
-    // }
-
+    const WIDTH = 416;
+    const INNER_WIDTH = WIDTH * state.player.health.current / state.player.health.max;
     return (
-        <div style={{ position: "absolute" }}>
-            {/* <AnimationImageComponent
-                serviceLocator={props.serviceLocator}
-                spriteSheet={SpriteSheets.UI}
-                animation={UIANIMATIONS.HEALTH_BAR}
-                interp={1 - state.healthState.health}
+        <div style={{ 
+            position: "absolute",
+            width: DOM_WIDTH,
+            height: DOM_HEIGHT,
+            marginTop: y,
+            opacity: fade
+        }}>
+
+            <div style={{
+                position: "absolute",
+                marginLeft: (DOM_WIDTH - WIDTH) / 2,
+                marginTop: 630,
+                width: WIDTH,
+                height: 27,
+                backgroundColor: "#000000",
+                borderColor: "#AC0000",
+                borderWidth: 1,
+                borderStyle: "solid",
+                borderRadius: 8,
+            }}/>
+
+            {
+                state.player.health.current ? <div style={{
+                    position: "absolute",
+                    marginLeft: (DOM_WIDTH - INNER_WIDTH) / 2,
+                    marginTop: 630,
+                    width: INNER_WIDTH,
+                    height: 27,
+                    backgroundColor: "#700000",
+                    borderColor: "#AC0000",
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    borderRadius: 8,
+                }}/> : null
+            }
+
+            <TextComponent
                 style={{
-                    marginLeft,
-                    marginTop,
-                    width,
-                    height,
-                    transform: `translate(0, ${translate}px)`,
+                    position: "absolute",
+                    marginLeft: (DOM_WIDTH - WIDTH) / 2,
+                    width: WIDTH,
+                    marginTop: 630,
+                    height: 27,
+                    textAlign: "center"
                 }}
-            /> */}
+                text={`${state.player.health.current}`}
+                size={TextSize.SMALL}
+            />
+            
         </div>
     );
 };

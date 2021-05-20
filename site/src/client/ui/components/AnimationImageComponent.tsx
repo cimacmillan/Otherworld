@@ -5,7 +5,7 @@ import { getImagePropsFromSprite } from "../../util/math/UI";
 export interface AnimationImageComponentProps {
     serviceLocator: ServiceLocator;
     spriteSheet: number;
-    animation: number;
+    animation: string;
     style: React.CSSProperties;
     interp: number;
 }

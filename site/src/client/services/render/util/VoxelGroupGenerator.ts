@@ -1,4 +1,4 @@
-import { SpriteSheets } from "../../../resources/manifests/Sprites";
+import { SpriteSheets } from "../../../resources/manifests";
 import { map3D, create3DArray } from "../../../util/math";
 import { ServiceLocator } from "../../ServiceLocator";
 import { ColourMap } from "./ReferenceMap";
