@@ -232,7 +232,14 @@ const HitBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
 
 const AttackingBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
     return [
-        OnDamagedByPlayer(ent => ent.setState({ behaviour: NPCBehaviour.DAMAGED }))
+        OnDamagedByPlayer(ent => ent.setState({ behaviour: NPCBehaviour.DAMAGED })),
+        {
+            getActions: (entity: Entity<NPCState>) => ({
+                onEntityCreated: () => {
+                    entity.getServiceLocator().getScriptingService().getPlayer().onDamage(1);
+                }
+            })
+        }
     ];
 }
 

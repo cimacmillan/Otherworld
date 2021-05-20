@@ -1,54 +1,65 @@
 import React = require("react");
-import { ServiceLocator } from "../../services/ServiceLocator";
 import { DOM_HEIGHT, DOM_WIDTH } from "../../Config";
-import { getImagePropsFromSprite } from "../../util/math/UI";
-// import {
-//     SpriteSheets,
-//     UISPRITES,
-//     UIANIMATIONS,
-// } from "../../resources/manifests/Types";
 import { GameAnimation } from "../../util/animation/GameAnimation";
-import { IntervalDriver } from "../../util/animation/AnimationIntervalDriver";
-import { AnimationImageComponent } from "./AnimationImageComponent";
-import { connect } from "react-redux";
 import { animation } from "../../util/animation/Animations";
 import { useGlobalState } from "../effects/GlobalState";
-import { Actions } from "../../Actions";
-
-const HEALTH_BAR_WIDTH = 0.5;
-const HEALTH_BAR_HEIGHT = HEALTH_BAR_WIDTH / 3;
+import { TextComponent, TextSize } from "./TextComponent";
 
 const HEALTH_BAR_BUMP_SPEED = 100;
 
-interface HealthBarComponentProps { }
-
-export const HealthBarComponent: React.FunctionComponent<HealthBarComponentProps> = (
+export const HealthBarComponent: React.FunctionComponent<{}> = (
     props
 ) => {
-    const [healthBarYOffset, setHealthBarOffset] = React.useState(0);
     const [state, dispatch] = useGlobalState();
-
-    console.log("health bar component render", state.player.health);
-
-    let knockAnimation: GameAnimation;
-    React.useEffect(() => {
-        knockAnimation = animation((x: number) => {
-            setHealthBarOffset(Math.sin(x * Math.PI));
-        })
-            .driven(false)
-            .speed(HEALTH_BAR_BUMP_SPEED);
-        return () => knockAnimation.stop();
-    }, []);
-
-    const width = DOM_HEIGHT * HEALTH_BAR_WIDTH;
-    const height = DOM_HEIGHT * HEALTH_BAR_HEIGHT;
-    const marginLeft = 10;
-    const marginTop = 10;
-
-    const translate = Math.floor(healthBarYOffset * 10);
-
+    const WIDTH = 416;
+    const INNER_WIDTH = WIDTH * state.player.health.current / state.player.health.max;
     return (
-        <div style={{ position: "absolute" }}>
+        <div style={{ 
+            position: "absolute",
+            width: DOM_WIDTH,
+            height: DOM_HEIGHT
+        }}>
+
+            <div style={{
+                position: "absolute",
+                marginLeft: (DOM_WIDTH - WIDTH) / 2,
+                marginTop: 630,
+                width: WIDTH,
+                height: 27,
+                backgroundColor: "#000000",
+                borderColor: "#AC0000",
+                borderWidth: 1,
+                borderStyle: "solid",
+                borderRadius: 8,
+            }}/>
+
+            {
+                state.player.health.current ? <div style={{
+                    position: "absolute",
+                    marginLeft: (DOM_WIDTH - INNER_WIDTH) / 2,
+                    marginTop: 630,
+                    width: INNER_WIDTH,
+                    height: 27,
+                    backgroundColor: "#700000",
+                    borderColor: "#AC0000",
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    borderRadius: 8,
+                }}/> : null
+            }
+
+            <TextComponent
+                style={{
+                    position: "absolute",
+                    marginLeft: (DOM_WIDTH - WIDTH) / 2,
+                    width: WIDTH,
+                    marginTop: 630,
+                    height: 27,
+                    textAlign: "center"
+                }}
+                text={`${state.player.health.current}`}
+                size={TextSize.SMALL}
+            />
             
         </div>
     );

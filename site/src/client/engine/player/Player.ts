@@ -187,6 +187,7 @@ export class Player {
             this.state.health.current = 0;
             this.onDeath();
         }
+        this.serviceLocator.getStore().getActions().onPlayerHealth(this.state.health);
     }
 
     private onDeath() {
