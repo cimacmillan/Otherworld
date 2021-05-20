@@ -188,6 +188,7 @@ export class Player {
             this.onDeath();
         }
         this.serviceLocator.getStore().getActions().onPlayerHealth(this.state.health);
+        this.serviceLocator.getStore().getActions().onPlayerDamaged();
     }
 
     private onDeath() {

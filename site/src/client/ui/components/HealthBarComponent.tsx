@@ -2,8 +2,9 @@ import React = require("react");
 import { DOM_HEIGHT, DOM_WIDTH } from "../../Config";
 import { GameAnimation } from "../../util/animation/GameAnimation";
 import { animation } from "../../util/animation/Animations";
-import { useGlobalState } from "../effects/GlobalState";
+import { useDispatchListener, useGlobalState } from "../effects/GlobalState";
 import { TextComponent, TextSize } from "./TextComponent";
+import { ProcedureService } from "../../services/jobs/ProcedureService";
 
 const HEALTH_BAR_BUMP_SPEED = 100;
 
@@ -11,13 +12,42 @@ export const HealthBarComponent: React.FunctionComponent<{}> = (
     props
 ) => {
     const [state, dispatch] = useGlobalState();
+    const [anim, setAnim] = React.useState<GameAnimation>(null);
+    const [fadeIn, setFadeIn] = React.useState<GameAnimation>(null);
+    const [fadeOut, setFadeOut] = React.useState<GameAnimation>(null);
+    const [y, setY] = React.useState(0);
+    const [fade, setFade] = React.useState(0);
+    const [timeout, setTimeout] = React.useState(undefined);
+
+    React.useEffect(() => {
+        setAnim(animation((x) => setY(-Math.sin(x * Math.PI) * 10)).speed(100).driven(false).whenDone(() => setY(0)))
+        setFadeIn(animation((x) => setFade(x)).speed(100).driven(false));
+        setFadeOut(animation((x) => setFade(1 - x)).speed(200).driven(false));
+    }, []);
+
+    useDispatchListener(({
+        onPlayerDamaged: () => {
+            anim.stop();
+            anim.start();
+            fadeIn.start();
+            if (timeout) {
+                ProcedureService.clearTimeout(timeout);
+            }
+            setTimeout(ProcedureService.setTimeout(() => {
+                fadeOut.start();
+            }, 2000));
+        }
+    }), [anim, fadeIn, fadeOut, timeout]);
+
     const WIDTH = 416;
     const INNER_WIDTH = WIDTH * state.player.health.current / state.player.health.max;
     return (
         <div style={{ 
             position: "absolute",
             width: DOM_WIDTH,
-            height: DOM_HEIGHT
+            height: DOM_HEIGHT,
+            marginTop: y,
+            opacity: fade
         }}>
 
             <div style={{
