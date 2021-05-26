@@ -261,7 +261,7 @@ const AttackingBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
         {
             getActions: (entity: Entity<NPCState>) => ({
                 onEntityCreated: () => {
-                    entity.getServiceLocator().getScriptingService().getPlayer().onDamage(1);
+                    entity.getServiceLocator().getScriptingService().getPlayer().onDamage(1, entity.getState().position);
                     entity.setState({
                         sprite: randomBool() ? "npc_bulky_man_hit" : "npc_bulky_man_hit2"
                     });
