@@ -1,11 +1,13 @@
 import { vec3 } from "gl-matrix";
 import { InteractionSource, InteractionSourceType, InteractionType } from "../../../services/interaction/InteractionType";
+import { ProcedureService } from "../../../services/jobs/ProcedureService";
 import { DamageTextParticle, HealthDropParticle } from "../../../services/particle/particles/HealthDropParticle";
 import { RenderItem, SpriteShadeOverride } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
 import { animation, easeInOutCirc } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
+import { randomBool, randomIntRange } from "../../../util/math";
 import { vec } from "../../../util/math/Vector";
 import { CanBeInteractedWith, onInteractedWith } from "../../components/core/InteractionComponent";
 import { PhysicsComponent, PhysicsStateType } from "../../components/core/PhysicsComponent";
@@ -148,14 +150,37 @@ const WalksTowardsPlayer = (): EntityComponent<PhysicsStateType> => {
 }
 
 const IdleBehaviour = (state: NPCState, visibleDistance: number): EntityComponent<NPCState>[] => {
+    let onInside = false;
+    let canChange = false;
+    const attemptPursue = (entity: Entity<NPCState>) => {
+        if (!onInside || !canChange) {
+            return;
+        }
+        entity.setState({
+            behaviour: NPCBehaviour.PURSUING
+        })
+    }
     return [
         OnDamagedByPlayer(ent => ent.setState({ behaviour: NPCBehaviour.DAMAGED })),
         BreathsSlowly(state.spriteHeight),
         WhenInPlayerVicinity(visibleDistance, (entity: Entity<NPCState>) => {
-            entity.setState({
-                behaviour: NPCBehaviour.PURSUING
+            onInside = true;
+            attemptPursue(entity);
+        }, (entity: Entity<NPCState>) => {
+            onInside = false;
+        }),
+        {
+            getActions: (entity: Entity<NPCState>) => ({
+                onEntityCreated: () => {
+                    onInside = false;
+                    canChange = false;
+                    ProcedureService.setGameTimeout(() => {
+                        canChange = true;
+                        attemptPursue(entity);
+                    }, 1000);
+                }   
             })
-        }, (entity: Entity<NPCState>) => {})
+        }
     ];
 }
 
@@ -237,6 +262,25 @@ const AttackingBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
             getActions: (entity: Entity<NPCState>) => ({
                 onEntityCreated: () => {
                     entity.getServiceLocator().getScriptingService().getPlayer().onDamage(1);
+                    entity.setState({
+                        sprite: randomBool() ? "npc_bulky_man_hit" : "npc_bulky_man_hit2"
+                    });
+                    entity.setState({
+                        spriteWidth: 1.1,
+                        spriteHeight: 1.1
+                    });
+                    ProcedureService.setGameTimeout(() => entity.setState({
+                        behaviour: NPCBehaviour.IDLE
+                    }), 200);
+                },
+                onEntityDeleted: () => {
+                    entity.setState({
+                        sprite: "npc_bulky_man"
+                    });
+                    entity.setState({
+                        spriteWidth: 1,
+                        spriteHeight: 1
+                    });
                 }
             })
         }
@@ -275,7 +319,7 @@ export function createNPC(
         new SwitchComponent(
             {
                 [NPCBehaviour.IDLE]: JoinComponent(IdleBehaviour(state, 8)),
-                [NPCBehaviour.PURSUING]: JoinComponent(PursuingBehaviour(state, 1)),
+                [NPCBehaviour.PURSUING]: JoinComponent(PursuingBehaviour(state, 1.5)),
                 [NPCBehaviour.DAMAGED]: JoinComponent(HitBehaviour(state)),
                 [NPCBehaviour.ATTACKING]: JoinComponent(AttackingBehaviour(state)),
             }, 

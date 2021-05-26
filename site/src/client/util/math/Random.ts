@@ -13,3 +13,7 @@ export function randomFloatRange(
     const alpha = randomFloat();
     return alpha * upperBound + (1 - alpha) * lowerBound;
 }
+
+export function randomBool(): boolean {
+    return randomFloat() > 0.5 ? true : false;
+}
