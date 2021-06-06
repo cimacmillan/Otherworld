@@ -18,7 +18,7 @@ import {
 } from "../../state/State";
 import { Item } from "../items/ItemTypes";
 
-const ITEM_SIZE = 0.4;
+const ITEM_SIZE_DEFAULT = 0.4;
 const ITEM_SPEED = 0.1;
 const ITEM_SPAWN_RADIUS = 0.1;
 
@@ -142,15 +142,17 @@ export function createItemDropState(arg: ItemDropArguments) {
         vec.vec_mult_scalar(posDiff, ITEM_SPAWN_RADIUS)
     );
 
+    const size = item.dropSize ? ITEM_SIZE_DEFAULT * item.dropSize : ITEM_SIZE_DEFAULT;
+
     return {
         yOffset: 0,
         position: newPosition,
         height: 0,
         heightVelocity: 0,
-        radius: ITEM_SIZE / 2,
+        radius: size / 2,
         angle: 0,
-        spriteWidth: ITEM_SIZE,
-        spriteHeight: ITEM_SIZE,
+        spriteWidth: size,
+        spriteHeight: size,
         sprite: item.spriteIcon,
         velocity,
         friction: ITEM_FRICTION,
@@ -167,12 +169,15 @@ export function createItemDrop(
     serviceLocator: ServiceLocator,
     state: ItemStateType
 ) {
+    const size = state.item.dropSize ? ITEM_SIZE_DEFAULT * state.item.dropSize : ITEM_SIZE_DEFAULT;
+    const change = state.item.dropSize ? ITEM_SIZE_CHANGE * state.item.dropSize : ITEM_SIZE_CHANGE;
+
     return new Entity<ItemStateType>(
         serviceLocator,
         state,
         SpriteRenderComponent(),
         PhysicsComponent(),
-        HoversAnimation(ITEM_SIZE, ITEM_SIZE, ITEM_SIZE_CHANGE),
+        HoversAnimation(size, size, change),
         WhenInPlayerVicinity(
             ITEM_COLLECT_DISTANCE,
             (entity: Entity<ItemStateType>) => {

@@ -199,7 +199,8 @@ export function loadPoint(args: {
                             x: object.data.x,
                             y: object.data.y
                         },
-                        health: 2
+                        health: 2,
+                        itemDropId: "npc_bulky_man"
                     })
                 )
             )

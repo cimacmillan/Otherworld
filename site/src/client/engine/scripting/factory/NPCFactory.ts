@@ -9,6 +9,7 @@ import { animation, easeInOutCirc } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
 import { randomBool, randomIntRange } from "../../../util/math";
 import { vec } from "../../../util/math/Vector";
+import { DropItemDistribution } from "../../commands/ItemCommands";
 import { CanBeInteractedWith, onInteractedWith } from "../../components/core/InteractionComponent";
 import { PhysicsComponent, PhysicsStateType } from "../../components/core/PhysicsComponent";
 import { SpriteRenderComponent } from "../../components/core/SpriteRenderComponent";
@@ -19,6 +20,7 @@ import { TimeoutComponent } from "../../components/util/TimeoutEffect";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { SpriteRenderState } from "../../state/State";
+import { ItemDropDistribution, ITEM_DROP_MAP } from "../items/ItemDrops";
 import { EntityFactory, EntityType } from "./EntityFactory";
 import { WhenInPlayerVicinity } from "./ItemFactory";
 import { createStaticSpriteState } from "./SceneryFactory";
@@ -37,7 +39,8 @@ enum NPCBehaviour {
 type NPCState = SpriteRenderState &
                 PhysicsStateType &
                 HealthState & {
-                    behaviour: NPCBehaviour
+                    behaviour: NPCBehaviour,
+                    itemDrops: ItemDropDistribution
                 };
 
 
@@ -287,6 +290,21 @@ const AttackingBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
     ];
 }
 
+const onNPCDeath = (entity: Entity<NPCState>) => {
+    const serviceLocator = entity.getServiceLocator();
+    const { position, spriteWidth, spriteHeight, itemDrops, velocity } = entity.getState();
+    entity.delete();
+    const newStaticSprite = EntityFactory[EntityType.SCENERY_SPRITE](serviceLocator, createStaticSpriteState(
+        "dead_man",
+        position,
+        0,
+        spriteWidth,
+        spriteHeight
+    ));
+    newStaticSprite.create();
+    DropItemDistribution(serviceLocator, itemDrops, position, velocity, true);
+}
+
 const whiteShade = {
     intensity: 1,
     r: 1,
@@ -305,17 +323,7 @@ export function createNPC(
         CanBeInteractedWith(InteractionType.ATTACK),
         LosesHealthWhenDamaged(),
         ReboundsWhenDamaged(),
-        WhenHealthDepleted((entity: Entity<NPCState>) => {
-            entity.delete();
-            const newStaticSprite = EntityFactory[EntityType.SCENERY_SPRITE](serviceLocator, createStaticSpriteState(
-                "dead_man",
-                entity.getState().position,
-                0,
-                entity.getState().spriteWidth,
-                entity.getState().spriteHeight
-            ));
-            newStaticSprite.create();
-        }),
+        WhenHealthDepleted(onNPCDeath),
         new SwitchComponent(
             {
                 [NPCBehaviour.IDLE]: JoinComponent(IdleBehaviour(state, 8)),
@@ -334,9 +342,11 @@ export function createNPCState(
     args: {
         position: Vector2D;
         health: number;
+        itemDropId: string;
     }
 ): NPCState {
-    const { position, health } = args;
+    const { position, health, itemDropId } = args;
+    const itemDrops = ITEM_DROP_MAP[itemDropId];
     return {
         behaviour: NPCBehaviour.IDLE,
         sprite: "npc_bulky_man",
@@ -354,7 +364,8 @@ export function createNPCState(
         elastic: 0.9,
         collidesEntities: true,
         collidesWalls: true,
-        health
+        health,
+        itemDrops
     };
 }
 

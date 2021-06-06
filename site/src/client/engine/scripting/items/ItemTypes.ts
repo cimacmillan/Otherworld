@@ -40,7 +40,9 @@ interface PreciousItem extends BaseItem {
     type: ItemType.PRECIOUS;
 }
 
-export type Item = KeyItem | EquipableItem | PreciousItem | ConsumableItem;
+export type Item = (KeyItem | EquipableItem | PreciousItem | ConsumableItem) & {
+    dropSize?: number
+};
 
 export enum ItemType {
     CONSUMABLE = "Consumable",
