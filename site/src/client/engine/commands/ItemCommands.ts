@@ -36,16 +36,17 @@ export const DropItemDistribution = (
     withVelocity?: boolean,
 ) => {
     const itemDrops = Object.entries(drops);
-    itemDrops.forEach(([idString, perc]) => {
+    itemDrops.forEach(([idString, val]) => {
+        const [perc, amount] = val;
         const rand = randomFloat();
         const id = idString as GameItem;
         if (rand <= perc) {
-            DropItem(serviceLocator, {
+            DropItems(serviceLocator, {
                 item: GameItems[id],
                 position,
                 force,
                 withVelocity
-            });
+            }, amount);
         }
     })
 }
