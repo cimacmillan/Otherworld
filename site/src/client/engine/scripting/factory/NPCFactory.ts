@@ -1,12 +1,15 @@
 import { vec3 } from "gl-matrix";
 import { InteractionSource, InteractionSourceType, InteractionType } from "../../../services/interaction/InteractionType";
+import { ProcedureService } from "../../../services/jobs/ProcedureService";
 import { DamageTextParticle, HealthDropParticle } from "../../../services/particle/particles/HealthDropParticle";
 import { RenderItem, SpriteShadeOverride } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
 import { animation, easeInOutCirc } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
+import { randomBool, randomIntRange } from "../../../util/math";
 import { vec } from "../../../util/math/Vector";
+import { DropItemDistribution } from "../../commands/ItemCommands";
 import { CanBeInteractedWith, onInteractedWith } from "../../components/core/InteractionComponent";
 import { PhysicsComponent, PhysicsStateType } from "../../components/core/PhysicsComponent";
 import { SpriteRenderComponent } from "../../components/core/SpriteRenderComponent";
@@ -17,6 +20,7 @@ import { TimeoutComponent } from "../../components/util/TimeoutEffect";
 import { Entity } from "../../Entity";
 import { EntityComponent } from "../../EntityComponent";
 import { SpriteRenderState } from "../../state/State";
+import { ItemDropDistribution, ITEM_DROP_MAP } from "../items/ItemDrops";
 import { EntityFactory, EntityType } from "./EntityFactory";
 import { WhenInPlayerVicinity } from "./ItemFactory";
 import { createStaticSpriteState } from "./SceneryFactory";
@@ -35,7 +39,8 @@ enum NPCBehaviour {
 type NPCState = SpriteRenderState &
                 PhysicsStateType &
                 HealthState & {
-                    behaviour: NPCBehaviour
+                    behaviour: NPCBehaviour,
+                    itemDrops: ItemDropDistribution
                 };
 
 
@@ -148,14 +153,37 @@ const WalksTowardsPlayer = (): EntityComponent<PhysicsStateType> => {
 }
 
 const IdleBehaviour = (state: NPCState, visibleDistance: number): EntityComponent<NPCState>[] => {
+    let onInside = false;
+    let canChange = false;
+    const attemptPursue = (entity: Entity<NPCState>) => {
+        if (!onInside || !canChange) {
+            return;
+        }
+        entity.setState({
+            behaviour: NPCBehaviour.PURSUING
+        })
+    }
     return [
         OnDamagedByPlayer(ent => ent.setState({ behaviour: NPCBehaviour.DAMAGED })),
         BreathsSlowly(state.spriteHeight),
         WhenInPlayerVicinity(visibleDistance, (entity: Entity<NPCState>) => {
-            entity.setState({
-                behaviour: NPCBehaviour.PURSUING
+            onInside = true;
+            attemptPursue(entity);
+        }, (entity: Entity<NPCState>) => {
+            onInside = false;
+        }),
+        {
+            getActions: (entity: Entity<NPCState>) => ({
+                onEntityCreated: () => {
+                    onInside = false;
+                    canChange = false;
+                    ProcedureService.setGameTimeout(() => {
+                        canChange = true;
+                        attemptPursue(entity);
+                    }, 1000);
+                }   
             })
-        }, (entity: Entity<NPCState>) => {})
+        }
     ];
 }
 
@@ -236,11 +264,45 @@ const AttackingBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
         {
             getActions: (entity: Entity<NPCState>) => ({
                 onEntityCreated: () => {
-                    entity.getServiceLocator().getScriptingService().getPlayer().onDamage(1);
+                    entity.getServiceLocator().getScriptingService().getPlayer().onDamage(1, entity.getState().position);
+                    entity.setState({
+                        sprite: randomBool() ? "npc_bulky_man_hit" : "npc_bulky_man_hit2"
+                    });
+                    entity.setState({
+                        spriteWidth: 1.1,
+                        spriteHeight: 1.1
+                    });
+                    ProcedureService.setGameTimeout(() => entity.setState({
+                        behaviour: NPCBehaviour.IDLE
+                    }), 200);
+                },
+                onEntityDeleted: () => {
+                    entity.setState({
+                        sprite: "npc_bulky_man"
+                    });
+                    entity.setState({
+                        spriteWidth: 1,
+                        spriteHeight: 1
+                    });
                 }
             })
         }
     ];
+}
+
+const onNPCDeath = (entity: Entity<NPCState>) => {
+    const serviceLocator = entity.getServiceLocator();
+    const { position, spriteWidth, spriteHeight, itemDrops, velocity } = entity.getState();
+    entity.delete();
+    const newStaticSprite = EntityFactory[EntityType.SCENERY_SPRITE](serviceLocator, createStaticSpriteState(
+        "dead_man",
+        position,
+        0,
+        spriteWidth,
+        spriteHeight
+    ));
+    newStaticSprite.create();
+    DropItemDistribution(serviceLocator, itemDrops, position, velocity, true);
 }
 
 const whiteShade = {
@@ -261,21 +323,11 @@ export function createNPC(
         CanBeInteractedWith(InteractionType.ATTACK),
         LosesHealthWhenDamaged(),
         ReboundsWhenDamaged(),
-        WhenHealthDepleted((entity: Entity<NPCState>) => {
-            entity.delete();
-            const newStaticSprite = EntityFactory[EntityType.SCENERY_SPRITE](serviceLocator, createStaticSpriteState(
-                "dead_man",
-                entity.getState().position,
-                0,
-                entity.getState().spriteWidth,
-                entity.getState().spriteHeight
-            ));
-            newStaticSprite.create();
-        }),
+        WhenHealthDepleted(onNPCDeath),
         new SwitchComponent(
             {
                 [NPCBehaviour.IDLE]: JoinComponent(IdleBehaviour(state, 8)),
-                [NPCBehaviour.PURSUING]: JoinComponent(PursuingBehaviour(state, 1)),
+                [NPCBehaviour.PURSUING]: JoinComponent(PursuingBehaviour(state, 1.5)),
                 [NPCBehaviour.DAMAGED]: JoinComponent(HitBehaviour(state)),
                 [NPCBehaviour.ATTACKING]: JoinComponent(AttackingBehaviour(state)),
             }, 
@@ -290,9 +342,11 @@ export function createNPCState(
     args: {
         position: Vector2D;
         health: number;
+        itemDropId: string;
     }
 ): NPCState {
-    const { position, health } = args;
+    const { position, health, itemDropId } = args;
+    const itemDrops = ITEM_DROP_MAP[itemDropId];
     return {
         behaviour: NPCBehaviour.IDLE,
         sprite: "npc_bulky_man",
@@ -310,7 +364,8 @@ export function createNPCState(
         elastic: 0.9,
         collidesEntities: true,
         collidesWalls: true,
-        health
+        health,
+        itemDrops
     };
 }
 

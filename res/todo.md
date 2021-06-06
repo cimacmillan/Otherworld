@@ -2,18 +2,9 @@
 ### Milestone 2
 Puzzle maps to escape prison, killing enemies
 
-* player health view
-* jailor entity attacks player
-* jailor entity has drops of a certain distribution, item drops
-* Get rid of entity factory and just add strings to thing
-
-
-<!-- * Player skills definition and serialisation
-* Killing jailor increases skill
-* Skill increase component and view
-* Player skills tab in inventory
-* Skill level up sound effect and view
-* Lockpicking increases skill -->
+* NPC item drops / item distribution string
+* Another creature using same entity behaviour, parameterise all images, item drops etc
+* Extend jail level
 
 ### Polish 
 * Improve head bob to not make noise when standing still (frequency?)
@@ -21,8 +12,13 @@ Puzzle maps to escape prison, killing enemies
 * Add particles to hits and deaths
 * Add screenshake to hits and deaths
 * Sort dodgy sprites shapes when rendering
+* Get rid of entity factory and just add strings to thing
 
 ### Audio
+* Entity hit noise
+* Swing noise
+* Player hit noise
+* Entity dead noise
 * Don't start audio until button pressed (onGameStart?)
 * Item collect sound
 * BPM sequencer for syncing song change
@@ -46,6 +42,8 @@ Puzzle maps to escape prison, killing enemies
 ### Optimise
 * Triangle render service to render arbitrary triangle counts for a single transform
 
+-------
+
 
 ### Ideas
 * Skills
@@ -54,3 +52,9 @@ Puzzle maps to escape prison, killing enemies
 
 
 
+<!-- * Player skills definition and serialisation
+* Killing jailor increases skill
+* Skill increase component and view
+* Player skills tab in inventory
+* Skill level up sound effect and view
+* Lockpicking increases skill -->

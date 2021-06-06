@@ -4,6 +4,7 @@ import { EquipmentType, Item, ItemType } from "../../engine/scripting/items/Item
 export enum GameItem {
     GOLD_KEY = "GOLD_KEY",
     GOLD_RING = "GOLD_RING",
+    GOLD_COIN = "GOLD_COIN",
 
     WEAPON_WOOD_STICK = "WEAPON_WOOD_STICK"
 }
@@ -51,5 +52,14 @@ export const GameItems: GameItemMap = {
             }
         ],
         equipmentType: EquipmentType.WEAPON
+    },
+    [GameItem.GOLD_COIN]: {
+        id: GameItem.GOLD_COIN,
+        type: ItemType.PRECIOUS,
+        spriteIcon: "item_gold_coin",
+        stackable: true,
+        name: "Gold Coin",
+        description: "A coin of gold, marked with the image of the Emperor",
+        dropSize: 0.4
     }
 };

@@ -137,27 +137,6 @@ export const AddItemToInventory = (inventory: Inventory, item: Item) => {
     }
 };
 
-export const DropItems = (
-    serviceLocator: ServiceLocator,
-    item: ItemDropArguments,
-    amount: number
-) => {
-    for (let i = 0; i < amount; i++) {
-        DropItem(serviceLocator, item);
-    }
-};
-
-export const DropItem = (
-    serviceLocator: ServiceLocator,
-    item: ItemDropArguments
-) => {
-    const itemEntity = EntityFactory.ITEM_DROP(
-        serviceLocator,
-        createItemDropState(item)
-    );
-    serviceLocator.getWorld().addEntity(itemEntity);
-};
-
 export const DoesPlayerHaveItem = (
     serviceLocator: ServiceLocator,
     item: GameItem

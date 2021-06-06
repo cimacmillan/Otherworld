@@ -22,6 +22,7 @@ import { getEmptyInventory, Inventory } from "../scripting/items/ItemTypes";
 import { CameraState, HealthState } from "../state/State";
 import { PlayerMovement } from "./PlayerMovement";
 import { PlayerEquipment } from "./PlayerEquipment";
+import { vec } from "../../util/math";
 
 type InternalEntityState = PhysicsStateType & HealthState & CameraState;
 
@@ -181,7 +182,7 @@ export class Player {
         });
     }
 
-    public onDamage(amount: number) {
+    public onDamage(amount: number, push: Vector2D) {
         this.state.health.current -= amount;
         if (this.state.health.current < 0) {
             this.state.health.current = 0;
@@ -189,6 +190,16 @@ export class Player {
         }
         this.serviceLocator.getStore().getActions().onPlayerHealth(this.state.health);
         this.serviceLocator.getStore().getActions().onPlayerDamaged();
+        this.serviceLocator.getRenderService().screenShakeService.shake(amount);
+        
+        const difference = vec.vec_sub(this.getPositon(), push);
+        if (difference.x > 0 || difference.y > 0) {
+            const normal = vec.vec_normalize(difference);
+            const force = amount * 0.1;
+
+            this.state.surface.velocity.x += normal.x * force;
+            this.state.surface.velocity.y += normal.y * force;
+        }
     }
 
     private onDeath() {

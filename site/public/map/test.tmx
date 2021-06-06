@@ -13,23 +13,5 @@
   <object id="5" type="Wall" x="479.592" y="359.193">
    <polyline points="-93.3876,39.1625 11.3807,38.3544 -11.0776,149.286"/>
   </object>
-  <object id="6" type="NPC" x="451.875" y="438.319">
-   <point/>
-  </object>
-  <object id="7" type="NPC" x="419.24" y="432.294">
-   <point/>
-  </object>
-  <object id="8" type="NPC" x="436.813" y="417.734">
-   <point/>
-  </object>
-  <object id="9" type="NPC" x="457.398" y="415.725">
-   <point/>
-  </object>
-  <object id="10" type="NPC" x="468.946" y="425.767">
-   <point/>
-  </object>
-  <object id="11" type="NPC" x="468.946" y="444.846">
-   <point/>
-  </object>
  </objectgroup>
 </map>

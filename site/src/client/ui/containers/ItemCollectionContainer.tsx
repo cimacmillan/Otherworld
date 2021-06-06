@@ -45,7 +45,7 @@ export const ItemCollectionContainer: React.FunctionComponent<ItemCollectionCont
             );
             if (itemInList) {
                 itemInList.amount++;
-                setItemList(itemList);
+                setItemList([...itemList]);
                 return;
             }
         }
@@ -75,7 +75,7 @@ export const ItemCollectionContainer: React.FunctionComponent<ItemCollectionCont
             addItem(item);
         }
     }, [itemList]);
-
+    
     return (
         <ViewportComponent
             x={0}
@@ -88,8 +88,8 @@ export const ItemCollectionContainer: React.FunctionComponent<ItemCollectionCont
                 justifyContent: "flex-end",
             }}
         >
-            {itemList.map((itemMetadata) => (
-                <ItemCollectionComponent
+            {itemList.map((itemMetadata) => {
+                return <ItemCollectionComponent
                     key={itemMetadata.key}
                     serviceLocator={serviceLocator}
                     sprite={itemMetadata.item.spriteIcon}
@@ -97,7 +97,7 @@ export const ItemCollectionContainer: React.FunctionComponent<ItemCollectionCont
                     amount={itemMetadata.amount}
                     onRemove={() => removeItem(itemMetadata)}
                 />
-            ))}
+            })}
         </ViewportComponent>
     );
 };
