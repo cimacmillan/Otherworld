@@ -98,27 +98,33 @@
         "height": 10,
         "frames": 4
     },
-    "skull": {
+    "npc_spider": {
         "x": 0,
         "y": 102,
         "width": 10,
         "height": 10
     },
-    "ui_finger": {
+    "skull": {
         "x": 0,
         "y": 112,
         "width": 10,
         "height": 10
     },
-    "wall": {
+    "ui_finger": {
         "x": 0,
         "y": 122,
         "width": 10,
         "height": 10
     },
-    "weapon_wood_stick": {
+    "wall": {
         "x": 0,
         "y": 132,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_wood_stick": {
+        "x": 0,
+        "y": 142,
         "width": 10,
         "height": 10
     }
