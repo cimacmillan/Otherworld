@@ -157,6 +157,8 @@ function getManifestWithFrameCounts(manifest, jsonFiles) {
 
 function main() {
     console.log("CompileArt");
+    const startTime = Date.now();
+
     const inputFiles = fs.readdirSync(inputDirectory).map(file => inputDirectory + file);
     const pngFiles = inputFiles.filter(fileName => fileName.substring(fileName.length - 3, fileName.length) === "png").map(fileName => ({
         png: readPng(fileName),
@@ -172,6 +174,10 @@ function main() {
     const manifestWithFrames = getManifestWithFrameCounts(manifest, jsonFiles);
     writeJson(outputJSON, manifestWithFrames);
     writePng(outputFile, pngDest);
+
+    const endTime = Date.now();
+    const executionTime = endTime - startTime;
+    console.log(`Complete in ${executionTime / 1000}s `);
 }
 
 

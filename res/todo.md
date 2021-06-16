@@ -2,6 +2,7 @@
 ### Milestone 2
 Puzzle maps to escape prison, killing enemies
 
+* Optimise compile art
 * Extend jail level
 
 ### Polish 
