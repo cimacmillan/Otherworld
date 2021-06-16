@@ -42,6 +42,6 @@ export const defaultTiledObjectProperties: Record<
         height: "0.5",
     },
     [TiledObjectType.NPC]: {
-        
+        npcTypeId: "jailor"
     }
 };
