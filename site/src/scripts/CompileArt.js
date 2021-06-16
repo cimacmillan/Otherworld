@@ -70,21 +70,74 @@ function getIsManifestValid(manifest) {
     return isValid;
 }
 
+class InsertionAxis {
+    constructor(log) {
+        this.axis = [0];
+        this.log = log;
+    }
+
+    getAxis() {
+        return this.axis;
+    }
+
+    insert(value) {
+        if (this.log) {
+            console.log(this.axis, value);
+        }
+        if (this.axis.length === 1) {
+            if (this.axis[0] === value) {
+                return;
+            }
+        } 
+
+        for (let i = 0; i < this.axis.length - 1; i++) {
+            const indexValue = this.axis[i];
+            const nextIndexValue = this.axis[i + 1];
+
+            if (value === indexValue) {
+                return;
+            }
+
+            if (value > indexValue && value < nextIndexValue) {
+                this.axis.splice(i + 1, 0, value);
+                return;
+            }
+        }
+
+        this.axis.push(value);
+    }
+}
+
+// Cheating here bc lazy
+
+const yAxis = new InsertionAxis(false);
+const xAxis = new InsertionAxis(false);
+
 function insertPngFileIntoNewManifest(manifest, obj) {
     const [ manifestWidth, manifestHeight ] = getManifestSize(manifest);
 
+    const width = obj.png.width;
+    const height = obj.png.height;
+
     let smallestSize = undefined;
     let bestManifest = undefined;
+    let insertX = undefined;
+    let insertY = undefined;
 
-    for (let x = 0; x < manifestWidth + 1; x++) {
-        for (let y = 0; y < manifestHeight + 1; y++) {
+    const axisIndexesX = xAxis.getAxis();
+    const axisIndexesY = yAxis.getAxis();
+
+    for (let axisIndexX = 0; axisIndexX < axisIndexesX.length; axisIndexX++) {
+        const x = axisIndexesX[axisIndexX];
+        for (let axisIndexY = 0; axisIndexY < axisIndexesY.length; axisIndexY++) {
+            const y = axisIndexesY[axisIndexY];
             const newManifest = {
                 ...manifest,
                 [obj.fileName]: {
                     x,
                     y,
-                    width: obj.png.width,
-                    height: obj.png.height
+                    width,
+                    height
                 }
             };
 
@@ -97,8 +150,19 @@ function insertPngFileIntoNewManifest(manifest, obj) {
             if (smallestSize === undefined || size < smallestSize) {
                 smallestSize = size;
                 bestManifest = newManifest;
+                insertX = x;
+                insertY = y;
             }
         }
+    }
+
+    if (bestManifest) {
+        xAxis.insert(insertX);
+        xAxis.insert(insertX + width);
+        yAxis.insert(insertY);
+        yAxis.insert(insertY + height);
+    } else {
+        console.log("No good manifest found...");
     }
 
     return bestManifest;
