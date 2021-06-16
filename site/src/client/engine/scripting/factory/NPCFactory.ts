@@ -206,7 +206,10 @@ const PursuingBehaviour = (state: NPCState, attackDistance: number): EntityCompo
                 });
 
                 if ((prevX < 0.25 && x > 0.25) || (prevX < 0.75 && x > 0.75)) {
-                    entity.getServiceLocator().getRenderService().screenShakeService.shake(0.3);
+                    const npcType = entity.getState().npcType;
+                    if (npcType.moveVibration) {
+                        entity.getServiceLocator().getRenderService().screenShakeService.shake(npcType.moveVibration.amount);
+                    }
                 }
                 prevX = x;
             }).looping();
@@ -235,17 +238,19 @@ const HitBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
         {
         getActions: (entity: Entity<NPCState>) => ({
             onEntityCreated: () => {
+                const { spriteWidth, spriteHeight } = entity.getState().npcType;
                 entity.setState({
                     shade: whiteShade,
-                    spriteWidth: 1.1,
-                    spriteHeight: 1.1
+                    spriteWidth: spriteWidth * 1.1,
+                    spriteHeight: spriteHeight * 1.1
                 });
             },
             onEntityDeleted: () => {
+                const { spriteWidth, spriteHeight } = entity.getState().npcType;
                 entity.setState({
                     shade: undefined,
-                    spriteWidth: 1,
-                    spriteHeight: 1
+                    spriteWidth,
+                    spriteHeight
                 });
             }
         })
@@ -264,26 +269,28 @@ const AttackingBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
         {
             getActions: (entity: Entity<NPCState>) => ({
                 onEntityCreated: () => {
+                    const { spriteWidth, spriteHeight } = entity.getState().npcType;
                     const hitSprite = randomSelection(entity.getState().npcType.spriteAttack);
                     entity.getServiceLocator().getScriptingService().getPlayer().onDamage(1, entity.getState().position);
                     entity.setState({
                         sprite: hitSprite
                     });
                     entity.setState({
-                        spriteWidth: 1.1,
-                        spriteHeight: 1.1
+                        spriteWidth: spriteWidth * 1.1,
+                        spriteHeight: spriteHeight * 1.1
                     });
                     ProcedureService.setGameTimeout(() => entity.setState({
                         behaviour: NPCBehaviour.IDLE
                     }), 200);
                 },
                 onEntityDeleted: () => {
+                    const { spriteWidth, spriteHeight } = entity.getState().npcType;
                     entity.setState({
                         sprite: entity.getState().npcType.spriteIdle
                     });
                     entity.setState({
-                        spriteWidth: 1,
-                        spriteHeight: 1
+                        spriteWidth,
+                        spriteHeight 
                     });
                 }
             })
@@ -347,14 +354,14 @@ export function createNPCState(
 ): NPCState {
     const { position, npcTypeId } = args;
     const npcType = NPCTypes[npcTypeId];
-    const { health, itemDropId, spriteIdle } = npcType;
+    const { health, itemDropId, spriteIdle, spriteWidth, spriteHeight } = npcType;
     const itemDrops = ITEM_DROP_MAP[itemDropId];
     return {
         npcType,
         behaviour: NPCBehaviour.IDLE,
         sprite: spriteIdle,
-        spriteHeight: 1,
-        spriteWidth: 1,
+        spriteHeight,
+        spriteWidth,
         position,
         height: 0,
         yOffset: 0,
