@@ -2,8 +2,7 @@
 ### Milestone 2
 Puzzle maps to escape prison, killing enemies
 
-* NPC item drops / item distribution string
-* Another creature using same entity behaviour, parameterise all images, item drops etc
+* Optimise compile art
 * Extend jail level
 
 ### Polish 

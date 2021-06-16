@@ -61,11 +61,6 @@ export function getTextureCoordinate(
     };
 }
 
-export function randomSelection<T>(toSelect: T[]): T {
-    const randomIndex = Math.floor(Math.random() * toSelect.length);
-    return toSelect[randomIndex];
-}
-
 export function toGameAngle(x: number, y: number) {
     return Math.atan2(x, -y);
 }

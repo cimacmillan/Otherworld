@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="3" nextobjectid="12">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="3" nextobjectid="23">
  <objectgroup id="2" name="Object Layer 1">
-  <object id="1" type="SpawnPoint" x="435.846" y="487.698">
+  <object id="1" type="SpawnPoint" x="435.846" y="496.233">
    <point/>
   </object>
   <object id="3" type="NPC" x="435.847" y="438.656">
@@ -12,6 +12,63 @@
   </object>
   <object id="5" type="Wall" x="479.592" y="359.193">
    <polyline points="-93.3876,39.1625 11.3807,38.3544 -11.0776,149.286"/>
+  </object>
+  <object id="12" type="NPC" x="458.904" y="431.792">
+   <properties>
+    <property name="npcTypeId" value="slime"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="13" type="NPC" x="452.377" y="452.377">
+   <properties>
+    <property name="npcTypeId" value="slime"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="14" type="NPC" x="419.742" y="444.846">
+   <properties>
+    <property name="npcTypeId" value="slime"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="15" type="NPC" x="426.269" y="420.746">
+   <properties>
+    <property name="npcTypeId" value="slime"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="16" type="NPC" x="431.29" y="449.365">
+   <properties>
+    <property name="npcTypeId" value="slime"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="17" type="NPC" x="473.967" y="428.277">
+   <point/>
+  </object>
+  <object id="18" type="NPC" x="441.834" y="409.7">
+   <point/>
+  </object>
+  <object id="19" type="NPC" x="467.44" y="444.846">
+   <point/>
+  </object>
+  <object id="20" type="NPC" x="423.257" y="453.382">
+   <properties>
+    <property name="npcTypeId" value="slime"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="21" type="NPC" x="467.942" y="451.373">
+   <properties>
+    <property name="npcTypeId" value="slime"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="22" type="NPC" x="452.377" y="454.888">
+   <properties>
+    <property name="npcTypeId" value="slime"/>
+   </properties>
+   <point/>
   </object>
  </objectgroup>
 </map>
