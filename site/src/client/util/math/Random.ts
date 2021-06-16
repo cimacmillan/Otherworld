@@ -17,3 +17,8 @@ export function randomFloatRange(
 export function randomBool(): boolean {
     return randomFloat() > 0.5 ? true : false;
 }
+
+export function randomSelection<T>(selections: T[]): T {
+    const index = randomIntRange(0, selections.length);
+    return selections[index];
+}
