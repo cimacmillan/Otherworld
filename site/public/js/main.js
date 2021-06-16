@@ -2857,7 +2857,7 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexport
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.NPCTypes = void 0;\nexports.NPCTypes = {\n    [\"jailor\"]: {\n        health: 2,\n        itemDropId: \"npc_bulky_man\",\n        spriteIdle: \"npc_bulky_man\",\n        spriteDead: \"dead_man\",\n        spriteAttack: [\"npc_bulky_man_hit\", \"npc_bulky_man_hit2\"],\n        spriteRun: \"npc_bulky_man_run\",\n    },\n    [\"slime\"]: {\n        health: 1,\n        spriteIdle: \"blob\",\n        spriteDead: \"blob_dead\",\n        itemDropId: \"npc_bulky_man\",\n        spriteAttack: [\"npc_bulky_man_hit\", \"npc_bulky_man_hit2\"],\n        spriteRun: \"npc_bulky_man_run\",\n    }\n};\n//# sourceMappingURL=NPCTypes.js.map\n\n//# sourceURL=webpack:///./site/build/client/engine/scripting/factory/NPCTypes.js?");
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.NPCTypes = void 0;\nexports.NPCTypes = {\n    [\"jailor\"]: {\n        health: 2,\n        itemDropId: \"npc_bulky_man\",\n        spriteIdle: \"npc_bulky_man\",\n        spriteDead: \"dead_man\",\n        spriteAttack: [\"npc_bulky_man_hit\", \"npc_bulky_man_hit2\"],\n        spriteRun: \"npc_bulky_man_run\",\n    },\n    [\"slime\"]: {\n        health: 1,\n        spriteIdle: \"blob\",\n        spriteDead: \"blob_dead\",\n        spriteAttack: [\"blob_attack\"],\n        spriteRun: \"sprite_run\",\n        itemDropId: \"npc_bulky_man\",\n    }\n};\n//# sourceMappingURL=NPCTypes.js.map\n\n//# sourceURL=webpack:///./site/build/client/engine/scripting/factory/NPCTypes.js?");
 
 /***/ }),
 

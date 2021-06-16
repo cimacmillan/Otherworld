@@ -22,9 +22,9 @@ export const NPCTypes: Record<string, NPCType> = {
         health: 1,
         spriteIdle: "blob",
         spriteDead: "blob_dead",
+        spriteAttack: ["blob_attack"],
+        spriteRun: "sprite_run",
 
         itemDropId: "npc_bulky_man",
-        spriteAttack: ["npc_bulky_man_hit", "npc_bulky_man_hit2"],
-        spriteRun: "npc_bulky_man_run",
     }
 }
