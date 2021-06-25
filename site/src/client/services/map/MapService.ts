@@ -18,7 +18,7 @@ export class MapService {
     private serviceLocator: ServiceLocator;
     private currentMap: Maps;
     private currentMapData: MapData = {};
-    private currentSpawnPoints: SpawnPoint[];
+    private currentSpawnPoints: SpawnPoint[] = [];
 
     public init(serviceLocator: ServiceLocator) {
         this.serviceLocator = serviceLocator;

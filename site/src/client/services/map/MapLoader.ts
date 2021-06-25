@@ -85,6 +85,8 @@ export function loadPolygon(args: {
     const { closed, points } = object;
     const properties = object.data.properties;
 
+    console.log("loadPolygon", object);
+
     switch (object.data.type) {
         case TiledObjectType.Wall:
             const length = closed ? points.length : points.length - 1;

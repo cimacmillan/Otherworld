@@ -36,6 +36,9 @@ function withType(
     type: EntityType,
     func: EntityCreationFunction
 ): EntityCreationFunction {
+    if (!func) {
+        console.error(`Missing entity type "${type}"`);
+    }
     return (serviceLocator: ServiceLocator, state: object) => {
         const entity = func(serviceLocator, state);
         return entity.withType(type);
@@ -46,8 +49,8 @@ const entityFactory: Record<EntityType, EntityCreationFunction> = {
     [EntityType.NULL]: () => {
         throw new Error("Entity type is null");
     },
-    [EntityType.DOOR]: createDoor,
-    [EntityType.DOOR_LOCKED]: createLockedDoor,
+    [EntityType.DOOR]: (...args: any[]) => createDoor(args[0], args[1]),
+    [EntityType.DOOR_LOCKED]: (...args: any[]) => createLockedDoor(args[0], args[1]),
     [EntityType.ITEM_DROP]: createItemDrop,
     [EntityType.LADDER]: createLadder,
     [EntityType.SCENERY_FLOOR]: createStaticFloor,
