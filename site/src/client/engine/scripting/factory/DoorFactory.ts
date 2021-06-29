@@ -318,7 +318,10 @@ export const createLockedDoor = (
                                     .audio[Audios.DOOR_UNLOCK],
                                 0.5
                             );
-                    } else {
+                        if (interactHintId !== undefined) {
+                            DeregisterKeyHint(serviceLocator)(interactHintId);
+                        }
+                    } else if (configuration) {
                         OpenLockpickingChallenge(serviceLocator)(
                             (result: boolean) => {
                                 ent.setState({
@@ -336,9 +339,9 @@ export const createLockedDoor = (
                             },
                             configuration
                         );
-                    }
-                    if (interactHintId !== undefined) {
-                        DeregisterKeyHint(serviceLocator)(interactHintId);
+                        if (interactHintId !== undefined) {
+                            DeregisterKeyHint(serviceLocator)(interactHintId);
+                        }
                     }
                 }
             ),
@@ -350,10 +353,15 @@ export const createLockedDoor = (
                             code: ["E"],
                             hint: "Unlock Door",
                         });
-                    } else {
+                    } else if (configuration) {
                         interactHintId = RegisterKeyHint(serviceLocator)({
                             code: ["E"],
                             hint: "Lockpick Door",
+                        });
+                    } else {
+                        interactHintId = RegisterKeyHint(serviceLocator)({
+                            code: ["?"],
+                            hint: "Locked",
                         });
                     }
                 },

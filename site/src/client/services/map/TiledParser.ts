@@ -111,8 +111,6 @@ export type GameTiledObject =
     | PointObject;
 
 export function tiledXMLtoGameTiledMap(tmx: TiledInterface): GameTiledMap {
-    console.log(tmx);
-
     const { map } = tmx;
     const { $, objectgroup } = map;
     const { width, height, tilewidth, tileheight } = $;
@@ -147,6 +145,7 @@ function parseObject(args: {
     const { object, destination, tileWidth, tileHeight } = args;
 
     const objectType = object.$.type;
+
     const properties: Record<string, string> =
         objectType &&
         defaultTiledObjectProperties[objectType as TiledObjectType]

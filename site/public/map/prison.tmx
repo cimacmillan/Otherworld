@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="7" nextobjectid="94">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="7" nextobjectid="98">
  <objectgroup id="5" name="Object Layer 1">
-  <object id="67" type="Door" x="340" y="600">
+  <object id="67" type="Door" x="740" y="600">
    <polyline points="20.2385,9.94948 40.2385,9.94948"/>
   </object>
-  <object id="71" type="Door" x="360" y="580">
+  <object id="71" type="Door" x="869.735" y="730.738">
    <properties>
-    <property name="height" value="5"/>
+    <property name="height" value=""/>
     <property name="keyId" value="GOLD_KEY"/>
-    <property name="locked" type="bool" value="true"/>
-    <property name="resets" type="bool" value="true"/>
-    <property name="width" value="5"/>
+    <property name="locked" type="bool" value="false"/>
+    <property name="resets" type="bool" value="false"/>
+    <property name="width" value=""/>
    </properties>
-   <polyline points="0,-10.0473 20,-10.0473"/>
+   <polyline points="0,-10.5465 -0.133721,8.89141"/>
   </object>
   <object id="72" type="Door" x="460" y="580">
    <properties>
@@ -40,10 +40,31 @@
   <object id="93" x="752.278" y="465.86" width="181.481" height="18.8438">
    <text wrap="1">Starting Area</text>
   </object>
+  <object id="94" type="Floor" x="645.767" y="418.81" width="357.58" height="411.462"/>
+  <object id="95" type="Floor" x="664.544" y="436.77" width="357.58" height="411.462">
+   <properties>
+    <property name="height" value="1"/>
+   </properties>
+  </object>
+  <object id="96" type="Door" x="780.258" y="617.892">
+   <properties>
+    <property name="height" value="2"/>
+    <property name="locked" type="bool" value="true"/>
+    <property name="resets" type="bool" value="false"/>
+    <property name="width" value="2"/>
+   </properties>
+   <polyline points="-20.1193,-48.0302 -0.119259,-48.0302"/>
+  </object>
  </objectgroup>
  <objectgroup id="6" name="Object Layer 2">
-  <object id="68" type="SpawnPoint" x="769.952" y="667.931">
+  <object id="68" type="SpawnPoint" x="771.23" y="559.312">
    <point/>
+  </object>
+  <object id="97" type="StaticSprite" x="787.142" y="502.216" width="6" height="6">
+   <properties>
+    <property name="height" value="0"/>
+    <property name="sprite" value="skull"/>
+   </properties>
   </object>
  </objectgroup>
 </map>

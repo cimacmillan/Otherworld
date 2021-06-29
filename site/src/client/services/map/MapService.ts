@@ -70,9 +70,6 @@ export class MapService {
         const spawnPoint = this.getSpawnPoint(destination);
         const { position, angle } = spawnPoint;
         const { x, y } = position;
-
-        console.log("spawn point ", spawnPoint);
-
         player.setPosition(x, y);
         player.setAngle(angle);
     }

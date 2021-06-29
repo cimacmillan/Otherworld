@@ -131,8 +131,8 @@
     "skull": {
         "x": 0,
         "y": 122,
-        "width": 10,
-        "height": 10
+        "width": 5,
+        "height": 5
     },
     "sprite_run": {
         "x": 40,
@@ -143,19 +143,19 @@
     },
     "ui_finger": {
         "x": 0,
-        "y": 132,
+        "y": 127,
         "width": 10,
         "height": 10
     },
     "wall": {
         "x": 0,
-        "y": 142,
+        "y": 137,
         "width": 10,
         "height": 10
     },
     "weapon_wood_stick": {
         "x": 0,
-        "y": 152,
+        "y": 147,
         "width": 10,
         "height": 10
     }

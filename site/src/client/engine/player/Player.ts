@@ -203,7 +203,7 @@ export class Player {
     }
 
     private onDeath() {
-        console.log("On death");
+
     }
 
     public attack() {

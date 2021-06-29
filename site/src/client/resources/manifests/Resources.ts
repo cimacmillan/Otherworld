@@ -12,8 +12,8 @@ export enum SpriteSheets {
 const manifest: ResourceManifestBuilder = new ResourceManifestBuilder();
 manifest.Spritesheet(SpriteSheets.SPRITE, "img/out");
 manifest.Map(Maps.PRISON, MapPrison);
-manifest.Map(Maps.CELLAR, MapCellar);
-manifest.Map(Maps.TEST, MapTest);
+// manifest.Map(Maps.CELLAR, MapCellar);
+// manifest.Map(Maps.TEST, MapTest);
 manifest.Builder(audios);
 
 export const defaultManifest = manifest;
