@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="7" nextobjectid="98">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="7" nextobjectid="102">
  <objectgroup id="5" name="Object Layer 1">
   <object id="67" type="Door" x="740" y="600">
    <polyline points="20.2385,9.94948 40.2385,9.94948"/>
@@ -64,6 +64,30 @@
    <properties>
     <property name="height" value="0"/>
     <property name="sprite" value="skull"/>
+   </properties>
+  </object>
+  <object id="98" type="StaticSprite" x="788.073" y="667.535" width="6" height="6">
+   <properties>
+    <property name="height" value="0"/>
+    <property name="sprite" value="skull"/>
+   </properties>
+  </object>
+  <object id="99" type="GameItem" x="770.305" y="652.871">
+   <properties>
+    <property name="item" value="GOLD_RING"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="100" type="StaticSprite" x="783.335" y="668.377" width="6" height="6">
+   <properties>
+    <property name="height" value="0"/>
+    <property name="sprite" value="floor_blood"/>
+   </properties>
+  </object>
+  <object id="101" type="StaticSprite" x="789.552" y="663.764" width="6" height="6">
+   <properties>
+    <property name="height" value="0"/>
+    <property name="sprite" value="floor_blood"/>
    </properties>
   </object>
  </objectgroup>

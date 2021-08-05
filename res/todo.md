@@ -2,6 +2,7 @@
 ### Milestone 2
 Puzzle maps to escape prison, killing enemies
 
+* Add god mode to quickly view cell map
 * Extend jail level
 
 ### Polish 

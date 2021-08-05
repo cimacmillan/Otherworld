@@ -72,20 +72,26 @@
         "width": 10,
         "height": 10
     },
-    "item_key": {
+    "item_gold_ring": {
         "x": 30,
         "y": 10,
         "width": 10,
         "height": 10
     },
-    "ladder": {
+    "item_key": {
         "x": 30,
         "y": 20,
         "width": 10,
         "height": 10
     },
-    "miner": {
+    "ladder": {
         "x": 32,
+        "y": 40,
+        "width": 10,
+        "height": 10
+    },
+    "miner": {
+        "x": 42,
         "y": 40,
         "width": 256,
         "height": 160,
@@ -110,52 +116,52 @@
         "height": 10
     },
     "npc_bulky_man_run": {
-        "x": 40,
-        "y": 0,
+        "x": 0,
+        "y": 102,
         "width": 40,
         "height": 10,
         "frames": 4
     },
     "npc_spider": {
         "x": 0,
-        "y": 102,
+        "y": 112,
         "width": 10,
         "height": 10
     },
     "npc_spider_idle": {
         "x": 0,
-        "y": 112,
+        "y": 122,
         "width": 20,
         "height": 10
     },
     "skull": {
         "x": 0,
-        "y": 122,
+        "y": 132,
         "width": 5,
         "height": 5
     },
     "sprite_run": {
         "x": 40,
-        "y": 10,
+        "y": 0,
         "width": 80,
         "height": 10,
         "frames": 8
     },
     "ui_finger": {
         "x": 0,
-        "y": 127,
+        "y": 137,
         "width": 10,
         "height": 10
     },
     "wall": {
         "x": 0,
-        "y": 137,
+        "y": 147,
         "width": 10,
         "height": 10
     },
     "weapon_wood_stick": {
         "x": 0,
-        "y": 147,
+        "y": 157,
         "width": 10,
         "height": 10
     }
