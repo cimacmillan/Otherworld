@@ -118,7 +118,7 @@ export function tiledXMLtoGameTiledMap(tmx: TiledInterface): GameTiledMap {
     const tHeight = Number.parseFloat(tileheight);
 
     const destination: GameTiledObject[] = [];
-    objectgroup.forEach((group) =>
+    objectgroup.forEach((group) => group.object &&
         group.object.forEach((object) => {
             parseObject({
                 object,

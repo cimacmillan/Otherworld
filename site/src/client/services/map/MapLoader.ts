@@ -93,7 +93,7 @@ export function loadPolygon(args: {
                 entities.push(
                     EntityFactory.SCENERY_WALL(
                         serviceLocator,
-                        createStaticWallState(properties.sprite, first, second)
+                        createStaticWallState(properties.sprite, first, second, Number.parseFloat(properties.height), Number.parseFloat(properties.offset), properties.collides === "true")
                     )
                 );
             }

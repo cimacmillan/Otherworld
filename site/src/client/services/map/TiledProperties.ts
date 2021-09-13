@@ -18,6 +18,9 @@ export const defaultTiledObjectProperties: Record<
 > = {
     [TiledObjectType.Wall]: {
         sprite: "wall",
+        height: "1",
+        offset: "0",
+        collides: "true"
     },
     [TiledObjectType.Door]: {
         sprite: "cell",
