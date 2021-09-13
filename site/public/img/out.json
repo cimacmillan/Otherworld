@@ -29,139 +29,151 @@
         "width": 10,
         "height": 10
     },
-    "dead_man": {
+    "chest_closed": {
         "x": 10,
         "y": 20,
         "width": 10,
         "height": 10
     },
-    "floor": {
+    "chest_open": {
         "x": 20,
         "y": 0,
         "width": 10,
         "height": 10
     },
-    "floor_blood": {
+    "dead_man": {
         "x": 20,
         "y": 10,
         "width": 10,
         "height": 10
     },
-    "floor_hole": {
+    "floor": {
         "x": 20,
         "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "floor_blood": {
+        "x": 0,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "floor_hole": {
+        "x": 10,
+        "y": 30,
         "width": 10,
         "height": 10
     },
     "font": {
         "x": 0,
-        "y": 30,
+        "y": 40,
         "width": 360,
         "height": 10,
         "frames": 36
     },
     "glorp": {
-        "x": 0,
-        "y": 40,
+        "x": 30,
+        "y": 0,
         "width": 32,
         "height": 32
     },
     "item_gold_coin": {
-        "x": 30,
-        "y": 0,
+        "x": 20,
+        "y": 30,
         "width": 10,
         "height": 10
     },
     "item_gold_ring": {
-        "x": 30,
-        "y": 10,
+        "x": 62,
+        "y": 0,
         "width": 10,
         "height": 10
     },
     "item_key": {
-        "x": 30,
-        "y": 20,
+        "x": 62,
+        "y": 10,
         "width": 10,
         "height": 10
     },
     "ladder": {
-        "x": 32,
-        "y": 40,
+        "x": 62,
+        "y": 20,
         "width": 10,
         "height": 10
     },
     "miner": {
-        "x": 42,
-        "y": 40,
+        "x": 0,
+        "y": 50,
         "width": 256,
         "height": 160,
         "frames": 8
     },
     "npc_bulky_man": {
-        "x": 0,
-        "y": 72,
+        "x": 62,
+        "y": 30,
         "width": 10,
         "height": 10
     },
     "npc_bulky_man_hit": {
-        "x": 0,
-        "y": 82,
+        "x": 72,
+        "y": 0,
         "width": 10,
         "height": 10
     },
     "npc_bulky_man_hit2": {
-        "x": 0,
-        "y": 92,
+        "x": 72,
+        "y": 10,
         "width": 10,
         "height": 10
     },
     "npc_bulky_man_run": {
-        "x": 0,
-        "y": 102,
+        "x": 72,
+        "y": 20,
         "width": 40,
         "height": 10,
         "frames": 4
     },
     "npc_spider": {
-        "x": 0,
-        "y": 112,
+        "x": 72,
+        "y": 30,
         "width": 10,
         "height": 10
     },
     "npc_spider_idle": {
-        "x": 0,
-        "y": 122,
+        "x": 82,
+        "y": 0,
         "width": 20,
         "height": 10
     },
     "skull": {
-        "x": 0,
-        "y": 132,
+        "x": 30,
+        "y": 32,
         "width": 5,
         "height": 5
     },
     "sprite_run": {
-        "x": 40,
-        "y": 0,
+        "x": 82,
+        "y": 10,
         "width": 80,
         "height": 10,
         "frames": 8
     },
     "ui_finger": {
-        "x": 0,
-        "y": 137,
+        "x": 82,
+        "y": 30,
         "width": 10,
         "height": 10
     },
     "wall": {
-        "x": 0,
-        "y": 147,
+        "x": 92,
+        "y": 30,
         "width": 10,
         "height": 10
     },
     "weapon_wood_stick": {
-        "x": 0,
-        "y": 157,
+        "x": 102,
+        "y": 0,
         "width": 10,
         "height": 10
     }

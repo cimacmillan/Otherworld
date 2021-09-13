@@ -1,5 +1,6 @@
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Entity } from "../../Entity";
+import { createChest } from "./ChestFactory";
 import { createDoor, createLockedDoor } from "./DoorFactory";
 import { createItemDrop } from "./ItemFactory";
 import { createLadder } from "./MapChangeFactory";
@@ -9,6 +10,7 @@ import {
     createStaticSprite,
     createStaticWall,
 } from "./SceneryFactory";
+import { createScript } from "./ScriptFactory";
 
 export enum EntityType {
     NULL = "NULL",
@@ -25,6 +27,9 @@ export enum EntityType {
     SCENERY_FLOOR = "SCENERY_FLOOR",
     SCENERY_WALL = "SCENERY_WALL",
     SCENERY_SPRITE = "SCENERY_SPRITE",
+
+    SCRIPT = "SCRIPT",
+    CHEST = "CHEST"
 }
 
 type EntityCreationFunction = (
@@ -56,7 +61,9 @@ const entityFactory: Record<EntityType, EntityCreationFunction> = {
     [EntityType.SCENERY_FLOOR]: createStaticFloor,
     [EntityType.SCENERY_WALL]: createStaticWall,
     [EntityType.SCENERY_SPRITE]: createStaticSprite,
-    [EntityType.NPC_BULKY_MAN]: createNPC
+    [EntityType.NPC_BULKY_MAN]: createNPC,
+    [EntityType.SCRIPT]: createScript,
+    [EntityType.CHEST]: createChest
 };
 
 const factoryWithType: any = {};

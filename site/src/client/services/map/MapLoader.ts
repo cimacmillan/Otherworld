@@ -12,6 +12,7 @@ import {
     createStaticSpriteState,
     createStaticWallState,
 } from "../../engine/scripting/factory/SceneryFactory";
+import { createScriptState } from "../../engine/scripting/factory/ScriptFactory";
 import { GameItem, GameItems } from "../../resources/manifests/Items";
 import { Maps } from "../../resources/manifests/Maps";
 import { LoadedMap } from "../../resources/maps/MapTypes";
@@ -199,6 +200,17 @@ export function loadPoint(args: {
                             y: object.data.y
                         },
                         npcTypeId: properties.npcTypeId
+                    })
+                )
+            )
+            break;
+        case TiledObjectType.Script:
+            entities.push(
+                EntityFactory.SCRIPT(
+                    serviceLocator,
+                    createScriptState({
+                        x: object.data.x,
+                        y: object.data.y
                     })
                 )
             )
