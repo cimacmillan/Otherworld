@@ -1,4 +1,9 @@
 import { InteractionType } from "../../../services/interaction/InteractionType";
+import { ProcedureService } from "../../../services/jobs/ProcedureService";
+import { BurstEmitter, BurstEmitterType } from "../../../services/particle/emitters/BurstEmitter";
+import { GravityDropParticle } from "../../../services/particle/particles/GravityDropParticle";
+import { SmokeParticle } from "../../../services/particle/particles/SmokeParticle";
+import { SparkleParticle } from "../../../services/particle/particles/SparkleParticle";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
 import { DropItemDistribution } from "../../commands/ItemCommands";
@@ -25,6 +30,7 @@ export function createChest(
     state: ChestStateType
 ) {
     let interactHintId: number = undefined;
+    let emitter: BurstEmitterType;
     return new Entity<ChestStateType>(
         serviceLocator,
         state,
@@ -64,15 +70,39 @@ export function createChest(
                     {
                         getActions: (entity: Entity<ChestStateType>) => ({
                             onEntityCreated: () => {
+                                const position = entity.getState().position;
                                 entity.setState({
                                     sprite: "chest_closed"
-                                })
+                                });
+                                emitter = BurstEmitter({
+                                    creator: pos => SparkleParticle({
+                                        start: pos
+                                    }),
+                                    position: [position.x, 0.5, position.y],
+                                    rate: 1
+                                });
+                                entity.getServiceLocator().getParticleService().addEmitter(emitter.emitter);
+                                ProcedureService.setGameTimeout(() => {
+                                    entity.getServiceLocator().getParticleService().removeEmitter(emitter.emitter);
+                                }, 300);
                             }
                         })
                     },
-                    TimeoutComponent((entity: Entity<ChestStateType>) => {
+                    TimeoutComponent((entity: Entity<ChestStateType>) => {                                const position = entity.getState().position;
+                        const pos = entity.getState().position;
                         entity.delete();
-                    }, 2000)
+                        const smokeEmitter = BurstEmitter({
+                            creator: pos => SmokeParticle({
+                                start: pos
+                            }),
+                            position: [pos.x, 0.5, pos.y],
+                            rate: 0.5
+                        });
+                        entity.getServiceLocator().getParticleService().addEmitter(smokeEmitter.emitter);
+                        ProcedureService.setGameTimeout(() => {
+                            entity.getServiceLocator().getParticleService().removeEmitter(smokeEmitter.emitter);
+                        }, 500);
+                    }, 3000)
                 ])
             }, 
             "false", 
@@ -89,7 +119,7 @@ export function createChestState(
         yOffset: 0,
         position,
         height: 0,
-        radius: 0.5,
+        radius: 1,
         angle: 0,
         sprite: "chest_open",
         spriteWidth: 1,

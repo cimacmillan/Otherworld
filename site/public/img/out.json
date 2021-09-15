@@ -146,6 +146,18 @@
         "width": 20,
         "height": 10
     },
+    "particle_smoke": {
+        "x": 82,
+        "y": 10,
+        "width": 10,
+        "height": 10
+    },
+    "particle_sparkle": {
+        "x": 82,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
     "skull": {
         "x": 30,
         "y": 32,
@@ -153,27 +165,27 @@
         "height": 5
     },
     "sprite_run": {
-        "x": 82,
+        "x": 92,
         "y": 10,
         "width": 80,
         "height": 10,
         "frames": 8
     },
     "ui_finger": {
-        "x": 82,
-        "y": 30,
-        "width": 10,
-        "height": 10
-    },
-    "wall": {
         "x": 92,
         "y": 30,
         "width": 10,
         "height": 10
     },
-    "weapon_wood_stick": {
+    "wall": {
         "x": 102,
         "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_wood_stick": {
+        "x": 102,
+        "y": 30,
         "width": 10,
         "height": 10
     }
