@@ -183,9 +183,429 @@
         "width": 10,
         "height": 10
     },
-    "weapon_wood_stick": {
+    "weapon_axe": {
         "x": 102,
         "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_axe_of_dread": {
+        "x": 112,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_axe_of_end": {
+        "x": 112,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_bolt_staff": {
+        "x": 112,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_carved_axe": {
+        "x": 122,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_ceremonial_axe": {
+        "x": 122,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_ceremonial_demon_staff": {
+        "x": 122,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_ceremonial_trident": {
+        "x": 132,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_ceremony_blade": {
+        "x": 132,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_claymore": {
+        "x": 132,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_dagger": {
+        "x": 142,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_dagglet": {
+        "x": 142,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_demon_staff": {
+        "x": 142,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_demon_sword": {
+        "x": 152,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_demon_wand": {
+        "x": 152,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_double_axe": {
+        "x": 152,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_double_spear": {
+        "x": 162,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_double_sword": {
+        "x": 162,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_earth_staff": {
+        "x": 162,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_edged_axe": {
+        "x": 172,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_elemental_fork": {
+        "x": 172,
+        "y": 10,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_elemental_staff": {
+        "x": 172,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_elemental_wand": {
+        "x": 172,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_flame_staff": {
+        "x": 182,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_flame_wand": {
+        "x": 182,
+        "y": 10,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_foil": {
+        "x": 182,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_forked_dagger": {
+        "x": 182,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_forked_staff": {
+        "x": 192,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_gold_blade": {
+        "x": 192,
+        "y": 10,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_gold_sword": {
+        "x": 192,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_grounded_wand": {
+        "x": 192,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_head_axe": {
+        "x": 202,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_heavy_axe": {
+        "x": 202,
+        "y": 10,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_heavy_iron_spear": {
+        "x": 202,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_illusion_staff": {
+        "x": 202,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_illusion_wand": {
+        "x": 212,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_iron_forked_spear": {
+        "x": 212,
+        "y": 10,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_iron_spear": {
+        "x": 212,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_iron_sword": {
+        "x": 212,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_iron_wand": {
+        "x": 222,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_king_axe": {
+        "x": 222,
+        "y": 10,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_king_claymore": {
+        "x": 222,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_life_staff": {
+        "x": 222,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_life_wand": {
+        "x": 232,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_lightning_staff": {
+        "x": 232,
+        "y": 10,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_lightning_wand": {
+        "x": 232,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_long_blade": {
+        "x": 232,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_magic_sword": {
+        "x": 242,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_magic_wand": {
+        "x": 242,
+        "y": 10,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_necro_staff": {
+        "x": 242,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_psychic_staff": {
+        "x": 242,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_psychic_wand": {
+        "x": 252,
+        "y": 0,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_rusted_blade": {
+        "x": 252,
+        "y": 10,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_rusty_claymore": {
+        "x": 252,
+        "y": 20,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_rusty_dagger": {
+        "x": 252,
+        "y": 30,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_rusty_knife": {
+        "x": 256,
+        "y": 50,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_rusty_sword": {
+        "x": 256,
+        "y": 60,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_scimitar": {
+        "x": 256,
+        "y": 70,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_shepherd_staff": {
+        "x": 256,
+        "y": 80,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_short_sword": {
+        "x": 256,
+        "y": 90,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_spear": {
+        "x": 256,
+        "y": 100,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_staff": {
+        "x": 256,
+        "y": 110,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_staff_of_ages": {
+        "x": 256,
+        "y": 120,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_stick": {
+        "x": 256,
+        "y": 130,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_tri_dagger": {
+        "x": 256,
+        "y": 140,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_trident": {
+        "x": 256,
+        "y": 150,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_wand": {
+        "x": 256,
+        "y": 160,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_war_axe": {
+        "x": 256,
+        "y": 170,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_wood_axe": {
+        "x": 256,
+        "y": 180,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_wood_stick": {
+        "x": 256,
+        "y": 190,
+        "width": 10,
+        "height": 10
+    },
+    "weapon_wooden_spear": {
+        "x": 256,
+        "y": 200,
         "width": 10,
         "height": 10
     }
