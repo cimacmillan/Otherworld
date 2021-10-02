@@ -46,7 +46,12 @@ export const emptyActions = {
     onPlayerInventoryClosed: () => {},
     onPlayerItemEquipped: (item: Item) => {},
 
-    onDamagedByPlayer: (damage: number) => {}
+    onDamagedByPlayer: (damage: number) => {},
+    
+
+    // Game script events
+    onChestOpened: () => {},
+    onEnemyKilled: () => {},
 }
 
 export type Actions = typeof emptyActions;

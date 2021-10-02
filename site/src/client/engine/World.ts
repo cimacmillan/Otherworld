@@ -41,4 +41,8 @@ export class World {
         }
         this.entityArray.sync();
     }
+
+    public forEachEntity(func: (ent: Entity<any>) => void) {
+        this.getEntityArray().getArray().forEach(func);
+    }
 }

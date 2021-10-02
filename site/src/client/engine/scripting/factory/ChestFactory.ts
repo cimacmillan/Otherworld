@@ -65,6 +65,24 @@ export function createChest(
                             }
                         }
                     ),
+                    {
+                        getActions: (entity: Entity<ChestStateType>) => ({
+                            onEntityCreated: () => {
+                                const position = entity.getState().position;
+                                const smokeEmitter = BurstEmitter({
+                                    creator: pos => SmokeParticle({
+                                        start: pos
+                                    }),
+                                    position: [position.x, 0.5, position.y],
+                                    rate: 0.5
+                                });
+                                entity.getServiceLocator().getParticleService().addEmitter(smokeEmitter.emitter);
+                                ProcedureService.setGameTimeout(() => {
+                                    entity.getServiceLocator().getParticleService().removeEmitter(smokeEmitter.emitter);
+                                }, 500);
+                            }
+                        })
+                    }
                 ]),
                 "true": JoinComponent([
                     {
@@ -91,6 +109,7 @@ export function createChest(
                     TimeoutComponent((entity: Entity<ChestStateType>) => {                                const position = entity.getState().position;
                         const pos = entity.getState().position;
                         entity.delete();
+                        entity.getServiceLocator().getWorld().forEachEntity(ent => ent.getActions().onChestOpened());
                         const smokeEmitter = BurstEmitter({
                             creator: pos => SmokeParticle({
                                 start: pos
