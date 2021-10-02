@@ -311,6 +311,7 @@ const onNPCDeath = (entity: Entity<NPCState>) => {
     ));
     newStaticSprite.create();
     DropItemDistribution(serviceLocator, itemDrops, position, velocity, true);
+    entity.getServiceLocator().getWorld().forEachEntity(ent => ent.getActions().onEnemyKilled())
 }
 
 const whiteShade = {

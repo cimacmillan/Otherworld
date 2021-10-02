@@ -28,6 +28,22 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
         serviceLocator.getScriptingService().startGame();
     };
 
+    const { currentStage, maxStage } = state.gameStart;
+ 
+    const shouldShowScore = currentStage > 0 && state.gameStart.showingMenu;
+    const StageComponent = shouldShowScore ? (
+        <TextComponent
+            text={`You reached level: ${currentStage} Best: ${maxStage}`}
+            style={{
+                width: "100%",
+                textAlign: "center",
+            }}
+            font={TextFont.REGULAR}
+            size={TextSize.SMALL}
+            colour={TextColour.LIGHT}
+        />
+    ) : null;
+
     return (
         <FadeComponent
             startingShown={false}
@@ -61,6 +77,7 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
                             size={TextSize.BIG}
                             colour={TextColour.LIGHT}
                         />
+                        { StageComponent }
                         <GameButtonContainer
                             width={256}
                             height={46}
@@ -83,7 +100,6 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
                                 colour={TextColour.LIGHT}
                             />
                         </GameButtonContainer>
-
                         <TextComponent
                             text={"Copyright \u00a9 2021 Callum Macmillan"}
                             style={{

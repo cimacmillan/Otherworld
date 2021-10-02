@@ -15,6 +15,7 @@ export const emptyActions = {
     setGameFPS: (fps: number) => {},
     setGameLoadPercentage: (percentage: number) => {},
     startGame: () => {},
+    stopGame: () => {},
 
     closeMiniGame: () => {},
 
@@ -46,7 +47,13 @@ export const emptyActions = {
     onPlayerInventoryClosed: () => {},
     onPlayerItemEquipped: (item: Item) => {},
 
-    onDamagedByPlayer: (damage: number) => {}
+    onDamagedByPlayer: (damage: number) => {},
+    
+
+    // Game script events
+    onChestOpened: () => {},
+    onEnemyKilled: () => {},
+    onStageReached: (stage: number) => {}
 }
 
 export type Actions = typeof emptyActions;

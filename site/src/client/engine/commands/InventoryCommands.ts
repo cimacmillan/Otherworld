@@ -104,6 +104,15 @@ export const PlayerPickUpItem = (serviceLocator: ServiceLocator) => (
         .getPlayer()
         .getInventory();
     AddItemToInventory(playerInventory, item);
+
+    // // Equip weapon if no weapon equipped
+    // const isItemWeapon = (item: Item) => item.type === ItemType.EQUIPMENT && item.equipmentType === EquipmentType.WEAPON;
+    // if (isItemWeapon(item)) {
+    //     const weapons = playerInventory.items.filter(itemInInventory => isItemWeapon(itemInInventory.item));
+    //     if (weapons.length === 1) {
+    //         EquipItemFromInventory(serviceLocator, item as EquipableItem);
+    //     }
+    // }
 };
 
 export const RemoveItemFromInventory = (inventory: Inventory, item: Item) => {

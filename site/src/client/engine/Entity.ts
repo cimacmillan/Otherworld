@@ -69,4 +69,8 @@ export class Entity<State> {
     public create() {
         this.serviceLocator.getWorld().addEntity(this);
     }
+
+    public getEventSubscriber() {
+        return this.eventSubscriber;
+    }
 }

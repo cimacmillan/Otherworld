@@ -1,3 +1,4 @@
+import { Backgrounds } from "../../services/render/services/BackgroundRenderService";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Audios } from "../manifests/Audios";
 import { UnloadedMap } from "./MapTypes";

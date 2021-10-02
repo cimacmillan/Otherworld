@@ -30,14 +30,14 @@ export const Backgrounds = {
     },
     CaveBackground: {
         colour: {
-            r: 0.22 * 0.2,
+            r: 0.3,
             g: 0.26 * 0.2,
             b: 0.4 * 0.2,
         },
         hazeAmount: 1,
         fog: {
             minDepth: 0,
-            maxDepth: 8,
+            maxDepth: 30,
             pixelAccuracy: 8,
             depthAccuracy: 16,
         },

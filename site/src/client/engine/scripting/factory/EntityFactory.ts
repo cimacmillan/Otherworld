@@ -1,5 +1,6 @@
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Entity } from "../../Entity";
+import { createChest } from "./ChestFactory";
 import { createDoor, createLockedDoor } from "./DoorFactory";
 import { createItemDrop } from "./ItemFactory";
 import { createLadder } from "./MapChangeFactory";
@@ -9,6 +10,7 @@ import {
     createStaticSprite,
     createStaticWall,
 } from "./SceneryFactory";
+import { createScript } from "./ScriptFactory";
 
 export enum EntityType {
     NULL = "NULL",
@@ -25,6 +27,9 @@ export enum EntityType {
     SCENERY_FLOOR = "SCENERY_FLOOR",
     SCENERY_WALL = "SCENERY_WALL",
     SCENERY_SPRITE = "SCENERY_SPRITE",
+
+    SCRIPT = "SCRIPT",
+    CHEST = "CHEST"
 }
 
 type EntityCreationFunction = (
@@ -36,6 +41,9 @@ function withType(
     type: EntityType,
     func: EntityCreationFunction
 ): EntityCreationFunction {
+    if (!func) {
+        console.error(`Missing entity type "${type}"`);
+    }
     return (serviceLocator: ServiceLocator, state: object) => {
         const entity = func(serviceLocator, state);
         return entity.withType(type);
@@ -46,14 +54,16 @@ const entityFactory: Record<EntityType, EntityCreationFunction> = {
     [EntityType.NULL]: () => {
         throw new Error("Entity type is null");
     },
-    [EntityType.DOOR]: createDoor,
-    [EntityType.DOOR_LOCKED]: createLockedDoor,
+    [EntityType.DOOR]: (...args: any[]) => createDoor(args[0], args[1]),
+    [EntityType.DOOR_LOCKED]: (...args: any[]) => createLockedDoor(args[0], args[1]),
     [EntityType.ITEM_DROP]: createItemDrop,
     [EntityType.LADDER]: createLadder,
     [EntityType.SCENERY_FLOOR]: createStaticFloor,
     [EntityType.SCENERY_WALL]: createStaticWall,
     [EntityType.SCENERY_SPRITE]: createStaticSprite,
-    [EntityType.NPC_BULKY_MAN]: createNPC
+    [EntityType.NPC_BULKY_MAN]: createNPC,
+    [EntityType.SCRIPT]: createScript,
+    [EntityType.CHEST]: createChest
 };
 
 const factoryWithType: any = {};

@@ -38,12 +38,21 @@ export class ScriptingService {
         this.game.setUpdateWorld(true);
     }
 
+    public stopGame() {
+        this.serviceLocator.getInputService().setInputState(InputState.MENU);
+        this.game.setUpdateWorld(false);
+        this.serviceLocator.getStore().getActions().stopGame();
+        this.offloadWorld();
+        this.bootstrapInitialContent();
+    }
+
     public offloadWorld() {
         this.offloadEntities();
         if (this.player) {
             this.player.destroy();
         }
         this.serviceLocator.getTutorialService().destroy();
+        this.serviceLocator.getMapService().destroy();
     }
 
     public offloadEntities() {
@@ -94,7 +103,7 @@ export class ScriptingService {
             .attachCamera(() => this.player.getCamera());
 
         this.serviceLocator.getMapService().goToLocation({
-            mapId: Maps.TEST,
+            mapId: Maps.PRISON,
         });
 
         this.serviceLocator.getTutorialService().onStart();

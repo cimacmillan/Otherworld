@@ -1,137 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="6" nextobjectid="91">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="7" nextobjectid="129">
  <objectgroup id="5" name="Object Layer 1">
-  <object id="58" type="Floor" x="271.629" y="460.195" width="263.035" height="285.248"/>
-  <object id="60" type="Floor" x="156.008" y="449.031" width="429.499" height="328.315">
+  <object id="102" type="Wall" x="660" y="660">
    <properties>
-    <property name="height" value="1"/>
+    <property name="height" type="float" value="10"/>
    </properties>
+   <polygon points="0,0 0,-20 20,-40 40,-40 60,-20 60,0 40,20 20,20"/>
   </object>
-  <object id="66" type="Wall" x="360" y="620">
-   <polyline points="0,0 -20,0 -20,60 60,60 60,0 20,0 20,-20 100,-20 100,0 80,0 80,60 160,60 160,0 120,0 120,-20 120,-40 120,-60 160,-60 160,-120 80,-120 80,-60 100,-60 100,-40 20,-40 20,-60 40,-60 40,-120 -20,-120 -20,-60 0,-60 0,0"/>
+  <object id="103" type="Wall" x="760" y="660">
+   <properties>
+    <property name="height" type="float" value="10"/>
+   </properties>
+   <polygon points="0,0 0,-20 20,-40 40,-40 60,-20 60,0 40,20 20,20"/>
   </object>
-  <object id="67" type="Door" x="340" y="600">
-   <polyline points="20.2385,9.94948 40.2385,9.94948"/>
+  <object id="104" type="Wall" x="760" y="560">
+   <properties>
+    <property name="height" type="float" value="10"/>
+   </properties>
+   <polygon points="0,0 0,-20 20,-40 40,-40 60,-20 60,0 40,20 20,20"/>
   </object>
-  <object id="68" type="SpawnPoint" x="379.504" y="671.842">
+  <object id="105" type="Wall" x="660" y="560">
+   <properties>
+    <property name="height" type="float" value="10"/>
+   </properties>
+   <polygon points="0,0 0,-20 20,-40 40,-40 60,-20 60,0 40,20 20,20"/>
+  </object>
+  <object id="107" type="SpawnPoint" x="740" y="800">
    <point/>
   </object>
-  <object id="71" type="Door" x="360" y="580">
+  <object id="114" type="Wall" x="980" y="840">
+   <properties>
+    <property name="height" type="float" value="10"/>
+   </properties>
+   <polygon points="0,0 0,-20 -100,-120 -120,-120 -120,-100 -20,0"/>
+  </object>
+  <object id="115" type="Wall" x="620" y="480">
+   <properties>
+    <property name="height" type="float" value="10"/>
+   </properties>
+   <polygon points="0,0 0,-20 -100,-120 -120,-120 -120,-100 -20,0"/>
+  </object>
+  <object id="116" type="Wall" x="860" y="480">
+   <properties>
+    <property name="height" type="float" value="10"/>
+   </properties>
+   <polygon points="0,0 0,-20 100,-120 120,-120 120,-100 20,0"/>
+  </object>
+  <object id="117" type="Wall" x="500" y="840">
+   <properties>
+    <property name="height" type="float" value="10"/>
+   </properties>
+   <polygon points="0,0 0,-20 100,-120 120,-120 120,-100 20,0"/>
+  </object>
+  <object id="118" type="Wall" x="1040" y="300">
+   <properties>
+    <property name="height" type="float" value="100"/>
+   </properties>
+   <polyline points="0,0 0,600 -600,600 -600,0 40,0"/>
+  </object>
+  <object id="128" type="Script" x="740" y="600">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="6" name="Object Layer 2" visible="0">
+  <object id="108" type="Floor" x="620" y="480" width="239.537" height="238.929">
    <properties>
     <property name="height" value="5"/>
-    <property name="keyId" value="GOLD_KEY"/>
-    <property name="locked" type="bool" value="true"/>
-    <property name="resets" type="bool" value="true"/>
-    <property name="width" value="5"/>
    </properties>
-   <polyline points="0,-10.0473 20,-10.0473"/>
   </object>
-  <object id="72" type="Door" x="460" y="580">
+  <object id="120" type="Floor" x="860" y="300.107" width="178.887" height="598.715">
    <properties>
-    <property name="height" value="2"/>
-    <property name="locked" type="bool" value="true"/>
-    <property name="width" value="2"/>
+    <property name="height" value="3"/>
    </properties>
-   <polyline points="0.0325298,-10.3721 20.0325,-10.3721"/>
   </object>
-  <object id="73" type="Door" x="460" y="600">
+  <object id="121" type="Floor" x="440" y="300" width="178.887" height="598.715">
    <properties>
-    <property name="height" value="2"/>
-    <property name="locked" type="bool" value="true"/>
-    <property name="resets" type="bool" value="true"/>
-    <property name="width" value="2"/>
+    <property name="height" value="3"/>
    </properties>
-   <polyline points="0,9.13129 20,9.13129"/>
   </object>
-  <object id="74" type="Portal" x="369.285" y="530.318">
+  <object id="122" type="Floor" x="441.135" y="300" width="598.295" height="181.363">
    <properties>
-    <property name="map" value="CELLAR"/>
+    <property name="height" value="3"/>
    </properties>
-   <point/>
   </object>
-  <object id="76" type="GameItem" x="497.143" y="651.153">
+  <object id="123" type="Floor" x="440.107" y="720" width="599.323" height="181.363">
    <properties>
-    <property name="item" value="GOLD_KEY"/>
+    <property name="height" value="3"/>
    </properties>
-   <point/>
   </object>
-  <object id="77" type="GameItem" x="499.08" y="530.076">
+  <object id="124" type="Wall" x="860" y="480">
    <properties>
-    <property name="item" value="GOLD_RING"/>
+    <property name="collides" type="bool" value="false"/>
+    <property name="height" type="float" value="2"/>
+    <property name="offset" type="float" value="3"/>
    </properties>
-   <point/>
+   <polyline points="0,0 0,240 -240,240 -240,0 20,0"/>
   </object>
-  <object id="78" type="StaticSprite" x="510.626" y="647.898" width="6.60952" height="6.27057">
-   <properties>
-    <property name="height" value="0.1"/>
-    <property name="sprite" value="SKULL"/>
-   </properties>
-  </object>
-  <object id="79" type="StaticSprite" x="508.198" y="527.219" width="6.60952" height="6.27057">
-   <properties>
-    <property name="height" value="0"/>
-    <property name="sprite" value="SKULL"/>
-   </properties>
-  </object>
-  <object id="80" type="StaticSprite" x="440.735" y="500.523" width="6.60952" height="6.27057">
-   <properties>
-    <property name="height" value="0.15"/>
-    <property name="sprite" value="SKULL"/>
-   </properties>
-  </object>
-  <object id="81" type="StaticSprite" x="440.568" y="503.287" width="6.60952" height="6.27057">
-   <properties>
-    <property name="height" value="0"/>
-    <property name="sprite" value="SKULL"/>
-   </properties>
-  </object>
-  <object id="82" type="StaticSprite" x="443.649" y="500.34" width="6.60952" height="6.27057">
-   <properties>
-    <property name="height" value="0"/>
-    <property name="sprite" value="SKULL"/>
-   </properties>
-  </object>
-  <object id="83" type="Floor" x="359.166" y="519.751" width="20" height="20">
-   <properties>
-    <property name="height" value="0.01"/>
-    <property name="sprite" value="FLOOR_HOLE"/>
-   </properties>
-  </object>
-  <object id="84" type="Floor" x="500.052" y="519.905" width="20" height="20">
-   <properties>
-    <property name="height" value="0.01"/>
-    <property name="sprite" value="FLOOR_BLOOD"/>
-   </properties>
-  </object>
-  <object id="85" type="StaticSprite" x="507.166" y="651.371" width="4.79648" height="4.65898">
-   <properties>
-    <property name="height" value="0"/>
-    <property name="sprite" value="BONE"/>
-   </properties>
-  </object>
-  <object id="87" type="StaticSprite" x="513.511" y="649.255" width="4.79648" height="4.65898">
-   <properties>
-    <property name="height" value="0"/>
-    <property name="sprite" value="BONE"/>
-   </properties>
-  </object>
-  <object id="88" type="StaticSprite" x="512.403" y="654.795" width="4.79648" height="4.65898">
-   <properties>
-    <property name="height" value="0.05"/>
-    <property name="sprite" value="BONE"/>
-   </properties>
-  </object>
-  <object id="89" type="StaticSprite" x="510.187" y="658.723" width="4.79648" height="4.65898">
-   <properties>
-    <property name="height" value="0"/>
-    <property name="sprite" value="BONE"/>
-   </properties>
-  </object>
-  <object id="90" type="GameItem" x="376.894" y="640.783">
-   <properties>
-    <property name="item" value="WEAPON_WOOD_STICK"/>
-   </properties>
-   <point/>
-  </object>
+  <object id="125" x="414.268" y="271.382" height="1.02796"/>
+  <object id="126" type="Floor" x="387.541" y="247.738" width="689.762" height="676.398"/>
  </objectgroup>
 </map>

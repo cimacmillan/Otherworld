@@ -15,7 +15,7 @@ import { EffectContext, getEffect } from "../scripting/effects/Effects";
 import { EquipableItem, EquipmentType } from "../scripting/items/ItemTypes";
 import { Player } from "./Player";
 
-const PLAYER_WEAPON_SPRITE_ANGLE = toRadians(45);
+const PLAYER_WEAPON_SPRITE_ANGLE = toRadians(-45);
 const PLAYER_WEAPON_ARM_ANGLE = toRadians(30);
 const PLAYER_WEAPON_ARM_TILT_ANGLE = toRadians(90);
 // const PLAYER_WEAPON_ANGLE = 0;

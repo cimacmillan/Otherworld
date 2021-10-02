@@ -28,9 +28,11 @@ export function getVoxelGroupFromSprite (serviceLocator: ServiceLocator, spriteI
             const g = imageData.data[index + 1];
             const b = imageData.data[index + 2];
             const a = imageData.data[index + 3];
+            
+            const writeX = width - x - 1;
         
             if (r > 0 || g > 0 || b > 0 || a > 0) {
-                data[x][y][0] = weaponColourMap.getID([
+                data[writeX][y][0] = weaponColourMap.getID([
                     r / 255,
                     g / 255,
                     b / 255

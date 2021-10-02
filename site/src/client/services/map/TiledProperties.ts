@@ -9,7 +9,8 @@ export enum TiledObjectType {
     GameItem = "GameItem",
     Portal = "Portal",
     StaticSprite = "StaticSprite",
-    NPC = "NPC"
+    NPC = "NPC",
+    Script = "Script"
 }
 
 export const defaultTiledObjectProperties: Record<
@@ -18,6 +19,9 @@ export const defaultTiledObjectProperties: Record<
 > = {
     [TiledObjectType.Wall]: {
         sprite: "wall",
+        height: "1",
+        offset: "0",
+        collides: "true"
     },
     [TiledObjectType.Door]: {
         sprite: "cell",
@@ -43,5 +47,8 @@ export const defaultTiledObjectProperties: Record<
     },
     [TiledObjectType.NPC]: {
         npcTypeId: "jailor"
+    },
+    [TiledObjectType.Script]: {
+        
     }
 };

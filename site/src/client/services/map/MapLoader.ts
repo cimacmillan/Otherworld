@@ -12,6 +12,7 @@ import {
     createStaticSpriteState,
     createStaticWallState,
 } from "../../engine/scripting/factory/SceneryFactory";
+import { createScriptState } from "../../engine/scripting/factory/ScriptFactory";
 import { GameItem, GameItems } from "../../resources/manifests/Items";
 import { Maps } from "../../resources/manifests/Maps";
 import { LoadedMap } from "../../resources/maps/MapTypes";
@@ -84,7 +85,6 @@ export function loadPolygon(args: {
     const { serviceLocator, entities, object } = args;
     const { closed, points } = object;
     const properties = object.data.properties;
-
     switch (object.data.type) {
         case TiledObjectType.Wall:
             const length = closed ? points.length : points.length - 1;
@@ -94,7 +94,7 @@ export function loadPolygon(args: {
                 entities.push(
                     EntityFactory.SCENERY_WALL(
                         serviceLocator,
-                        createStaticWallState(properties.sprite, first, second)
+                        createStaticWallState(properties.sprite, first, second, Number.parseFloat(properties.height), Number.parseFloat(properties.offset), properties.collides === "true")
                     )
                 );
             }
@@ -112,7 +112,7 @@ export function loadPolygon(args: {
                             end,
                             spriteString: properties.sprite,
                             keyId: properties.keyId as GameItem,
-                            configuration: properties.locked
+                            configuration: properties.locked === "true"
                                 ? {
                                       width: Number.parseFloat(
                                           properties.width
@@ -200,6 +200,17 @@ export function loadPoint(args: {
                             y: object.data.y
                         },
                         npcTypeId: properties.npcTypeId
+                    })
+                )
+            )
+            break;
+        case TiledObjectType.Script:
+            entities.push(
+                EntityFactory.SCRIPT(
+                    serviceLocator,
+                    createScriptState({
+                        x: object.data.x,
+                        y: object.data.y
                     })
                 )
             )

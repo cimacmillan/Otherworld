@@ -35,7 +35,7 @@ export interface PlayerSerialisation {
     };
 }
 
-const DEFAULT_PLAYER_STATE: PlayerSerialisation = {
+const getDefaultPlayerState = (): PlayerSerialisation => ({
     inventory: getEmptyInventory(),
     surface: {
         position: { x: 39, y: 29 },
@@ -52,10 +52,10 @@ const DEFAULT_PLAYER_STATE: PlayerSerialisation = {
         collidesWalls: true,
     },
     health: {
-        current: 10,
-        max: 10
+        current: 1,
+        max: 1
     }
-};
+});
 
 export class Player {
     public state: PlayerSerialisation;
@@ -72,7 +72,7 @@ export class Player {
         serialisation?: PlayerSerialisation
     ) {
         this.serviceLocator = serviceLocator;
-        this.state = serialisation || DEFAULT_PLAYER_STATE;
+        this.state = serialisation || getDefaultPlayerState();
         this.interactDelay = new ActionDelay(300);
 
         this.movement = new PlayerMovement(
@@ -184,7 +184,7 @@ export class Player {
 
     public onDamage(amount: number, push: Vector2D) {
         this.state.health.current -= amount;
-        if (this.state.health.current < 0) {
+        if (this.state.health.current <= 0) {
             this.state.health.current = 0;
             this.onDeath();
         }
@@ -203,7 +203,7 @@ export class Player {
     }
 
     private onDeath() {
-        console.log("On death");
+        this.serviceLocator.getScriptingService().stopGame();
     }
 
     public attack() {

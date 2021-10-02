@@ -6,6 +6,8 @@ export interface GameStartState {
     showingFade: boolean;
     gameLoadPercentage: number;
     fps: number;
+    currentStage: number;
+    maxStage: number;
 }
 
 export const gameStartReducer: Reducer<GameStartState, Actions> = {
@@ -14,12 +16,19 @@ export const gameStartReducer: Reducer<GameStartState, Actions> = {
         showingFade: true,
         gameLoadPercentage: 0,
         fps: 0,
+        currentStage: 0,
+        maxStage: 0
     },
     actions: {
         startGame: (state: GameStartState) => ({
             ...state,
             showingMenu: false,
             showingFade: false,
+        }),
+        stopGame: (state) => ({
+            ...state,
+            showingMenu: true,
+            showingFade: true,
         }),
         fadeBackground: (state: GameStartState) => ({
             ...state,
@@ -37,5 +46,10 @@ export const gameStartReducer: Reducer<GameStartState, Actions> = {
             ...state,
             fps: x,
         }),
+        onStageReached: (state: GameStartState, stage: number) => ({
+            ...state,
+            currentStage: stage,
+            maxStage: Math.max(stage, state.maxStage)
+        })
     },
 };

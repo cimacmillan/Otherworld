@@ -39,7 +39,7 @@ export const GameItems: GameItemMap = {
     },
     [GameItem.WEAPON_WOOD_STICK]: {
         id: GameItem.WEAPON_WOOD_STICK,
-        spriteIcon: "weapon_wood_stick",
+        spriteIcon: "weapon_axe",
         stackable: false,
         name: "Wooden Club",
         type: ItemType.EQUIPMENT,

@@ -18,10 +18,16 @@ export class MapService {
     private serviceLocator: ServiceLocator;
     private currentMap: Maps;
     private currentMapData: MapData = {};
-    private currentSpawnPoints: SpawnPoint[];
+    private currentSpawnPoints: SpawnPoint[] = [];
 
     public init(serviceLocator: ServiceLocator) {
         this.serviceLocator = serviceLocator;
+    }
+
+    public destroy() {
+        this.currentMap = undefined;
+        this.currentMapData = {};
+        this.currentSpawnPoints = [];
     }
 
     public setExistingMapData(currentMapData: MapData, currentMap: Maps) {
@@ -70,9 +76,6 @@ export class MapService {
         const spawnPoint = this.getSpawnPoint(destination);
         const { position, angle } = spawnPoint;
         const { x, y } = position;
-
-        console.log("spawn point ", spawnPoint);
-
         player.setPosition(x, y);
         player.setAngle(angle);
     }
