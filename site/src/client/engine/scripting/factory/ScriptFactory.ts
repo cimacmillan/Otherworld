@@ -43,6 +43,7 @@ export function createScript(
             getActions: (entity: Entity<ScriptState>) => ({
                 onEntityCreated: () => {
                     addChest(entity);
+                    entity.getServiceLocator().getStore().getActions().onStageReached(1);
                 },
                 onChestOpened: () => {
                     addEnemy(entity);

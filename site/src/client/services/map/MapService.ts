@@ -24,6 +24,12 @@ export class MapService {
         this.serviceLocator = serviceLocator;
     }
 
+    public destroy() {
+        this.currentMap = undefined;
+        this.currentMapData = {};
+        this.currentSpawnPoints = [];
+    }
+
     public setExistingMapData(currentMapData: MapData, currentMap: Maps) {
         this.currentMapData = currentMapData;
         this.currentMap = currentMap;
