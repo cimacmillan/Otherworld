@@ -1,6 +1,8 @@
 import { GameItem } from "../../../resources/manifests/Items";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
+import { JoinComponent } from "../../components/util/JoinComponent";
+import { SwitchComponent } from "../../components/util/SwitchComponent";
 import { Entity } from "../../Entity";
 import { ItemDropDistribution } from "../items/ItemDrops";
 import { createChestState } from "./ChestFactory";
@@ -9,6 +11,8 @@ import { createNPCState } from "./NPCFactory";
 
 interface ScriptState {
     position: Vector2D;
+    stage: number;
+    levelStage: LevelStage
 }
 
 const STARTING_ITEMS: ItemDropDistribution = [
@@ -32,6 +36,12 @@ function addEnemy(entity: Entity<ScriptState>) {
     serviceLocator.getWorld().addEntity(enemy);
 }
 
+enum LevelStage {
+    SPAWN_REWARD = "SPAWN_REWARD",
+    OPEN_CHEST = "OPEN_CHEST",
+    KILL_ENEMIES = "KILL_ENEMIES"
+}
+
 export function createScript(
     serviceLocator: ServiceLocator,
     state: ScriptState
@@ -42,17 +52,49 @@ export function createScript(
         {
             getActions: (entity: Entity<ScriptState>) => ({
                 onEntityCreated: () => {
-                    addChest(entity);
-                    entity.getServiceLocator().getStore().getActions().onStageReached(1);
-                },
-                onChestOpened: () => {
-                    addEnemy(entity);
-                },
-                onEnemyKilled: () => {
-                    addChest(entity);
+                    const { stage } = entity.getState();
+                    entity.getServiceLocator().getStore().getActions().onStageReached(stage);
                 }
             })
-        }
+        },
+        new SwitchComponent(
+            {
+                [LevelStage.SPAWN_REWARD]: JoinComponent([{
+                    getActions: (entity: Entity<ScriptState>) => ({
+                        onEntityCreated: () => {
+                            addChest(entity);
+                            const { stage } = entity.getState();
+                            entity.setState({
+                                stage: stage + 1,
+                                levelStage: LevelStage.OPEN_CHEST
+                            })
+                            entity.getServiceLocator().getStore().getActions().onStageReached(stage + 1);
+                        }
+                    })
+                }]),
+                [LevelStage.OPEN_CHEST]: JoinComponent([{
+                    getActions: (entity: Entity<ScriptState>) => ({
+                        onChestOpened: () => {
+                            addEnemy(entity);
+                            entity.setState({
+                                levelStage: LevelStage.KILL_ENEMIES
+                            });
+                        }
+                    })
+                }]),
+                [LevelStage.KILL_ENEMIES]: JoinComponent([{
+                    getActions: (entity: Entity<ScriptState>) => ({
+                        onEnemyKilled: () => {
+                            entity.setState({
+                                levelStage: LevelStage.SPAWN_REWARD
+                            });
+                        }
+                    })
+                }])
+            },
+            state.levelStage,
+            ent => ent.getState().levelStage
+        )
     )
 }
 
@@ -60,7 +102,9 @@ export function createScriptState(
     position: Vector2D
 ): ScriptState {
     return {
-        position
+        position,
+        stage: 0,
+        levelStage: LevelStage.SPAWN_REWARD
     };
 }
 

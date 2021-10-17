@@ -27,15 +27,20 @@ import { vec } from "../../util/math";
 type InternalEntityState = PhysicsStateType & HealthState & CameraState;
 
 export interface PlayerSerialisation {
+    stage: number;
+}
+
+export interface PlayerState {
     inventory: Inventory;
     surface: PhysicsStateType;
     health: {
         current: number, 
         max: number
     };
+    stage: number;
 }
 
-const getDefaultPlayerState = (): PlayerSerialisation => ({
+const getDefaultPlayerState = (): PlayerState => ({
     inventory: getEmptyInventory(),
     surface: {
         position: { x: 39, y: 29 },
@@ -54,11 +59,12 @@ const getDefaultPlayerState = (): PlayerSerialisation => ({
     health: {
         current: 1,
         max: 1
-    }
+    },
+    stage: 0
 });
 
 export class Player {
-    public state: PlayerSerialisation;
+    public state: PlayerState;
     public movement: PlayerMovement;
     public equipment: PlayerEquipment;
 
@@ -72,7 +78,7 @@ export class Player {
         serialisation?: PlayerSerialisation
     ) {
         this.serviceLocator = serviceLocator;
-        this.state = serialisation || getDefaultPlayerState();
+        this.state = {...getDefaultPlayerState(), ...serialisation};
         this.interactDelay = new ActionDelay(300);
 
         this.movement = new PlayerMovement(
