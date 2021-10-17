@@ -18,7 +18,7 @@ export interface NPCType {
 
 export const NPCTypes: Record<string, NPCType> = {
     ["jailor"]: {
-        health: 2,
+        health: 5,
         itemDropId: "npc_bulky_man",
         spriteIdle: "npc_bulky_man",
         spriteDead: "dead_man",
