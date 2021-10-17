@@ -1,6 +1,7 @@
 import { GameItem } from "../../../resources/manifests/Items";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
+import { randomFloatRange, vec } from "../../../util/math";
 import { JoinComponent } from "../../components/util/JoinComponent";
 import { SwitchComponent } from "../../components/util/SwitchComponent";
 import { Entity } from "../../Entity";
@@ -12,28 +13,52 @@ import { createNPCState } from "./NPCFactory";
 interface ScriptState {
     position: Vector2D;
     stage: number;
-    levelStage: LevelStage
+    levelStage: LevelStage;
+    activeEnemies: number;
 }
 
 const STARTING_ITEMS: ItemDropDistribution = [
     [GameItem.WEAPON_WOOD_STICK, [0, 1], 1]
 ];
 
+const OTHER_ITEMS: ItemDropDistribution = [
+    [GameItem.GOLD_COIN, [0, 0.1], 5],
+    [GameItem.GOLD_COIN, [0.1, 0.5], 2],
+    [GameItem.GOLD_COIN, [0.5, 1], 1],
+];
+
 function addChest(entity: Entity<ScriptState>) {
+    const { stage } = entity.getState();
     const serviceLocator = entity.getServiceLocator();
     const { position } = entity.getState();
-    const chest = EntityFactory.CHEST(serviceLocator, createChestState(position, STARTING_ITEMS));
+    let chest = EntityFactory.CHEST(serviceLocator, createChestState(position, STARTING_ITEMS));
+    if (stage !== 1) {
+        chest = EntityFactory.CHEST(serviceLocator, createChestState(position, OTHER_ITEMS));
+    }
     serviceLocator.getWorld().addEntity(chest);
 }
 
 function addEnemy(entity: Entity<ScriptState>) {
+    const { stage, position } = entity.getState();
     const serviceLocator = entity.getServiceLocator();
-    const { position } = entity.getState();
-    const enemy = EntityFactory.NPC_BULKY_MAN(serviceLocator, createNPCState({
-        position,
-        npcTypeId: "jailor"
-    }));
-    serviceLocator.getWorld().addEntity(enemy);
+    const severity = stage * stage;
+    for (let x = 0; x < severity; x ++) {
+        const spawnPoint = vec.vec_add(
+            position,
+            {
+                x: randomFloatRange(-1, 1),
+                y: randomFloatRange(-1, 1),
+            }
+        );
+        const enemy = EntityFactory.NPC_BULKY_MAN(serviceLocator, createNPCState({
+            position: spawnPoint,
+            npcTypeId: "jailor"
+        }));
+        serviceLocator.getWorld().addEntity(enemy);
+    }
+    entity.setState({
+        activeEnemies: severity
+    });
 }
 
 enum LevelStage {
@@ -62,13 +87,13 @@ export function createScript(
                 [LevelStage.SPAWN_REWARD]: JoinComponent([{
                     getActions: (entity: Entity<ScriptState>) => ({
                         onEntityCreated: () => {
-                            addChest(entity);
                             const { stage } = entity.getState();
                             entity.setState({
                                 stage: stage + 1,
                                 levelStage: LevelStage.OPEN_CHEST
                             })
                             entity.getServiceLocator().getStore().getActions().onStageReached(stage + 1);
+                            addChest(entity);
                         }
                     })
                 }]),
@@ -85,9 +110,16 @@ export function createScript(
                 [LevelStage.KILL_ENEMIES]: JoinComponent([{
                     getActions: (entity: Entity<ScriptState>) => ({
                         onEnemyKilled: () => {
+                            const { activeEnemies } = entity.getState();
+                            const newEnemies = activeEnemies - 1;
                             entity.setState({
-                                levelStage: LevelStage.SPAWN_REWARD
-                            });
+                                activeEnemies: newEnemies
+                            })
+                            if (newEnemies <= 0) {
+                                entity.setState({
+                                    levelStage: LevelStage.SPAWN_REWARD
+                                });
+                            }
                         }
                     })
                 }])
@@ -104,7 +136,8 @@ export function createScriptState(
     return {
         position,
         stage: 0,
-        levelStage: LevelStage.SPAWN_REWARD
+        levelStage: LevelStage.SPAWN_REWARD,
+        activeEnemies: 0
     };
 }
 

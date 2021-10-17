@@ -57,8 +57,8 @@ const getDefaultPlayerState = (): PlayerState => ({
         collidesWalls: true,
     },
     health: {
-        current: 1,
-        max: 1
+        current: 10,
+        max: 10
     },
     stage: 0
 });

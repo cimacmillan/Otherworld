@@ -143,7 +143,7 @@ const WalksTowardsPlayer = (): EntityComponent<PhysicsStateType> => {
             const pos = entity.getState().position;
             const diff = vec.vec_sub(playerPos, pos);
             const norm = vec.vec_normalize(diff);
-            const speed = vec.vec_mult_scalar(norm, 0.004);
+            const speed = vec.vec_mult_scalar(norm, 0.01);
             const newVelocity = vec.vec_add(entity.getState().velocity, speed);
             entity.setState({
                 velocity: newVelocity
@@ -335,7 +335,7 @@ export function createNPC(
         WhenHealthDepleted(onNPCDeath),
         new SwitchComponent(
             {
-                [NPCBehaviour.IDLE]: JoinComponent(IdleBehaviour(state, 8)),
+                [NPCBehaviour.IDLE]: JoinComponent(IdleBehaviour(state, 80)),
                 [NPCBehaviour.PURSUING]: JoinComponent(PursuingBehaviour(state, 1.5)),
                 [NPCBehaviour.DAMAGED]: JoinComponent(HitBehaviour(state)),
                 [NPCBehaviour.ATTACKING]: JoinComponent(AttackingBehaviour(state)),
