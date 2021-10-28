@@ -6,6 +6,7 @@ import {
     EntityType,
 } from "../../engine/scripting/factory/EntityFactory";
 import { TutorialSerialisation } from "../../engine/scripting/TutorialService";
+import { State, store } from "../../ui/State";
 import { SpawnPoint } from "../map/MapLoader";
 import { MapData } from "../map/MapService";
 import { ServiceLocator } from "../ServiceLocator";
@@ -28,6 +29,7 @@ export interface SerialisationObject {
         currentMap: string;
         player: PlayerSerialisation;
     };
+    maxStage: number,
     services: {
         tutorial: TutorialSerialisation;
     };
@@ -39,6 +41,7 @@ export interface DeserialisedObject {
         currentMap: string;
         player: Player;
     };
+    maxStage: number,
     services: {
         tutorial: TutorialSerialisation;
     };
@@ -80,6 +83,7 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
                 maps: serialisedMapData,
                 currentMap: this.serviceLocator.getMapService().getCurrentMap(),
             },
+            maxStage: store.getState().gameStart.maxStage,
             services: {
                 tutorial: this.serviceLocator.getTutorialService().serialise(),
             },
@@ -110,6 +114,7 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
             services: {
                 tutorial: data.services.tutorial,
             },
+            maxStage: data.maxStage
         };
 
         return deserialisedObject;

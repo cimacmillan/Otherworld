@@ -53,7 +53,9 @@ export const emptyActions = {
     // Game script events
     onChestOpened: () => {},
     onEnemyKilled: () => {},
-    onStageReached: (stage: number) => {}
+    onStageReached: (stage: number) => {},
+    onMaxStageReached: (stage: number) => {}
+
 }
 
 export type Actions = typeof emptyActions;

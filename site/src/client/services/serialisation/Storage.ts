@@ -16,4 +16,8 @@ export class GameStorage {
     public setSaveGame(save: SerialisationObject) {
         localStorage.setItem(SAVE_KEY, JSON.stringify(save));
     }
+
+    public clearSaveGame() {
+        localStorage.removeItem(SAVE_KEY);
+    }
 }

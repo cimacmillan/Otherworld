@@ -1,6 +1,6 @@
-import { GameItem } from "../../../resources/manifests/Items"
+import { Item } from "./ItemTypes";
 
-export type ItemDropDistribution = [GameItem, number | [number, number], number][]
+export type ItemDropDistribution = [Item, number | [number, number], number][]
 
 export const ITEM_DROPS_NONE: ItemDropDistribution = [];
 

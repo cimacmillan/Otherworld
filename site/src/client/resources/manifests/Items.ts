@@ -1,5 +1,5 @@
 import { EffectType } from "../../engine/scripting/effects/Effects";
-import { EquipmentType, Item, ItemType } from "../../engine/scripting/items/ItemTypes";
+import { EquipableItem, EquipmentType, Item, ItemType } from "../../engine/scripting/items/ItemTypes";
 
 export enum GameItem {
     GOLD_KEY = "GOLD_KEY",
@@ -12,6 +12,28 @@ export enum GameItem {
 export type GameItemMap = {
     [key in GameItem]: Item;
 };
+
+export const createBasicSword = (
+    spriteIcon: string,
+    name: string,
+    description: string,
+    damage: number
+): EquipableItem => ({
+    id: `${Math.random()}`,
+    spriteIcon,
+    stackable: false,
+    name,
+    type: ItemType.EQUIPMENT,
+    description,
+    onAttack: [
+        {
+            type: EffectType.DAMAGES_TARGET_IN_RANGE,
+            a: damage,
+            b: damage + 1
+        }
+    ],
+    equipmentType: EquipmentType.WEAPON
+});
 
 export const GameItems: GameItemMap = {
     [GameItem.GOLD_KEY]: {
@@ -37,22 +59,7 @@ export const GameItems: GameItemMap = {
         equipmentType: EquipmentType.RING,
         description: "A ring I found inside someone's cell. It smells funny.",
     },
-    [GameItem.WEAPON_WOOD_STICK]: {
-        id: GameItem.WEAPON_WOOD_STICK,
-        spriteIcon: "weapon_wood_stick",
-        stackable: false,
-        name: "Wooden Club",
-        type: ItemType.EQUIPMENT,
-        description: "A heavy wooden club. It feels like it could bash some skulls.",
-        onAttack: [
-            {
-                type: EffectType.DAMAGES_TARGET_IN_RANGE,
-                a: 1,
-                b: 2
-            }
-        ],
-        equipmentType: EquipmentType.WEAPON
-    },
+    [GameItem.WEAPON_WOOD_STICK]: createBasicSword("weapon_wood_stick", "Wooden Club", "A heavy wooden club, good for bashing some heads", 1),
     [GameItem.GOLD_COIN]: {
         id: GameItem.GOLD_COIN,
         type: ItemType.PRECIOUS,

@@ -38,11 +38,10 @@ export const DropItemDistribution = (
     const rand = randomFloat();
     drops.forEach((val) => {
         const [idString, perc, amount] = val;
-        const id = idString as GameItem;
         const [x, y] = typeof perc === "number" ? [0, perc] : perc;
         if (rand >= x && rand <= y) {
             DropItems(serviceLocator, {
-                item: GameItems[id],
+                item: idString,
                 position,
                 force,
                 withVelocity

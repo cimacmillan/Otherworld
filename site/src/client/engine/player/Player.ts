@@ -6,7 +6,6 @@ import {
     ZFAR,
     ZNEAR,
 } from "../../Config";
-import { GameItems } from "../../resources/manifests/Items";
 import {
     InteractionSourceType,
     InteractionType,
@@ -15,7 +14,6 @@ import { PhysicsRegistration } from "../../services/physics/PhysicsService";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Camera, Vector2D } from "../../types";
 import { ActionDelay } from "../../util/time/ActionDelay";
-import { AddItemToInventory, PlayerPickUpItem } from "../commands/InventoryCommands";
 import { TurnDirection, WalkDirection } from "../commands/PlayerCommands";
 import { PhysicsStateType } from "../components/core/PhysicsComponent";
 import { getEmptyInventory, Inventory } from "../scripting/items/ItemTypes";
@@ -27,20 +25,15 @@ import { vec } from "../../util/math";
 type InternalEntityState = PhysicsStateType & HealthState & CameraState;
 
 export interface PlayerSerialisation {
-    stage: number;
-}
-
-export interface PlayerState {
     inventory: Inventory;
     surface: PhysicsStateType;
     health: {
         current: number, 
         max: number
     };
-    stage: number;
 }
 
-const getDefaultPlayerState = (): PlayerState => ({
+const getDefaultPlayerState = (): PlayerSerialisation => ({
     inventory: getEmptyInventory(),
     surface: {
         position: { x: 39, y: 29 },
@@ -59,12 +52,11 @@ const getDefaultPlayerState = (): PlayerState => ({
     health: {
         current: 10,
         max: 10
-    },
-    stage: 0
+    }
 });
 
 export class Player {
-    public state: PlayerState;
+    public state: PlayerSerialisation;
     public movement: PlayerMovement;
     public equipment: PlayerEquipment;
 

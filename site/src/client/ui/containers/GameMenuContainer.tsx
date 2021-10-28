@@ -28,12 +28,11 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
         serviceLocator.getScriptingService().startGame();
     };
 
-    const { currentStage, maxStage } = state.gameStart;
- 
-    const shouldShowScore = currentStage > 0 && state.gameStart.showingMenu;
+    const { currentStage, maxStage } = state.gameStart; 
+    const shouldShowScore = maxStage > 0 && state.gameStart.showingMenu;
     const StageComponent = shouldShowScore ? (
         <TextComponent
-            text={`You reached level: ${currentStage} Best: ${maxStage}`}
+            text={`Your best stage reached is ${maxStage}`}
             style={{
                 width: "100%",
                 textAlign: "center",

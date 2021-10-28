@@ -49,7 +49,13 @@ export const gameStartReducer: Reducer<GameStartState, Actions> = {
         onStageReached: (state: GameStartState, stage: number) => ({
             ...state,
             currentStage: stage,
-            maxStage: Math.max(stage, state.maxStage)
+            maxStage: Math.max(stage, state.maxStage),
+        }),
+        onMaxStageReached: (state: GameStartState, stage: number) => ({
+            ...state,
+            showingMenu: stage === 0,
+            showingFade: stage === 0,
+            maxStage: stage
         })
     },
 };

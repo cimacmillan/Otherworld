@@ -1,4 +1,4 @@
-import { GameItem } from "../../../resources/manifests/Items";
+import { createBasicSword, GameItem, GameItems } from "../../../resources/manifests/Items";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
 import { randomFloatRange, vec } from "../../../util/math";
@@ -18,30 +18,64 @@ interface ScriptState {
 }
 
 const STARTING_ITEMS: ItemDropDistribution = [
-    [GameItem.WEAPON_WOOD_STICK, [0, 1], 1]
+    [GameItems[GameItem.WEAPON_WOOD_STICK], [0, 1], 1],
 ];
 
 const OTHER_ITEMS: ItemDropDistribution = [
-    [GameItem.GOLD_COIN, [0, 0.1], 5],
-    [GameItem.GOLD_COIN, [0.1, 0.5], 2],
-    [GameItem.GOLD_COIN, [0.5, 1], 1],
+    [GameItems[GameItem.GOLD_COIN], [0, 0.1], 5],
+    [GameItems[GameItem.GOLD_COIN], [0.1, 0.5], 2],
+    [GameItems[GameItem.GOLD_COIN], [0.5, 1], 1],
 ];
 
 function addChest(entity: Entity<ScriptState>) {
     const { stage } = entity.getState();
     const serviceLocator = entity.getServiceLocator();
     const { position } = entity.getState();
-    let chest = EntityFactory.CHEST(serviceLocator, createChestState(position, STARTING_ITEMS));
-    if (stage !== 1) {
-        chest = EntityFactory.CHEST(serviceLocator, createChestState(position, OTHER_ITEMS));
+    let items;
+    switch(stage) {
+        case 0:
+            items = STARTING_ITEMS;
+            break;
+        case 2: 
+            items = [
+                [createBasicSword("weapon_wood_axe", "Wooden axe", "A large wood axe. What can it cut?", 3), [0, 1], 1]
+            ];
+            break;
+        case 4: 
+            items = [
+                [createBasicSword("weapon_dagger", "Iron dagger", "A small iron dagger.", 4), [0, 1], 1]
+            ];
+            break;
+        case 6: 
+            items = [
+                [createBasicSword("weapon_claymore", "Iron claymore", "An iron claymore. Hard to hold with one hand.", 10), [0, 1], 1]
+            ];
+            break;
+        case 8: 
+            items = [
+                [createBasicSword("weapon_heavy_axe", "Heavy axe", "Double sided for her pleasure", 14), [0, 1], 1]
+            ];
+            break;
+        default: 
+            items = OTHER_ITEMS;
+            break;
     }
+
+    let chest = EntityFactory.CHEST(serviceLocator, createChestState(position, items as any));
     serviceLocator.getWorld().addEntity(chest);
+}
+
+function fib(x: number): number {
+    if (x <= 1) {
+        return 1;
+    }
+    return fib(x - 1) + fib(x - 2);
 }
 
 function addEnemy(entity: Entity<ScriptState>) {
     const { stage, position } = entity.getState();
     const serviceLocator = entity.getServiceLocator();
-    const severity = stage * stage;
+    const severity = fib(stage);
     for (let x = 0; x < severity; x ++) {
         const spawnPoint = vec.vec_add(
             position,
@@ -89,10 +123,8 @@ export function createScript(
                         onEntityCreated: () => {
                             const { stage } = entity.getState();
                             entity.setState({
-                                stage: stage + 1,
                                 levelStage: LevelStage.OPEN_CHEST
                             })
-                            entity.getServiceLocator().getStore().getActions().onStageReached(stage + 1);
                             addChest(entity);
                         }
                     })
@@ -100,6 +132,11 @@ export function createScript(
                 [LevelStage.OPEN_CHEST]: JoinComponent([{
                     getActions: (entity: Entity<ScriptState>) => ({
                         onChestOpened: () => {
+                            const { stage } = entity.getState();
+                            entity.setState({
+                                stage: stage + 1,
+                            })
+                            entity.getServiceLocator().getStore().getActions().onStageReached(stage + 1);
                             addEnemy(entity);
                             entity.setState({
                                 levelStage: LevelStage.KILL_ENEMIES
