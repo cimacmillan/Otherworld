@@ -32,7 +32,7 @@ function addChest(entity: Entity<ScriptState>) {
     const serviceLocator = entity.getServiceLocator();
     const { position } = entity.getState();
     let chest = EntityFactory.CHEST(serviceLocator, createChestState(position, STARTING_ITEMS));
-    if (stage !== 1) {
+    if (stage !== 0) {
         chest = EntityFactory.CHEST(serviceLocator, createChestState(position, OTHER_ITEMS));
     }
     serviceLocator.getWorld().addEntity(chest);
@@ -89,10 +89,8 @@ export function createScript(
                         onEntityCreated: () => {
                             const { stage } = entity.getState();
                             entity.setState({
-                                stage: stage + 1,
                                 levelStage: LevelStage.OPEN_CHEST
                             })
-                            entity.getServiceLocator().getStore().getActions().onStageReached(stage + 1);
                             addChest(entity);
                         }
                     })
@@ -100,6 +98,11 @@ export function createScript(
                 [LevelStage.OPEN_CHEST]: JoinComponent([{
                     getActions: (entity: Entity<ScriptState>) => ({
                         onChestOpened: () => {
+                            const { stage } = entity.getState();
+                            entity.setState({
+                                stage: stage + 1,
+                            })
+                            entity.getServiceLocator().getStore().getActions().onStageReached(stage + 1);
                             addEnemy(entity);
                             entity.setState({
                                 levelStage: LevelStage.KILL_ENEMIES

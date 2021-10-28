@@ -22,4 +22,6 @@ export const DEFAULT_PLAYER_RADIUS = 0.5;
 
 export const SCENERY_PIXEL_DENSITY = 10;
 
-export const IS_DEV_MODE = () => window.location.href === "http://localhost/";
+// export const IS_DEV_MODE = () => window.location.href === "http://localhost/";
+export const IS_DEV_MODE = () => false;
+

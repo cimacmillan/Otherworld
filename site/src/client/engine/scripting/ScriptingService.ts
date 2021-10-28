@@ -90,6 +90,8 @@ export class ScriptingService {
         entities.forEach((entity) => world.addEntity(entity));
 
         world.performSync();
+
+        this.serviceLocator.getStore().getActions().onMaxStageReached(args.maxStage);
     }
 
     public bootstrapInitialContent() {
