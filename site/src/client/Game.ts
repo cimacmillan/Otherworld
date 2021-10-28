@@ -91,6 +91,7 @@ export class Game {
         this.serviceLocator.getMapService().init(this.serviceLocator);
 
         this.storage = new GameStorage();
+        (global as any).storage = this.storage;
 
         let compatibleSave: SerialisationObject | undefined;
 

@@ -53,7 +53,7 @@ export const EquipItemFromInventory = (serviceLocator: ServiceLocator, item: Equ
     RemoveItemFromInventory(playerInventory, item);
     const alreadyEquipped = playerInventory.equipped[item.equipmentType];
     if (alreadyEquipped) {
-        AddItemToInventory(playerInventory, item);
+        AddItemToInventory(playerInventory, alreadyEquipped);
         alreadyEquipped.onUnEquip?.forEach(effect => getEffect(effect).onTrigger({
             type: "PLAYER",
             player: serviceLocator.getScriptingService().getPlayer(),

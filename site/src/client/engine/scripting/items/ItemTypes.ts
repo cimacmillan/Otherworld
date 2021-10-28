@@ -1,8 +1,8 @@
-import { GameItem, GameItems } from "../../../resources/manifests/Items";
+import { GameItem } from "../../../resources/manifests/Items";
 import { Effect } from "../effects/Effects";
 
 interface BaseItem {
-    id: GameItem;
+    id: string;
     spriteIcon: string;
     stackable: boolean;
     name: string;

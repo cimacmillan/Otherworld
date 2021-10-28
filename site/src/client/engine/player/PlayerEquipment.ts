@@ -1,5 +1,4 @@
 import { vec2, vec3 } from "gl-matrix";
-import { GameItems } from "../../resources/manifests/Items";
 import { SpriteSheet } from "../../resources/SpriteSheet";
 import { InteractionSourceType, InteractionType } from "../../services/interaction/InteractionType";
 import { ColourMap } from "../../services/render/util/ReferenceMap";
@@ -70,7 +69,6 @@ export class PlayerEquipment {
         if (existingWeapon) {
             this.setWeapon(existingWeapon);
         }
-        // this.setWeapon(GameItems.WEAPON_WOOD_STICK as EquipableItem);
     }
 
     public update() {
@@ -108,6 +106,10 @@ export class PlayerEquipment {
     }
 
     public onEquip(item: EquipableItem) {
+        if (this.weapon) {
+            this.destroy();
+            this.weapon = undefined;
+        }
         if (item.equipmentType === EquipmentType.WEAPON) {
             this.setWeapon(item);
         }

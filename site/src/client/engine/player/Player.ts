@@ -6,7 +6,6 @@ import {
     ZFAR,
     ZNEAR,
 } from "../../Config";
-import { GameItems } from "../../resources/manifests/Items";
 import {
     InteractionSourceType,
     InteractionType,
@@ -15,7 +14,6 @@ import { PhysicsRegistration } from "../../services/physics/PhysicsService";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Camera, Vector2D } from "../../types";
 import { ActionDelay } from "../../util/time/ActionDelay";
-import { AddItemToInventory, PlayerPickUpItem } from "../commands/InventoryCommands";
 import { TurnDirection, WalkDirection } from "../commands/PlayerCommands";
 import { PhysicsStateType } from "../components/core/PhysicsComponent";
 import { getEmptyInventory, Inventory } from "../scripting/items/ItemTypes";
