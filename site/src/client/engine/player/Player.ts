@@ -21,6 +21,7 @@ import { CameraState, HealthState } from "../state/State";
 import { PlayerMovement } from "./PlayerMovement";
 import { PlayerEquipment } from "./PlayerEquipment";
 import { vec } from "../../util/math";
+import { createBasicFood } from "../../resources/manifests/Items";
 
 type InternalEntityState = PhysicsStateType & HealthState & CameraState;
 
@@ -198,6 +199,11 @@ export class Player {
             this.state.surface.velocity.x += normal.x * force;
             this.state.surface.velocity.y += normal.y * force;
         }
+    }
+
+    public onHealed(amount: number) {
+        this.state.health.current = Math.min(this.state.health.current + amount, this.state.health.max);
+        this.serviceLocator.getStore().getActions().onPlayerHealth(this.state.health);
     }
 
     private onDeath() {

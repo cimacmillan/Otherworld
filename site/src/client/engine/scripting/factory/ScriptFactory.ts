@@ -1,4 +1,4 @@
-import { createBasicSword, GameItem, GameItems } from "../../../resources/manifests/Items";
+import { createBasicFood, createBasicSword, GameItem, GameItems } from "../../../resources/manifests/Items";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
 import { randomFloatRange, vec } from "../../../util/math";
@@ -25,6 +25,12 @@ const OTHER_ITEMS: ItemDropDistribution = [
     [GameItems[GameItem.GOLD_COIN], [0, 0.1], 5],
     [GameItems[GameItem.GOLD_COIN], [0.1, 0.5], 2],
     [GameItems[GameItem.GOLD_COIN], [0.5, 1], 1],
+
+    [createBasicFood("food_carrot", "Carrot", "Crunchy and helps you see in the dark", 2), [0, 0.5], 1],
+    [createBasicFood("food_apple", "Apple", "It feels waxy", 10), [0.5, 0.7], 1],
+    [createBasicFood("food_meat", "Meat", "But what kind?", 14), [0.7, 0.8], 1],
+    [createBasicFood("food_candy", "Candy", "Hard and sweet", 1), [0.8, 0.9], 5],
+
 ];
 
 function addChest(entity: Entity<ScriptState>) {
@@ -38,22 +44,22 @@ function addChest(entity: Entity<ScriptState>) {
             break;
         case 2: 
             items = [
-                [createBasicSword("weapon_wood_axe", "Wooden axe", "A large wood axe. What can it cut?", 3), [0, 1], 1]
+                [...OTHER_ITEMS, createBasicSword("weapon_wood_axe", "Wooden axe", "A large wood axe. What can it cut?", 3), [0, 1], 1]
             ];
             break;
         case 4: 
             items = [
-                [createBasicSword("weapon_dagger", "Iron dagger", "A small iron dagger.", 4), [0, 1], 1]
+                [...OTHER_ITEMS, createBasicSword("weapon_dagger", "Iron dagger", "A small iron dagger.", 4), [0, 1], 1]
             ];
             break;
         case 6: 
             items = [
-                [createBasicSword("weapon_claymore", "Iron claymore", "An iron claymore. Hard to hold with one hand.", 10), [0, 1], 1]
+                [...OTHER_ITEMS, createBasicSword("weapon_claymore", "Iron claymore", "An iron claymore. Hard to hold with one hand.", 10), [0, 1], 1]
             ];
             break;
         case 8: 
             items = [
-                [createBasicSword("weapon_heavy_axe", "Heavy axe", "Double sided for her pleasure", 14), [0, 1], 1]
+                [...OTHER_ITEMS, createBasicSword("weapon_heavy_axe", "Heavy axe", "Double sided for her pleasure", 14), [0, 1], 1]
             ];
             break;
         default: 

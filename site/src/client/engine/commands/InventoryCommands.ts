@@ -7,7 +7,7 @@ import {
     createItemDropState,
     ItemDropArguments,
 } from "../scripting/factory/ItemFactory";
-import { EquipableItem, EquipmentType, Inventory, Item, ItemType } from "../scripting/items/ItemTypes";
+import { ConsumableItem, EquipableItem, EquipmentType, Inventory, Item, ItemType } from "../scripting/items/ItemTypes";
 import { TutorialServiceEvent } from "../scripting/TutorialService";
 import { CommandCreator } from "./Command";
 
@@ -42,8 +42,24 @@ export const PlayerUseItemFromInventory = (serviceLocator: ServiceLocator) => (
         case ItemType.EQUIPMENT:
             EquipItemFromInventory(serviceLocator, item);
             break;
+        case ItemType.CONSUMABLE:
+            ConsumeItemFromInventory(serviceLocator, item);
+            break;
     }
 };
+
+export const ConsumeItemFromInventory =  (serviceLocator: ServiceLocator, item: ConsumableItem) => {
+    const playerInventory = serviceLocator
+        .getScriptingService()
+        .getPlayer()
+        .getInventory();
+    RemoveItemFromInventory(playerInventory, item);
+    item.onConsume?.forEach(effect => getEffect(effect).onTrigger({
+        type: "PLAYER",
+        player: serviceLocator.getScriptingService().getPlayer(),
+        serviceLocator
+    }));
+}
 
 export const EquipItemFromInventory = (serviceLocator: ServiceLocator, item: EquipableItem) => {
     const playerInventory = serviceLocator

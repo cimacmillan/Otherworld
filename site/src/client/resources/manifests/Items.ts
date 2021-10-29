@@ -1,5 +1,5 @@
 import { EffectType } from "../../engine/scripting/effects/Effects";
-import { EquipableItem, EquipmentType, Item, ItemType } from "../../engine/scripting/items/ItemTypes";
+import { ConsumableItem, EquipableItem, EquipmentType, Item, ItemType } from "../../engine/scripting/items/ItemTypes";
 
 export enum GameItem {
     GOLD_KEY = "GOLD_KEY",
@@ -12,6 +12,26 @@ export enum GameItem {
 export type GameItemMap = {
     [key in GameItem]: Item;
 };
+
+export const createBasicFood = (
+    spriteIcon: string,
+    name: string,
+    description: string,
+    health: number
+): ConsumableItem => ({
+    id: spriteIcon,
+    type: ItemType.CONSUMABLE,
+    name,
+    description,
+    spriteIcon,
+    stackable: true,
+    onConsume: [
+        {
+            type: EffectType.HEALS_SELF,
+            points: health
+        }
+    ]
+})
 
 export const createBasicSword = (
     spriteIcon: string,

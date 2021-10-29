@@ -2,7 +2,12 @@ import { EffectContext, HealsPlayer, HealthIncreasePlayer, ItemEffectActions } f
 
 export const EffectHealsPlayer = (params: HealsPlayer): ItemEffectActions => {
     return {
-        onTrigger: (context: EffectContext) => {}
+        onTrigger: (context: EffectContext) => {
+            if (context.type === "PLAYER") {
+                context.serviceLocator.getStore().getActions().onPlayerHealed(params.points);
+                context.player.onHealed(params.points);
+            }
+        }
     };
 }
 
