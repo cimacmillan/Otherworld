@@ -248,6 +248,7 @@ const InventoryItems: React.FunctionComponent<{
                 display: "flex",
                 flexDirection: "column",
                 overflowY: "scroll",
+                height: INVENTORY_HEIGHT,
             }}
         >
             {props.items.map((item) => (

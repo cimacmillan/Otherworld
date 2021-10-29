@@ -25,18 +25,21 @@ export const HealthBarComponent: React.FunctionComponent<{}> = (
         setFadeOut(animation((x) => setFade(1 - x)).speed(200).driven(false));
     }, []);
 
-    useDispatchListener(({
-        onPlayerDamaged: () => {
-            anim.stop();
-            anim.start();
-            fadeIn.start();
-            if (timeout) {
-                ProcedureService.clearTimeout(timeout);
-            }
-            setTimeout(ProcedureService.setTimeout(() => {
-                fadeOut.start();
-            }, 2000));
+    const onPopHealthBar = () => {
+        anim.stop();
+        anim.start();
+        fadeIn.start();
+        if (timeout) {
+            ProcedureService.clearTimeout(timeout);
         }
+        setTimeout(ProcedureService.setTimeout(() => {
+            fadeOut.start();
+        }, 2000));
+    };
+
+    useDispatchListener(({
+        onPlayerDamaged: onPopHealthBar,
+        onPlayerHealed: onPopHealthBar
     }), [anim, fadeIn, fadeOut, timeout]);
 
     const WIDTH = 416;

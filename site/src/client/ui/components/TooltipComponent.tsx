@@ -171,6 +171,19 @@ function getUsingHintFromItem(serviceLocator: ServiceLocator, item: Item) {
                 />,
                 isEquipped ? text("to unequip") : text("to equip"),
             ]);
+        case ItemType.CONSUMABLE:
+                return row([
+                    <SpriteImageComponent
+                        spriteSheet={SpriteSheets.SPRITE}
+                        sprite={"ui_finger"}
+                        style={{
+                            width: 32,
+                            height: 32,
+                            transform: `translate(0px, ${yOffset}px)`,
+                        }}
+                    />,
+                    text("to consume"),
+                ]);
     }
 }
 
@@ -206,6 +219,17 @@ function getEffectHintsFromItem(item: Item): JSX.Element {
                 )}                
                 </>
         )
+        case ItemType.CONSUMABLE:
+            return (
+                <>
+                {item.onConsume && (
+                    <>
+                    {text("On consume", TextColour.GOLD)}
+                    {effectList(item.onConsume)}
+                    </>
+                )}
+                </>
+            )
     }
     return undefined;
 }

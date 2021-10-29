@@ -13,7 +13,7 @@ interface KeyItem extends BaseItem {
     type: ItemType.KEY;
 }
 
-interface ConsumableItem extends BaseItem {
+export interface ConsumableItem extends BaseItem {
     type: ItemType.CONSUMABLE;
     onConsume?: Effect[];
 }
