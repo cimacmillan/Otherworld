@@ -78,13 +78,21 @@ function fib(x: number): number {
     return fib(x - 1) + fib(x - 2);
 }
 
-function addEnemy(entity: Entity<ScriptState>) {
+function getSpawnPoint(entity: Entity<ScriptState>): Vector2D {
     const { stage, position } = entity.getState();
+    const serviceLocator = entity.getServiceLocator();
+    const allSpawnPoints = serviceLocator.getMapService().getSpawnPoints();
+    const enemySpawnPoints = allSpawnPoints.filter(spawn => spawn.name.includes("SPAWN"));
+    return enemySpawnPoints[(stage - 1) % enemySpawnPoints.length].position;
+}
+
+function addEnemy(entity: Entity<ScriptState>) {
+    const { stage } = entity.getState();
     const serviceLocator = entity.getServiceLocator();
     const severity = fib(stage);
     for (let x = 0; x < severity; x ++) {
         const spawnPoint = vec.vec_add(
-            position,
+            getSpawnPoint(entity),
             {
                 x: randomFloatRange(-1, 1),
                 y: randomFloatRange(-1, 1),

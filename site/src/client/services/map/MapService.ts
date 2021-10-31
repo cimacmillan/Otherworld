@@ -103,6 +103,10 @@ export class MapService {
         return this.currentMapData;
     }
 
+    public getSpawnPoints(): SpawnPoint[] {
+        return this.currentSpawnPoints;
+    }
+
     private getSpawnPoint(id?: string): SpawnPoint {
         const search = id || "BIRTH";
         const spawn = this.currentSpawnPoints.find(
