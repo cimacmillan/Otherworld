@@ -1,7 +1,11 @@
 import { vec3 } from "gl-matrix";
 import { InteractionSource, InteractionSourceType, InteractionType } from "../../../services/interaction/InteractionType";
 import { ProcedureService } from "../../../services/jobs/ProcedureService";
+import { BurstEmitter } from "../../../services/particle/emitters/BurstEmitter";
+import { SpawnEmitter } from "../../../services/particle/emitters/SpawnEmitter";
 import { DamageTextParticle, HealthDropParticle } from "../../../services/particle/particles/HealthDropParticle";
+import { SmokeParticle } from "../../../services/particle/particles/SmokeParticle";
+import { SpawnParticle } from "../../../services/particle/particles/SpawnParticle";
 import { RenderItem, SpriteShadeOverride } from "../../../services/render/types/RenderInterface";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
@@ -31,6 +35,7 @@ interface HealthState {
 }
 
 enum NPCBehaviour {
+    SPAWNING = "SPAWNING",
     IDLE = "IDLE",
     PURSUING = "PURSUING",
     DAMAGED = "DAMAGED",
@@ -314,6 +319,35 @@ const onNPCDeath = (entity: Entity<NPCState>) => {
     entity.getServiceLocator().getWorld().forEachEntity(ent => ent.getActions().onEnemyKilled())
 }
 
+const SPAWN_TIME_MS = 500;
+function SpawningBehaviour(state: NPCState): EntityComponent<NPCState>[] {
+    const { position } = state;
+    return [
+        {
+            getActions: (entity: Entity<NPCState>) => ({
+                onEntityCreated: () => {
+                    const smokeEmitter = SpawnEmitter({
+                        creator: pos => SpawnParticle({
+                            start: pos
+                        }),
+                        position: [position.x, 0, position.y],
+                        rate: 0.5
+                    });
+                    entity.getServiceLocator().getParticleService().addEmitter(smokeEmitter.emitter);
+                    ProcedureService.setGameTimeout(() => {
+                        entity.getServiceLocator().getParticleService().removeEmitter(smokeEmitter.emitter);
+                    }, SPAWN_TIME_MS);
+                }
+            })
+        },
+        TimeoutComponent((entity: Entity<NPCState>) => {
+            entity.setState({
+                behaviour: NPCBehaviour.IDLE
+            })
+        }, SPAWN_TIME_MS)
+    ];
+}
+
 const whiteShade = {
     intensity: 1,
     r: 1,
@@ -335,6 +369,7 @@ export function createNPC(
         WhenHealthDepleted(onNPCDeath),
         new SwitchComponent(
             {
+                [NPCBehaviour.SPAWNING]: JoinComponent(SpawningBehaviour(state)),
                 [NPCBehaviour.IDLE]: JoinComponent(IdleBehaviour(state, 80)),
                 [NPCBehaviour.PURSUING]: JoinComponent(PursuingBehaviour(state, 1.5)),
                 [NPCBehaviour.DAMAGED]: JoinComponent(HitBehaviour(state)),
@@ -359,7 +394,7 @@ export function createNPCState(
     const itemDrops = ITEM_DROP_MAP[itemDropId];
     return {
         npcType,
-        behaviour: NPCBehaviour.IDLE,
+        behaviour: NPCBehaviour.SPAWNING,
         sprite: spriteIdle,
         spriteHeight,
         spriteWidth,

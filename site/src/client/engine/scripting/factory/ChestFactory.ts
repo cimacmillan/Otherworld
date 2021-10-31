@@ -30,7 +30,6 @@ export function createChest(
     state: ChestStateType
 ) {
     let interactHintId: number = undefined;
-    let emitter: BurstEmitterType;
     return new Entity<ChestStateType>(
         serviceLocator,
         state,
@@ -92,7 +91,7 @@ export function createChest(
                                 entity.setState({
                                     sprite: "chest_closed"
                                 });
-                                emitter = BurstEmitter({
+                                const emitter = BurstEmitter({
                                     creator: pos => SparkleParticle({
                                         start: pos
                                     }),
@@ -124,7 +123,7 @@ export function createChest(
                     }, 3000)
                 ])
             }, 
-            "false", 
+            `${state.opened}`, 
             ent => `${ent.getState().opened}`
         )
     )

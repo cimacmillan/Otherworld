@@ -24,12 +24,12 @@ const STARTING_ITEMS: ItemDropDistribution = [
 const OTHER_ITEMS: ItemDropDistribution = [
     [GameItems[GameItem.GOLD_COIN], [0, 0.1], 5],
     [GameItems[GameItem.GOLD_COIN], [0.1, 0.5], 2],
-    [GameItems[GameItem.GOLD_COIN], [0.5, 1], 1],
+    [GameItems[GameItem.GOLD_COIN], 1, 1],
 
-    [createBasicFood("food_carrot", "Carrot", "Crunchy and helps you see in the dark", 2), [0, 0.5], 1],
-    [createBasicFood("food_apple", "Apple", "It feels waxy", 10), [0.5, 0.7], 1],
-    [createBasicFood("food_meat", "Meat", "But what kind?", 14), [0.7, 0.8], 1],
-    [createBasicFood("food_candy", "Candy", "Hard and sweet", 1), [0.8, 0.9], 5],
+    [createBasicFood("food_carrot", "Carrot", "Crunchy and helps you see in the dark", 2), 0.5, 1],
+    [createBasicFood("food_apple", "Apple", "It feels waxy", 10), 0.2, 1],
+    [createBasicFood("food_meat", "Meat", "But what kind?", 14), 0.1, 1],
+    [createBasicFood("food_candy", "Candy", "Hard and sweet", 1), 0.05, 5],
 
 ];
 
@@ -78,13 +78,21 @@ function fib(x: number): number {
     return fib(x - 1) + fib(x - 2);
 }
 
-function addEnemy(entity: Entity<ScriptState>) {
+function getSpawnPoint(entity: Entity<ScriptState>): Vector2D {
     const { stage, position } = entity.getState();
+    const serviceLocator = entity.getServiceLocator();
+    const allSpawnPoints = serviceLocator.getMapService().getSpawnPoints();
+    const enemySpawnPoints = allSpawnPoints.filter(spawn => spawn.name.includes("SPAWN"));
+    return enemySpawnPoints[(stage - 1) % enemySpawnPoints.length].position;
+}
+
+function addEnemy(entity: Entity<ScriptState>) {
+    const { stage } = entity.getState();
     const serviceLocator = entity.getServiceLocator();
     const severity = fib(stage);
     for (let x = 0; x < severity; x ++) {
         const spawnPoint = vec.vec_add(
-            position,
+            getSpawnPoint(entity),
             {
                 x: randomFloatRange(-1, 1),
                 y: randomFloatRange(-1, 1),
