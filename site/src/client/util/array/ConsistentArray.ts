@@ -29,6 +29,12 @@ export class ConsistentArray<T> {
         this.toRemove.push(element);
     }
 
+    public clear() {
+        this.array = [];
+        this.toAdd = [];
+        this.toRemove = [];
+    }
+
     public sync() {
         this.array.push(...this.toAdd);
         this.toRemove.forEach((element: T) => {

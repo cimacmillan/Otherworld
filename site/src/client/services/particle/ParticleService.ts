@@ -53,6 +53,11 @@ class ParticleInstance {
         }
     }
 
+    public destroy() {
+        this.getRenderService().freeItem(this.renderItem);
+        this.removeSelf();
+    }
+
     private getRenderService() {
         switch (this.type) {
             case "Particle":
@@ -113,7 +118,7 @@ export class ParticleService {
         this.emitters.add(instance);
     }
 
-    public removeEmitter(emitter: ParticleEmitter) {
+    public removeEmitter(emitter?: ParticleEmitter) {
         const instance = this.emitters
             .getArray()
             .find((x) => x.emitter === emitter);
@@ -131,5 +136,12 @@ export class ParticleService {
             () => this.particles.remove(instance)
         );
         this.particles.add(instance);
+    }
+
+    public destroy() {
+        this.emitters.clear();
+        this.particles.getArray().forEach(particle => particle.destroy());
+        this.emitters.sync();
+        this.particles.sync();
     }
 }

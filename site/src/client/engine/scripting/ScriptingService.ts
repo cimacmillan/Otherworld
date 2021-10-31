@@ -62,6 +62,7 @@ export class ScriptingService {
             world.removeEntity(entity);
         }
         world.performSync();
+        this.serviceLocator.getParticleService().destroy();
     }
 
     public bootsrapDeserialisedContent(args: DeserialisedObject) {
