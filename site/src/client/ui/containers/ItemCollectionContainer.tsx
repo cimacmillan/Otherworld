@@ -85,7 +85,8 @@ export const ItemCollectionContainer: React.FunctionComponent<ItemCollectionCont
             style={{
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "flex-end",
+                alignItems: "flex-start",
+                justifyContent: "flex-start",
             }}
         >
             {itemList.map((itemMetadata) => {

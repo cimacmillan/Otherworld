@@ -1,3 +1,4 @@
+import { randomInt } from "crypto";
 import { createBasicFood, createBasicSword, GameItem, GameItems } from "../../../resources/manifests/Items";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
@@ -21,45 +22,60 @@ const STARTING_ITEMS: ItemDropDistribution = [
     [GameItems[GameItem.WEAPON_WOOD_STICK], [0, 1], 1],
 ];
 
+const CANDY = createBasicFood("food_candy", "Candy", "Hard and sweet", 1);
+
 const OTHER_ITEMS: ItemDropDistribution = [
-    [GameItems[GameItem.GOLD_COIN], [0, 0.1], 5],
-    [GameItems[GameItem.GOLD_COIN], [0.1, 0.5], 2],
-    [GameItems[GameItem.GOLD_COIN], 1, 1],
+    [CANDY, [0, 0.1], 5],
+    [CANDY, [0.1, 0.5], 2],
+    [CANDY, 1, 1],
 
     [createBasicFood("food_carrot", "Carrot", "Crunchy and helps you see in the dark", 2), 0.5, 1],
     [createBasicFood("food_apple", "Apple", "It feels waxy", 10), 0.2, 1],
     [createBasicFood("food_meat", "Meat", "But what kind?", 14), 0.1, 1],
-    [createBasicFood("food_candy", "Candy", "Hard and sweet", 1), 0.05, 5],
-
 ];
 
 function addChest(entity: Entity<ScriptState>) {
     const { stage } = entity.getState();
     const serviceLocator = entity.getServiceLocator();
     const { position } = entity.getState();
-    let items;
+    let items: ItemDropDistribution;
     switch(stage) {
         case 0:
             items = STARTING_ITEMS;
             break;
         case 2: 
             items = [
-                [...OTHER_ITEMS, createBasicSword("weapon_wood_axe", "Wooden axe", "A large wood axe. What can it cut?", 3), [0, 1], 1]
+                ...OTHER_ITEMS, [createBasicSword("weapon_wood_axe", "Wooden axe", "A large wood axe. What can it cut?", 3), 1, 1]
             ];
             break;
         case 4: 
             items = [
-                [...OTHER_ITEMS, createBasicSword("weapon_dagger", "Iron dagger", "A small iron dagger.", 4), [0, 1], 1]
+                ...OTHER_ITEMS, [createBasicSword("weapon_dagger", "Iron dagger", "A small iron dagger.", 4), 1, 1]
             ];
             break;
         case 6: 
             items = [
-                [...OTHER_ITEMS, createBasicSword("weapon_claymore", "Iron claymore", "An iron claymore. Hard to hold with one hand.", 10), [0, 1], 1]
+                ...OTHER_ITEMS, [createBasicSword("weapon_claymore", "Iron claymore", "An iron claymore. Hard to hold with one hand.", 10), 1, 1]
             ];
             break;
         case 8: 
             items = [
-                [...OTHER_ITEMS, createBasicSword("weapon_heavy_axe", "Heavy axe", "Double sided for her pleasure", 14), [0, 1], 1]
+                ...OTHER_ITEMS, [createBasicSword("weapon_heavy_axe", "Heavy axe", "Double sided for extra killing", 14), 1, 1]
+            ];
+            break;
+        case 10: 
+            items = [
+                ...OTHER_ITEMS, [createBasicSword("weapon_ceremonial_trident", "Ceremonial trident", "A three-pronged spear. Useful for stabbing multiple enemies.", 18), 1, 1]
+            ];
+            break;
+        case 14: 
+            items = [
+                ...OTHER_ITEMS, [createBasicSword("weapon_magic_sword", "Magic sword", "A sword weilding curious magical power", 21), 1, 1]
+            ];
+            break;
+        case 20: 
+            items = [
+                ...OTHER_ITEMS, [createBasicSword("weapon_demon_staff", "Demon staff", "A dark staff from the realm of the otherworld", 25), 1, 1]
             ];
             break;
         default: 
@@ -67,7 +83,7 @@ function addChest(entity: Entity<ScriptState>) {
             break;
     }
 
-    let chest = EntityFactory.CHEST(serviceLocator, createChestState(position, items as any));
+    let chest = EntityFactory.CHEST(serviceLocator, createChestState(position, items));
     serviceLocator.getWorld().addEntity(chest);
 }
 
@@ -86,6 +102,14 @@ function getSpawnPoint(entity: Entity<ScriptState>): Vector2D {
     return enemySpawnPoints[(stage - 1) % enemySpawnPoints.length].position;
 }
 
+function getNpcType() {
+    let npcTypeId = "slime";
+    if (randomFloatRange(0, 1) < 0.4) {
+        npcTypeId = "jailor";
+    }
+    return npcTypeId;
+}
+
 function addEnemy(entity: Entity<ScriptState>) {
     const { stage } = entity.getState();
     const serviceLocator = entity.getServiceLocator();
@@ -98,9 +122,10 @@ function addEnemy(entity: Entity<ScriptState>) {
                 y: randomFloatRange(-1, 1),
             }
         );
+       
         const enemy = EntityFactory.NPC_BULKY_MAN(serviceLocator, createNPCState({
             position: spawnPoint,
-            npcTypeId: "jailor"
+            npcTypeId: getNpcType()
         }));
         serviceLocator.getWorld().addEntity(enemy);
     }
