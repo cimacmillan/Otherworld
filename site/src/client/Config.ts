@@ -1,5 +1,5 @@
 export const MINOR = "1";
-export const PHASE = "3";
+export const PHASE = "4";
 export const MAJOR = "0";
 export const VERSION = `V${MAJOR}.${PHASE}.${MINOR}`;
 
