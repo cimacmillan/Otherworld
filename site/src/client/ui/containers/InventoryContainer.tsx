@@ -92,6 +92,9 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
     };
 
     const onItemUsed = (itemMetadata: ItemMetadata | undefined) => {
+        if (itemMetadata.count === 0) {
+            return;
+        }
         const { item, count } = itemMetadata;
         const itemAmount = serviceLocator
             .getScriptingService()
