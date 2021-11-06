@@ -20,6 +20,11 @@ interface ScriptState {
 
 const STARTING_ITEMS: ItemDropDistribution = [
     [GameItems[GameItem.WEAPON_WOOD_STICK], [0, 1], 1],
+    [GameItems[GameItem.GOLD_RING], 1, 1],
+    [GameItems[GameItem.EQUIPMENT_CHEST], 1, 1],
+    [GameItems[GameItem.EQUIPMENT_GREAVES], 1, 1],
+    [GameItems[GameItem.EQUIPMENT_HELMET], 1, 1],
+    [GameItems[GameItem.EQUIPMENT_SHIELD], 1, 1],
 ];
 
 const CANDY = createBasicFood("food_candy", "Candy", "Hard and sweet", 1);

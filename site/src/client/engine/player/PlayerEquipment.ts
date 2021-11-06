@@ -106,11 +106,11 @@ export class PlayerEquipment {
     }
 
     public onEquip(item: EquipableItem) {
-        if (this.weapon) {
-            this.destroy();
-            this.weapon = undefined;
-        }
         if (item.equipmentType === EquipmentType.WEAPON) {
+            if (this.weapon) {
+                this.destroy();
+                this.weapon = undefined;
+            }
             this.setWeapon(item);
         }
     }

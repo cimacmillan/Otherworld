@@ -6,7 +6,12 @@ export enum GameItem {
     GOLD_RING = "GOLD_RING",
     GOLD_COIN = "GOLD_COIN",
 
-    WEAPON_WOOD_STICK = "WEAPON_WOOD_STICK"
+    WEAPON_WOOD_STICK = "WEAPON_WOOD_STICK",
+
+    EQUIPMENT_CHEST = "EQUIPMENT_CHEST",
+    EQUIPMENT_GREAVES = "EQUIPMENT_GREAVES",
+    EQUIPMENT_SHIELD = "EQUIPMENT_SHIELD",
+    EQUIPMENT_HELMET = "EQUIPMENT_HELMET",
 }
 
 export type GameItemMap = {
@@ -88,5 +93,65 @@ export const GameItems: GameItemMap = {
         name: "Gold Coin",
         description: "A coin of gold, marked with the image of the Emperor",
         dropSize: 0.4
+    },
+    [GameItem.EQUIPMENT_HELMET]: {
+        id: GameItem.EQUIPMENT_HELMET,
+        spriteIcon: "equipment_helmet",
+        stackable: false,
+        name: "Helmet",
+        type: ItemType.EQUIPMENT,
+        onEquip: [
+            {
+                type: EffectType.HEALTH_INCREASE,
+                points: 1
+            }
+        ],
+        equipmentType: EquipmentType.HELMET,
+        description: "[Description]",
+    },
+    [GameItem.EQUIPMENT_CHEST]: {
+        id: GameItem.EQUIPMENT_CHEST,
+        spriteIcon: "equipment_chestplate",
+        stackable: false,
+        name: "Chestplate",
+        type: ItemType.EQUIPMENT,
+        onEquip: [
+            {
+                type: EffectType.HEALTH_INCREASE,
+                points: 1
+            }
+        ],
+        equipmentType: EquipmentType.BODY,
+        description: "[Description]",
+    },
+    [GameItem.EQUIPMENT_SHIELD]: {
+        id: GameItem.EQUIPMENT_SHIELD,
+        spriteIcon: "equipment_shield",
+        stackable: false,
+        name: "Shield",
+        type: ItemType.EQUIPMENT,
+        onEquip: [
+            {
+                type: EffectType.HEALTH_INCREASE,
+                points: 1
+            }
+        ],
+        equipmentType: EquipmentType.SHIELD,
+        description: "[Description]",
+    },
+    [GameItem.EQUIPMENT_GREAVES]: {
+        id: GameItem.EQUIPMENT_GREAVES,
+        spriteIcon: "equipment_greaves",
+        stackable: false,
+        name: "Greaves",
+        type: ItemType.EQUIPMENT,
+        onEquip: [
+            {
+                type: EffectType.HEALTH_INCREASE,
+                points: 1
+            }
+        ],
+        equipmentType: EquipmentType.SHOES,
+        description: "[Description]",
     }
 };
