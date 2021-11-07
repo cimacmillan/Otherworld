@@ -9,7 +9,12 @@ export enum EffectType {
     HEALS_SELF = "HEALS_SELF",
     DAMAGES_TARGET = "DAMAGES_TARGET",
     DAMAGES_TARGET_IN_RANGE = "DAMAGES_TARGET_IN_RANGE",
-    HEALTH_INCREASE = "HEALTH_INCREASE"
+    HEALTH_INCREASE = "HEALTH_INCREASE",
+    ANCIENT_POWER = "ANCIENT_POWER",
+    ATTACK_SPEED_INCREASE = "ATTACK_SPEED_INCREASE",
+    ACCURACY_INCREASE = "ACCURACY_INCREASE",
+    PROTECTION_INCREASE = "PROTECTION_INCREASE",
+    SPEED_INCREASE = "SPEED_INCREASE"
 }
 
 export interface HealsPlayer {
@@ -33,7 +38,35 @@ export interface DamagesTargetInRange {
     b: number
 }
 
-export type Effect = HealsPlayer | DamagesTarget | HealthIncreasePlayer | DamagesTargetInRange;
+export interface AncientPower {
+    type: EffectType.ANCIENT_POWER;
+}
+
+export interface AttackSpeedIncrease {
+    type: EffectType.ATTACK_SPEED_INCREASE;
+}
+
+export interface AccuracyIncrease {
+    type: EffectType.ACCURACY_INCREASE;
+}
+
+export interface ProtectionIncrease {
+    type: EffectType.PROTECTION_INCREASE;
+}
+
+export interface SpeedIncrease {
+    type: EffectType.SPEED_INCREASE;
+}
+
+export type Effect = HealsPlayer | 
+    DamagesTarget | 
+    HealthIncreasePlayer | 
+    DamagesTargetInRange | 
+    AncientPower |
+    AttackSpeedIncrease |
+    AccuracyIncrease | 
+    ProtectionIncrease |
+    SpeedIncrease;
 
 export type EffectContext = ({
     type: "PLAYER";
@@ -58,5 +91,6 @@ export const getEffect = (effects: Effect): ItemEffectActions => {
         case EffectType.DAMAGES_TARGET_IN_RANGE: return EffectDamagesTargetInRange(effects);
         case EffectType.HEALTH_INCREASE: return EffectIncreaseHealthPlayer(effects);
     }
+    return emptyItemActions;
 }
 

@@ -1,5 +1,5 @@
 import { randomInt } from "crypto";
-import { createBasicFood, createBasicSword, GameItem, GameItems } from "../../../resources/manifests/Items";
+import { createAncientSword, createBasicFood, createBasicSword, GameItem, GameItems } from "../../../resources/manifests/Items";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
 import { randomFloatRange, vec } from "../../../util/math";
@@ -25,6 +25,7 @@ const STARTING_ITEMS: ItemDropDistribution = [
     [GameItems[GameItem.EQUIPMENT_GREAVES], 1, 1],
     [GameItems[GameItem.EQUIPMENT_HELMET], 1, 1],
     [GameItems[GameItem.EQUIPMENT_SHIELD], 1, 1],
+    [createAncientSword(), 1, 1]
 ];
 
 const CANDY = createBasicFood("food_candy", "Candy", "Hard and sweet", 1);
@@ -80,7 +81,7 @@ function addChest(entity: Entity<ScriptState>) {
             break;
         case 20: 
             items = [
-                ...OTHER_ITEMS, [createBasicSword("weapon_demon_staff", "Demon staff", "A dark staff from the realm of the otherworld", 25), 1, 1]
+                ...OTHER_ITEMS, [createAncientSword(), 1, 1]
             ];
             break;
         default: 
