@@ -1,7 +1,7 @@
 import { GameItem } from "../../resources/manifests/Items";
 import { InputState } from "../../services/input/InputService";
 import { ServiceLocator } from "../../services/ServiceLocator";
-import { getEffect } from "../scripting/effects/Effects";
+import { getEffect, inverse } from "../scripting/effects/Effects";
 import { EntityFactory } from "../scripting/factory/EntityFactory";
 import {
     createItemDropState,
@@ -97,6 +97,11 @@ export const UnequipItemFromInventory =  (serviceLocator: ServiceLocator, item: 
     playerInventory.equipped[item.equipmentType] = undefined;
     AddItemToInventory(playerInventory, item);
     item.onUnEquip?.forEach(effect => getEffect(effect).onTrigger({
+        type: "PLAYER",
+        player: serviceLocator.getScriptingService().getPlayer(),
+        serviceLocator
+    }));
+    item.onEquip?.forEach(effect => getEffect(inverse(effect)).onTrigger({
         type: "PLAYER",
         player: serviceLocator.getScriptingService().getPlayer(),
         serviceLocator

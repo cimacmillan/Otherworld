@@ -28,7 +28,8 @@ export const EffectDamagesTarget = (params: DamagesTarget): ItemEffectActions =>
     return {
         onTrigger: (context: EffectContext) => {
             damageTargets(context, params.points);
-        }
+        },
+        onTriggerInverse: () => {}
     };
 }
 
@@ -37,6 +38,7 @@ export const EffectDamagesTargetInRange = (params: DamagesTargetInRange): ItemEf
         onTrigger: (context: EffectContext) => {
             const rand = randomIntRange(params.a, params.b + 1);
             damageTargets(context, rand);
-        }
+        },
+        onTriggerInverse: () => {}
     };
 }

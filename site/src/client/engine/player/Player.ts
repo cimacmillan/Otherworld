@@ -34,6 +34,8 @@ export interface PlayerSerialisation {
     };
 }
 
+const BASE_HEALTH = 10;
+
 const getDefaultPlayerState = (): PlayerSerialisation => ({
     inventory: getEmptyInventory(),
     surface: {
@@ -52,7 +54,7 @@ const getDefaultPlayerState = (): PlayerSerialisation => ({
     },
     health: {
         current: 10,
-        max: 10
+        max: BASE_HEALTH
     }
 });
 
@@ -199,6 +201,19 @@ export class Player {
             this.state.surface.velocity.x += normal.x * force;
             this.state.surface.velocity.y += normal.y * force;
         }
+    }
+
+    public setHealthBonus(amount: number) {
+        const diff = amount - this.state.health.max;
+        this.state.health.current += diff;
+        this.state.health.max = amount;
+        if (this.state.health.current <= 0) {
+            this.state.health.current = 1;
+        }
+    }
+
+    public getHealthBonus() {
+        return this.state.health.max;
     }
 
     public onHealed(amount: number) {
