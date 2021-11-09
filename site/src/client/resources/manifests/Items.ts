@@ -192,7 +192,7 @@ export const GameItems: GameItemMap = {
                 points: 30
             },
             {
-                type: EffectType.ATTACK_SPEED_INCREASE,
+                type: EffectType.SPEED_INCREASE,
             }
         ],
         equipmentType: EquipmentType.SHOES,

@@ -2,7 +2,17 @@ import { AccuracyIncrease, EffectContext, ItemEffectActions, SpeedIncrease } fro
 
 export const EffectSpeedIncrease = (params: SpeedIncrease): ItemEffectActions => {
     return {
-        onTrigger: (context: EffectContext) => {},
-        onTriggerInverse: (context: EffectContext) => {},
+        onTrigger: (context: EffectContext) => {
+            if (context.type === "PLAYER") {
+                const state = context.player.getMutableState();
+                state.bonuses.moveSpeed = true;
+            }
+        },
+        onTriggerInverse: (context: EffectContext) => {
+            if (context.type === "PLAYER") {
+                const state = context.player.getMutableState();
+                state.bonuses.moveSpeed = false;
+            }
+        },
     };
 }

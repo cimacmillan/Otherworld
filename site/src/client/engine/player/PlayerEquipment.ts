@@ -12,7 +12,7 @@ import { ActionDelay } from "../../util/time/ActionDelay";
 import { setFPSProportion } from "../../util/time/GlobalFPSController";
 import { EffectContext, getEffect } from "../scripting/effects/Effects";
 import { EquipableItem, EquipmentType } from "../scripting/items/ItemTypes";
-import { Player } from "./Player";
+import { Player, PlayerBonuses } from "./Player";
 
 const PLAYER_WEAPON_SPRITE_ANGLE = toRadians(-45);
 const PLAYER_WEAPON_ARM_ANGLE = toRadians(30);
@@ -62,6 +62,7 @@ export class PlayerEquipment {
         private getPlayer: () => Player,
         private getPlayerPosition: () => vec3,
         private getPlayerAngle: () => number,
+        private getBonuses: () => PlayerBonuses
         ) {}
 
     public init() {
@@ -129,6 +130,13 @@ export class PlayerEquipment {
     }
 
     public attack() {
+        if (this.getBonuses().attackSpeed) {
+            this.attackDelay.setDelay(PLAYER_ATTACK_SPEED / 2);
+            this.weaponAnimation.speed(PLAYER_ATTACK_SPEED / 2);
+        } else {
+            this.attackDelay.setDelay(PLAYER_ATTACK_SPEED);
+            this.weaponAnimation.speed(PLAYER_ATTACK_SPEED);
+        }
         if (this.weapon && this.attackDelay.canAction()) {
             this.attackDelay.onAction();
             this.weaponAnimation.stop();

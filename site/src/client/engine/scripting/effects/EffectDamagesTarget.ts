@@ -36,7 +36,7 @@ export const EffectDamagesTarget = (params: DamagesTarget): ItemEffectActions =>
 export const EffectDamagesTargetInRange = (params: DamagesTargetInRange): ItemEffectActions => {
     return {
         onTrigger: (context: EffectContext) => {
-            const rand = randomIntRange(params.a, params.b + 1);
+            const rand = (context.type === "PLAYER" && context.player.getMutableState().bonuses.accuracy) ? params.b : randomIntRange(params.a, params.b + 1);
             damageTargets(context, rand);
         },
         onTriggerInverse: () => {}

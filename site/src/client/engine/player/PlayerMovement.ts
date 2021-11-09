@@ -9,6 +9,7 @@ import { fpsNorm } from "../../util/time/GlobalFPSController";
 import { ActionSwitch } from "../../util/time/Switch";
 import { TurnDirection, WalkDirection } from "../commands/PlayerCommands";
 import { PhysicsStateType } from "../components/core/PhysicsComponent";
+import { PlayerBonuses } from "./Player";
 
 const WALK_SPEED = 0.02;
 const TURN_SPEED = 0.15;
@@ -26,7 +27,8 @@ export class PlayerMovement {
         private serviceLocator: ServiceLocator,
         private getSurface: () => PhysicsStateType,
         private setVelocity: (vec: Vector2D) => void,
-        private setAngle: (angle: number) => void
+        private setAngle: (angle: number) => void,
+        private getBonuses: () => PlayerBonuses
     ) {
         this.walkNoiseDelay = new ActionDelay(400);
         this.headbob = animation((x: number) => {
@@ -78,7 +80,8 @@ export class PlayerMovement {
 
     public walk(direction: WalkDirection) {
         this.walking.onPerformed();
-        const speed = fpsNorm(WALK_SPEED);
+        const walkSpeed = this.getBonuses().moveSpeed ? WALK_SPEED * 2 : WALK_SPEED;
+        const speed = fpsNorm(walkSpeed);
         let camera_add = { x: 0, y: 0 };
         const { angle } = this.getSurface();
         switch (direction) {

@@ -25,6 +25,15 @@ import { createBasicFood } from "../../resources/manifests/Items";
 
 type InternalEntityState = PhysicsStateType & HealthState & CameraState;
 
+export interface PlayerBonuses {
+    moveSpeed: boolean,
+    accuracy: boolean,
+    ancientPowerCount: number,
+    ancientPower: boolean,
+    attackSpeed: boolean,
+    protection: boolean
+}
+
 export interface PlayerSerialisation {
     inventory: Inventory;
     surface: PhysicsStateType;
@@ -32,6 +41,7 @@ export interface PlayerSerialisation {
         current: number, 
         max: number
     };
+    bonuses: PlayerBonuses
 }
 
 const BASE_HEALTH = 10;
@@ -55,6 +65,14 @@ const getDefaultPlayerState = (): PlayerSerialisation => ({
     health: {
         current: 10,
         max: BASE_HEALTH
+    },
+    bonuses: {
+        moveSpeed: false,
+        accuracy: false,
+        ancientPowerCount: 0,
+        ancientPower: false,
+        attackSpeed: false,
+        protection: false
     }
 });
 
@@ -80,7 +98,8 @@ export class Player {
             this.serviceLocator,
             () => this.state.surface,
             (vec: Vector2D) => (this.state.surface.velocity = vec),
-            (ang: number) => (this.state.surface.angle = ang)
+            (ang: number) => (this.state.surface.angle = ang),
+            () => this.state.bonuses
         );
 
         this.equipment = new PlayerEquipment(
@@ -90,7 +109,8 @@ export class Player {
                 const { x, y } = this.state.surface.position;
                 return [x, this.state.surface.height, y];
             },
-            () => this.state.surface.angle
+            () => this.state.surface.angle,
+            () => this.state.bonuses
         );
 
         this.physicsRegistration = {
@@ -183,7 +203,8 @@ export class Player {
         });
     }
 
-    public onDamage(amount: number, push: Vector2D) {
+    public onDamage(amountBeforeBonus: number, push: Vector2D) {
+        const amount = this.state.bonuses.protection ? amountBeforeBonus / 2 : amountBeforeBonus;
         this.state.health.current -= amount;
         if (this.state.health.current <= 0) {
             this.state.health.current = 0;
@@ -210,6 +231,11 @@ export class Player {
         if (this.state.health.current <= 0) {
             this.state.health.current = 1;
         }
+    }
+
+    // Crap but it works
+    public getMutableState() {
+        return this.state;
     }
 
     public getHealthBonus() {

@@ -7,6 +7,10 @@ export class ActionDelay {
         this.delay = delay;
     }
 
+    public setDelay(delay: number) {
+        this.delay = delay;
+    }
+
     public canAction(): boolean {
         return this.canPerform;
     }
