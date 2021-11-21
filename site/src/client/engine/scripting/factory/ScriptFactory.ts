@@ -102,10 +102,13 @@ function fib(x: number): number {
 }
 
 function getSpawnPoint(entity: Entity<ScriptState>): Vector2D {
-    const { stage, position } = entity.getState();
+    const { stage, position} = entity.getState();
     const serviceLocator = entity.getServiceLocator();
     const allSpawnPoints = serviceLocator.getMapService().getSpawnPoints();
     const enemySpawnPoints = allSpawnPoints.filter(spawn => spawn.name.includes("SPAWN"));
+    if (stage === 21) {
+        return position;
+    }
     return enemySpawnPoints[(stage - 1) % enemySpawnPoints.length].position;
 }
 
@@ -145,6 +148,14 @@ function addEnemy(entity: Entity<ScriptState>) {
     });
 }
 
+function endGame(entity: Entity<ScriptState>) {
+    const serviceLocator = entity.getServiceLocator();
+    const player = serviceLocator.getScriptingService().getPlayer();
+    player.getMutableState().beatenGame = true;
+    serviceLocator.getStore().getActions().onBeatGame();
+    console.log("Game over");
+}
+
 enum LevelStage {
     SPAWN_REWARD = "SPAWN_REWARD",
     OPEN_CHEST = "OPEN_CHEST",
@@ -172,6 +183,9 @@ export function createScript(
                     getActions: (entity: Entity<ScriptState>) => ({
                         onEntityCreated: () => {
                             const { stage } = entity.getState();
+                            // if (stage === 21) {
+                                endGame(entity);
+                            // }
                             entity.setState({
                                 levelStage: LevelStage.OPEN_CHEST
                             })

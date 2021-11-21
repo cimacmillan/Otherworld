@@ -41,7 +41,8 @@ export interface PlayerSerialisation {
         current: number, 
         max: number
     };
-    bonuses: PlayerBonuses
+    bonuses: PlayerBonuses,
+    beatenGame: boolean;
 }
 
 const BASE_HEALTH = 10;
@@ -73,7 +74,8 @@ const getDefaultPlayerState = (): PlayerSerialisation => ({
         ancientPower: false,
         attackSpeed: false,
         protection: false
-    }
+    },
+    beatenGame: false
 });
 
 export class Player {
