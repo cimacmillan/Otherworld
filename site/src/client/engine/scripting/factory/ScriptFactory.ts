@@ -10,6 +10,7 @@ import { ItemDropDistribution } from "../items/ItemDrops";
 import { createChestState } from "./ChestFactory";
 import { EntityFactory } from "./EntityFactory";
 import { createNPCState } from "./NPCFactory";
+import { NPCTypes } from "./NPCTypes";
 
 interface ScriptState {
     position: Vector2D;
@@ -108,11 +109,15 @@ function getSpawnPoint(entity: Entity<ScriptState>): Vector2D {
     return enemySpawnPoints[(stage - 1) % enemySpawnPoints.length].position;
 }
 
-function getNpcType() {
-    let npcTypeId = "slime";
-    if (randomFloatRange(0, 1) < 0.4) {
-        npcTypeId = "jailor";
-    }
+function getNpcType(stage: number): string {
+    // let npcTypeId = "slime";
+    // if (randomFloatRange(0, 1) < 0.4) {
+    //     npcTypeId = "jailor";
+    // }
+    // if x(stage === 20) {
+    //     npcTypeId = "boss";
+    // }
+    let npcTypeId = "boss"
     return npcTypeId;
 }
 
@@ -131,7 +136,7 @@ function addEnemy(entity: Entity<ScriptState>) {
        
         const enemy = EntityFactory.NPC_BULKY_MAN(serviceLocator, createNPCState({
             position: spawnPoint,
-            npcTypeId: getNpcType()
+            npcTypeId: getNpcType(stage)
         }));
         serviceLocator.getWorld().addEntity(enemy);
     }

@@ -47,7 +47,7 @@ export const emptyActions = {
     onPlayerInventoryClosed: () => {},
     onPlayerItemEquipped: (item: Item) => {},
 
-    onDamagedByPlayer: (damage: number) => {},
+    onDamagedByPlayer: (damage: number, ancientPower: boolean) => {},
     
 
     // Game script events

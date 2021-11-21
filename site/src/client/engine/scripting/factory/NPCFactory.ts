@@ -47,14 +47,20 @@ type NPCState = SpriteRenderState &
                 HealthState & {
                     behaviour: NPCBehaviour,
                     itemDrops: ItemDropDistribution,
-                    npcType: NPCType
+                    npcType: NPCType,
+                    boss?: boolean,
+                    damage: number
                 };
 
 
 const LosesHealthWhenDamaged = () => {
     return ({
-        getActions: (entity: Entity<HealthState>) => ({
-            onDamagedByPlayer: (points: number) => {
+        getActions: (entity: Entity<NPCState>) => ({
+            onDamagedByPlayer: (points: number, ancientPower: boolean) => {
+                if (entity.getState().boss && !ancientPower) {
+                    return;
+                }
+                console.log("Lost health");
                 let health = entity.getState().health - points;
                 health = health < 0 ? 0 : health;
                 entity.setState({
@@ -85,9 +91,17 @@ const ReboundsWhenDamaged = (force = 0.1) => {
 const RendersTextWhenDamaged = () => {
     return ({
         getActions: (entity: Entity<NPCState>) => ({
-            onDamagedByPlayer: (points: number) => {
+            onDamagedByPlayer: (points: number, ancientPower: boolean) => {
                 const { position, height, spriteHeight, health } = entity.getState();
                 const vector: vec3 = [position.x, height + spriteHeight/2, position.y];
+                if (entity.getState().boss && !ancientPower) {
+                    entity.getServiceLocator().getParticleService().addParticle(DamageTextParticle({ 
+                        damage: 0, 
+                        start: vector,
+                        getAngle: () => entity.getServiceLocator().getScriptingService().getPlayer().getAngle()
+                    }))
+                    return;
+                }
                 entity.getServiceLocator().getParticleService().addParticle(HealthDropParticle({ 
                     damage: health, 
                     start: vector,
@@ -138,17 +152,17 @@ const OnDamagedByPlayer = (onDamaged: (entity: Entity<NPCState>) => void) => {
     }
 }
 
-const WalksTowardsPlayer = (): EntityComponent<PhysicsStateType> => {
+const WalksTowardsPlayer = (): EntityComponent<NPCState> => {
     return ({
         getActions: (entity: Entity<PhysicsStateType>) => ({
 
         }),
-        update: (entity: Entity<PhysicsStateType>) => {
+        update: (entity: Entity<NPCState>) => {
             const playerPos = entity.getServiceLocator().getScriptingService().getPlayer().getPositon();
             const pos = entity.getState().position;
             const diff = vec.vec_sub(playerPos, pos);
             const norm = vec.vec_normalize(diff);
-            const speed = vec.vec_mult_scalar(norm, 0.01);
+            const speed = vec.vec_mult_scalar(norm, 0.01 * entity.getState().npcType.speed);
             const newVelocity = vec.vec_add(entity.getState().velocity, speed);
             entity.setState({
                 velocity: newVelocity
@@ -274,9 +288,9 @@ const AttackingBehaviour = (state: NPCState): EntityComponent<NPCState>[] => {
         {
             getActions: (entity: Entity<NPCState>) => ({
                 onEntityCreated: () => {
-                    const { spriteWidth, spriteHeight } = entity.getState().npcType;
+                    const { spriteWidth, spriteHeight, damage } = entity.getState().npcType;
                     const hitSprite = randomSelection(entity.getState().npcType.spriteAttack);
-                    entity.getServiceLocator().getScriptingService().getPlayer().onDamage(1, entity.getState().position);
+                    entity.getServiceLocator().getScriptingService().getPlayer().onDamage(damage, entity.getState().position);
                     entity.setState({
                         sprite: hitSprite
                     });
@@ -321,22 +335,37 @@ const onNPCDeath = (entity: Entity<NPCState>) => {
 
 const SPAWN_TIME_MS = 500;
 function SpawningBehaviour(state: NPCState): EntityComponent<NPCState>[] {
-    const { position } = state;
+    const { position, boss } = state;
+    const spawnTime = boss ? SPAWN_TIME_MS * 2 : SPAWN_TIME_MS;
     return [
         {
             getActions: (entity: Entity<NPCState>) => ({
                 onEntityCreated: () => {
-                    const smokeEmitter = SpawnEmitter({
+                    const purpleEmitter = SpawnEmitter({
                         creator: pos => SpawnParticle({
                             start: pos
                         }),
                         position: [position.x, 0, position.y],
-                        rate: 0.5
+                        rate: entity.getState().boss ? 1 : 0.5
                     });
-                    entity.getServiceLocator().getParticleService().addEmitter(smokeEmitter.emitter);
+                    entity.getServiceLocator().getParticleService().addEmitter(purpleEmitter.emitter);
                     ProcedureService.setGameTimeout(() => {
-                        entity.getServiceLocator().getParticleService().removeEmitter(smokeEmitter.emitter);
-                    }, SPAWN_TIME_MS);
+                        entity.getServiceLocator().getParticleService().removeEmitter(purpleEmitter.emitter);
+                    }, spawnTime);
+                
+                    if (boss) {
+                        const smokeEmitter = BurstEmitter({
+                            creator: pos => SmokeParticle({
+                                start: pos
+                            }),
+                            position: [position.x, 0, position.y],
+                            rate: 0.5
+                        });
+                        entity.getServiceLocator().getParticleService().addEmitter(smokeEmitter.emitter);
+                        ProcedureService.setGameTimeout(() => {
+                            entity.getServiceLocator().getParticleService().removeEmitter(smokeEmitter.emitter);
+                        }, spawnTime);
+                    }
                 }
             })
         },
@@ -344,7 +373,7 @@ function SpawningBehaviour(state: NPCState): EntityComponent<NPCState>[] {
             entity.setState({
                 behaviour: NPCBehaviour.IDLE
             })
-        }, SPAWN_TIME_MS)
+        }, spawnTime)
     ];
 }
 
@@ -390,7 +419,7 @@ export function createNPCState(
 ): NPCState {
     const { position, npcTypeId } = args;
     const npcType = NPCTypes[npcTypeId];
-    const { health, itemDropId, spriteIdle, spriteWidth, spriteHeight } = npcType;
+    const { health, itemDropId, spriteIdle, spriteWidth, spriteHeight, boss, damage } = npcType;
     const itemDrops = ITEM_DROP_MAP[itemDropId];
     return {
         npcType,
@@ -411,7 +440,9 @@ export function createNPCState(
         collidesEntities: true,
         collidesWalls: true,
         health,
-        itemDrops
+        itemDrops,
+        boss,
+        damage
     };
 }
 

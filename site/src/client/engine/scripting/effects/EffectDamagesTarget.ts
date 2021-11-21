@@ -18,7 +18,7 @@ function damageTargets(context: EffectContext, amount: number) {
         interacts.forEach(interact => {
             const source = interact.source;
             if (source.type === InteractionSourceType.ENTITY) {
-                source.entity.getActions().onDamagedByPlayer(amount);
+                source.entity.getActions().onDamagedByPlayer(amount, player.getMutableState().bonuses.ancientPower);
             }
         });
     }
