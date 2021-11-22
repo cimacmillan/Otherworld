@@ -106,34 +106,33 @@ function getSpawnPoint(entity: Entity<ScriptState>): Vector2D {
     const serviceLocator = entity.getServiceLocator();
     const allSpawnPoints = serviceLocator.getMapService().getSpawnPoints();
     const enemySpawnPoints = allSpawnPoints.filter(spawn => spawn.name.includes("SPAWN"));
-    if (stage === 21) {
+    if (stage === 20) {
         return position;
     }
     return enemySpawnPoints[(stage - 1) % enemySpawnPoints.length].position;
 }
 
 function getNpcType(stage: number): string {
-    // let npcTypeId = "slime";
-    // if (randomFloatRange(0, 1) < 0.4) {
-    //     npcTypeId = "jailor";
-    // }
-    // if x(stage === 20) {
-    //     npcTypeId = "boss";
-    // }
-    let npcTypeId = "boss"
+    let npcTypeId = "slime";
+    if (randomFloatRange(0, 1) < 0.4) {
+        npcTypeId = "jailor";
+    }
+    if (stage === 20) {
+        npcTypeId = "boss";
+    }
     return npcTypeId;
 }
 
 function addEnemy(entity: Entity<ScriptState>) {
     const { stage } = entity.getState();
     const serviceLocator = entity.getServiceLocator();
-    const severity = fib(stage);
+    const severity = stage === 20 ? 1 : stage;
     for (let x = 0; x < severity; x ++) {
         const spawnPoint = vec.vec_add(
             getSpawnPoint(entity),
             {
-                x: randomFloatRange(-1, 1),
-                y: randomFloatRange(-1, 1),
+                x: randomFloatRange(-2, 2),
+                y: randomFloatRange(-2, 2),
             }
         );
        
@@ -146,14 +145,6 @@ function addEnemy(entity: Entity<ScriptState>) {
     entity.setState({
         activeEnemies: severity
     });
-}
-
-function endGame(entity: Entity<ScriptState>) {
-    const serviceLocator = entity.getServiceLocator();
-    const player = serviceLocator.getScriptingService().getPlayer();
-    player.getMutableState().beatenGame = true;
-    serviceLocator.getStore().getActions().onBeatGame();
-    console.log("Game over");
 }
 
 enum LevelStage {
@@ -182,10 +173,6 @@ export function createScript(
                 [LevelStage.SPAWN_REWARD]: JoinComponent([{
                     getActions: (entity: Entity<ScriptState>) => ({
                         onEntityCreated: () => {
-                            const { stage } = entity.getState();
-                            // if (stage === 21) {
-                                endGame(entity);
-                            // }
                             entity.setState({
                                 levelStage: LevelStage.OPEN_CHEST
                             })
@@ -197,6 +184,10 @@ export function createScript(
                     getActions: (entity: Entity<ScriptState>) => ({
                         onChestOpened: () => {
                             const { stage } = entity.getState();
+                            if (stage === 20) {
+                                entity.getServiceLocator().getScriptingService().onBeatGame();
+                                return;
+                            }
                             entity.setState({
                                 stage: stage + 1,
                             })

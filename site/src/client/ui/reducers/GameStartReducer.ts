@@ -1,6 +1,8 @@
 import { Reducer } from "@cimacmillan/refunc";
 import { Actions } from "../../Actions";
 
+type MenuType = "MAIN" | "CREDITS";
+
 export interface GameStartState {
     showingMenu: boolean;
     showingFade: boolean;
@@ -8,6 +10,7 @@ export interface GameStartState {
     fps: number;
     currentStage: number;
     maxStage: number;
+    menu: MenuType;
 }
 
 export const gameStartReducer: Reducer<GameStartState, Actions> = {
@@ -17,18 +20,21 @@ export const gameStartReducer: Reducer<GameStartState, Actions> = {
         gameLoadPercentage: 0,
         fps: 0,
         currentStage: 0,
-        maxStage: 0
+        maxStage: 0,
+        menu: "MAIN"
     },
     actions: {
         startGame: (state: GameStartState) => ({
             ...state,
             showingMenu: false,
             showingFade: false,
+            menu: "MAIN"
         }),
         stopGame: (state) => ({
             ...state,
             showingMenu: true,
             showingFade: true,
+            menu: "MAIN"
         }),
         fadeBackground: (state: GameStartState) => ({
             ...state,
@@ -56,6 +62,12 @@ export const gameStartReducer: Reducer<GameStartState, Actions> = {
             showingMenu: stage === 0,
             showingFade: stage === 0,
             maxStage: stage
+        }),
+        onBeatGame: (state: GameStartState) => ({
+            ...state,
+            showingMenu: true,
+            showingFade: true,
+            menu: "CREDITS"
         })
     },
 };

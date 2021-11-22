@@ -90,10 +90,11 @@ export class Player {
 
     public constructor(
         serviceLocator: ServiceLocator,
-        serialisation?: PlayerSerialisation
+        beatenGame: boolean,
+        serialisation?: PlayerSerialisation,
     ) {
         this.serviceLocator = serviceLocator;
-        this.state = {...getDefaultPlayerState(), ...serialisation};
+        this.state = {...getDefaultPlayerState(), beatenGame, ...serialisation};
         this.interactDelay = new ActionDelay(300);
 
         this.movement = new PlayerMovement(

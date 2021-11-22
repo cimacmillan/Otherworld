@@ -9,6 +9,8 @@ import { store } from "./ui/State";
 // For viewing deployed version
 console.log(VERSION);
 
+(global as any).game = game;
+
 const render = () => {
     ReactDOM.render(
         <gameContext.Provider value={game}>
