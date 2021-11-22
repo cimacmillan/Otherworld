@@ -128,12 +128,13 @@ function addEnemy(entity: Entity<ScriptState>) {
     const serviceLocator = entity.getServiceLocator();
     const severity = stage === 20 ? 1 : stage;
     for (let x = 0; x < severity; x ++) {
+        const randomAdjust = stage === 20 ? {x: 0, y:0} : {
+            x: randomFloatRange(-2, 2),
+            y: randomFloatRange(-2, 2),
+        };
         const spawnPoint = vec.vec_add(
             getSpawnPoint(entity),
-            {
-                x: randomFloatRange(-2, 2),
-                y: randomFloatRange(-2, 2),
-            }
+            randomAdjust
         );
        
         const enemy = EntityFactory.NPC_BULKY_MAN(serviceLocator, createNPCState({
@@ -173,6 +174,11 @@ export function createScript(
                 [LevelStage.SPAWN_REWARD]: JoinComponent([{
                     getActions: (entity: Entity<ScriptState>) => ({
                         onEntityCreated: () => {
+                            const { stage } = entity.getState();
+                            if (stage === 20) {
+                                entity.getServiceLocator().getScriptingService().onBeatGame();
+                                return;
+                            }
                             entity.setState({
                                 levelStage: LevelStage.OPEN_CHEST
                             })
@@ -184,10 +190,6 @@ export function createScript(
                     getActions: (entity: Entity<ScriptState>) => ({
                         onChestOpened: () => {
                             const { stage } = entity.getState();
-                            if (stage === 20) {
-                                entity.getServiceLocator().getScriptingService().onBeatGame();
-                                return;
-                            }
                             entity.setState({
                                 stage: stage + 1,
                             })

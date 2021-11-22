@@ -5,14 +5,13 @@ export const EffectAncientPower = (params: AncientPower): ItemEffectActions => {
         onTrigger: (context: EffectContext) => {
             if (context.type === "PLAYER") {
                 const state = context.player.getMutableState();
-                state.bonuses.ancientPowerCount++;
-                state.bonuses.ancientPower = state.bonuses.ancientPowerCount === 6;
-            }
+                state.bonuses.ancientPowerCount = Math.min(6, state.bonuses.ancientPowerCount + 1);
+                state.bonuses.ancientPower = state.bonuses.ancientPowerCount === 6;            }
         },
         onTriggerInverse: (context: EffectContext) => {
             if (context.type === "PLAYER") {
                 const state = context.player.getMutableState();
-                state.bonuses.ancientPowerCount--;
+                state.bonuses.ancientPowerCount = Math.max(0, state.bonuses.ancientPowerCount - 1);
                 state.bonuses.ancientPower = false;
             }
         },

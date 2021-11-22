@@ -75,6 +75,11 @@ export const EquipItemFromInventory = (serviceLocator: ServiceLocator, item: Equ
             player: serviceLocator.getScriptingService().getPlayer(),
             serviceLocator
         }));
+        alreadyEquipped.onEquip?.forEach(effect => getEffect(inverse(effect)).onTrigger({
+            type: "PLAYER",
+            player: serviceLocator.getScriptingService().getPlayer(),
+            serviceLocator
+        }));
     }
     playerInventory.equipped[item.equipmentType] = item;
     serviceLocator.getStore().getActions().onPlayerItemEquipped(item);

@@ -43,8 +43,11 @@ export class ScriptingService {
         this.serviceLocator.getInputService().setInputState(InputState.MENU);
         this.game.setUpdateWorld(false);
         this.serviceLocator.getStore().getActions().stopGame();
-        this.offloadWorld();
-        this.bootstrapInitialContent(beatenGame);
+
+        setTimeout(() => {
+            this.offloadWorld();
+            this.bootstrapInitialContent(beatenGame);
+        }, 1000);
     }
 
     public onBeatGame() {
@@ -53,8 +56,11 @@ export class ScriptingService {
         const player = this.serviceLocator.getScriptingService().getPlayer();
         player.getMutableState().beatenGame = true;
         this.serviceLocator.getStore().getActions().onBeatGame();
-        this.offloadWorld();
-        this.bootstrapInitialContent(true);
+
+        setTimeout(() => {
+            this.offloadWorld();
+            this.bootstrapInitialContent(true);
+        }, 1000);
     }
 
     public offloadWorld() {
