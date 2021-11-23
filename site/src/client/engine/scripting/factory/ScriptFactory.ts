@@ -105,6 +105,7 @@ function getSpawnPoint(entity: Entity<ScriptState>): Vector2D {
     const { stage, position} = entity.getState();
     const serviceLocator = entity.getServiceLocator();
     const allSpawnPoints = serviceLocator.getMapService().getSpawnPoints();
+
     const enemySpawnPoints = allSpawnPoints.filter(spawn => spawn.name.includes("SPAWN"));
     if (stage === 20) {
         return position;

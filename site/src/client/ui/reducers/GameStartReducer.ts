@@ -59,8 +59,6 @@ export const gameStartReducer: Reducer<GameStartState, Actions> = {
         }),
         onMaxStageReached: (state: GameStartState, stage: number) => ({
             ...state,
-            showingMenu: stage === 0,
-            showingFade: stage === 0,
             maxStage: stage
         }),
         onBeatGame: (state: GameStartState) => ({

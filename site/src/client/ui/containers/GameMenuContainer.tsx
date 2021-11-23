@@ -21,6 +21,7 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
     props
 ) => {
     const [state, dispatch] = useGlobalState();
+
     switch (state.gameStart.menu) {
         case "MAIN":
             return <MainMenuContainer/>;

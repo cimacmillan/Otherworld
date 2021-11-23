@@ -4,13 +4,15 @@ import { DeregisterKeyHint, RegisterKeyHint } from "../commands/UICommands";
 export interface TutorialSerialisation {
     movement: "WALKING" | "TURNING" | "DONE";
     inventory: "NONE" | "OPENED" | "CLOSED" | "DONE";
-    weapon: "NONE" | "DONE"
+    weapon: "NONE" | "DONE";
+    equip: "NONE" | "DONE";
 }
 
 const DEFAULT_STATE: TutorialSerialisation = {
     movement: "WALKING",
     inventory: "NONE",
-    weapon: "NONE"
+    weapon: "NONE",
+    equip: "NONE",
 };
 
 export enum TutorialServiceEvent {
