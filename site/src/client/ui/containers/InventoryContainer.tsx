@@ -10,7 +10,7 @@ import {
     TextSize,
     TextFont,
 } from "../components/TextComponent";
-import { useGlobalState } from "../effects/GlobalState";
+import { useDispatchListener, useGlobalState } from "../effects/GlobalState";
 import { Actions } from "../../Actions";
 import { ShadowComponentStyle } from "../components/ShadowComponent";
 import { SpriteImageComponent } from "../components/SpriteImageComponent";
@@ -245,6 +245,13 @@ const InventoryItems: React.FunctionComponent<{
     onMouseLeave: (item: ItemMetadata) => void;
     onClick: (item: ItemMetadata) => void;
 }> = (props) => {
+    // To busy to fix this properly. This is needed to make the items re-render after being clicked. This is because inventory hasn't changed due to it being a reference and shallow checked.
+    const [dummy, setDummy] = React.useState(false);
+    const onClick = (item: ItemMetadata) => {
+        props.onClick(item)
+        setDummy(!dummy);
+    }
+
     return (
         <div
             style={{
@@ -254,8 +261,9 @@ const InventoryItems: React.FunctionComponent<{
                 height: INVENTORY_HEIGHT,
             }}
         >
-            {props.items.map((item) => (
+            {props.items.filter(item => item.count > 0).map((item) => (
                 <InventoryItemComponent
+                    key={item.id}
                     itemMetadata={item}
                     style={{
                         marginLeft: 8,
@@ -266,7 +274,7 @@ const InventoryItems: React.FunctionComponent<{
                     }}
                     onMouseEnter={() => props.onMouseEnter(item)}
                     onMouseLeave={() => props.onMouseLeave(item)}
-                    onClick={() => props.onClick(item)}
+                    onClick={() => onClick(item)}
                 />
             ))}
         </div>

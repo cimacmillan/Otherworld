@@ -154,6 +154,8 @@ export const RemoveItemFromInventory = (inventory: Inventory, item: Item) => {
     }
 }
 
+let UNIQUE_ITEM_INVENTORY_ID = 0;
+
 export const AddItemToInventory = (inventory: Inventory, item: Item) => {
     let countIncreased = false;
     for (let x = 0; x < inventory.items.length; x++) {
@@ -168,6 +170,7 @@ export const AddItemToInventory = (inventory: Inventory, item: Item) => {
         inventory.items.push({
             item,
             count: 1,
+            id: UNIQUE_ITEM_INVENTORY_ID++
         });
     }
 };
