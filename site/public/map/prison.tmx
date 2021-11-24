@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="7" nextobjectid="133">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="20" tileheight="20" infinite="0" nextlayerid="7" nextobjectid="142">
  <objectgroup id="5" name="Object Layer 1">
   <object id="102" type="Wall" x="660" y="660">
    <properties>
@@ -80,6 +80,54 @@
    <point/>
   </object>
   <object id="132" type="SpawnPoint" x="740" y="780">
+   <properties>
+    <property name="name" value="SPAWN_3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="134" type="SpawnPoint" x="854.235" y="827.508">
+   <properties>
+    <property name="name" value="SPAWN_3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="135" type="SpawnPoint" x="651.727" y="840.872">
+   <properties>
+    <property name="name" value="SPAWN_3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="136" type="SpawnPoint" x="474.918" y="719.572">
+   <properties>
+    <property name="name" value="SPAWN_3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="137" type="SpawnPoint" x="466.694" y="486.225">
+   <properties>
+    <property name="name" value="SPAWN_3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="138" type="SpawnPoint" x="613.692" y="364.926">
+   <properties>
+    <property name="name" value="SPAWN_3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="139" type="SpawnPoint" x="859.375" y="355.674">
+   <properties>
+    <property name="name" value="SPAWN_3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="140" type="SpawnPoint" x="964.227" y="481.086">
+   <properties>
+    <property name="name" value="SPAWN_3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="141" type="SpawnPoint" x="983.758" y="699.013">
    <properties>
     <property name="name" value="SPAWN_3"/>
    </properties>

@@ -1,8 +1,7 @@
-import { randomInt } from "crypto";
 import { createAncientSword, createBasicFood, createBasicSword, GameItem, GameItems } from "../../../resources/manifests/Items";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
-import { randomFloatRange, vec } from "../../../util/math";
+import { randomFloatRange, randomIntRange, vec } from "../../../util/math";
 import { JoinComponent } from "../../components/util/JoinComponent";
 import { SwitchComponent } from "../../components/util/SwitchComponent";
 import { Entity } from "../../Entity";
@@ -57,7 +56,9 @@ function addChest(entity: Entity<ScriptState>) {
             break;
         case 4: 
             items = [
-                ...OTHER_ITEMS, [createBasicSword("weapon_dagger", "Iron dagger", "A small iron dagger.", 4), 1, 1]
+                ...OTHER_ITEMS, 
+                [createBasicSword("weapon_dagger", "Iron dagger", "A small iron dagger.", 4), 1, 1],
+                [GameItems[GameItem.GOLD_RING], 1, 1]
             ];
             break;
         case 6: 
@@ -67,7 +68,9 @@ function addChest(entity: Entity<ScriptState>) {
             break;
         case 8: 
             items = [
-                ...OTHER_ITEMS, [createBasicSword("weapon_heavy_axe", "Heavy axe", "Double sided for extra killing", 14), 1, 1]
+                ...OTHER_ITEMS, 
+                [createBasicSword("weapon_heavy_axe", "Heavy axe", "Double sided for extra killing", 14), 1, 1],
+                [GameItems[GameItem.EQUIPMENT_GREAVES], 1, 1]
             ];
             break;
         case 10: 
@@ -75,12 +78,27 @@ function addChest(entity: Entity<ScriptState>) {
                 ...OTHER_ITEMS, [createBasicSword("weapon_ceremonial_trident", "Ceremonial trident", "A three-pronged spear. Useful for stabbing multiple enemies.", 18), 1, 1]
             ];
             break;
+        case 12: 
+            items = [
+                ...OTHER_ITEMS, [GameItems[GameItem.EQUIPMENT_HELMET], 1, 1]
+            ];
+            break;
         case 14: 
             items = [
                 ...OTHER_ITEMS, [createBasicSword("weapon_magic_sword", "Magic sword", "A sword weilding curious magical power", 21), 1, 1]
             ];
             break;
-        case 20: 
+        case 16: 
+            items = [
+                ...OTHER_ITEMS, [GameItems[GameItem.EQUIPMENT_SHIELD], 1, 1]
+            ];
+            break;
+        case 18: 
+            items = [
+                ...OTHER_ITEMS, [GameItems[GameItem.EQUIPMENT_CHEST], 1, 1]
+            ];
+            break;
+        case 19: 
             items = [
                 ...OTHER_ITEMS, [createAncientSword(), 1, 1]
             ];
@@ -110,7 +128,7 @@ function getSpawnPoint(entity: Entity<ScriptState>): Vector2D {
     if (stage === 20) {
         return position;
     }
-    return enemySpawnPoints[(stage - 1) % enemySpawnPoints.length].position;
+    return enemySpawnPoints[randomIntRange(0, enemySpawnPoints.length)].position;
 }
 
 function getNpcType(stage: number): string {
@@ -127,7 +145,7 @@ function getNpcType(stage: number): string {
 function addEnemy(entity: Entity<ScriptState>) {
     const { stage } = entity.getState();
     const serviceLocator = entity.getServiceLocator();
-    const severity = stage === 20 ? 1 : stage;
+    const severity = stage === 20 ? 1 : ((stage - 1) * 2) + 1;
     for (let x = 0; x < severity; x ++) {
         const randomAdjust = stage === 20 ? {x: 0, y:0} : {
             x: randomFloatRange(-2, 2),
