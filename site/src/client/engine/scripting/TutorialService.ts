@@ -5,7 +5,7 @@ export interface TutorialSerialisation {
     movement: "WALKING" | "TURNING" | "DONE";
     inventory: "NONE" | "OPENED" | "CLOSED" | "DONE";
     weapon: "NONE" | "DONE";
-    equip: "NONE" | "DONE";
+    equip: "NONE" | "PICKED_UP" | "DONE";
 }
 
 const DEFAULT_STATE: TutorialSerialisation = {
@@ -107,6 +107,9 @@ export class TutorialService {
                     this.register(HINTS.inventory);
                     this.state.inventory = "OPENED";
                 }
+                if (this.state.equip === "NONE") {
+                    this.state.equip = "PICKED_UP";
+                }
                 break;
             case TutorialServiceEvent.OPEN_INVENTORY:
                 if (this.state.inventory === "OPENED") {
@@ -124,6 +127,9 @@ export class TutorialService {
             case TutorialServiceEvent.EQUIPED_WEAPON:
                 if (this.state.weapon === "NONE") {
                     this.register(HINTS.attack)
+                }
+                if (this.state.equip === "PICKED_UP") {
+                    this.state.equip = "DONE";
                 }
                 break;
             case TutorialServiceEvent.UNEQUIPED_WEAPON:
@@ -144,6 +150,10 @@ export class TutorialService {
         for (const key in HINTS) {
             this.deregister(HINTS[key]);
         }
+    }
+
+    public shouldShowEquipHint(): boolean {
+        return this.state.equip === "PICKED_UP";
     }
 
     private register(hint: KeyHint) {

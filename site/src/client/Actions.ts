@@ -54,7 +54,7 @@ export const emptyActions = {
     onChestOpened: () => {},
     onEnemyKilled: () => {},
     onStageReached: (stage: number) => {},
-    onMaxStageReached: (stage: number) => {}
+    onMaxStageReached: (stage: number) => {},
 
 }
 
