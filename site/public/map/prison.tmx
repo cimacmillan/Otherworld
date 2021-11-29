@@ -85,49 +85,49 @@
    </properties>
    <point/>
   </object>
-  <object id="134" type="SpawnPoint" x="854.235" y="827.508">
+  <object id="134" type="SpawnPoint" x="810.033" y="814.145">
    <properties>
     <property name="name" value="SPAWN_3"/>
    </properties>
    <point/>
   </object>
-  <object id="135" type="SpawnPoint" x="651.727" y="840.872">
+  <object id="135" type="SpawnPoint" x="671.258" y="810.033">
    <properties>
     <property name="name" value="SPAWN_3"/>
    </properties>
    <point/>
   </object>
-  <object id="136" type="SpawnPoint" x="474.918" y="719.572">
+  <object id="136" type="SpawnPoint" x="518.092" y="678.454">
    <properties>
     <property name="name" value="SPAWN_3"/>
    </properties>
    <point/>
   </object>
-  <object id="137" type="SpawnPoint" x="466.694" y="486.225">
+  <object id="137" type="SpawnPoint" x="517.064" y="515.008">
    <properties>
     <property name="name" value="SPAWN_3"/>
    </properties>
    <point/>
   </object>
-  <object id="138" type="SpawnPoint" x="613.692" y="364.926">
+  <object id="138" type="SpawnPoint" x="653.783" y="372.122">
    <properties>
     <property name="name" value="SPAWN_3"/>
    </properties>
    <point/>
   </object>
-  <object id="139" type="SpawnPoint" x="859.375" y="355.674">
+  <object id="139" type="SpawnPoint" x="836.76" y="378.289">
    <properties>
     <property name="name" value="SPAWN_3"/>
    </properties>
    <point/>
   </object>
-  <object id="140" type="SpawnPoint" x="964.227" y="481.086">
+  <object id="140" type="SpawnPoint" x="949.836" y="526.316">
    <properties>
     <property name="name" value="SPAWN_3"/>
    </properties>
    <point/>
   </object>
-  <object id="141" type="SpawnPoint" x="983.758" y="699.013">
+  <object id="141" type="SpawnPoint" x="950.863" y="680.51">
    <properties>
     <property name="name" value="SPAWN_3"/>
    </properties>

@@ -28,16 +28,16 @@ const STARTING_ITEMS: ItemDropDistribution = [
     // [createAncientSword(), 1, 1]
 ];
 
-const CANDY = createBasicFood("food_candy", "Candy", "Hard and sweet", 1);
+const CANDY = createBasicFood("food_candy", "Candy", "Hard and sweet", 2);
 
 const OTHER_ITEMS: ItemDropDistribution = [
     [CANDY, [0, 0.1], 5],
     [CANDY, [0.1, 0.5], 2],
     [CANDY, 1, 1],
 
-    [createBasicFood("food_carrot", "Carrot", "Crunchy and helps you see in the dark", 2), 0.5, 1],
+    [createBasicFood("food_carrot", "Carrot", "Crunchy and helps you see in the dark", 5), 0.5, 1],
     [createBasicFood("food_apple", "Apple", "It feels waxy", 10), 0.2, 1],
-    [createBasicFood("food_meat", "Meat", "But what kind?", 14), 0.1, 1],
+    [createBasicFood("food_meat", "Meat", "But what kind?", 40), 0.1, 1],
 ];
 
 function addChest(entity: Entity<ScriptState>) {
@@ -133,8 +133,30 @@ function getSpawnPoint(entity: Entity<ScriptState>): Vector2D {
 
 function getNpcType(stage: number): string {
     let npcTypeId = "slime";
-    if (randomFloatRange(0, 1) < 0.4) {
+    const grad = stage / 20;
+    if (grad < 2 + Math.random() * 1.5) {
         npcTypeId = "jailor";
+    }
+    if (grad < 0.8 + Math.random() * 0.4) {
+        npcTypeId = "small_jailor";
+    }
+    if (grad < 0.6 + Math.random() * 0.3) {
+        npcTypeId = "slime";
+    }
+    if (grad < 0.4 + Math.random() * 0.2) {
+        npcTypeId = "small_slime";
+    }
+    if (randomFloatRange(0, 1) < 0.02) {
+        npcTypeId = "jailor";
+    }
+    if (randomFloatRange(0, 1) < 0.04) {
+        npcTypeId = "small_jailor";
+    }
+    if (randomFloatRange(0, 1) < 0.06) {
+        npcTypeId = "slime";
+    }
+    if (randomFloatRange(0, 1) < 0.08) {
+        npcTypeId = "small_slime";
     }
     if (stage === 20) {
         npcTypeId = "boss";

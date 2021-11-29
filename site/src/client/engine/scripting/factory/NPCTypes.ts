@@ -34,7 +34,7 @@ export const NPCTypes: Record<string, NPCType> = {
         speed: 1
     },
     ["jailor"]: {
-        health: 5,
+        health: 20,
         itemDropId: "npc_bulky_man",
         spriteIdle: "npc_bulky_man",
         spriteDead: "dead_man",
@@ -45,10 +45,37 @@ export const NPCTypes: Record<string, NPCType> = {
         moveVibration: {
             amount: 0.3
         },
-        damage: 1,
+        damage: 10,
+        speed: 1
+    },
+    ["small_jailor"]: {
+        health: 5,
+        itemDropId: "npc_bulky_man",
+        spriteIdle: "npc_bulky_man",
+        spriteDead: "dead_man",
+        spriteAttack: ["npc_bulky_man_hit", "npc_bulky_man_hit2"],
+        spriteRun: "npc_bulky_man_run",
+        spriteWidth: 0.6,
+        spriteHeight: 0.6,
+        moveVibration: {
+            amount: 0.1
+        },
+        damage: 8,
         speed: 1
     },
     ["slime"]: {
+        health: 10,
+        spriteIdle: "blob",
+        spriteDead: "blob_dead",
+        spriteAttack: ["blob_attack"],
+        spriteRun: "sprite_run",
+        spriteWidth: 0.8,
+        spriteHeight: 0.8,
+        itemDropId: "npc_bulky_man",
+        damage: 5,
+        speed: 1
+    },
+    ["small_slime"]: {
         health: 1,
         spriteIdle: "blob",
         spriteDead: "blob_dead",
