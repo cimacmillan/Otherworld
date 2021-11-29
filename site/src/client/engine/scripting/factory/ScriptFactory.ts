@@ -1,8 +1,7 @@
-import { randomInt } from "crypto";
-import { createBasicFood, createBasicSword, GameItem, GameItems } from "../../../resources/manifests/Items";
+import { createAncientSword, createBasicFood, createBasicSword, GameItem, GameItems } from "../../../resources/manifests/Items";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
-import { randomFloatRange, vec } from "../../../util/math";
+import { randomFloatRange, randomIntRange, vec } from "../../../util/math";
 import { JoinComponent } from "../../components/util/JoinComponent";
 import { SwitchComponent } from "../../components/util/SwitchComponent";
 import { Entity } from "../../Entity";
@@ -10,6 +9,7 @@ import { ItemDropDistribution } from "../items/ItemDrops";
 import { createChestState } from "./ChestFactory";
 import { EntityFactory } from "./EntityFactory";
 import { createNPCState } from "./NPCFactory";
+import { NPCTypes } from "./NPCTypes";
 
 interface ScriptState {
     position: Vector2D;
@@ -20,18 +20,24 @@ interface ScriptState {
 
 const STARTING_ITEMS: ItemDropDistribution = [
     [GameItems[GameItem.WEAPON_WOOD_STICK], [0, 1], 1],
+    // [GameItems[GameItem.GOLD_RING], 1, 1],
+    // [GameItems[GameItem.EQUIPMENT_CHEST], 1, 1],
+    // [GameItems[GameItem.EQUIPMENT_GREAVES], 1, 1],
+    // [GameItems[GameItem.EQUIPMENT_HELMET], 1, 1],
+    // [GameItems[GameItem.EQUIPMENT_SHIELD], 1, 1],
+    // [createAncientSword(), 1, 1]
 ];
 
-const CANDY = createBasicFood("food_candy", "Candy", "Hard and sweet", 1);
+const CANDY = createBasicFood("food_candy", "Candy", "Hard and sweet", 2);
 
 const OTHER_ITEMS: ItemDropDistribution = [
     [CANDY, [0, 0.1], 5],
     [CANDY, [0.1, 0.5], 2],
     [CANDY, 1, 1],
 
-    [createBasicFood("food_carrot", "Carrot", "Crunchy and helps you see in the dark", 2), 0.5, 1],
+    [createBasicFood("food_carrot", "Carrot", "Crunchy and helps you see in the dark", 5), 0.5, 1],
     [createBasicFood("food_apple", "Apple", "It feels waxy", 10), 0.2, 1],
-    [createBasicFood("food_meat", "Meat", "But what kind?", 14), 0.1, 1],
+    [createBasicFood("food_meat", "Meat", "But what kind?", 40), 0.1, 1],
 ];
 
 function addChest(entity: Entity<ScriptState>) {
@@ -50,7 +56,9 @@ function addChest(entity: Entity<ScriptState>) {
             break;
         case 4: 
             items = [
-                ...OTHER_ITEMS, [createBasicSword("weapon_dagger", "Iron dagger", "A small iron dagger.", 4), 1, 1]
+                ...OTHER_ITEMS, 
+                [createBasicSword("weapon_dagger", "Iron dagger", "A small iron dagger.", 4), 1, 1],
+                [GameItems[GameItem.GOLD_RING], 1, 1]
             ];
             break;
         case 6: 
@@ -60,7 +68,9 @@ function addChest(entity: Entity<ScriptState>) {
             break;
         case 8: 
             items = [
-                ...OTHER_ITEMS, [createBasicSword("weapon_heavy_axe", "Heavy axe", "Double sided for extra killing", 14), 1, 1]
+                ...OTHER_ITEMS, 
+                [createBasicSword("weapon_heavy_axe", "Heavy axe", "Double sided for extra killing", 14), 1, 1],
+                [GameItems[GameItem.EQUIPMENT_GREAVES], 1, 1]
             ];
             break;
         case 10: 
@@ -68,14 +78,29 @@ function addChest(entity: Entity<ScriptState>) {
                 ...OTHER_ITEMS, [createBasicSword("weapon_ceremonial_trident", "Ceremonial trident", "A three-pronged spear. Useful for stabbing multiple enemies.", 18), 1, 1]
             ];
             break;
+        case 12: 
+            items = [
+                ...OTHER_ITEMS, [GameItems[GameItem.EQUIPMENT_HELMET], 1, 1]
+            ];
+            break;
         case 14: 
             items = [
                 ...OTHER_ITEMS, [createBasicSword("weapon_magic_sword", "Magic sword", "A sword weilding curious magical power", 21), 1, 1]
             ];
             break;
-        case 20: 
+        case 16: 
             items = [
-                ...OTHER_ITEMS, [createBasicSword("weapon_demon_staff", "Demon staff", "A dark staff from the realm of the otherworld", 25), 1, 1]
+                ...OTHER_ITEMS, [GameItems[GameItem.EQUIPMENT_SHIELD], 1, 1]
+            ];
+            break;
+        case 18: 
+            items = [
+                ...OTHER_ITEMS, [GameItems[GameItem.EQUIPMENT_CHEST], 1, 1]
+            ];
+            break;
+        case 19: 
+            items = [
+                ...OTHER_ITEMS, [createAncientSword(), 1, 1]
             ];
             break;
         default: 
@@ -95,17 +120,46 @@ function fib(x: number): number {
 }
 
 function getSpawnPoint(entity: Entity<ScriptState>): Vector2D {
-    const { stage, position } = entity.getState();
+    const { stage, position} = entity.getState();
     const serviceLocator = entity.getServiceLocator();
     const allSpawnPoints = serviceLocator.getMapService().getSpawnPoints();
+
     const enemySpawnPoints = allSpawnPoints.filter(spawn => spawn.name.includes("SPAWN"));
-    return enemySpawnPoints[(stage - 1) % enemySpawnPoints.length].position;
+    if (stage === 20) {
+        return position;
+    }
+    return enemySpawnPoints[randomIntRange(0, enemySpawnPoints.length)].position;
 }
 
-function getNpcType() {
+function getNpcType(stage: number): string {
     let npcTypeId = "slime";
-    if (randomFloatRange(0, 1) < 0.4) {
+    const grad = stage / 20;
+    if (grad < 2 + Math.random() * 1.5) {
         npcTypeId = "jailor";
+    }
+    if (grad < 0.8 + Math.random() * 0.4) {
+        npcTypeId = "small_jailor";
+    }
+    if (grad < 0.6 + Math.random() * 0.3) {
+        npcTypeId = "slime";
+    }
+    if (grad < 0.4 + Math.random() * 0.2) {
+        npcTypeId = "small_slime";
+    }
+    if (randomFloatRange(0, 1) < 0.02) {
+        npcTypeId = "jailor";
+    }
+    if (randomFloatRange(0, 1) < 0.04) {
+        npcTypeId = "small_jailor";
+    }
+    if (randomFloatRange(0, 1) < 0.06) {
+        npcTypeId = "slime";
+    }
+    if (randomFloatRange(0, 1) < 0.08) {
+        npcTypeId = "small_slime";
+    }
+    if (stage === 20) {
+        npcTypeId = "boss";
     }
     return npcTypeId;
 }
@@ -113,19 +167,20 @@ function getNpcType() {
 function addEnemy(entity: Entity<ScriptState>) {
     const { stage } = entity.getState();
     const serviceLocator = entity.getServiceLocator();
-    const severity = fib(stage);
+    const severity = stage === 20 ? 1 : ((stage - 1) * 2) + 1;
     for (let x = 0; x < severity; x ++) {
+        const randomAdjust = stage === 20 ? {x: 0, y:0} : {
+            x: randomFloatRange(-2, 2),
+            y: randomFloatRange(-2, 2),
+        };
         const spawnPoint = vec.vec_add(
             getSpawnPoint(entity),
-            {
-                x: randomFloatRange(-1, 1),
-                y: randomFloatRange(-1, 1),
-            }
+            randomAdjust
         );
        
         const enemy = EntityFactory.NPC_BULKY_MAN(serviceLocator, createNPCState({
             position: spawnPoint,
-            npcTypeId: getNpcType()
+            npcTypeId: getNpcType(stage)
         }));
         serviceLocator.getWorld().addEntity(enemy);
     }
@@ -161,6 +216,10 @@ export function createScript(
                     getActions: (entity: Entity<ScriptState>) => ({
                         onEntityCreated: () => {
                             const { stage } = entity.getState();
+                            if (stage === 20) {
+                                entity.getServiceLocator().getScriptingService().onBeatGame();
+                                return;
+                            }
                             entity.setState({
                                 levelStage: LevelStage.OPEN_CHEST
                             })

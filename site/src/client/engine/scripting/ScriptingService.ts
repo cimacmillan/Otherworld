@@ -39,11 +39,28 @@ export class ScriptingService {
     }
 
     public stopGame() {
+        const beatenGame = this.serviceLocator.getScriptingService().getPlayer().getMutableState().beatenGame;
         this.serviceLocator.getInputService().setInputState(InputState.MENU);
         this.game.setUpdateWorld(false);
         this.serviceLocator.getStore().getActions().stopGame();
-        this.offloadWorld();
-        this.bootstrapInitialContent();
+
+        setTimeout(() => {
+            this.offloadWorld();
+            this.bootstrapInitialContent(beatenGame);
+        }, 1000);
+    }
+
+    public onBeatGame() {
+        this.serviceLocator.getInputService().setInputState(InputState.MENU);
+        this.game.setUpdateWorld(false);
+        const player = this.serviceLocator.getScriptingService().getPlayer();
+        player.getMutableState().beatenGame = true;
+        this.serviceLocator.getStore().getActions().onBeatGame();
+
+        setTimeout(() => {
+            this.offloadWorld();
+            this.bootstrapInitialContent(true);
+        }, 1000);
     }
 
     public offloadWorld() {
@@ -95,8 +112,8 @@ export class ScriptingService {
         this.serviceLocator.getStore().getActions().onMaxStageReached(args.maxStage);
     }
 
-    public bootstrapInitialContent() {
-        this.player = createPlayer(this.serviceLocator);
+    public bootstrapInitialContent(beatenGame: boolean) {
+        this.player = createPlayer(this.serviceLocator, beatenGame);
         this.player.init();
         this.serviceLocator
             .getAudioService()

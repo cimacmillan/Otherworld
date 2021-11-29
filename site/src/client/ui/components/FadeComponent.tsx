@@ -11,6 +11,7 @@ import {
 
 interface FadeComponentProps {
     shouldShow: boolean;
+    delay?: number;
     startingShown?: boolean;
     fadeInSpeed?: number;
     fadeOutSpeed?: number;
@@ -64,12 +65,12 @@ export class FadeComponent extends React.Component<
                 interpolate(this.state.opacity, this.props.shouldShow ? 1 : 0)
             )
             .driven(false)
-            .start()
             .whenDone(() =>
                 this.props.shouldShow
                     ? this.props.onFadeIn && this.props.onFadeIn()
                     : this.props.onFadeOut && this.props.onFadeOut()
             );
+        setTimeout(() => this.currentAnimation.start(), this.props.delay ?? 0);
     }
 
     public componentWillUnmount() {

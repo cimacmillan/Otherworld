@@ -10,7 +10,7 @@ import {
     TextSize,
     TextFont,
 } from "../components/TextComponent";
-import { useGlobalState } from "../effects/GlobalState";
+import { useDispatchListener, useGlobalState } from "../effects/GlobalState";
 import { Actions } from "../../Actions";
 import { ShadowComponentStyle } from "../components/ShadowComponent";
 import { SpriteImageComponent } from "../components/SpriteImageComponent";
@@ -92,6 +92,9 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
     };
 
     const onItemUsed = (itemMetadata: ItemMetadata | undefined) => {
+        if (itemMetadata.count === 0) {
+            return;
+        }
         const { item, count } = itemMetadata;
         const itemAmount = serviceLocator
             .getScriptingService()
@@ -242,6 +245,55 @@ const InventoryItems: React.FunctionComponent<{
     onMouseLeave: (item: ItemMetadata) => void;
     onClick: (item: ItemMetadata) => void;
 }> = (props) => {
+    // To busy to fix this properly. This is needed to make the items re-render after being clicked. This is because inventory hasn't changed due to it being a reference and shallow checked.
+    const [dummy, setDummy] = React.useState(false);
+    const onClick = (item: ItemMetadata) => {
+        props.onClick(item)
+        setDummy(!dummy);
+    }
+    const [offset, setOffset] = React.useState(0);
+    React.useEffect(() => {
+        animation(setOffset).speed(500).looping().driven(false).start();
+    }, []);
+
+    const diff = 2;
+    let yOffset = offset;
+    yOffset = offset > 0.5 ? diff : -diff;
+
+    const serviceLocator = useServiceLocator();
+
+    const equipTutorialHint = (
+        <div style={{
+            position: "absolute",
+            top: 208,
+            left: 640,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            pointerEvents: "none"
+        }}>
+            <SpriteImageComponent
+                spriteSheet={SpriteSheets.SPRITE}
+                sprite={"ui_finger"}
+                style={{
+                    width: 32,
+                    height: 32,
+                    transform: `translate(0px, ${yOffset}px)`,
+                }}
+            />
+            <TextComponent
+                text={"Left click to equip"}
+                style={{
+
+                    paddingLeft: 8,
+                }}
+                font={TextFont.REGULAR}
+                size={TextSize.SMALL}
+                colour={TextColour.LIGHT}
+            />
+        </div>
+    )
+
     return (
         <div
             style={{
@@ -251,8 +303,10 @@ const InventoryItems: React.FunctionComponent<{
                 height: INVENTORY_HEIGHT,
             }}
         >
-            {props.items.map((item) => (
+            {serviceLocator.getTutorialService().shouldShowEquipHint() && equipTutorialHint}
+            {props.items.filter(item => item.count > 0).map((item) => (
                 <InventoryItemComponent
+                    key={item.id}
                     itemMetadata={item}
                     style={{
                         marginLeft: 8,
@@ -263,7 +317,7 @@ const InventoryItems: React.FunctionComponent<{
                     }}
                     onMouseEnter={() => props.onMouseEnter(item)}
                     onMouseLeave={() => props.onMouseLeave(item)}
-                    onClick={() => props.onClick(item)}
+                    onClick={() => onClick(item)}
                 />
             ))}
         </div>

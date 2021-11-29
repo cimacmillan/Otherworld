@@ -30,6 +30,31 @@ export const EffectComponent: React.FunctionComponent<EffectComponentProps> = (p
                 text("Health", TextColour.RED),
                 text(`${effect.points} pts`),
             ]); 
+        case EffectType.ACCURACY_INCREASE: 
+            return row([
+                text(`Improves accuracy of`),
+                text("Attack", TextColour.BLUE),
+            ]); 
+        case EffectType.ATTACK_SPEED_INCREASE: 
+            return row([
+                text(`Improves`),
+                text("Speed", TextColour.BLUE),
+            ]); 
+        case EffectType.PROTECTION_INCREASE:
+            return row([
+                text(`Improves`),
+                text("Protection", TextColour.BLUE),
+            ]); 
+        case EffectType.SPEED_INCREASE:
+            return row([
+                text(`Improves`),
+                text("Speed", TextColour.BLUE),
+            ]); 
+        case EffectType.ANCIENT_POWER: 
+            return row([
+                text(`Imbues with`),
+                text("Ancient Power", TextColour.STEEL),
+            ]); 
     }
     return <></>;
 }

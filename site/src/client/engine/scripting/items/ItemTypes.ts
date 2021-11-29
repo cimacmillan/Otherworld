@@ -55,6 +55,7 @@ export enum ItemType {
 export interface ItemMetadata {
     item: Item;
     count: number;
+    id: number;
 }
 
 export interface Inventory {

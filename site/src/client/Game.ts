@@ -96,7 +96,7 @@ export class Game {
         let compatibleSave: SerialisationObject | undefined;
 
         const newGame = () => {
-            this.serviceLocator.getScriptingService().bootstrapInitialContent();
+            this.serviceLocator.getScriptingService().bootstrapInitialContent(false);
         };
 
         try {

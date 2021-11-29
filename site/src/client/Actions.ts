@@ -47,14 +47,14 @@ export const emptyActions = {
     onPlayerInventoryClosed: () => {},
     onPlayerItemEquipped: (item: Item) => {},
 
-    onDamagedByPlayer: (damage: number) => {},
-    
+    onDamagedByPlayer: (damage: number, ancientPower: boolean) => {},
+    onBeatGame: () => {},
 
     // Game script events
     onChestOpened: () => {},
     onEnemyKilled: () => {},
     onStageReached: (stage: number) => {},
-    onMaxStageReached: (stage: number) => {}
+    onMaxStageReached: (stage: number) => {},
 
 }
 

@@ -54,10 +54,13 @@ export class DefaultControlScheme implements ControlScheme {
             const serialised = this.serviceLocator
                 .getSerialisationService()
                 .serialise();
-            console.log(serialised);
             const deserialised = this.serviceLocator
                 .getSerialisationService()
                 .deserialise(serialised);
+
+            console.log("Serialised: ", serialised);
+            console.log("Deserialised: ", serialised);
+
             this.serviceLocator
                 .getScriptingService()
                 .bootsrapDeserialisedContent(deserialised);

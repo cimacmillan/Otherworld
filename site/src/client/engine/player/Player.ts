@@ -25,6 +25,15 @@ import { createBasicFood } from "../../resources/manifests/Items";
 
 type InternalEntityState = PhysicsStateType & HealthState & CameraState;
 
+export interface PlayerBonuses {
+    moveSpeed: boolean,
+    accuracy: boolean,
+    ancientPowerCount: number,
+    ancientPower: boolean,
+    attackSpeed: boolean,
+    protection: boolean
+}
+
 export interface PlayerSerialisation {
     inventory: Inventory;
     surface: PhysicsStateType;
@@ -32,7 +41,11 @@ export interface PlayerSerialisation {
         current: number, 
         max: number
     };
+    bonuses: PlayerBonuses,
+    beatenGame: boolean;
 }
+
+const BASE_HEALTH = 10;
 
 const getDefaultPlayerState = (): PlayerSerialisation => ({
     inventory: getEmptyInventory(),
@@ -52,8 +65,17 @@ const getDefaultPlayerState = (): PlayerSerialisation => ({
     },
     health: {
         current: 10,
-        max: 10
-    }
+        max: BASE_HEALTH
+    },
+    bonuses: {
+        moveSpeed: false,
+        accuracy: false,
+        ancientPowerCount: 0,
+        ancientPower: false,
+        attackSpeed: false,
+        protection: false
+    },
+    beatenGame: false
 });
 
 export class Player {
@@ -68,17 +90,19 @@ export class Player {
 
     public constructor(
         serviceLocator: ServiceLocator,
-        serialisation?: PlayerSerialisation
+        beatenGame: boolean,
+        serialisation?: PlayerSerialisation,
     ) {
         this.serviceLocator = serviceLocator;
-        this.state = {...getDefaultPlayerState(), ...serialisation};
+        this.state = {...getDefaultPlayerState(), beatenGame, ...serialisation};
         this.interactDelay = new ActionDelay(300);
 
         this.movement = new PlayerMovement(
             this.serviceLocator,
             () => this.state.surface,
             (vec: Vector2D) => (this.state.surface.velocity = vec),
-            (ang: number) => (this.state.surface.angle = ang)
+            (ang: number) => (this.state.surface.angle = ang),
+            () => this.state.bonuses
         );
 
         this.equipment = new PlayerEquipment(
@@ -88,7 +112,8 @@ export class Player {
                 const { x, y } = this.state.surface.position;
                 return [x, this.state.surface.height, y];
             },
-            () => this.state.surface.angle
+            () => this.state.surface.angle,
+            () => this.state.bonuses
         );
 
         this.physicsRegistration = {
@@ -181,7 +206,8 @@ export class Player {
         });
     }
 
-    public onDamage(amount: number, push: Vector2D) {
+    public onDamage(amountBeforeBonus: number, push: Vector2D) {
+        const amount = this.state.bonuses.protection ? amountBeforeBonus / 2 : amountBeforeBonus;
         this.state.health.current -= amount;
         if (this.state.health.current <= 0) {
             this.state.health.current = 0;
@@ -199,6 +225,24 @@ export class Player {
             this.state.surface.velocity.x += normal.x * force;
             this.state.surface.velocity.y += normal.y * force;
         }
+    }
+
+    public setHealthBonus(amount: number) {
+        const diff = amount - this.state.health.max;
+        this.state.health.current += diff;
+        this.state.health.max = amount;
+        if (this.state.health.current <= 0) {
+            this.state.health.current = 1;
+        }
+    }
+
+    // Crap but it works
+    public getMutableState() {
+        return this.state;
+    }
+
+    public getHealthBonus() {
+        return this.state.health.max;
     }
 
     public onHealed(amount: number) {

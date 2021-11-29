@@ -121,7 +121,7 @@ export class SerialisationService implements Serialisable<SerialisationObject> {
     }
 
     public deserialisePlayer(player: PlayerSerialisation): Player {
-        return new Player(this.serviceLocator, player);
+        return new Player(this.serviceLocator, player.beatenGame, player);
     }
 
     public deserialiseEntity(entity: SerialisedEntity): Entity<any> {

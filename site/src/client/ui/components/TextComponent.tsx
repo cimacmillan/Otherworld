@@ -18,7 +18,8 @@ export enum TextColour {
     RED = "#e43b44",
     YELLOW = "#feae34",
     GOLD = "#fee761",
-    STEEL = "#98a198"
+    STEEL = "#98a198",
+    BLUE = "#637bff"
 }
 
 export enum TextShadow {

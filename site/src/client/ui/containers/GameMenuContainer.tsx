@@ -21,6 +21,19 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
     props
 ) => {
     const [state, dispatch] = useGlobalState();
+
+    switch (state.gameStart.menu) {
+        case "MAIN":
+            return <MainMenuContainer/>;
+        case "CREDITS":
+            return <CreditsContainer/>;
+    }
+}
+
+export const MainMenuContainer: React.FunctionComponent<GameMenuContainerProps> = (
+    props
+) => {
+    const [state, dispatch] = useGlobalState();
     const serviceLocator = useServiceLocator();
 
     const onStartPress = () => {
@@ -28,11 +41,14 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
         serviceLocator.getScriptingService().startGame();
     };
 
+    const { beatenGame } = serviceLocator.getScriptingService().getPlayer().getMutableState();
+
     const { currentStage, maxStage } = state.gameStart; 
-    const shouldShowScore = maxStage > 0 && state.gameStart.showingMenu;
+    const shouldShowScore = maxStage > 0 || beatenGame && state.gameStart.showingMenu;
+    const text = beatenGame ? "You've beaten the game!" : `Your best stage reached is ${maxStage}`;
     const StageComponent = shouldShowScore ? (
         <TextComponent
-            text={`Your best stage reached is ${maxStage}`}
+            text={text}
             style={{
                 width: "100%",
                 textAlign: "center",
@@ -108,6 +124,165 @@ export const GameMenuContainer: React.FunctionComponent<GameMenuContainerProps> 
                             size={TextSize.SMALL}
                             colour={TextColour.LIGHT}
                         />
+                    </div>
+                )
+            }
+        ></FadeComponent>
+    );
+};
+
+
+export const CreditsContainer: React.FunctionComponent<GameMenuContainerProps> = (
+    props
+) => {
+    const [state, dispatch] = useGlobalState();
+    const serviceLocator = useServiceLocator();
+
+    const onStartPress = () => {
+        dispatch.startGame();
+        serviceLocator.getScriptingService().startGame();
+    };
+
+    const { beatenGame } = serviceLocator.getScriptingService().getPlayer().getMutableState();
+
+    const { currentStage, maxStage } = state.gameStart; 
+    const shouldShowScore = maxStage > 0 || beatenGame && state.gameStart.showingMenu;
+
+    return (
+        <FadeComponent
+            startingShown={false}
+            shouldShow={state.gameStart.showingMenu}
+            fadeInSpeed={1000}
+            fadeOutSpeed={150}
+            render={(x) =>
+                x === 0 ? (
+                    <></>
+                ) : (
+                    <div
+                        style={{
+                            width: DOM_WIDTH,
+                            height: DOM_HEIGHT,
+                            position: "absolute",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            opacity: x,
+                        }}
+                    >
+                        <TextComponent
+                            text={"Congratulations"}
+                            style={{
+                                width: "100%",
+                                textAlign: "center",
+                                marginTop: 10,
+                            }}
+                            font={TextFont.REGULAR}
+                            size={TextSize.BIG}
+                            colour={TextColour.LIGHT}
+                        />
+                        <FadeComponent
+                            startingShown={false}
+                            shouldShow={state.gameStart.showingMenu}
+                            delay={1000}
+                            fadeInSpeed={1000}
+                            fadeOutSpeed={150}
+                            render={(x) => (
+                                <TextComponent
+                                    text={"You've beaten the game!"}
+                                    style={{
+                                        opacity: x,
+                                        width: "100%",
+                                        textAlign: "center",
+                                    }}
+                                    font={TextFont.REGULAR}
+                                    size={TextSize.SMALL}
+                                    colour={TextColour.LIGHT}
+                                />
+                            )}
+                        />
+                        <FadeComponent
+                            startingShown={false}
+                            shouldShow={state.gameStart.showingMenu}
+                            delay={2000}
+                            fadeInSpeed={1000}
+                            fadeOutSpeed={150}
+                            render={(x) => (
+                                <TextComponent
+                                    text={"There's nothing else but you can play again if you want"}
+                                    style={{
+                                        opacity: x,
+                                        width: "100%",
+                                        textAlign: "center",
+                                    }}
+                                    font={TextFont.REGULAR}
+                                    size={TextSize.SMALL}
+                                    colour={TextColour.LIGHT}
+                                />
+                            )}
+                        />
+                        <FadeComponent
+                            startingShown={false}
+                            shouldShow={state.gameStart.showingMenu}
+                            delay={3000}
+                            fadeInSpeed={1000}
+                            fadeOutSpeed={150}
+                            render={(x) => (
+                                <TextComponent
+                                    text={"Thank you for playing"}
+                                    style={{
+                                        opacity: x,
+                                        width: "100%",
+                                        textAlign: "center",
+                                    }}
+                                    font={TextFont.REGULAR}
+                                    size={TextSize.SMALL}
+                                    colour={TextColour.LIGHT}
+                                />
+                            )}
+                        />
+                        <FadeComponent
+                            startingShown={false}
+                            shouldShow={state.gameStart.showingMenu}
+                            delay={4000}
+                            fadeInSpeed={1000}
+                            fadeOutSpeed={150}
+                            render={(x) => (
+                                <div
+                                    style={{
+                                        width: DOM_WIDTH,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        opacity: x,
+                                        marginTop: 32,
+                                    }}
+                                >
+                                    <GameButtonContainer
+                                        width={256}
+                                        height={46}
+                                        style={{}}
+                                        childStyle={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                        }}
+                                        onSelect={onStartPress}
+                                    >
+                                        <TextComponent
+                                            text={"New Game"}
+                                            style={{}}
+                                            font={TextFont.REGULAR}
+                                            size={TextSize.SMALL}
+                                            colour={TextColour.LIGHT}
+                                        />
+                                    </GameButtonContainer>
+                                </div>
+                            )}
+                        />
+                        
                     </div>
                 )
             }

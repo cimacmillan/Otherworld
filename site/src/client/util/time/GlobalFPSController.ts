@@ -10,6 +10,8 @@ export function logFPS(callback: (number: number) => void) {
     getInstance().logFPS(callback);
 }
 
+const REPORTING_INTERVAL_SECS = 10;
+
 class GlobalFPSController {
     private proportion = 1;
     private framesSinceLastLog = 0;
@@ -26,8 +28,8 @@ class GlobalFPSController {
     public logFPS(callback: (number: number) => void) {
         this.framesSinceLastLog++;
         const timeSincelastLog = Date.now() - this.previousLogTime;
-        if (timeSincelastLog >= 1000) {
-            callback(this.framesSinceLastLog);
+        if (timeSincelastLog >= 1000 * REPORTING_INTERVAL_SECS) {
+            callback(this.framesSinceLastLog / REPORTING_INTERVAL_SECS);
             this.framesSinceLastLog = 0;
             this.previousLogTime = Date.now();
         }

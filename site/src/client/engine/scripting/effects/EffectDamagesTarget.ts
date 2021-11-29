@@ -18,7 +18,7 @@ function damageTargets(context: EffectContext, amount: number) {
         interacts.forEach(interact => {
             const source = interact.source;
             if (source.type === InteractionSourceType.ENTITY) {
-                source.entity.getActions().onDamagedByPlayer(amount);
+                source.entity.getActions().onDamagedByPlayer(amount, player.getMutableState().bonuses.ancientPower);
             }
         });
     }
@@ -28,15 +28,17 @@ export const EffectDamagesTarget = (params: DamagesTarget): ItemEffectActions =>
     return {
         onTrigger: (context: EffectContext) => {
             damageTargets(context, params.points);
-        }
+        },
+        onTriggerInverse: () => {}
     };
 }
 
 export const EffectDamagesTargetInRange = (params: DamagesTargetInRange): ItemEffectActions => {
     return {
         onTrigger: (context: EffectContext) => {
-            const rand = randomIntRange(params.a, params.b + 1);
+            const rand = (context.type === "PLAYER" && context.player.getMutableState().bonuses.accuracy) ? params.b : randomIntRange(params.a, params.b + 1);
             damageTargets(context, rand);
-        }
+        },
+        onTriggerInverse: () => {}
     };
 }

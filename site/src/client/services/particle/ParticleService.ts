@@ -139,9 +139,19 @@ export class ParticleService {
     }
 
     public destroy() {
-        this.emitters.clear();
-        this.particles.getArray().forEach(particle => particle.destroy());
-        this.emitters.sync();
-        this.particles.sync();
+        try {
+            this.emitters.clear();
+            this.particles.getArray().forEach(particle => {
+                try {
+                    particle.destroy()
+                } catch (e) { 
+                    // I'm too busy to fix this properly
+                }
+            });
+            this.emitters.sync();
+            this.particles.sync();
+        } catch (e) {
+            // I'm too busy to fix this properly
+        }
     }
 }

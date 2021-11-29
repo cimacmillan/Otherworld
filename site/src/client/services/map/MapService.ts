@@ -33,6 +33,7 @@ export class MapService {
     public setExistingMapData(currentMapData: MapData, currentMap: Maps) {
         this.currentMapData = currentMapData;
         this.currentMap = currentMap;
+        this.currentSpawnPoints = currentMapData[currentMap].spawnPoints;
     }
 
     public goToLocation(dest: MapDestination) {
