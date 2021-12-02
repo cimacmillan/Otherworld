@@ -35,9 +35,9 @@ const OTHER_ITEMS: ItemDropDistribution = [
     [CANDY, [0.1, 0.5], 2],
     [CANDY, 1, 1],
 
-    [createBasicFood("food_carrot", "Carrot", "Crunchy and helps you see in the dark", 5), 0.5, 1],
-    [createBasicFood("food_apple", "Apple", "It feels waxy", 10), 0.2, 1],
-    [createBasicFood("food_meat", "Meat", "But what kind?", 40), 0.1, 1],
+    [createBasicFood("food_carrot", "Carrot", "Crunchy and helps you see in the dark", 5), 0.8, 1],
+    [createBasicFood("food_apple", "Apple", "It feels waxy", 10), 0.5, 1],
+    [createBasicFood("food_meat", "Meat", "But what kind?", 40), 0.2, 1],
 ];
 
 function addChest(entity: Entity<ScriptState>) {
