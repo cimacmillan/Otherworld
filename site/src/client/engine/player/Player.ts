@@ -220,7 +220,7 @@ export class Player {
         const difference = vec.vec_sub(this.getPositon(), push);
         if (difference.x > 0 || difference.y > 0) {
             const normal = vec.vec_normalize(difference);
-            const force = amount * 0.1;
+            const force = 0.1;
 
             this.state.surface.velocity.x += normal.x * force;
             this.state.surface.velocity.y += normal.y * force;
