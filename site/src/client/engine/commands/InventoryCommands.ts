@@ -1,6 +1,8 @@
+import { Audios } from "../../resources/manifests/Audios";
 import { GameItem } from "../../resources/manifests/Items";
 import { InputState } from "../../services/input/InputService";
 import { ServiceLocator } from "../../services/ServiceLocator";
+import { randomSelection } from "../../util/math";
 import { getEffect, inverse } from "../scripting/effects/Effects";
 import { EntityFactory } from "../scripting/factory/EntityFactory";
 import {
@@ -21,6 +23,7 @@ export const OpenInventory: CommandCreator = (
     serviceLocator.getGame().setUpdateWorld(false);
     serviceLocator.getInputService().setInputState(InputState.INVENTORY);
     serviceLocator.getStore().getActions().onPlayerInventoryOpened();
+    serviceLocator.getAudioService().play(serviceLocator.getResourceManager().manifest.audio[randomSelection([Audios.MENU_0])]);
 };
 
 export const CloseInventory: CommandCreator = (
@@ -33,6 +36,7 @@ export const CloseInventory: CommandCreator = (
     serviceLocator.getGame().setUpdateWorld(true);
     serviceLocator.getInputService().setInputState(InputState.DEFAULT);
     serviceLocator.getStore().getActions().onPlayerInventoryClosed();
+    serviceLocator.getAudioService().play(serviceLocator.getResourceManager().manifest.audio[randomSelection([Audios.MENU_0])]);
 };
 
 export const PlayerUseItemFromInventory = (serviceLocator: ServiceLocator) => (
@@ -92,6 +96,7 @@ export const EquipItemFromInventory = (serviceLocator: ServiceLocator, item: Equ
     if (item.equipmentType === EquipmentType.WEAPON) {
         serviceLocator.getTutorialService().onEvent(TutorialServiceEvent.EQUIPED_WEAPON);
     }
+    serviceLocator.getAudioService().play(serviceLocator.getResourceManager().manifest.audio[randomSelection([Audios.EQUIP_0])]);
 }
 
 export const UnequipItemFromInventory =  (serviceLocator: ServiceLocator, item: EquipableItem) => {
@@ -115,6 +120,8 @@ export const UnequipItemFromInventory =  (serviceLocator: ServiceLocator, item: 
     if (item.equipmentType === EquipmentType.WEAPON) {
         serviceLocator.getTutorialService().onEvent(TutorialServiceEvent.UNEQUIPED_WEAPON);
     }
+    serviceLocator.getAudioService().play(serviceLocator.getResourceManager().manifest.audio[randomSelection([Audios.EQUIP_1])]);
+
 }
 
 
@@ -130,6 +137,8 @@ export const PlayerPickUpItem = (serviceLocator: ServiceLocator) => (
         .getPlayer()
         .getInventory();
     AddItemToInventory(playerInventory, item);
+
+    serviceLocator.getAudioService().play(serviceLocator.getResourceManager().manifest.audio[randomSelection([Audios.COLLECT_0])]);
 
     // // Equip weapon if no weapon equipped
     // const isItemWeapon = (item: Item) => item.type === ItemType.EQUIPMENT && item.equipmentType === EquipmentType.WEAPON;

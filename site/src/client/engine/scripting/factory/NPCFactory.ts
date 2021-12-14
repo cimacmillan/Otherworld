@@ -1,4 +1,5 @@
 import { vec3 } from "gl-matrix";
+import { Audios } from "../../../resources/manifests/Audios";
 import { InteractionSource, InteractionSourceType, InteractionType } from "../../../services/interaction/InteractionType";
 import { ProcedureService } from "../../../services/jobs/ProcedureService";
 import { BurstEmitter } from "../../../services/particle/emitters/BurstEmitter";
@@ -13,6 +14,7 @@ import { animation, easeInOutCirc } from "../../../util/animation/Animations";
 import { GameAnimation } from "../../../util/animation/GameAnimation";
 import { randomBool, randomIntRange, randomSelection } from "../../../util/math";
 import { vec } from "../../../util/math/Vector";
+import { ActionDelay } from "../../../util/time/ActionDelay";
 import { DropItemDistribution } from "../../commands/ItemCommands";
 import { CanBeInteractedWith, onInteractedWith } from "../../components/core/InteractionComponent";
 import { PhysicsComponent, PhysicsStateType } from "../../components/core/PhysicsComponent";
@@ -58,14 +60,19 @@ const LosesHealthWhenDamaged = () => {
         getActions: (entity: Entity<NPCState>) => ({
             onDamagedByPlayer: (points: number, ancientPower: boolean) => {
                 if (entity.getState().boss && !ancientPower) {
+                    entity.getServiceLocator().getAudioService().play(entity.getServiceLocator().getResourceManager().manifest.audio[randomSelection([Audios.ENEMY_RESIST])]);
                     return;
                 }
-                console.log("Lost health");
                 let health = entity.getState().health - points;
                 health = health < 0 ? 0 : health;
                 entity.setState({
                     health
-                })
+                });
+                if (health === 0) {
+                    entity.getServiceLocator().getAudioService().play(entity.getServiceLocator().getResourceManager().manifest.audio[randomSelection([Audios.ENEMY_KILLED])]);
+                } else {
+                    entity.getServiceLocator().getAudioService().play(entity.getServiceLocator().getResourceManager().manifest.audio[randomSelection([Audios.ENEMY_HURT])]);
+                }
             }
         })
     })
@@ -153,6 +160,8 @@ const OnDamagedByPlayer = (onDamaged: (entity: Entity<NPCState>) => void) => {
 }
 
 const WalksTowardsPlayer = (): EntityComponent<NPCState> => {
+    const walkSoundDelay: ActionDelay = new ActionDelay(200);
+
     return ({
         getActions: (entity: Entity<PhysicsStateType>) => ({
 
@@ -166,7 +175,18 @@ const WalksTowardsPlayer = (): EntityComponent<NPCState> => {
             const newVelocity = vec.vec_add(entity.getState().velocity, speed);
             entity.setState({
                 velocity: newVelocity
-            })
+            });
+            if (walkSoundDelay.canAction()) {
+                walkSoundDelay.onAction();
+                entity.getServiceLocator()
+                    .getAudioService()
+                    .play3D(
+                        entity.getServiceLocator().getResourceManager().manifest.audio[
+                            randomSelection([Audios.FOOTSTEP_0, Audios.FOOTSTEP_1, Audios.FOOTSTEP_2, Audios.FOOTSTEP_3])
+                        ],
+                        [pos.x, pos.y]
+                    );
+            }
         }
     })
 }
