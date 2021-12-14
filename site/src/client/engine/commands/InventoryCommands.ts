@@ -63,6 +63,13 @@ export const ConsumeItemFromInventory =  (serviceLocator: ServiceLocator, item: 
         player: serviceLocator.getScriptingService().getPlayer(),
         serviceLocator
     }));
+    serviceLocator
+        .getAudioService()
+        .play(
+            serviceLocator.getResourceManager().manifest.audio[
+                Audios.EATING
+            ],
+        );
 }
 
 export const EquipItemFromInventory = (serviceLocator: ServiceLocator, item: EquipableItem) => {

@@ -28,6 +28,7 @@ export enum Audios {
     ENEMY_RESIST = "ENEMY_RESIST",
     CHEST_APPEAR = "CHEST_APPEAR",
     CHEST_DISAPPEAR = "CHEST_DISAPPEAR",
+    EATING = "EATING",
 
 
 
@@ -65,6 +66,7 @@ audios.Audio(Audios.ENEMY_KILLED, "./audio/point.mp3");
 audios.Audio(Audios.ENEMY_RESIST, "./audio/kenney_rpgaudio/handleSmallLeather.mp3");
 audios.Audio(Audios.CHEST_APPEAR, "./audio/kenney_rpgaudio/doorClose_4.mp3");
 audios.Audio(Audios.CHEST_DISAPPEAR, "./audio/kenney_rpgaudio/cloth3.mp3");
+audios.Audio(Audios.EATING, "./audio/kenney_rpgaudio/drawKnife3.mp3");
 
 
 
