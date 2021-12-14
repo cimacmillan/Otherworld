@@ -27,6 +27,8 @@ import { PlayerUseItemFromInventory, UnequipItemFromInventory } from "../../engi
 import { SpriteSheets } from "../../resources/manifests";
 import { Effect } from "../../engine/scripting/effects/Effects";
 import { EffectComponent } from "../components/EffectComponent";
+import { randomSelection } from "../../util/math/Random";
+import { Audios } from "../../resources/manifests/Audios";
 
 const FADE_IN = 200;
 export const INVENTORY_WIDTH = 520;
@@ -161,7 +163,10 @@ export const InventoryContainer: React.FunctionComponent<InventoryContainerProps
                         }}>
                             {
                                 inventoryTabs.map(tab => (
-                                    <InventoryTab label={tab} open={tab === activeTab} onPress={() => setActiveTab(tab)}/>
+                                    <InventoryTab label={tab} open={tab === activeTab} onPress={() => {
+                                        setActiveTab(tab);
+                                        serviceLocator.getAudioService().play(serviceLocator.getResourceManager().manifest.audio[randomSelection([Audios.BUTTON_0])]);
+                                    }}/>
                                 ))
                             }
                         </div>

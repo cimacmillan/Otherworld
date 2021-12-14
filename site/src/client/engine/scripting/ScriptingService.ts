@@ -1,9 +1,11 @@
 import { Game } from "../../Game";
+import { Audios } from "../../resources/manifests/Audios";
 import { Maps } from "../../resources/manifests/Maps";
 // import { Audios } from "../../resources/manifests/Types";
 import { InputState } from "../../services/input/InputService";
 import { DeserialisedObject } from "../../services/serialisation/SerialisationService";
 import { ServiceLocator } from "../../services/ServiceLocator";
+import { randomSelection } from "../../util/math";
 import { Player } from "../player/Player";
 import { createPlayer } from "./factory/PlayerFactory";
 
@@ -36,6 +38,8 @@ export class ScriptingService {
     public startGame() {
         this.serviceLocator.getInputService().setInputState(InputState.DEFAULT);
         this.game.setUpdateWorld(true);
+        this.serviceLocator.getAudioService().play(this.serviceLocator.getResourceManager().manifest.audio[randomSelection([Audios.START])]);
+
     }
 
     public stopGame() {
@@ -43,6 +47,7 @@ export class ScriptingService {
         this.serviceLocator.getInputService().setInputState(InputState.MENU);
         this.game.setUpdateWorld(false);
         this.serviceLocator.getStore().getActions().stopGame();
+        this.serviceLocator.getAudioService().play(this.serviceLocator.getResourceManager().manifest.audio[randomSelection([Audios.END])]);
 
         setTimeout(() => {
             this.offloadWorld();
@@ -56,6 +61,8 @@ export class ScriptingService {
         const player = this.serviceLocator.getScriptingService().getPlayer();
         player.getMutableState().beatenGame = true;
         this.serviceLocator.getStore().getActions().onBeatGame();
+        this.serviceLocator.getAudioService().play(this.serviceLocator.getResourceManager().manifest.audio[randomSelection([Audios.WON])]);
+
 
         setTimeout(() => {
             this.offloadWorld();

@@ -1,4 +1,5 @@
 import { vec2, vec3 } from "gl-matrix";
+import { Audios } from "../../resources/manifests/Audios";
 import { SpriteSheet } from "../../resources/SpriteSheet";
 import { InteractionSourceType, InteractionType } from "../../services/interaction/InteractionType";
 import { ColourMap } from "../../services/render/util/ReferenceMap";
@@ -7,7 +8,7 @@ import { getVoxelGroupFromSprite } from "../../services/render/util/VoxelGroupGe
 import { ServiceLocator } from "../../services/ServiceLocator";
 import { Vector2D } from "../../types";
 import { animation } from "../../util/animation/Animations";
-import { map3D, create3DArray, randomIntRange, forEach3D, toRadians } from "../../util/math";
+import { map3D, create3DArray, randomIntRange, forEach3D, toRadians, randomSelection } from "../../util/math";
 import { ActionDelay } from "../../util/time/ActionDelay";
 import { setFPSProportion } from "../../util/time/GlobalFPSController";
 import { EffectContext, getEffect } from "../scripting/effects/Effects";
@@ -138,6 +139,7 @@ export class PlayerEquipment {
             this.weaponAnimation.speed(PLAYER_ATTACK_SPEED);
         }
         if (this.weapon && this.attackDelay.canAction()) {
+            this.serviceLocator.getAudioService().play(this.serviceLocator.getResourceManager().manifest.audio[randomSelection([Audios.ATTACK_0])]);
             this.attackDelay.onAction();
             this.weaponAnimation.stop();
             this.weaponAnimation.start();

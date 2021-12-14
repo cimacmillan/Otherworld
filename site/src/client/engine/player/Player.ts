@@ -20,8 +20,9 @@ import { getEmptyInventory, Inventory } from "../scripting/items/ItemTypes";
 import { CameraState, HealthState } from "../state/State";
 import { PlayerMovement } from "./PlayerMovement";
 import { PlayerEquipment } from "./PlayerEquipment";
-import { vec } from "../../util/math";
+import { randomSelection, vec } from "../../util/math";
 import { createBasicFood } from "../../resources/manifests/Items";
+import { Audios } from "../../resources/manifests/Audios";
 
 type InternalEntityState = PhysicsStateType & HealthState & CameraState;
 
@@ -207,6 +208,7 @@ export class Player {
     }
 
     public onDamage(amountBeforeBonus: number, push: Vector2D) {
+        this.serviceLocator.getAudioService().play(this.serviceLocator.getResourceManager().manifest.audio[randomSelection([Audios.DAMAGE_0])]);
         const amount = this.state.bonuses.protection ? amountBeforeBonus / 2 : amountBeforeBonus;
         this.state.health.current -= amount;
         if (this.state.health.current <= 0) {

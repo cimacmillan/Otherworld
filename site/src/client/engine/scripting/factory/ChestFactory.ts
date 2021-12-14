@@ -1,3 +1,4 @@
+import { Audios } from "../../../resources/manifests/Audios";
 import { InteractionType } from "../../../services/interaction/InteractionType";
 import { ProcedureService } from "../../../services/jobs/ProcedureService";
 import { BurstEmitter, BurstEmitterType } from "../../../services/particle/emitters/BurstEmitter";
@@ -6,6 +7,7 @@ import { SmokeParticle } from "../../../services/particle/particles/SmokeParticl
 import { SparkleParticle } from "../../../services/particle/particles/SparkleParticle";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
+import { randomSelection } from "../../../util/math/Random";
 import { DropItemDistribution } from "../../commands/ItemCommands";
 import { DeregisterKeyHint, RegisterKeyHint } from "../../commands/UICommands";
 import { InteractionStateType, onCanBeInteractedWithByPlayer, onInteractedWith } from "../../components/core/InteractionComponent";
@@ -48,6 +50,12 @@ export function createChest(
                             }
                             const { itemDrops, position } = ent.getState();
                             DropItemDistribution(serviceLocator, itemDrops, position, { x: 0, y: 0 }, true);
+                            serviceLocator.getAudioService().play3D(
+                                serviceLocator.getResourceManager().manifest.audio[
+                                    randomSelection([Audios.CHEST_OPEN_0, Audios.CHEST_OPEN_1])
+                                ],
+                                [position.x, position.y]
+                            );
                         }
                     ),
                     onCanBeInteractedWithByPlayer(
