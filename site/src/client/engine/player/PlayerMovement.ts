@@ -3,7 +3,7 @@ import { ServiceLocator } from "../../services/ServiceLocator";
 import { Vector2D } from "../../types";
 import { animation } from "../../util/animation/Animations";
 import { GameAnimation } from "../../util/animation/GameAnimation";
-import { vec } from "../../util/math";
+import { randomSelection, vec } from "../../util/math";
 import { ActionDelay } from "../../util/time/ActionDelay";
 import { fpsNorm } from "../../util/time/GlobalFPSController";
 import { ActionSwitch } from "../../util/time/Switch";
@@ -71,7 +71,7 @@ export class PlayerMovement {
                 .getAudioService()
                 .play(
                     this.serviceLocator.getResourceManager().manifest.audio[
-                        Audios.FOOTSTEP
+                        randomSelection([Audios.FOOTSTEP_0, Audios.FOOTSTEP_1, Audios.FOOTSTEP_2, Audios.FOOTSTEP_3])
                     ],
                     0.1
                 );

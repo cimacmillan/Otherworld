@@ -1,7 +1,10 @@
 import { ResourceManifestBuilder } from "../ResourceManifestBuilder";
 
 export enum Audios {
-    FOOTSTEP = "FOOTSTEP",
+    FOOTSTEP_0 = "FOOTSTEP_0",
+    FOOTSTEP_1 = "FOOTSTEP_1",
+    FOOTSTEP_2 = "FOOTSTEP_2",
+    FOOTSTEP_3 = "FOOTSTEP_3",
     DOOR_OPEN = "DOOR_OPEN",
     BUTTON_PRESS = "BUTTON_PRESS",
     DOOR_UNLOCK = "DOOR_UNLOCK",
@@ -20,6 +23,13 @@ export enum Audios {
     MENU_0 = "MENU_0",
     BUTTON_0 = "BUTTON_0",
     DAMAGE_0 = "DAMAGE_0",
+    ENEMY_HURT = "ENEMY_HURT",
+    ENEMY_KILLED = "ENEMY_KILLED",
+    ENEMY_RESIST = "ENEMY_RESIST",
+    CHEST_APPEAR = "CHEST_APPEAR",
+    CHEST_DISAPPEAR = "CHEST_DISAPPEAR",
+
+
 
     START = "START",
     END = "END",
@@ -28,7 +38,10 @@ export enum Audios {
 
 export const audios = new ResourceManifestBuilder();
 
-audios.Audio(Audios.FOOTSTEP, "./audio/oneshot/footstep.mp3");
+audios.Audio(Audios.FOOTSTEP_0, "./audio/kenney_rpgaudio/footstep00.mp3");
+audios.Audio(Audios.FOOTSTEP_1, "./audio/kenney_rpgaudio/footstep01.mp3");
+audios.Audio(Audios.FOOTSTEP_2, "./audio/kenney_rpgaudio/footstep02.mp3");
+audios.Audio(Audios.FOOTSTEP_3, "./audio/kenney_rpgaudio/footstep03.mp3");
 audios.Audio(Audios.DOOR_OPEN, "./audio/effect/door_open.mp3");
 audios.Audio(Audios.BUTTON_PRESS, "./audio/oneshot/button_press.mp3");
 audios.Audio(Audios.DOOR_UNLOCK, "./audio/oneshot/door_unlock.mp3");
@@ -47,6 +60,11 @@ audios.Audio(Audios.DAMAGE_0, "./audio/player_hit.mp3");
 audios.Audio(Audios.START, "./audio/incoming.mp3");
 audios.Audio(Audios.END, "./audio/end.mp3");
 audios.Audio(Audios.WON, "./audio/grunt_yay.mp3");
+audios.Audio(Audios.ENEMY_HURT, "./audio/slam.mp3");
+audios.Audio(Audios.ENEMY_KILLED, "./audio/point.mp3");
+audios.Audio(Audios.ENEMY_RESIST, "./audio/kenney_rpgaudio/handleSmallLeather.mp3");
+audios.Audio(Audios.CHEST_APPEAR, "./audio/kenney_rpgaudio/doorClose_4.mp3");
+audios.Audio(Audios.CHEST_DISAPPEAR, "./audio/kenney_rpgaudio/cloth3.mp3");
 
 
 

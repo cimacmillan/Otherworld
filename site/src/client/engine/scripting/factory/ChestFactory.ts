@@ -128,6 +128,11 @@ export function createChest(
                         ProcedureService.setGameTimeout(() => {
                             entity.getServiceLocator().getParticleService().removeEmitter(smokeEmitter.emitter);
                         }, 500);
+                        serviceLocator.getAudioService().play(
+                            serviceLocator.getResourceManager().manifest.audio[
+                                randomSelection([Audios.CHEST_DISAPPEAR])
+                            ]
+                        );
                     }, 3000)
                 ])
             }, 
