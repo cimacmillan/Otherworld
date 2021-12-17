@@ -1,4 +1,5 @@
 import { vec2 } from "gl-matrix";
+import { endsWith } from "lodash";
 import { Camera } from "../../types";
 import { AudioMetadata, AudioObject } from "./AudioObject";
 
@@ -8,9 +9,16 @@ const DISTANCE_RUN_OFF = 1;
 
 const MIN_PLAY_BETWEEN = 100;
 
+const FADE_IN_SPEED = 0.02;
+const FADE_OUT_SPEED = 0.02;
+
+
 export class AudioService {
     private camera: () => Camera;
-    private currentSong: AudioBufferSourceNode | undefined = undefined;
+    private currentSong: {
+        source: AudioBufferSourceNode;
+        gainNode: GainNode;
+    } | undefined = undefined;
 
     constructor(private context: AudioContext) {
         window.AudioContext = window.AudioContext;
@@ -23,30 +31,48 @@ export class AudioService {
     public play(
         audioObject: AudioObject,
         gain: number = 1,
-        pan: number = 0
+        pan: number = 0,
+        onEnded: () => void = () => {}
     ): AudioBufferSourceNode | undefined {
         if (this.canPlay(audioObject)) {
-            return playSound(audioObject, this.context, gain, pan);
+            return playSound(audioObject, this.context, gain, pan, onEnded);
         }
     }
 
+    private fadeOutInterval: any;
+    private fadeInInterval: any;
+ 
     public playSong(
         audioObject: AudioObject,
-        gain: number = 1
-    ): AudioBufferSourceNode | undefined {
-        // TODO fade out
-        if (this.currentSong) {
-            this.currentSong.stop();
+        gain: number = 1,
+        shouldFade: boolean = true
+    ) {
+        this.fadeOutInterval && clearInterval(this.fadeOutInterval);
+        this.fadeInInterval && clearInterval(this.fadeInInterval);
+        if (this.currentSong && shouldFade) {
+            const targetSong = this.currentSong;
+            let fadeOut = targetSong.gainNode.gain.value;
+            this.fadeOutInterval = setInterval(() => {
+                fadeOut -= FADE_OUT_SPEED;
+                if (fadeOut <= 0) {
+                    fadeOut = 0;
+                    clearInterval(this.fadeOutInterval);
+                    targetSong.source.stop();
+                }
+                targetSong.gainNode.gain.setValueAtTime(fadeOut, this.context.currentTime);
+            }, 60);
+        } else if (this.currentSong) {
+            this.currentSong.source.stop();
         }
         const gainNode = this.context.createGain();
         gainNode.gain.setValueAtTime(0, this.context.currentTime);
 
         let fade = 0;
-        const interval = setInterval(() => {
-            fade += 0.04;
+        this.fadeInInterval = setInterval(() => {
+            fade += FADE_IN_SPEED;
             if (fade >= 1) {
                 fade = 1;
-                clearInterval(interval);
+                clearInterval(this.fadeInInterval);
             }
             gainNode.gain.setValueAtTime(fade * gain, this.context.currentTime);
         }, 60);
@@ -55,8 +81,10 @@ export class AudioService {
         source.buffer = audioObject.buffer; // tell the source which sound to play
         source.connect(gainNode).connect(this.context.destination); // connect the source to the context's destination (the speakers)
         source.start(0); // play the source now
-        this.currentSong = source;
-        this.currentSong.loop = true;
+        this.currentSong = {
+            source, gainNode
+        };
+        this.currentSong.source.loop = true;
         return this.currentSong;
     }
 
@@ -94,6 +122,12 @@ export class AudioService {
             currentTime - audioObject.timeSinceLastPlayed >= MIN_PLAY_BETWEEN
         );
     }
+
+    public stopSong(){
+        if (this.currentSong) {
+            this.currentSong.source.stop();
+        }
+    }
 }
 
 export function loadSound(
@@ -127,7 +161,8 @@ export function playSound(
     audioObject: AudioObject,
     context: AudioContext,
     gain: number,
-    pan: number
+    pan: number,
+    onEnded: () => void = () => {}
 ): AudioBufferSourceNode {
     audioObject.timeSinceLastPlayed = Date.now();
 
@@ -144,5 +179,6 @@ export function playSound(
     source.buffer = audioObject.buffer; // tell the source which sound to play
     source.connect(panNode).connect(gainNode).connect(context.destination); // connect the source to the context's destination (the speakers)
     source.start(0); // play the source now
+    source.addEventListener("ended", onEnded);
     return source;
 }

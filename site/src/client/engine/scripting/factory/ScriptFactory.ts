@@ -1,3 +1,4 @@
+import { Audios } from "../../../resources/manifests/Audios";
 import { createAncientSword, createBasicFood, createBasicSword, GameItem, GameItems } from "../../../resources/manifests/Items";
 import { ServiceLocator } from "../../../services/ServiceLocator";
 import { Vector2D } from "../../../types";
@@ -224,6 +225,12 @@ export function createScript(
                                 levelStage: LevelStage.OPEN_CHEST
                             })
                             addChest(entity);
+                            const serviceLocator = entity.getServiceLocator();
+                            serviceLocator.getAudioService().playSong(
+                                serviceLocator.getResourceManager().manifest.audio[Audios.CHEST_STAGE],
+                                undefined,
+                                false
+                            )
                         }
                     })
                 }]),
@@ -251,6 +258,7 @@ export function createScript(
                                 activeEnemies: newEnemies
                             })
                             if (newEnemies <= 0) {
+                                entity.getServiceLocator().getAudioService().play(entity.getServiceLocator().getResourceManager().manifest.audio[Audios.BEAT_ENEMIES]);
                                 entity.setState({
                                     levelStage: LevelStage.SPAWN_REWARD
                                 });

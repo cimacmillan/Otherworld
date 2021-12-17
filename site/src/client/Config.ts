@@ -1,6 +1,6 @@
-export const MINOR = "1";
-export const PHASE = "9";
-export const MAJOR = "0";
+export const MINOR = "0";
+export const PHASE = "0";
+export const MAJOR = "1";
 export const VERSION = `V${MAJOR}.${PHASE}.${MINOR}`;
 
 export const DOM_WIDTH = 1280;

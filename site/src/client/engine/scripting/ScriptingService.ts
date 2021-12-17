@@ -38,8 +38,11 @@ export class ScriptingService {
     public startGame() {
         this.serviceLocator.getInputService().setInputState(InputState.DEFAULT);
         this.game.setUpdateWorld(true);
-        this.serviceLocator.getAudioService().play(this.serviceLocator.getResourceManager().manifest.audio[randomSelection([Audios.START])]);
-
+        this.serviceLocator.getAudioService().play(
+            this.serviceLocator.getResourceManager().manifest.audio[randomSelection([Audios.START])],
+            undefined,
+            undefined,
+        );
     }
 
     public stopGame() {
@@ -47,6 +50,7 @@ export class ScriptingService {
         this.serviceLocator.getInputService().setInputState(InputState.MENU);
         this.game.setUpdateWorld(false);
         this.serviceLocator.getStore().getActions().stopGame();
+        this.serviceLocator.getAudioService().stopSong();
         this.serviceLocator.getAudioService().play(this.serviceLocator.getResourceManager().manifest.audio[randomSelection([Audios.END])]);
 
         setTimeout(() => {
@@ -60,9 +64,9 @@ export class ScriptingService {
         this.game.setUpdateWorld(false);
         const player = this.serviceLocator.getScriptingService().getPlayer();
         player.getMutableState().beatenGame = true;
+        this.serviceLocator.getAudioService().stopSong();
         this.serviceLocator.getStore().getActions().onBeatGame();
         this.serviceLocator.getAudioService().play(this.serviceLocator.getResourceManager().manifest.audio[randomSelection([Audios.WON])]);
-
 
         setTimeout(() => {
             this.offloadWorld();
