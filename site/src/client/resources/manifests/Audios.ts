@@ -35,6 +35,9 @@ export enum Audios {
     START = "START",
     END = "END",
     WON = "WON",
+    CHEST_STAGE = "CHEST_STAGE",
+    FIGHT = "FIGHT",
+    BEAT_ENEMIES = "BEAT_ENEMIES"
 }
 
 export const audios = new ResourceManifestBuilder();
@@ -68,6 +71,9 @@ audios.Audio(Audios.CHEST_APPEAR, "./audio/kenney_rpgaudio/doorClose_4.mp3");
 audios.Audio(Audios.CHEST_DISAPPEAR, "./audio/kenney_rpgaudio/cloth3.mp3");
 audios.Audio(Audios.EATING, "./audio/kenney_rpgaudio/drawKnife3.mp3");
 
+audios.Audio(Audios.CHEST_STAGE, "./audio/fadeaway.mp3");
+audios.Audio(Audios.FIGHT, "./audio/fight.mp3");
+audios.Audio(Audios.BEAT_ENEMIES, "./audio/beat.mp3");
 
 
 audios.Audio(Audios.SONG_BIT_STEP, "./audio/background/bit_step.mp3", {

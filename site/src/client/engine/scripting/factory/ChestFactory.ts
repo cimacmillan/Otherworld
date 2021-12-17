@@ -56,6 +56,9 @@ export function createChest(
                                 ],
                                 [position.x, position.y]
                             );
+                            serviceLocator.getAudioService().playSong(
+                                serviceLocator.getResourceManager().manifest.audio[Audios.FIGHT]
+                            )
                         }
                     ),
                     onCanBeInteractedWithByPlayer(

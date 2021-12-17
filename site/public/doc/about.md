@@ -1,7 +1,7 @@
 
 ### What is Otherworld?
 
-Otherworld is a first-person RPG being developed by [Callum Macmillan](https://github.com/cimacmillan), started on September 2019. 
+Otherworld was developed by [Callum Macmillan](https://github.com/cimacmillan) from Sep 2019 to December 2021. 
 
 ----
 
