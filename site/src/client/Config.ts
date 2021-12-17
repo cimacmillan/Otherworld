@@ -1,4 +1,4 @@
-export const MINOR = "0";
+export const MINOR = "1";
 export const PHASE = "0";
 export const MAJOR = "1";
 export const VERSION = `V${MAJOR}.${PHASE}.${MINOR}`;
@@ -22,6 +22,6 @@ export const DEFAULT_PLAYER_RADIUS = 0.5;
 
 export const SCENERY_PIXEL_DENSITY = 10;
 
-export const IS_DEV_MODE = () => window.location.href === "http://localhost/";
+export const IS_DEV_MODE = () => false;
 // export const IS_DEV_MODE = () => false;
 
