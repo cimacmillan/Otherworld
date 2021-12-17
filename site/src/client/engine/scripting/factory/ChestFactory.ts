@@ -56,9 +56,6 @@ export function createChest(
                                 ],
                                 [position.x, position.y]
                             );
-                            serviceLocator.getAudioService().playSong(
-                                serviceLocator.getResourceManager().manifest.audio[Audios.FIGHT]
-                            )
                         }
                     ),
                     onCanBeInteractedWithByPlayer(
@@ -113,6 +110,9 @@ export function createChest(
                                 ProcedureService.setGameTimeout(() => {
                                     entity.getServiceLocator().getParticleService().removeEmitter(emitter.emitter);
                                 }, 300);
+                                serviceLocator.getAudioService().playSong(
+                                    serviceLocator.getResourceManager().manifest.audio[Audios.FIGHT]
+                                )
                             }
                         })
                     },

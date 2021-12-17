@@ -236,6 +236,15 @@ export function createScript(
                 }]),
                 [LevelStage.OPEN_CHEST]: JoinComponent([{
                     getActions: (entity: Entity<ScriptState>) => ({
+                        onEntityCreated: () => {
+                            if (!entity.getServiceLocator().getAudioService().isPlayingSong()) {
+                                serviceLocator.getAudioService().playSong(
+                                    serviceLocator.getResourceManager().manifest.audio[Audios.CHEST_STAGE],
+                                    undefined,
+                                    false
+                                )
+                            }
+                        },
                         onChestOpened: () => {
                             const { stage } = entity.getState();
                             entity.setState({
@@ -251,6 +260,15 @@ export function createScript(
                 }]),
                 [LevelStage.KILL_ENEMIES]: JoinComponent([{
                     getActions: (entity: Entity<ScriptState>) => ({
+                        onEntityCreated: () => {
+                            if (!entity.getServiceLocator().getAudioService().isPlayingSong()) {
+                                serviceLocator.getAudioService().playSong(
+                                    serviceLocator.getResourceManager().manifest.audio[Audios.FIGHT],
+                                    undefined,
+                                    false
+                                )
+                            }
+                        },
                         onEnemyKilled: () => {
                             const { activeEnemies } = entity.getState();
                             const newEnemies = activeEnemies - 1;

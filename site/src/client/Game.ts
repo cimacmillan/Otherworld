@@ -135,6 +135,7 @@ export class Game {
                 this.serviceLocator
                     .getInputService()
                     .setInputState(InputState.DEFAULT);
+                this.serviceLocator.getStore().getActions().startGame();
                 console.log("Successfully loaded save game...", compatibleSave);
             } else {
                 newGame();

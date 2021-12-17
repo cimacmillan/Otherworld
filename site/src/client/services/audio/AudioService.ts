@@ -128,6 +128,10 @@ export class AudioService {
             this.currentSong.source.stop();
         }
     }
+
+    public isPlayingSong() {
+        return this.currentSong;
+    }
 }
 
 export function loadSound(
