@@ -25,6 +25,7 @@ export const AsyncMarkdown: React.FunctionComponent<AsyncMarkdownProps> = (
             {...props}
             source={source}
             renderers={AsyncMarkdownRenderers()}
+            transformImageUri={(uri) => `doc/deepdive/${uri}`}
         />
     );
 };

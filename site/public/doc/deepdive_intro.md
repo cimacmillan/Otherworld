@@ -1,6 +1,6 @@
 
 ### Deep Dives
 
-Deep dives on Otherworld systems designs, geared towards developers and game development enthusiasts. 
+Deep dives on Otherworld system's designs, geared towards developers
 
 ----
