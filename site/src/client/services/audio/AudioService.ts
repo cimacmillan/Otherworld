@@ -132,6 +132,19 @@ export class AudioService {
     public isPlayingSong() {
         return this.currentSong;
     }
+
+    public pauseSong() {
+        if (this.currentSong) {
+            this.currentSong.gainNode.gain.setValueAtTime(0, this.context.currentTime);
+            this.fadeInInterval && clearInterval(this.fadeInInterval);
+        }
+    }
+
+    public resumeSong() {
+        if (this.currentSong) {
+            this.currentSong.gainNode.gain.setValueAtTime(1, this.context.currentTime);
+        }
+    }
 }
 
 export function loadSound(
