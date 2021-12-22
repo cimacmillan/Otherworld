@@ -26,6 +26,9 @@ const deepdives: [string, string][] = [
 
 export const PageDeepDive: React.FunctionComponent = (props) => {
     React.useEffect(() => {
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams) {
             const deepDiveTitle = urlParams.get("deepdive");
