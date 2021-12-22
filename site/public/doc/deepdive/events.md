@@ -53,7 +53,7 @@ class Enemy {
 }
 ```
 
-Different game subsystems can then respond to these events in their own classes.
+Different game subsystems can then respond to these events in their own classes. Updating any subsystems interface with side effects is incredibly straightforward, where adjustments occur in a single place and no changes to `Player` or `Enemy` need to be made.
 
 ```js
 class AudioService {
@@ -83,5 +83,50 @@ class UIService {
 }
 ```
 
-Updating any subsystems interface with side effects is incredibly straightforward, where adjustments occur in a single place and no changes to `Player` or `Enemy` need to be made.
+Otherworld used this pattern at the beginning of development. A GameEvent object would contain a type and a payload. The type can then be read using a switch case to extract the payload type:
+
+```js
+enum GameEventType {
+    PlayerDamaged,
+    EnemyDamaged
+}
+
+interface PlayerDamagedEvent {
+    type: GameEventType.PlayerDamaged;
+    payload: {
+        playerHealth: number;
+    }
+}
+
+interface EnemyDamagedEvent {
+    type: GameEventType.EnemyDamaged;
+     payload: {
+        enemyHealth: number;
+    }
+}
+
+type GameEvent = PlayerDamagedEvent | EnemyDamagedEvent;
+
+
+class Player {
+    update(){
+        if (wasDamaged) {
+            emit({
+                type: GameEventType.PlayerDamaged,
+                payload: {
+                    playerHealth: this.health
+                }
+            })
+        }
+    }
+}
+
+function onEvent(event: GameEvent) {    
+    switch (event.type) {
+        case GameEventType.PlayerDamaged:
+            const health = event.payload.playerHealth;
+            break;
+    }
+}
+```
 
