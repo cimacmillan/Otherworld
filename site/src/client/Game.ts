@@ -153,6 +153,9 @@ export class Game {
         const loop = new TimeControlledLoop(TARGET_MILLIS, this.mainLoop);
         this.initialised = true;
         this.serviceLocator.getStore().getActions().onGameInitialised();
+        if (this.isHidden) {
+            this.serviceLocator.getAudioService().pauseSong();
+        }
 
         loop.start();
     }

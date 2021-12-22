@@ -7,6 +7,7 @@ import {
 } from "../ui/components/TextComponent";
 import { DOM_WIDTH } from "../Config";
 import { animation, sin } from "../util/animation/Animations";
+import { useDispatchListener } from "../ui/effects/GlobalState";
 
 export enum NavPage {
     GAME = "Game",
@@ -29,14 +30,46 @@ export const NavbarContainer: React.FunctionComponent<NavbarContainerProps> = (
     const hideGame = () => {
         setShowGame(false);
     };
-    const onSelect = (navPage: NavPage) => {
+    const onSelect = (navPage: NavPage, withNav: boolean) => {
+        const urlParams = new URLSearchParams();
         setPage(navPage);
         if (navPage === NavPage.GAME) {
             showGame();
         } else {
-            hideGame();
+            hideGame(); 
+        }
+        if (withNav) {
+            switch (navPage) {
+                case NavPage.GAME:
+                    urlParams.delete("page");
+                    break;
+                case NavPage.DEEPDIVE:
+                    urlParams.set("page", "deepdive");
+                    break;
+                case NavPage.ABOUT:
+                    urlParams.set("page", "about");
+                    break;
+            }  
+            history.replaceState(null, null, "?"+urlParams.toString());
         }
     };
+
+    React.useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has("page")) {
+            const page = urlParams.get("page");
+            switch (page) {
+                case "game":
+                    break;
+                case "deepdive":
+                    onSelect(NavPage.DEEPDIVE, false);
+                    break;
+                case "about":
+                    onSelect(NavPage.ABOUT, false);
+                    break;
+            }
+        }
+    }, [])
 
     return (
         <div
@@ -91,7 +124,7 @@ export const NavbarContainer: React.FunctionComponent<NavbarContainerProps> = (
 interface NavItemProps {
     navPage: NavPage;
     selectedNavPage: NavPage;
-    onClick: (navPage: NavPage) => void;
+    onClick: (navPage: NavPage, withNav: boolean) => void;
 }
 
 const NavItem: React.FunctionComponent<NavItemProps> = (props) => {
@@ -121,7 +154,7 @@ const NavItem: React.FunctionComponent<NavItemProps> = (props) => {
                 transformOrigin: "center",
                 transform: `scale(${scale})`,
             }}
-            clickable={() => props.onClick(props.navPage)}
+            clickable={() => props.onClick(props.navPage, true)}
         />
     );
 };

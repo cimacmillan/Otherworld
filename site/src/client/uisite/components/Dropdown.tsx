@@ -4,6 +4,9 @@ import { TextSize } from "../../ui/components/TextComponent";
 export interface DropdownProps {
     title: string;
     toDraw: () => JSX.Element;
+    onSelect: () => void;
+    onDeselect: () => void;
+    startSelected: boolean;
 }
 
 const COLOR_SELECTED = "#3a4466";
@@ -11,8 +14,12 @@ const COLOR_DEFAULT = "#2d2d2d";
 
 export const Dropdown: React.FunctionComponent<DropdownProps> = (props) => {
     const [hover, setHover] = React.useState(false);
-    const [selected, setSelected] = React.useState(false);
+    const [selected, setSelected] = React.useState(props.startSelected);
     const { title, toDraw } = props;
+    const onClick = () => {
+        setSelected(!selected);
+        !selected ? props.onSelect() : props.onDeselect()
+    }
     return (
         <>
             <div
@@ -28,7 +35,7 @@ export const Dropdown: React.FunctionComponent<DropdownProps> = (props) => {
                 }}
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)}
-                onClick={() => setSelected(!selected)}
+                onClick={onClick}
             >
                 {selected ? <DownArrow /> : <RightArrow />} {title}
             </div>

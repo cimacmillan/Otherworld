@@ -13,7 +13,6 @@ const deepdives: [string, string][] = [
     ["Player", "doc/deepdive/player.md"],
     ["Entity Interaction", "doc/deepdive/entity_interaction.md"],
     ["UI", "doc/deepdive/ui.md"],
-    ["Input", "doc/deepdive/input.md"],
     ["Inventory Items", "doc/deepdive/inventory_items.md"],
     ["Attacking / Equipment", "doc/deepdive/attacking_equipment.md"],
     ["Entity Factory", "doc/deepdive/entity_factory.md"],
@@ -26,6 +25,16 @@ const deepdives: [string, string][] = [
 ];
 
 export const PageDeepDive: React.FunctionComponent = (props) => {
+    React.useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams) {
+            const deepDiveTitle = urlParams.get("deepdive");
+            const index = deepdives.findIndex(deepDive => deepDive[0] === deepDiveTitle);
+            if (index) {
+                window.scrollTo(0, 128 + index * 32);
+            }
+        }
+    }, [])
     return (
         <div style={{ marginTop: 100, width: "75%", textAlign: "center", marginBottom: 512}}>
             <AsyncMarkdown
@@ -49,6 +58,22 @@ export const PageDeepDive: React.FunctionComponent = (props) => {
 };
 
 const StandardDeepDive = ([title, markdownUrl]: [string, string]) => {
+    const onSelect = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("deepdive", title);
+        history.replaceState(null, null, "?"+urlParams.toString());
+    }
+    const onDeselect = () => {
+
+    }
+    let startSelected = false;
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams) {
+        const deepdive = urlParams.get("deepdive");
+        if (deepdive) {
+            startSelected = deepdive === title;
+        }
+    }
     return (
         <Dropdown
             title={title}
@@ -58,6 +83,9 @@ const StandardDeepDive = ([title, markdownUrl]: [string, string]) => {
                     url={markdownUrl}
                 />
             )}
+            startSelected={startSelected}
+            onSelect={onSelect}
+            onDeselect={onDeselect}
         />
     );
 };

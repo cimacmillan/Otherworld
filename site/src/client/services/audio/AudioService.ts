@@ -19,6 +19,7 @@ export class AudioService {
         source: AudioBufferSourceNode;
         gainNode: GainNode;
     } | undefined = undefined;
+    private isPaused = false;
 
     constructor(private context: AudioContext) {
         window.AudioContext = window.AudioContext;
@@ -68,14 +69,16 @@ export class AudioService {
         gainNode.gain.setValueAtTime(0, this.context.currentTime);
 
         let fade = 0;
-        this.fadeInInterval = setInterval(() => {
-            fade += FADE_IN_SPEED;
-            if (fade >= 1) {
-                fade = 1;
-                clearInterval(this.fadeInInterval);
-            }
-            gainNode.gain.setValueAtTime(fade * gain, this.context.currentTime);
-        }, 60);
+        if (!this.isPaused) {
+            this.fadeInInterval = setInterval(() => {
+                fade += FADE_IN_SPEED;
+                if (fade >= 1) {
+                    fade = 1;
+                    clearInterval(this.fadeInInterval);
+                }
+                gainNode.gain.setValueAtTime(fade * gain, this.context.currentTime);
+            }, 60);
+        }
 
         const source = this.context.createBufferSource(); // creates a sound source
         source.buffer = audioObject.buffer; // tell the source which sound to play
@@ -134,6 +137,7 @@ export class AudioService {
     }
 
     public pauseSong() {
+        this.isPaused = true;
         if (this.currentSong) {
             this.currentSong.gainNode.gain.setValueAtTime(0, this.context.currentTime);
             this.fadeInInterval && clearInterval(this.fadeInInterval);
@@ -141,6 +145,7 @@ export class AudioService {
     }
 
     public resumeSong() {
+        this.isPaused = false;
         if (this.currentSong) {
             this.currentSong.gainNode.gain.setValueAtTime(1, this.context.currentTime);
         }
