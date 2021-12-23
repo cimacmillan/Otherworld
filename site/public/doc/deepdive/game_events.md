@@ -52,7 +52,7 @@ class Enemy {
 }
 ```
 
-Different game subsystems can then respond to these events in their own classes. Updating any subsystems interface with side effects is incredibly straightforward, where adjustments occur in a single place and no changes to `Player` or `Enemy` need to be made.
+Different game subsystems can then respond to these events in their own classes. Updating any subsystems interface with side effects is  straightforward, where adjustments occur in a single place and no changes to `Player` or `Enemy` need to be made.
 
 ```js
 class AudioService {
@@ -82,9 +82,9 @@ class UIService {
 }
 ```
 
-Otherworld used this pattern at the beginning of development. A GameEvent object would contain a type and a payload. The type can then be read using a switch case to extract the payload type:
+Otherworld used this pattern at the beginning of development. In TypeScript, a GameEvent object would contain a type and a payload. The type can then be read using a switch case to extract the payload type:
 
-```js
+```ts
 enum GameEventType {
     PlayerDamaged,
     EnemyDamaged
@@ -129,11 +129,61 @@ function onEvent(event: GameEvent) {
 }
 ```
 
+This became cumbersome because to define a new event required a new enum entry, a new interface for the event payload and to add the event to the union type. A faster way of defining events is by using function definitions. This is a sample of the function based event system used in Otherworld:
 
+```ts
+interface Events {
+    onPlayerItemDropCollected: (item: Item) => void,
+    onPlayerItemUsed: (item: Item) => void,
+    onPlayerHealed: (amount: number) => void,
+    onPlayerInventoryOpened: () => void,
+    ...
+}
+```
 
+In this method, the name of the function corresponds to its event type and the parameters correspond to its payload. The game uses the `FunctionEventSubscriber` utility, defined in Refunc, to emit and react to events.
 
-Event as function
+```ts
+const emptyEvents = {
+    onPlayerItemDropCollected: (item: Item) => {},
+    onPlayerItemUsed: (item: Item) => {},
+    onPlayerHealed: (amount: number) => {},
+    onPlayerInventoryOpened: () => {},
+    ...
+}
 
-Function event subscriber
+type Events = typeof emptyEvents;
+
+const functionEvents = new FunctionEventSubscriber(emptyEvents);
+
+functionEvents.subscribe({
+    onPlayerItemUsed: (item: Item) => {
+        console.log("Item was used!");
+    }
+});
+
+functionEvents.subscribe({
+    onPlayerItemUsed: (item: Item) => {
+        console.log("Item was used 2!");
+    }
+});
+
+functionEvents.actions().onPlayerItemUsed(...)
+
+// Item was used!
+// Item was used 2!
+```
+
+This is why entity components have a `getActions` function. This function provides an entity, and requests a handler for various game events. The handler can then mutate the entities state or communicate with other game systems (like rendering) depending on the action. For instance, here's a component that plays an audio when an entity is created:
+
+```ts
+const ComponentThatPlaysAudioOnCreate = (audio) => ({
+    getActions: (entity: Entity<...>) => ({
+        onEntityCreated: () => entity.getServiceLocator().getAudioService().play(audio)
+    })
+})
+
+const entity = new Entity(state, ComponentThatPlaysAudioOnCreate(audio));
+```
 
 
