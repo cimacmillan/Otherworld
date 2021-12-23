@@ -6,7 +6,7 @@ It uses a custom game engine, leveraging Typescript and WebGL. The in-game user 
 
 It is hosted on AWS Amplify at [otherworld.io](https://other-world.io/)
 
-See [deep dives](http://localhost/?page=deepdive) on the site for more information on the game systems. 
+See [deep dives](http://other-world.io/?page=deepdive) on the site for more information on the game systems. 
 
 ## Quick start guide
 
