@@ -33,7 +33,7 @@ export const PageDeepDive: React.FunctionComponent = (props) => {
         if (urlParams) {
             const deepDiveTitle = urlParams.get("deepdive");
             const index = deepdives.findIndex(deepDive => deepDive[0] === deepDiveTitle);
-            if (index) {
+            if (index > 0) {
                 window.scrollTo(0, 128 + index * 32);
             }
         }
