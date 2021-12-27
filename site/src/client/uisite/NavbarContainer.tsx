@@ -76,8 +76,8 @@ export const NavbarContainer: React.FunctionComponent<NavbarContainerProps> = (
             style={{
                 display: "flex",
                 flexDirection: "row",
+                justifyContent: "start",
                 width: DOM_WIDTH,
-                justifyContent: "space-between",
                 alignItems: "center",
                 position: "fixed",
                 height: 68,
@@ -153,6 +153,7 @@ const NavItem: React.FunctionComponent<NavItemProps> = (props) => {
             style={{
                 transformOrigin: "center",
                 transform: `scale(${scale})`,
+                marginLeft: 16,
             }}
             clickable={() => props.onClick(props.navPage, true)}
         />
